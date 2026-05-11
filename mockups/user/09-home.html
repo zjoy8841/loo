@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-08 메인 · 개인화 정보 허브 (직장인 프로필)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ivory: '#FAF7F0', charcoal: '#1F2937', mustard: '#F59E0B', lavender: '#8B5CF6' }, fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    @keyframes pulse-mic { 0%,100% { transform: scale(1);} 50% { transform: scale(1.06);} }
+    .pulse-mic { animation: pulse-mic 2s infinite; }
+  </style>
+</head>
+<body class="bg-gray-100 text-charcoal font-sans min-h-screen p-4 sm:p-8">
+  <a href="../index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500 hover:text-emerald-600">← 인덱스로</a>
+  <div class="max-w-[420px] mx-auto bg-ivory rounded-3xl shadow-xl overflow-hidden flex flex-col relative" style="min-height: 844px;">
+
+    <header class="px-5 pt-6 pb-3 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold">L</div>
+      <span class="font-bold tracking-tight">Life OS<span class="text-emerald-500">.ONE</span></span>
+      <div class="ml-auto flex items-center gap-2">
+        <a href="09-notifications.html" class="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center relative">
+          <span class="text-base">🔔</span>
+          <span class="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
+        </a>
+        <button class="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-sm">다</button>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto pb-24">
+
+      <section class="px-5 pt-4 pb-2">
+        <p class="text-xs text-gray-500 mb-1">2026년 5월 10일 · 토요일</p>
+        <h1 class="text-2xl font-bold leading-snug">좋은 아침이에요,<br>다환님 ☀️</h1>
+        <p class="text-xs text-gray-400 mt-1">💼 직장인 · 📈 경제·시사 · 💻 IT · 📚 자기계발</p>
+      </section>
+
+      <section class="px-5 mt-4">
+        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-4 text-white shadow-md shadow-emerald-200">
+          <div class="flex items-start gap-2">
+            <span class="text-lg">💡</span>
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-wider opacity-80 mb-1">오늘의 한 줄</p>
+              <p class="text-sm leading-relaxed">어제 5,200걸음 걸으셨네요. 미팅 많은 날이니 점심엔 단백질 챙기시면 딱이에요. <strong>닭가슴살 샐러드</strong>, B카페에서 이미 단골 메뉴죠 😉</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-5 mt-4">
+        <div class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <div class="text-3xl">☁️</div>
+          <div class="flex-1">
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xl font-bold">14°</span>
+              <span class="text-xs text-gray-500">최고 22° · 비 80%</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">우산 챙기세요 · 자켓 추천</p>
+          </div>
+          <button class="text-xs font-semibold text-emerald-600">자세히</button>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider">📰 오늘의 헤드라인</h2>
+          <span class="text-[10px] text-gray-400">관심사 기반</span>
+        </div>
+        <div class="space-y-2.5">
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center text-2xl flex-shrink-0">📉</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-red-50 text-red-700 text-[10px] rounded font-bold">증시</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">코스피 2,890 (-1.2%) · 호르무즈 긴장에 유가 5%↑</p>
+              <p class="text-[10px] text-gray-500 mt-1">매일경제 · 28분 전</p>
+            </div>
+          </article>
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center text-2xl flex-shrink-0">🏦</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] rounded font-bold">금리</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">한은 기준금리 동결 결정… 내년 인하 시점은 언제</p>
+              <p class="text-[10px] text-gray-500 mt-1">한국경제 · 1시간 전</p>
+            </div>
+          </article>
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-200 flex items-center justify-center text-2xl flex-shrink-0">🤖</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] rounded font-bold">IT·테크</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">Anthropic Claude 5 출시 임박… "추론·코드 모두 30% 향상"</p>
+              <p class="text-[10px] text-gray-500 mt-1">디지털타임스 · 3시간 전</p>
+            </div>
+          </article>
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-100 to-pink-200 flex items-center justify-center text-2xl flex-shrink-0">📚</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-[10px] rounded font-bold">자기계발</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">"하루 30분 독서 6개월 챌린지" 모집… 직장인 1만 명 신청</p>
+              <p class="text-[10px] text-gray-500 mt-1">동아일보 · 어제</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">💼 직장인 인사이트</h2>
+        <div class="bg-white rounded-2xl p-4 shadow-sm">
+          <div class="flex items-start gap-3">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center text-2xl flex-shrink-0">📊</div>
+            <div class="flex-1">
+              <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">BC카드 데이터 인사이트</p>
+              <p class="font-semibold text-sm mt-1 leading-snug">강남 직장인 점심 트렌드: 단백질 메뉴 32% 증가, 한식 -8%</p>
+              <p class="text-xs text-gray-500 mt-2 leading-relaxed">최근 6개월 강남역 상권 결제 데이터 분석. 다환님과 비슷한 페르소나가 가장 많이 결제한 곳: <strong>B카페·SUBWAY·샐러디</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider">✅ 오늘의 미션</h2>
+          <span class="text-[10px] text-gray-400">1 / 4 완료</span>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs">✓</span>
+            <span class="text-sm flex-1 line-through text-gray-400">아침 브리핑 확인</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full border-2 border-gray-300"></span>
+            <span class="text-sm flex-1">물 8잔 마시기</span>
+            <span class="text-[10px] text-gray-400 font-mono">4 / 8</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full border-2 border-gray-300"></span>
+            <span class="text-sm flex-1">30분 산책하기</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full border-2 border-gray-300"></span>
+            <span class="text-sm flex-1">저염 메뉴 1번 선택</span>
+          </div>
+          <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-emerald-500 rounded-full" style="width: 25%"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">⚡ 빠른 액션</h2>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3 hover:bg-emerald-50 transition">
+            <span class="text-2xl">🍽️</span>
+            <span class="text-sm font-semibold">맛집 찾기</span>
+          </button>
+          <button class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3 hover:bg-emerald-50 transition">
+            <span class="text-2xl">🏃</span>
+            <span class="text-sm font-semibold">운동 시작</span>
+          </button>
+          <button class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3 hover:bg-emerald-50 transition">
+            <span class="text-2xl">📅</span>
+            <span class="text-sm font-semibold">일정 보기</span>
+          </button>
+          <button class="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3 hover:bg-emerald-50 transition">
+            <span class="text-2xl">📊</span>
+            <span class="text-sm font-semibold">기록 입력</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">📊 오늘의 기록</h2>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="bg-white rounded-2xl p-4 shadow-sm">
+            <div class="flex items-center gap-1.5 mb-2"><span class="text-base">🚶</span><span class="text-xs text-gray-500">걸음</span></div>
+            <div class="flex items-baseline gap-1"><span class="text-xl font-bold">5,200</span><span class="text-[10px] text-gray-400">/ 7,000</span></div>
+            <div class="h-1 bg-gray-100 rounded-full mt-2 overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: 74%"></div></div>
+          </div>
+          <div class="bg-white rounded-2xl p-4 shadow-sm">
+            <div class="flex items-center gap-1.5 mb-2"><span class="text-base">🔥</span><span class="text-xs text-gray-500">칼로리</span></div>
+            <div class="flex items-baseline gap-1"><span class="text-xl font-bold">320</span><span class="text-[10px] text-gray-400">kcal 소모</span></div>
+            <p class="text-[10px] text-gray-400 mt-2">목표까지 200kcal</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider">나의 페르소나</h2>
+          <button class="text-xs text-emerald-600 font-semibold">편집</button>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-sm">
+          <p class="text-xs text-gray-500 mb-3">선택하신 4개의 태그로 추천이 만들어져요</p>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">🥚 콜레스테롤 걱정중</span>
+            <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">♾️ 네버엔딩 다이어터</span>
+            <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">🍖 다 먹어요</span>
+            <span class="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">☕ 카페인 의존</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">🩺 건강·식음 뉴스</h2>
+        <div class="space-y-2.5">
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center text-2xl flex-shrink-0">🥚</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] rounded font-bold">콜레스테롤</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">달걀 노른자, 정말 콜레스테롤에 안 좋을까? 2026년 최신 연구</p>
+              <p class="text-[10px] text-gray-500 mt-1">헬스조선 · 3시간 전</p>
+            </div>
+          </article>
+          <article class="bg-white rounded-2xl p-4 shadow-sm flex gap-3">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center text-2xl flex-shrink-0">☕</div>
+            <div class="flex-1 min-w-0">
+              <span class="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] rounded font-bold">카페인</span>
+              <p class="font-semibold text-sm mt-1.5 leading-snug">오후 2시 이후 커피, 수면 질에 미치는 영향은?</p>
+              <p class="text-[10px] text-gray-500 mt-1">한국영양학회지 · 어제</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="px-5 mt-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">이번 주 페르소나가 좋아한</h2>
+        <div class="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5">
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex-shrink-0 w-40">
+            <div class="aspect-square bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center text-4xl">🥗</div>
+            <div class="p-3"><p class="text-sm font-bold leading-tight">닭가슴살 샐러드</p><p class="text-[10px] text-gray-500 mt-1">B카페 · 4.7 ★</p></div>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex-shrink-0 w-40">
+            <div class="aspect-square bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center text-4xl">🍜</div>
+            <div class="p-3"><p class="text-sm font-bold leading-tight">우동 한 그릇</p><p class="text-[10px] text-gray-500 mt-1">C식당 · 4.5 ★</p></div>
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden flex-shrink-0 w-40">
+            <div class="aspect-square bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center text-4xl">🥙</div>
+            <div class="p-3"><p class="text-sm font-bold leading-tight">그릭 랩</p><p class="text-[10px] text-gray-500 mt-1">D키친 · 4.8 ★</p></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <a href="10-voice.html" class="absolute bottom-20 right-5 w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white shadow-lg shadow-emerald-500/40 flex items-center justify-center text-2xl transition pulse-mic z-50" aria-label="AI 비서 호출">🎤</a>
+
+    <nav class="bg-white border-t border-gray-200 px-2 py-2 grid grid-cols-4">
+      <button class="flex flex-col items-center gap-0.5 py-1 text-emerald-600"><span class="text-lg">🏠</span><span class="text-[10px] font-bold">홈</span></button>
+      <button class="flex flex-col items-center gap-0.5 py-1 text-gray-400"><span class="text-lg">📊</span><span class="text-[10px]">기록</span></button>
+      <button class="flex flex-col items-center gap-0.5 py-1 text-gray-400"><span class="text-lg">🍽️</span><span class="text-[10px]">맛집</span></button>
+      <button class="flex flex-col items-center gap-0.5 py-1 text-gray-400"><span class="text-lg">👤</span><span class="text-[10px]">마이</span></button>
+    </nav>
+  </div>
+</body>
+</html>

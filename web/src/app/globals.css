@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #FAF7F0;
+  --color-charcoal: #1F2937;
+  --color-mustard: #F59E0B;
+  --color-lavender: #8B5CF6;
+  --font-sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-02 회원가입 1/7 · 계정</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ink: '#0A0A0F', mist: '#FAFAFA', cyber: '#06B6D4', grape: '#8B5CF6', magenta: '#EC4899' }, fontFamily: { sans: ['Pretendard Variable', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .grad-bg { background: radial-gradient(at 50% -20%, rgba(139,92,246,0.2) 0%, transparent 50%), #0A0A0F; }
+    .input-glass { background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+    .input-glass:focus { border-color: #06B6D4; background: rgba(6,182,212,0.08); outline: none; }
+  </style>
+</head>
+<body class="bg-gray-950 text-mist font-sans">
+  <a href="../index.html" class="block max-w-[420px] mx-auto pt-4 px-4 text-sm text-white/40 hover:text-cyber">← 인덱스로</a>
+  <div class="max-w-[420px] mx-auto rounded-[3rem] overflow-hidden flex flex-col grad-bg" style="min-height: 844px;">
+
+    <div class="px-6 pt-8 pb-4 flex items-center justify-between">
+      <button class="w-10 h-10 rounded-full glass flex items-center justify-center text-xl">←</button>
+      <span class="text-xs font-mono font-bold text-white/50">01 / 07</span>
+    </div>
+
+    <div class="px-6 mb-2">
+      <div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+        <div class="h-full rounded-full" style="width: 14.3%; background: linear-gradient(90deg, #06B6D4 0%, #8B5CF6 100%)"></div>
+      </div>
+    </div>
+
+    <div class="flex-1 px-6 pt-12">
+      <p class="text-xs font-bold uppercase tracking-widest text-cyber mb-2">START</p>
+      <h1 class="text-4xl font-black mb-3 tracking-tight leading-tight">계정<br/>만들기</h1>
+      <p class="text-white/50 text-sm mb-10 leading-relaxed">3분이면 충분해요.<br/>1단계: 가장 기본인 정보부터</p>
+
+      <div class="space-y-5">
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">NAME</label>
+          <input type="text" placeholder="홍길동" class="input-glass w-full rounded-2xl px-5 py-4 text-mist placeholder:text-white/20 font-medium" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">EMAIL</label>
+          <input type="email" placeholder="you@example.com" class="input-glass w-full rounded-2xl px-5 py-4 text-mist placeholder:text-white/20 font-medium" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">PASSWORD</label>
+          <input type="password" placeholder="••••••••" class="input-glass w-full rounded-2xl px-5 py-4 text-mist placeholder:text-white/20 font-medium" />
+        </div>
+      </div>
+
+      <div class="my-8 flex items-center gap-3">
+        <div class="flex-1 h-px bg-white/10"></div>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-white/30">OR · 곧 지원</span>
+        <div class="flex-1 h-px bg-white/10"></div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-3">
+        <button onclick="alert('곧 지원 예정')" class="aspect-square rounded-2xl bg-yellow-300 flex items-center justify-center text-xl font-black text-gray-900">K</button>
+        <button onclick="alert('곧 지원 예정')" class="aspect-square rounded-2xl bg-emerald-500 flex items-center justify-center text-white text-xl font-black">N</button>
+        <button onclick="alert('곧 지원 예정')" class="aspect-square rounded-2xl bg-mist flex items-center justify-center text-blue-500 text-xl font-black">G</button>
+        <button onclick="alert('곧 지원 예정')" class="aspect-square rounded-2xl bg-mist flex items-center justify-center text-gray-900 text-xl"></button>
+      </div>
+    </div>
+
+    <div class="px-6 py-5">
+      <a href="#" class="block w-full text-center py-5 rounded-2xl font-black text-lg text-white" style="background: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%)">
+        다음 →
+      </a>
+    </div>
+  </div>
+</body>
+</html>

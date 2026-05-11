@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-09 알림 페이지</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ivory: '#FAF7F0', charcoal: '#1F2937', mustard: '#F59E0B', lavender: '#8B5CF6' }, fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    @keyframes pulse-dot { 0%,100% { opacity: 1;} 50% { opacity: 0.4;} }
+    .pulse-dot { animation: pulse-dot 1.5s infinite; }
+  </style>
+</head>
+<body class="bg-gray-100 text-charcoal font-sans min-h-screen p-4 sm:p-8">
+  <a href="../index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500 hover:text-emerald-600">← 인덱스로</a>
+  <div class="max-w-[420px] mx-auto bg-ivory rounded-3xl shadow-xl overflow-hidden flex flex-col" style="min-height: 844px;">
+    <header class="px-5 pt-6 pb-4 flex items-center gap-3 border-b border-gray-100">
+      <a href="08-home.html" class="text-2xl text-gray-500">←</a>
+      <h1 class="font-bold">알림</h1>
+      <button class="ml-auto text-xs font-semibold text-emerald-600">모두 읽음</button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto px-5 pb-8">
+
+      <section class="mt-5">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500 pulse-dot"></span>
+          <h2 class="text-[10px] font-bold text-red-500 uppercase tracking-wider">지금 · 새 알림</h2>
+        </div>
+        <a href="12-lunch-chat.html" class="block bg-white rounded-2xl shadow-sm p-4 border-2 border-emerald-500 mb-2.5">
+          <div class="flex items-start gap-3">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl">🍽️</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] rounded font-bold">시점 알림</span>
+                <span class="text-[10px] text-gray-400">방금</span>
+              </div>
+              <p class="font-bold text-sm mt-1.5">점심 시간 — 오늘 뭐 드시고 싶으세요?</p>
+              <p class="text-xs text-gray-500 mt-1 leading-relaxed">컨디션 보니 단백질 챙기시면 좋겠어요. 음성으로 메뉴 말씀해보세요</p>
+            </div>
+          </div>
+        </a>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">오늘 받은 알림</h2>
+        <div class="space-y-2.5">
+
+          <a href="11-morning.html" class="block bg-white rounded-2xl shadow-sm p-4 opacity-70">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-mustard/15 flex items-center justify-center text-2xl">🌅</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-mustard text-white text-[10px] rounded font-bold">시점 알림</span>
+                  <span class="text-[10px] text-emerald-600 font-bold">✓ 확인됨</span>
+                  <span class="text-[10px] text-gray-400 ml-auto">7:30</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">아침 브리핑이 도착했어요</p>
+                <p class="text-xs text-gray-500 mt-1 leading-relaxed">14° · 비 80% · 자켓 + 우산 챙기세요</p>
+              </div>
+            </div>
+          </a>
+
+          <div class="bg-white rounded-2xl shadow-sm p-4">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl">✅</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded font-bold">미션</span>
+                  <span class="text-[10px] text-gray-400 ml-auto">9:42</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">잘 하셨어요! 아침 미션 1/4 완료</p>
+                <p class="text-xs text-gray-500 mt-1">남은 미션 3개 · 물 마시기·산책·저염 메뉴</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-4">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-2xl">📅</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] rounded font-bold">일정</span>
+                  <span class="text-[10px] text-gray-400 ml-auto">10:30</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">14:00 클라이언트 미팅 (디자인 리뷰)</p>
+                <p class="text-xs text-gray-500 mt-1">강남역 · 3시간 30분 후</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="15-evening.html" class="block bg-white rounded-2xl shadow-sm p-4">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-lavender/10 flex items-center justify-center text-2xl">🌙</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-lavender text-white text-[10px] rounded font-bold">시점 알림</span>
+                  <span class="text-[10px] text-gray-500 ml-auto">19:00 예정</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">저녁 마무리 알림 예정</p>
+                <p class="text-xs text-gray-500 mt-1">동반자 토글 + 메뉴/운동 추천</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">최근 알림</h2>
+        <div class="space-y-2.5">
+          <div class="bg-white rounded-2xl shadow-sm p-4 opacity-70">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-2xl">🎉</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-rose-100 text-rose-700 text-[10px] rounded font-bold">달성</span>
+                  <span class="text-[10px] text-gray-400 ml-auto">어제</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">7,000걸음 목표 달성! 7일 연속 🔥</p>
+                <p class="text-xs text-gray-500 mt-1">이번 주 평균보다 12% 높음</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm p-4 opacity-70">
+            <div class="flex items-start gap-3">
+              <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-2xl">📰</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[10px] rounded font-bold">관심사</span>
+                  <span class="text-[10px] text-gray-400 ml-auto">어제</span>
+                </div>
+                <p class="font-semibold text-sm mt-1.5">관심 기업 소식: Anthropic Claude 5 출시 임박</p>
+                <p class="text-xs text-gray-500 mt-1">IT·테크 키워드로 발견됨</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="text-center text-xs text-gray-400 mt-8">알림은 30일간 보관돼요</p>
+    </div>
+  </div>
+</body>
+</html>

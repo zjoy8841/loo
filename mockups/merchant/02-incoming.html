@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M-02 가맹점 · 새 예약 알림 (하이라이트)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ivory: '#FAF7F0', charcoal: '#1F2937', mustard: '#F59E0B', lavender: '#8B5CF6' }, fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6), 0 8px 24px rgba(16, 185, 129, 0.2); }
+      50% { box-shadow: 0 0 0 24px rgba(16, 185, 129, 0), 0 8px 24px rgba(16, 185, 129, 0.4); }
+    }
+    .pulse-glow { animation: pulse-glow 1.6s infinite; }
+    @keyframes shake-bell { 0%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(-15deg); } 20%, 40% { transform: rotate(15deg); } 50% { transform: rotate(0); } }
+    .shake-bell { animation: shake-bell 1.5s infinite; transform-origin: top center; }
+  </style>
+</head>
+<body class="bg-ivory text-charcoal font-sans min-h-screen">
+  <div class="px-4 py-3 bg-white border-b border-gray-200">
+    <a href="../index.html" class="text-sm text-gray-500 hover:text-emerald-600">← 인덱스로</a>
+  </div>
+
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-8 py-5 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl">B</div>
+      <div class="flex-1">
+        <h1 class="text-xl font-bold">B카페 (강남점)</h1>
+        <div class="flex items-center gap-2 mt-0.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <p class="text-xs text-gray-500">영업 중 · 사장님 김민수</p>
+        </div>
+      </div>
+      <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-50">설정</button>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-8 py-8 grid grid-cols-3 gap-6">
+    <div class="col-span-2 space-y-6">
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold flex items-center gap-2">
+            <span class="shake-bell text-2xl">🔔</span>
+            새 예약 알림!
+          </h2>
+          <span class="text-sm text-emerald-600 font-bold">방금</span>
+        </div>
+
+        <div class="bg-white rounded-2xl p-8 shadow-sm border-2 border-emerald-500 pulse-glow">
+          <div class="flex items-start gap-4 mb-5">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center text-white text-2xl font-bold">다</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="font-bold text-lg">다환님</h3>
+                <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full font-semibold">단골 0회</span>
+              </div>
+              <p class="text-sm text-gray-500">오후 12:30 · 1명 입장 예정</p>
+            </div>
+          </div>
+
+          <div class="bg-ivory rounded-xl p-4 mb-5">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-2xl">🥗</span>
+              <div class="flex-1">
+                <p class="font-bold">닭가슴살 샐러드 세트</p>
+                <p class="text-xs text-gray-500">단백질 38g · 420kcal · 저염</p>
+              </div>
+              <span class="font-bold text-lg">8,500원</span>
+            </div>
+            <div class="text-xs text-gray-500 border-t border-gray-200 pt-2 mt-2">
+              💡 고객 메모: <span class="text-charcoal">알레르기 없음 · 추가 요청 없음</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <button class="bg-white border border-red-200 text-red-500 hover:bg-red-50 font-semibold py-4 rounded-xl transition">거절</button>
+            <button class="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-emerald-200">수락</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold">📅 오늘 예약 현황</h2>
+          <span class="text-sm text-gray-500">총 3건 (대기 1)</span>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-4">
+            <span class="font-mono text-sm text-gray-500 w-14">11:30</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">김OO · 2명</p>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">수락됨</span>
+          </div>
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-4">
+            <span class="font-mono text-sm text-gray-500 w-14">12:00</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">이OO · 1명</p>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">수락됨</span>
+          </div>
+          <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-4 bg-emerald-50/40">
+            <span class="font-mono text-sm text-emerald-700 w-14 font-bold">12:30</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">다환님 · 1명</p>
+              <p class="text-xs text-gray-500">닭가슴살 샐러드</p>
+            </div>
+            <span class="px-2.5 py-1 bg-mustard text-white text-xs rounded-full font-semibold">대기 중</span>
+          </div>
+          <div class="px-5 py-4 flex items-center gap-4">
+            <span class="font-mono text-sm text-gray-500 w-14">13:30</span>
+            <div class="flex-1">
+              <p class="font-semibold text-sm">박OO · 3명</p>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">수락됨</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div>
+        <h2 class="text-lg font-bold mb-4">📊 오늘 요약</h2>
+        <div class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-baseline justify-between">
+            <span class="text-sm text-gray-500">예약</span>
+            <div>
+              <span class="text-2xl font-bold">3</span>
+              <span class="text-sm text-gray-500 ml-1">+1 대기</span>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between border-t border-gray-100 pt-4">
+            <span class="text-sm text-gray-500">매출</span>
+            <div>
+              <span class="text-2xl font-bold">38,500</span>
+              <span class="text-sm text-gray-500 ml-1">원</span>
+            </div>
+          </div>
+          <div class="flex items-baseline justify-between border-t border-gray-100 pt-4">
+            <span class="text-sm text-gray-500">평균 평점</span>
+            <div>
+              <span class="text-2xl font-bold">4.7</span>
+              <span class="text-sm text-gray-500 ml-1">/ 5.0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

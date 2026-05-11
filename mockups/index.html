@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Life OS.ONE — UI Mock Index</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: '#FAF7F0',
+            charcoal: '#1F2937',
+            mustard: '#F59E0B',
+            lavender: '#8B5CF6',
+          },
+          fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-ivory text-charcoal font-sans">
+  <div class="max-w-5xl mx-auto p-8">
+    <header class="mb-12">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl">L</div>
+        <h1 class="text-3xl font-bold">Life OS.ONE — UI Mock v4</h1>
+      </div>
+      <p class="text-gray-500">2026-05-10 · 회원가입 7단계 (직업/관심사 분리) + 개인화 메인 + 알림 + 음성 입력</p>
+    </header>
+
+    <section class="mb-10 bg-emerald-50 border border-emerald-200 rounded-2xl p-6">
+      <h2 class="font-bold mb-3 text-emerald-700">🆕 v4에서 추가/변경</h2>
+      <ul class="text-sm text-emerald-700 space-y-1.5 leading-relaxed">
+        <li>• <strong>회원가입 6단계 → 7단계</strong> — 직업(U-07) / 관심사(U-08) 분리</li>
+        <li>• <strong>메인(U-09)</strong> — 직업·관심사 기반 헤드라인, 직장인 인사이트, 미션, 빠른 액션, FAB</li>
+        <li>• <strong>알림(U-10)</strong> — 시점 알림은 여기로 / <strong>음성 입력(U-11)</strong> — FAB 진입 풀스크린</li>
+        <li>• 시점/결제/확정 페이지 번호 +4 시프트 (U-12~16)</li>
+      </ul>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-xl font-bold mb-4">🎨 디자인 시스템</h2>
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div><div class="w-full h-16 rounded-lg" style="background:#FAF7F0; border:1px solid #E5E7EB"></div><p class="text-sm font-semibold mt-2">Ivory</p><p class="text-xs text-gray-500">#FAF7F0 · 바탕</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-white border border-gray-200"></div><p class="text-sm font-semibold mt-2">White</p><p class="text-xs text-gray-500">#FFFFFF · 카드</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-emerald-500"></div><p class="text-sm font-semibold mt-2">Emerald (Key)</p><p class="text-xs text-gray-500">#10B981 · CTA</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-charcoal"></div><p class="text-sm font-semibold mt-2">Charcoal</p><p class="text-xs text-gray-500">#1F2937 · 본문</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-mustard"></div><p class="text-sm font-semibold mt-2">Mustard</p><p class="text-xs text-gray-500">#F59E0B · 아침</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-lavender"></div><p class="text-sm font-semibold mt-2">Lavender</p><p class="text-xs text-gray-500">#8B5CF6 · 저녁</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-gray-500"></div><p class="text-sm font-semibold mt-2">Gray-500</p><p class="text-xs text-gray-500">#6B7280 · 캡션</p></div>
+          <div><div class="w-full h-16 rounded-lg bg-red-500"></div><p class="text-sm font-semibold mt-2">Red</p><p class="text-xs text-gray-500">#EF4444 · 거절·알림</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-xl font-bold mb-1">📱 사용자 앱 (/user, 청중 모바일)</h2>
+      <p class="text-sm text-gray-500 mb-4">Splash → 회원가입 7단계 → 메인 → 알림/시점/음성</p>
+
+      <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 mt-6">진입</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="user/01-splash.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-01</div>
+          <h3 class="font-semibold">Splash · 시작</h3>
+          <p class="text-sm text-gray-500 mt-1">로고 + 회원가입/로그인 진입</p>
+        </a>
+      </div>
+
+      <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 mt-6">회원가입 (7단계)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="user/02-signup-account.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-02 · 1/7</div>
+          <h3 class="font-semibold">계정</h3>
+          <p class="text-sm text-gray-500 mt-1">이메일·비밀번호 + 소셜 아이콘(UI)</p>
+        </a>
+        <a href="user/03-signup-health.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-03 · 2/7</div>
+          <h3 class="font-semibold">🩺 건강 신호</h3>
+          <p class="text-sm text-gray-500 mt-1">콜레스테롤·고혈압·혈당 등</p>
+        </a>
+        <a href="user/04-signup-shape.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-04 · 3/7</div>
+          <h3 class="font-semibold">🎯 체형·목표</h3>
+          <p class="text-sm text-gray-500 mt-1">다이어트·벌크업·네버엔딩 등</p>
+        </a>
+        <a href="user/05-signup-diet.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-05 · 4/7</div>
+          <h3 class="font-semibold">🍽️ 식성</h3>
+          <p class="text-sm text-gray-500 mt-1">채식·페스코·알레르기 등</p>
+        </a>
+        <a href="user/06-signup-lifestyle.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-06 · 5/7</div>
+          <h3 class="font-semibold">☕ 라이프</h3>
+          <p class="text-sm text-gray-500 mt-1">카페인·음주·야행성 등</p>
+        </a>
+        <a href="user/07-signup-job.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-07 · 6/7 · 신규</div>
+          <h3 class="font-semibold">💼 직업</h3>
+          <p class="text-sm text-gray-500 mt-1">학생/직장인/의료인/프리랜서/부모/시니어</p>
+        </a>
+        <a href="user/08-signup-interests.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-08 · 7/7 · 신규</div>
+          <h3 class="font-semibold">🎯 관심 분야</h3>
+          <p class="text-sm text-gray-500 mt-1">경제·엔터·스포츠·IT·헬스 등 10개</p>
+        </a>
+      </div>
+
+      <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 mt-6">서비스 메인 + 알림 + 음성</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="user/09-home.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-09 · 메인</div>
+          <h3 class="font-semibold">서비스 홈 (개인화 허브)</h3>
+          <p class="text-sm text-gray-500 mt-1">오늘의 한 줄·헤드라인·직업 인사이트·미션·빠른 액션 + FAB</p>
+        </a>
+        <a href="user/10-notifications.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-10 · 신규</div>
+          <h3 class="font-semibold">🔔 알림 페이지</h3>
+          <p class="text-sm text-gray-500 mt-1">시점 알림 + 일반 알림 (지금/오늘/최근)</p>
+        </a>
+        <a href="user/11-voice.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-11 · 신규</div>
+          <h3 class="font-semibold">🎤 AI 비서 (음성 입력)</h3>
+          <p class="text-sm text-gray-500 mt-1">FAB 클릭 시 풀스크린 음성 인식 UI</p>
+        </a>
+      </div>
+
+      <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 mt-6">시점별 시나리오 (알림에서 진입)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="user/12-morning.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-mustard mb-1">U-12</div>
+          <h3 class="font-semibold">🌅 아침 시나리오</h3>
+          <p class="text-sm text-gray-500 mt-1">알림 → 날씨·일정·옷차림 브리핑</p>
+        </a>
+        <a href="user/13-lunch-chat.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-13 · 하이라이트</div>
+          <h3 class="font-semibold">🍽️ 점심 · 음성 대화</h3>
+          <p class="text-sm text-gray-500 mt-1">AI 역제안 + 메뉴 추천 카드 (B카페·서브웨이)</p>
+        </a>
+        <a href="user/14-lunch-payment.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-14</div>
+          <h3 class="font-semibold">점심 · 더미 결제</h3>
+          <p class="text-sm text-gray-500 mt-1">카드 폼 + DEMO 워터마크</p>
+        </a>
+        <a href="user/15-lunch-confirmed.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">U-15</div>
+          <h3 class="font-semibold">점심 · 예약 확정</h3>
+          <p class="text-sm text-gray-500 mt-1">가맹점 수락 후 확정 화면</p>
+        </a>
+        <a href="user/16-evening.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-lavender mb-1">U-16 · P1</div>
+          <h3 class="font-semibold">🌙 저녁 시나리오</h3>
+          <p class="text-sm text-gray-500 mt-1">동반자 토글 + 메뉴/운동 카드</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-xl font-bold mb-4">💻 가맹점 웹 (/merchant, 시연자 PC)</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <a href="merchant/01-main.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="text-xs font-mono text-emerald-600 mb-1">M-01</div>
+          <h3 class="font-semibold">가맹점 메인 · 대기</h3>
+          <p class="text-sm text-gray-500 mt-1">예약 리스트 + 알림 영역</p>
+        </a>
+        <a href="merchant/02-incoming.html" class="block bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border-2 border-emerald-500">
+          <div class="text-xs font-mono text-emerald-600 mb-1">M-02 · 하이라이트</div>
+          <h3 class="font-semibold">가맹점 · 새 예약 알림</h3>
+          <p class="text-sm text-gray-500 mt-1">알림 점멸 + 수락/거절</p>
+        </a>
+      </div>
+    </section>
+
+    <footer class="text-center text-sm text-gray-500 mt-16 pb-8">
+      <p>이 mock은 검토용 정적 화면입니다. 실제 동작은 web/ Next.js 앱에서 구현됩니다.</p>
+      <p class="mt-2">기획서 v3 · 디자인 가이드 v1 · 회원가입 7단계 + 직업/관심사 기반 메인</p>
+    </footer>
+  </div>
+</body>
+</html>
