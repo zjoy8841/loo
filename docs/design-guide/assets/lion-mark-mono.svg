@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="Lion mark mono — Life OS.ONE">
+  <title>Lion Mark (Mono)</title>
+  <rect width="80" height="80" rx="20" fill="none"/>
+  <g stroke="currentColor" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Face outline -->
+    <ellipse cx="40" cy="46" rx="20" ry="18"/>
+    <!-- Ears -->
+    <circle cx="24" cy="32" r="5"/>
+    <circle cx="56" cy="32" r="5"/>
+    <!-- Eyes -->
+    <circle cx="32" cy="42" r="1.5" fill="currentColor"/>
+    <circle cx="48" cy="42" r="1.5" fill="currentColor"/>
+    <!-- Nose -->
+    <path d="M 37 50 L 43 50 L 40 53 Z" fill="currentColor"/>
+    <!-- Smile -->
+    <path d="M 32 58 Q 40 63 48 58"/>
+  </g>
+</svg>
