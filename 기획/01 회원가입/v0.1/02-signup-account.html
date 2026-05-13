@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02 계정 · v0.1 wireframe</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500}
+.cb{width:18px;height:18px;border:1.5px solid #888;border-radius:4px;display:inline-block;flex-shrink:0;cursor:pointer;position:relative}
+.cb.on{background:#1f1f1f;border-color:#1f1f1f}
+.cb.on::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:9px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.vs{font-size:11px;color:#999;margin-top:4px;font-style:italic}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500">← v0.1 인덱스</a>
+<div class="max-w-[420px] mx-auto bg-white rounded-3xl shadow overflow-hidden flex flex-col" style="min-height:844px">
+  <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+    <a href="01-splash.html" class="text-2xl text-gray-500">←</a>
+    <span class="text-sm text-gray-500">1 / 7</span>
+  </div>
+  <div class="px-6">
+    <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
+      <div class="h-full bg-gray-900" style="width:14.3%"></div>
+    </div>
+  </div>
+  <div class="flex-1 px-6 pt-8">
+    <h1 class="text-2xl font-bold mb-2">계정을 만들어요</h1>
+    <p class="text-gray-500 mb-6 text-sm">이메일과 비밀번호로 시작하세요</p>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold mb-2">이름</label>
+        <input type="text" placeholder="홍길동" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+        <p class="vs">[검증 슬롯 — 빈 값일 때 안내]</p>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-2">이메일</label>
+        <input type="email" placeholder="you@example.com" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+        <p class="vs">[형식 검증 + 중복 체크 결과]</p>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-2">비밀번호</label>
+        <input type="password" placeholder="8자 이상 · 영문+숫자" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+        <div class="mt-2 flex gap-1">
+          <div class="flex-1 h-1 bg-gray-500 rounded"></div>
+          <div class="flex-1 h-1 bg-gray-300 rounded"></div>
+          <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+          <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+        </div>
+        <p class="vs">[강도 표시 + 조건 충족 안내]</p>
+      </div>
+    </div>
+
+    <div class="mt-8 border-t border-gray-200 pt-6 space-y-3">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">약관 동의 · v0.1 신규</p>
+      <label class="flex items-start gap-3 cursor-pointer">
+        <span class="cb mt-0.5"></span>
+        <div class="text-sm"><span class="text-gray-500">(필수)</span> 이용약관 동의 <a href="#" class="text-gray-700 underline">보기</a></div>
+      </label>
+      <label class="flex items-start gap-3 cursor-pointer">
+        <span class="cb mt-0.5"></span>
+        <div class="text-sm"><span class="text-gray-500">(필수)</span> 개인정보 처리방침 동의 <a href="#" class="text-gray-700 underline">보기</a></div>
+      </label>
+      <label class="flex items-start gap-3 cursor-pointer">
+        <span class="cb mt-0.5"></span>
+        <div class="text-sm"><span class="text-gray-500">(선택)</span> 마케팅 정보 수신 동의</div>
+      </label>
+    </div>
+
+    <div class="my-8 flex items-center gap-3">
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <span class="text-xs text-gray-400">또는 SNS로</span>
+      <div class="flex-1 h-px bg-gray-200"></div>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+      <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+      <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+      <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+    </div>
+  </div>
+  <div class="px-6 py-4 border-t border-gray-200">
+    <a href="03-signup-health.html" class="block w-full bg-gray-900 text-white font-semibold py-4 rounded-xl text-center">다음</a>
+    <p class="text-center text-xs text-gray-400 mt-2">계정 · 약관 동의는 필수 (건너뛰기 불가)</p>
+  </div>
+</div>
+<script>document.querySelectorAll('.cb').forEach(c=>c.addEventListener('click',e=>{e.preventDefault();c.classList.toggle('on')}))</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02-1 계정 · v0.2 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500}
+.cb{width:18px;height:18px;border:1.5px solid #888;border-radius:4px;display:inline-block;flex-shrink:0;cursor:pointer;position:relative}
+.cb.on{background:#1f1f1f;border-color:#1f1f1f}
+.cb.on::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:9px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.vs{font-size:11px;color:#999;margin-top:4px;font-style:italic}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.field-tag{position:absolute;top:-8px;right:8px}
+.inline-tag{margin-left:8px;vertical-align:middle}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame (v0.1 동일 톤) ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+    <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+      <a href="#" class="text-2xl text-gray-500">←</a>
+      <span class="text-sm text-gray-500">1 / 7 <span class="tag inline-tag">1</span></span>
+    </div>
+    <div class="px-6">
+      <div class="h-1 bg-gray-200 rounded-full overflow-hidden">
+        <div class="h-full bg-gray-900" style="width:14.3%"></div>
+      </div>
+    </div>
+    <div class="flex-1 px-6 pt-8">
+      <h1 class="text-2xl font-bold mb-2">계정을 만들어요</h1>
+      <p class="text-gray-500 mb-6 text-sm">이메일과 비밀번호로 시작하세요</p>
+
+      <div class="space-y-4">
+        <div class="relative">
+          <label class="block text-sm font-semibold mb-2">이름</label>
+          <input type="text" placeholder="홍길동" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+          <p class="vs">[검증 슬롯 — 1~50자 trim]</p>
+        </div>
+        <div class="relative">
+          <label class="block text-sm font-semibold mb-2">이메일 <span class="tag inline-tag">3</span></label>
+          <input type="email" placeholder="you@example.com" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+          <p class="vs">[형식 검증 + 중복 체크 결과 · spinner]</p>
+        </div>
+        <div class="relative">
+          <label class="block text-sm font-semibold mb-2">비밀번호 <span class="tag inline-tag">2</span></label>
+          <input type="password" placeholder="8자 이상 · 영문+숫자" class="w-full bg-white border border-gray-300 rounded-xl px-4 py-3" />
+          <div class="mt-2 flex gap-1 items-center">
+            <div class="flex-1 h-1 bg-gray-500 rounded"></div>
+            <div class="flex-1 h-1 bg-gray-300 rounded"></div>
+            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+            <div class="flex-1 h-1 bg-gray-200 rounded"></div>
+            <span class="tag inline-tag">4</span>
+          </div>
+          <p class="vs">[강도 0~4 · "강도 N단계 / 4단계" SR]</p>
+        </div>
+      </div>
+
+      <div class="mt-8 border-t border-gray-200 pt-6 space-y-3">
+        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">약관 동의 <span class="tag inline-tag">5</span></p>
+        <label class="flex items-start gap-3 cursor-pointer">
+          <span class="cb mt-0.5"></span>
+          <div class="text-sm"><span class="text-gray-500">(필수)</span> 이용약관 동의 <a href="#" class="text-gray-700 underline">보기</a></div>
+        </label>
+        <label class="flex items-start gap-3 cursor-pointer">
+          <span class="cb mt-0.5"></span>
+          <div class="text-sm"><span class="text-gray-500">(필수)</span> 개인정보 처리방침 동의 <a href="#" class="text-gray-700 underline">보기</a></div>
+        </label>
+        <label class="flex items-start gap-3 cursor-pointer">
+          <span class="cb mt-0.5"></span>
+          <div class="text-sm"><span class="text-gray-500">(선택)</span> 마케팅 정보 수신 동의</div>
+        </label>
+      </div>
+
+      <div class="my-8 flex items-center gap-3">
+        <div class="flex-1 h-px bg-gray-200"></div>
+        <span class="text-xs text-gray-400">또는 SNS로 <span class="tag inline-tag">8</span></span>
+        <div class="flex-1 h-px bg-gray-200"></div>
+      </div>
+      <div class="grid grid-cols-4 gap-3">
+        <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+        <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+        <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+        <button class="aspect-square rounded-xl border border-gray-300 flex items-center justify-center"><div class="ic" style="width:36px;height:36px;font-size:9px">아이콘</div></button>
+      </div>
+    </div>
+    <div class="px-6 py-4 border-t border-gray-200">
+      <div class="flex items-center gap-2 mb-2 text-[11px] text-gray-500">
+        <span class="tag">6</span><span>활성 조건</span>
+      </div>
+      <a href="#" class="block w-full bg-gray-900 text-white font-semibold py-4 rounded-xl text-center relative">
+        다음
+        <span class="tag inline-tag" style="background:#fff;color:#1f1f1f">7</span>
+      </a>
+      <p class="text-center text-xs text-gray-400 mt-2">계정 · 약관 동의는 필수 (건너뛰기 불가)</p>
+    </div>
+  </div>
+
+  <!-- ───── Caption column ───── -->
+  <div class="cap w-[320px]">
+    <h2>주요 인터랙션 매핑</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body"><strong>mount 시 idempotencyKey 생성</strong><br><code>crypto.randomUUID()</code> → <code>SignupContext.idempotencyKey</code>. 7단계 가입 API 1회 보장 키.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body"><strong>password는 메모리(state)만</strong><br><code>sessionStorage</code> 미저장. 새로고침 시 password 손실 감지 → 1단계 redirect + 토스트 "보안을 위해 처음부터".</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body"><strong>email onBlur (debounce 500ms)</strong><br><code>GET /api/auth/email-check?email=</code> → inline 결과 + spinner. 중복 시 "이미 가입된 이메일이에요".</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body"><strong>비번 강도 미터 4단</strong><br>length≥8 · 영문 · 숫자 · 특수문자 boolean 합산. <code>role="progressbar" aria-valuemax=4</code>.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">5</span>
+      <div class="body"><strong>약관: 필수 2 + 선택 1</strong><br><code>agreeTerms</code> · <code>agreePrivacy</code> 필수 true. <code>agreeMarketing</code> 선택. "보기" 모달은 별도 description (U-02-1-terms).</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">6</span>
+      <div class="body"><strong>Primary 활성 조건</strong><br>name 1자+ <em>AND</em> email 유효+중복X <em>AND</em> password 강도 2+ <em>AND</em> 필수약관 2개 체크. 미충족 시 <code>aria-disabled=true</code>.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">7</span>
+      <div class="body"><strong>"다음" 클릭 → 2단계로</strong><br>Context.account 저장 + password state 보관 → <code>router.push('/user/signup/health')</code>. API 호출 없음.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">8</span>
+      <div class="body"><strong>SNS 4 버튼 (베타: placeholder)</strong><br>클릭 시 토스트 "준비 중이에요". 정식 OAuth 흐름은 별도 description (U-02-SNS).</div>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <p class="text-[11px] text-gray-500 leading-relaxed">
+        ※ 색·폰트·픽셀·radius·motion·WCAG 등 시각 사양은 디자인 가이드 참조. 본 wireframe은 인터랙션·동작 매핑 목적.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 전체 공통 규칙(SignupContext · 라우팅 가드 · 접근성 · 분석 이벤트)은 노션 <em>U-02 회원가입 공통 패턴</em> 참조.
+      </p>
+    </div>
+  </div>
+
+</div>
+<script>document.querySelectorAll('.cb').forEach(c=>c.addEventListener('click',e=>{e.preventDefault();c.classList.toggle('on')}))</script>
+</body>
+</html>

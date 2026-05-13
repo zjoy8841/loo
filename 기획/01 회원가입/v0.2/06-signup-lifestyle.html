@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02-5 라이프스타일 · v0.2 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500}
+.chip{transition:.15s;position:relative}
+.chip .mark{position:absolute;top:8px;right:8px;width:18px;height:18px;border:1.5px solid #888;border-radius:4px;background:#fff}
+.chip.active{background:#1f1f1f;color:#fff;border-color:#1f1f1f}
+.chip.active .mark{background:#fff;border-color:#fff}
+.chip.active .mark::after{content:'';position:absolute;top:2px;left:5px;width:4px;height:9px;border:solid #1f1f1f;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.chip.active .ic{border-color:#fff;color:#fff}
+.badge{display:inline-block;background:#f0f0f0;border:1px solid #ccc;border-radius:999px;padding:2px 10px;font-size:11px;color:#666}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+    <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+      <a href="05-signup-diet.html" class="text-2xl text-gray-500">←</a>
+      <span class="text-sm text-gray-500">5 / 7</span>
+    </div>
+    <div class="px-6">
+      <div class="h-1 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gray-900" style="width:71.4%"></div></div>
+    </div>
+    <div class="flex-1 px-6 pt-8">
+      <div class="ic mb-3" style="width:48px;height:48px;font-size:10px;border-width:2px">아이콘</div>
+      <h1 class="text-2xl font-bold mb-2">평소 라이프는요?</h1>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="badge inline-block">□ 복수 선택 가능</span>
+        <span class="tag">1</span>
+      </div>
+      <p class="text-gray-500 mb-4 text-sm">이제 두 단계 남았어요. 모두 골라주세요.</p>
+
+      <div class="flex items-center gap-2 mb-2 text-[11px] text-gray-500">
+        <span class="tag">4</span><span>role=checkbox</span>
+        <span class="tag">5</span><span>키보드 multi 표준</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+          <span class="mark"></span>
+          <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+          <div class="text-sm font-semibold leading-tight">카페인 의존</div>
+        </button>
+        <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+          <span class="mark"></span>
+          <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+          <div class="text-sm font-semibold leading-tight">술 좀 마셔요</div>
+        </button>
+        <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left relative">
+          <span class="mark"></span>
+          <span class="tag" style="position:absolute;top:-8px;left:8px;background:#fff">2</span>
+          <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+          <div class="text-sm font-semibold leading-tight">야행성</div>
+        </button>
+        <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left relative">
+          <span class="mark"></span>
+          <span class="tag" style="position:absolute;top:-8px;left:8px;background:#fff">2</span>
+          <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+          <div class="text-sm font-semibold leading-tight">새벽형</div>
+        </button>
+      </div>
+
+      <div class="mt-8 bg-gray-100 border border-gray-300 rounded-2xl px-4 py-3 flex gap-3 items-start relative">
+        <div class="ic" style="width:24px;height:24px;font-size:9px">아이콘</div>
+        <p class="text-sm text-gray-700 leading-relaxed">두 단계 남았어요!</p>
+        <span class="tag" style="margin-left:auto">6</span>
+      </div>
+    </div>
+    <div class="px-6 py-4 border-t border-gray-200">
+      <div class="flex items-center gap-2 mb-2 text-[11px] text-gray-500">
+        <span class="tag">3</span><span>0개 OK · "나중에 입력" 가능</span>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <a href="#" class="col-span-1 bg-white border border-gray-300 text-gray-500 font-semibold py-3 rounded-xl text-center text-sm leading-tight">나중에 입력<div class="text-[10px] text-gray-400 mt-0.5">권장 안 함</div></a>
+        <a href="07-signup-job.html" class="col-span-2 bg-gray-900 text-white font-semibold py-4 rounded-xl text-center">다음</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cap w-[320px]">
+    <h2>주요 인터랙션 매핑</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body"><strong>multi 모드</strong><br>4개 옵션 2×2 그리드. 카드 탭 toggle.</div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body"><strong>night_owl + early_bird 동시 허용</strong><br>둘 다 true = "시간대 무관" 시그널. 추천 알고리즘에 전체 시간대 가중치 0. 한쪽만 true = 해당 시간대 가중치 ↑.</div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body"><strong>0개 OK</strong><br>"나중에 입력" 가능 (<code>lifestyle: []</code>). Primary 활성에 영향 없음.</div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body"><strong>카드 role="checkbox" aria-checked</strong><br>VoiceOver/TalkBack 호환 대안: <code>role="button" aria-pressed</code>.</div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">5</span>
+      <div class="body"><strong>키보드 multi 표준</strong><br>Tab 진입 · Space toggle · Arrow 포커스 이동만.</div>
+    </div>
+    <div class="tag-row">
+      <span class="tag">6</span>
+      <div class="body"><strong>격려 카피</strong><br>"두 단계 남았어요!" — 진행률 인지 + 이탈 방지. 분석 이벤트 <code>signup_step_view</code> 5단계 머문 시간 측정.</div>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <p class="text-[11px] text-gray-500 leading-relaxed">※ 시각 사양은 디자인 가이드, 공통 규칙은 노션 <em>U-02 공통 패턴</em> 참조.</p>
+    </div>
+  </div>
+
+</div>
+<script>document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('active')))</script>
+</body>
+</html>

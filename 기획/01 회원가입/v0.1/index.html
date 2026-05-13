@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 v0.1 wireframes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Pretendard,system-ui,sans-serif}</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+<div class="max-w-4xl mx-auto p-8">
+  <h1 class="text-2xl font-bold mb-1">회원가입 v0.1 — 그레이스케일 와이어프레임</h1>
+  <p class="text-gray-600 text-sm mb-8">v1.0 시안의 5가지 약점을 보완한 초기 와이어프레임 (색·아이콘 제거)</p>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">시니어 기획자 리뷰 — 5가지 약점</h2>
+    <ol class="text-sm space-y-2 text-gray-800 leading-relaxed list-decimal pl-5">
+      <li>건너뛰기 옵션이 모든 단계에 존재 → 추천 정확도 핵심 데이터까지 누락 가능</li>
+      <li>약관 동의(이용약관·개인정보·마케팅) 단계 부재 → 한국 법적 필수 누락</li>
+      <li>단일 선택 vs 복수 선택 시각적 구분 부재 → 같은 chip 모양으로 혼동</li>
+      <li>각 단계 입력의 데이터 활용 미리보기 부재 → "왜 입력하나" 가치 불명확</li>
+      <li>계정 단계 입력 검증·피드백 슬롯 부재 → 에러 표시·비밀번호 강도 미표시</li>
+    </ol>
+  </section>
+
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.1 반영 사항</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>건너뛰기 정리</strong>: 계정 단계는 건너뛰기 제거. 나머지는 "나중에 입력 · 권장 안 함" 라벨</li>
+      <li><strong>약관 동의</strong>: 계정 단계 하단에 필수 2 + 선택 1 체크박스 슬롯</li>
+      <li><strong>선택 구분</strong>: chip 우상단 □(복수) / ○(단일) 마커</li>
+      <li><strong>데이터 활용</strong>: 각 단계 상단에 "사용처: 메인 → OO 카드" 미리보기</li>
+      <li><strong>입력 검증</strong>: 계정 input 아래 검증 슬롯 + 비밀번호 강도 4단계 미터</li>
+    </ul>
+  </section>
+
+  <h2 class="font-bold text-lg mb-4">8개 화면</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <a href="01-splash.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-01</div>
+      <div class="font-semibold text-sm">Splash · 시작</div>
+      <div class="text-xs text-gray-500 mt-1">+ 가치 미리보기 3줄</div>
+    </a>
+    <a href="02-signup-account.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02 · 1/7</div>
+      <div class="font-semibold text-sm">계정</div>
+      <div class="text-xs text-gray-500 mt-1">+ 검증 슬롯 + 약관</div>
+    </a>
+    <a href="03-signup-health.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-03 · 2/7</div>
+      <div class="font-semibold text-sm">건강</div>
+      <div class="text-xs text-gray-500 mt-1">복수 □ · 활용 미리보기</div>
+    </a>
+    <a href="04-signup-shape.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-04 · 3/7</div>
+      <div class="font-semibold text-sm">체형</div>
+      <div class="text-xs text-gray-500 mt-1">단일 ○</div>
+    </a>
+    <a href="05-signup-diet.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-05 · 4/7</div>
+      <div class="font-semibold text-sm">식성</div>
+      <div class="text-xs text-gray-500 mt-1">복수 □ · 알레르기 강조</div>
+    </a>
+    <a href="06-signup-lifestyle.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-06 · 5/7</div>
+      <div class="font-semibold text-sm">라이프</div>
+      <div class="text-xs text-gray-500 mt-1">복수 □</div>
+    </a>
+    <a href="07-signup-job.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-07 · 6/7</div>
+      <div class="font-semibold text-sm">직업</div>
+      <div class="text-xs text-gray-500 mt-1">단일 ○</div>
+    </a>
+    <a href="08-signup-interests.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-08 · 7/7</div>
+      <div class="font-semibold text-sm">관심사</div>
+      <div class="text-xs text-gray-500 mt-1">복수 □ · 최소 3개 권장</div>
+    </a>
+  </div>
+</div>
+</body>
+</html>

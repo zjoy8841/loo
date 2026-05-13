@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 v0.2 — wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Pretendard,system-ui,sans-serif}</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+<div class="max-w-5xl mx-auto p-8">
+  <h1 class="text-2xl font-bold mb-1">회원가입 v0.2 — wireframe + 인터랙션 매핑</h1>
+  <p class="text-gray-600 text-sm mb-8">v0.1 그레이스케일 wireframe + 노션 description의 Critical 인터랙션을 ①②③ 마커로 1:1 매핑한 도면 7장</p>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.1 대비 변경 사항</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>화면 우측에 320px 캡션 컬럼 추가</strong> — Phone frame(420px) + Caption(320px) 2-column 레이아웃, 총 폭 780px</li>
+      <li><strong>요소 위에 ① ② ③ 번호 마커 배치</strong> — 노션 description의 Critical 인터랙션(5~8개)을 wireframe 좌표와 1:1 매핑</li>
+      <li><strong>캡션 톤</strong> — `굵은 한 줄 제목` + 자연어 설명 1줄 + `<code>` 엔드포인트/필드명. 시각 사양은 박지 않음 (디자인 가이드 책임)</li>
+      <li><strong>v0.1과 동일</strong> — 그레이스케일 / "아이콘" placeholder / chip mark □/○ / badge / preview / warn 박스</li>
+    </ul>
+  </section>
+
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">소스 of Truth</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li>노션 <strong>화면 Description</strong>: <a href="https://www.notion.so/35fc2986e14081cc9890efbd525ab46d" class="underline text-gray-700">35fc2986e14081cc9890efbd525ab46d</a></li>
+      <li>노션 <strong>U-02 공통 패턴</strong>: <a href="https://www.notion.so/35fc2986e14081d88fbef8d8763f82d2" class="underline text-gray-700">35fc2986e14081d88fbef8d8763f82d2</a> — SignupContext · 라우팅 가드 · 접근성 · 분석 이벤트</li>
+      <li>이전 시안: <a href="../v0.1/index.html" class="underline text-gray-700">v0.1 인덱스</a> · <a href="../v1.0/01-splash.html" class="underline text-gray-700">v1.0 시안</a></li>
+    </ul>
+  </section>
+
+  <h2 class="font-bold text-lg mb-4">7 화면</h2>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <a href="02-signup-account.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-1 · 1/7</div>
+      <div class="font-semibold text-sm">계정</div>
+      <div class="text-xs text-gray-500 mt-1">8 캡션 · 폼 + 약관 + SNS</div>
+    </a>
+    <a href="03-signup-health.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-2 · 2/7</div>
+      <div class="font-semibold text-sm">건강</div>
+      <div class="text-xs text-gray-500 mt-1">6 캡션 · multi · healthy mutex</div>
+    </a>
+    <a href="04-signup-shape.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-3 · 3/7</div>
+      <div class="font-semibold text-sm">체형</div>
+      <div class="text-xs text-gray-500 mt-1">5 캡션 · single · radiogroup</div>
+    </a>
+    <a href="05-signup-diet.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-4 · 4/7</div>
+      <div class="font-semibold text-sm">식이/알레르기</div>
+      <div class="text-xs text-gray-500 mt-1">7 캡션 · 2 섹션 · AlertDialog</div>
+    </a>
+    <a href="06-signup-lifestyle.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-5 · 5/7</div>
+      <div class="font-semibold text-sm">라이프스타일</div>
+      <div class="text-xs text-gray-500 mt-1">6 캡션 · night_owl+early_bird 허용</div>
+    </a>
+    <a href="07-signup-job.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-6 · 6/7</div>
+      <div class="font-semibold text-sm">직업</div>
+      <div class="text-xs text-gray-500 mt-1">6 캡션 · single · 서브텍스트</div>
+    </a>
+    <a href="08-signup-interests.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700 md:col-span-1">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-7 · 7/7</div>
+      <div class="font-semibold text-sm">관심사 · 가입</div>
+      <div class="text-xs text-gray-500 mt-1">8 캡션 · 카운터 · signup API 시퀀스</div>
+    </a>
+  </div>
+
+  <section class="mt-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">총 46 캡션 분포</h2>
+    <div class="text-sm text-gray-700 grid grid-cols-2 md:grid-cols-4 gap-2 leading-relaxed">
+      <div>U-02-1 계정 — <strong>8</strong></div>
+      <div>U-02-2 건강 — <strong>6</strong></div>
+      <div>U-02-3 체형 — <strong>5</strong></div>
+      <div>U-02-4 식이 — <strong>7</strong></div>
+      <div>U-02-5 라이프 — <strong>6</strong></div>
+      <div>U-02-6 직업 — <strong>6</strong></div>
+      <div>U-02-7 관심사 — <strong>8</strong></div>
+      <div class="font-bold">합계 — 46</div>
+    </div>
+  </section>
+
+  <p class="text-xs text-gray-500 mt-8 leading-relaxed">
+    ※ 본 wireframe은 인터랙션·동작 매핑 목적. 색·폰트·픽셀·radius·motion·WCAG는 디자인 가이드(v.7 / v.8 / v.9) 참조.<br>
+    ※ Splash(U-01) · 약관 본문 · SNS 가입 · 로그인 화면은 본 v0.2 범위 외 (별도 description 필요).
+  </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04 체형 · v0.1 wireframe</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500}
+.chip{transition:.15s;position:relative}
+.chip .mark{position:absolute;top:8px;right:8px;width:18px;height:18px;border:1.5px solid #888;border-radius:999px;background:#fff}
+.chip.active{background:#1f1f1f;color:#fff;border-color:#1f1f1f}
+.chip.active .mark{background:#fff;border-color:#fff}
+.chip.active .mark::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;background:#1f1f1f;border-radius:999px;transform:translate(-50%,-50%)}
+.chip.active .ic{border-color:#fff;color:#fff}
+.preview{border:1px dashed #999;border-radius:8px;padding:10px 12px;font-size:11px;color:#666;background:#fafafa;margin-bottom:16px}
+.preview .cards{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.preview .card{background:#fff;border:1px solid #ccc;border-radius:6px;padding:3px 8px;font-size:10px}
+.badge{display:inline-block;background:#f0f0f0;border:1px solid #ccc;border-radius:999px;padding:2px 10px;font-size:11px;color:#666}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500">← v0.1 인덱스</a>
+<div class="max-w-[420px] mx-auto bg-white rounded-3xl shadow overflow-hidden flex flex-col" style="min-height:844px">
+  <div class="px-6 pt-6 pb-4 flex items-center justify-between">
+    <a href="03-signup-health.html" class="text-2xl text-gray-500">←</a>
+    <span class="text-sm text-gray-500">3 / 7</span>
+  </div>
+  <div class="px-6">
+    <div class="h-1 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gray-900" style="width:42.9%"></div></div>
+  </div>
+  <div class="flex-1 px-6 pt-8">
+    <div class="ic mb-3" style="width:48px;height:48px;font-size:10px;border-width:2px">아이콘</div>
+    <h1 class="text-2xl font-bold mb-2">요즘 체형 목표는요?</h1>
+    <span class="badge mb-3 inline-block">○ 1개만 선택</span>
+    <p class="text-gray-500 mb-4 text-sm">하나만 골라주세요. 메뉴 추천 알고리즘에 활용돼요.</p>
+
+    <div class="preview">
+      <div><strong>사용처</strong> · v0.1 신규</div>
+      <div class="cards">
+        <span class="card">메뉴 추천 (칼로리·단백질)</span>
+        <span class="card">시점별 액션 강도</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3" id="grid">
+      <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+        <span class="mark"></span>
+        <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+        <div class="text-sm font-semibold leading-tight">살찌고 싶어요</div>
+      </button>
+      <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+        <span class="mark"></span>
+        <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+        <div class="text-sm font-semibold leading-tight">다이어트 중</div>
+      </button>
+      <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+        <span class="mark"></span>
+        <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+        <div class="text-sm font-semibold leading-tight">벌크업 중</div>
+      </button>
+      <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left">
+        <span class="mark"></span>
+        <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+        <div class="text-sm font-semibold leading-tight">네버엔딩 다이어터</div>
+      </button>
+      <button class="chip bg-white border-2 border-gray-300 rounded-2xl p-4 text-left col-span-2">
+        <span class="mark"></span>
+        <div class="ic mb-2" style="width:32px;height:32px;font-size:9px">아이콘</div>
+        <div class="text-sm font-semibold">그냥 유지만 할래요</div>
+      </button>
+    </div>
+  </div>
+  <div class="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
+    <a href="05-signup-diet.html" class="col-span-1 bg-white border border-gray-300 text-gray-500 font-semibold py-3 rounded-xl text-center text-sm leading-tight">나중에 입력<div class="text-[10px] text-gray-400 mt-0.5">권장 안 함</div></a>
+    <a href="05-signup-diet.html" class="col-span-2 bg-gray-900 text-white font-semibold py-4 rounded-xl text-center">다음</a>
+  </div>
+</div>
+<script>document.querySelectorAll('#grid .chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('#grid .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active')}))</script>
+</body>
+</html>
