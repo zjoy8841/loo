@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 시안 v2 — 사이버틱 패치 (로그인 · 메인)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+
+  :root {
+    --primary-300: #F2A879; --primary-500: #E87A3E;
+    --primary-600: #C8651F; --primary-700: #A04F12;
+    --secondary-500: #3D7A5C;
+    --accent-honey: #F4B860; --accent-cream: #FAF3E0;
+    --neutral-500: #82795F; --neutral-700: #4A4332;
+    --neutral-900: #1F1B16;
+    --oled-black: #050505; --oled-card: #0A0908; --oled-card-elev: #11100E;
+    --dark-text: #F5EFE6; --dark-text-muted: #6E665A;
+    --hud-line: rgba(232,122,62,0.10); --hud-tick: rgba(245,239,230,0.05);
+    --teal: #4FD1C5; --cyan: #00D4FF; --purple: #A78BFA; --coral: #FF8C7A;
+    --font: 'Pretendard Variable', system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html, body {
+    margin: 0; padding: 0; min-height: 100vh;
+    background: radial-gradient(ellipse at top, #1A1612 0%, #0A0908 50%, #000 100%);
+    color: var(--dark-text); font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 보드 헤더 */
+  header.board { padding: 40px 32px 24px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  header.board .brand { display: inline-flex; align-items: center; gap: 14px; }
+  header.board h1 { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.015em; }
+  header.board h1 b { color: var(--accent-honey); }
+  header.board .meta {
+    font-size: 10px; color: var(--dark-text-muted); margin-top: 10px;
+    font-family: var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  header.board .meta b { color: var(--accent-honey); font-weight: 700; }
+  header.board .label-row { display: flex; gap: 6px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; padding: 4px 10px; border-radius: 999px;
+    background: rgba(232,122,62,0.12); color: var(--accent-honey);
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em; font-family: var(--font-mono);
+    text-transform: uppercase; border: 1px solid rgba(232,122,62,0.2);
+  }
+  .pill.teal { background: rgba(79,209,197,0.1); color: var(--teal); border-color: rgba(79,209,197,0.22); }
+
+  /* 보드 */
+  .board-stage {
+    padding: 48px 32px 40px;
+    display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+  }
+  .scene { display: flex; flex-direction: column; align-items: center; }
+  .scene-tag { margin-bottom: 16px; text-align: center; }
+  .scene-tag .num {
+    display: inline-block; padding: 5px 12px; border-radius: 4px;
+    background: transparent; color: var(--accent-honey);
+    border: 1px solid rgba(244,184,96,0.4);
+    font-size: 9px; font-weight: 800; letter-spacing: 0.16em; font-family: var(--font-mono);
+  }
+  .scene:nth-child(2) .scene-tag .num { color: var(--teal); border-color: rgba(79,209,197,0.4); }
+  .scene-tag p {
+    font-size: 10px; color: var(--dark-text-muted); margin: 8px 0 0;
+    font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* 폰 프레임 */
+  .phone {
+    width: 340px; max-width: 92vw; aspect-ratio: 9 / 19.5;
+    border-radius: 44px; padding: 11px; background: #0A0A0A;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(244,184,96,0.08);
+    position: relative;
+  }
+  .phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px; background: #000; border-radius: 14px; z-index: 30;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 33px; overflow: hidden;
+    background: var(--oled-black); color: var(--dark-text);
+    position: relative; display: flex; flex-direction: column;
+  }
+
+  /* HUD 그리드 백그라운드 */
+  .hud-grid {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(var(--hud-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--hud-line) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(ellipse at center, black 25%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 75%);
+  }
+  .scanline {
+    position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 2px,
+      rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 3px
+    );
+    z-index: 2;
+  }
+  .vignette {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(232,122,62,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.6) 0%, transparent 50%);
+  }
+
+  /* 상태바 */
+  .status-bar {
+    padding: 14px 28px 6px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; font-weight: 700; color: var(--dark-text);
+    flex-shrink: 0; z-index: 5;
+    font-family: var(--font-mono); letter-spacing: 0.05em;
+  }
+
+  /* 캡션 */
+  .caption {
+    margin-top: 18px; max-width: 340px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(244,184,96,0.1);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .caption h4 {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.16em;
+    color: var(--accent-honey); margin: 0 0 10px; text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+  .caption ul { margin: 0; padding-left: 14px; }
+  .caption li {
+    font-size: 12px; color: rgba(245,239,230,0.78); margin-bottom: 5px; line-height: 1.5;
+  }
+  .caption li b { color: var(--accent-honey); font-weight: 700; }
+
+  /* ═══════════════════════════════════════════════ */
+  /* ═══════════ SCENE 1 — LOGIN (v2) ═══════════ */
+  /* ═══════════════════════════════════════════════ */
+  .login-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 28%, rgba(232,122,62,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 95%, rgba(0,212,255,0.04) 0%, transparent 50%);
+  }
+  .login-content {
+    position: relative; z-index: 4; flex: 1;
+    display: flex; flex-direction: column;
+    padding: 30px 30px 32px;
+  }
+  .login-top { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+
+  /* 입자 헤일로 (로그인 마크) */
+  .login-orb {
+    position: relative; width: 180px; height: 180px;
+    margin-bottom: 28px;
+  }
+  .login-orb-rings {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .login-orb-rings::before, .login-orb-rings::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    border: 1px dashed rgba(244,184,96,0.18);
+  }
+  .login-orb-rings::after { inset: 22px; border-color: rgba(79,209,197,0.14); animation: orb-spin 80s linear infinite reverse; }
+  .login-orb-rings::before { animation: orb-spin 90s linear infinite; }
+  @keyframes orb-spin { to { transform: rotate(360deg); } }
+
+  .login-orb-mark {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 88px; height: 88px;
+    filter: drop-shadow(0 0 24px rgba(244,184,96,0.35));
+  }
+  .particle-field { position: absolute; inset: 0; pointer-events: none; }
+  .particle-field .p {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: var(--accent-honey);
+    box-shadow: 0 0 4px rgba(244,184,96,0.6);
+    animation: ptw 3s ease-in-out infinite;
+  }
+  .particle-field .p.teal { background: var(--teal); box-shadow: 0 0 4px rgba(79,209,197,0.7); }
+  @keyframes ptw { 0%, 100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+  .login-brand-mono {
+    font-family: var(--font-mono); font-size: 10px;
+    font-weight: 700; letter-spacing: 0.4em;
+    color: var(--accent-honey); text-transform: uppercase;
+    margin-bottom: 14px; opacity: 0.9;
+  }
+  .login-brand-mono::before { content: '['; margin-right: 8px; opacity: 0.5; }
+  .login-brand-mono::after { content: ']'; margin-left: 4px; opacity: 0.5; }
+
+  .login-h1 {
+    font-size: 30px; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.1; margin: 0 0 12px; color: white;
+  }
+  .login-h1 b { color: var(--accent-honey); font-weight: 800; }
+  .login-sub {
+    font-size: 12px; color: var(--dark-text-muted); margin: 0;
+    font-family: var(--font-mono); letter-spacing: 0.04em;
+  }
+  .login-sub b { color: var(--teal); font-weight: 700; }
+
+  .login-form { margin-top: 38px; }
+  .field-line {
+    position: relative;
+    padding: 12px 0 10px;
+    border-bottom: 1px solid rgba(245,239,230,0.1);
+    transition: border-color 0.2s;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .field-line:focus-within { border-color: var(--accent-honey); }
+  .field-line .lbl {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.12em; color: var(--dark-text-muted); text-transform: uppercase;
+    min-width: 56px;
+  }
+  .field-line input {
+    flex: 1; background: transparent; border: 0; outline: 0;
+    color: var(--dark-text); font: inherit; font-size: 14px;
+    padding: 0;
+  }
+  .field-line input::placeholder { color: rgba(245,239,230,0.25); }
+  .field-line .indicator {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 6px var(--teal);
+    animation: ptw 1.8s ease-in-out infinite;
+  }
+
+  .login-helper {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; margin-top: 14px;
+    font-family: var(--font-mono); letter-spacing: 0.05em;
+  }
+  .login-helper a { color: var(--dark-text-muted); text-decoration: none; }
+  .login-helper a:hover { color: var(--accent-honey); }
+  .login-helper label {
+    display: inline-flex; gap: 6px; align-items: center; color: var(--dark-text-muted);
+  }
+  .login-helper input[type="checkbox"] { width: 11px; height: 11px; accent-color: var(--accent-honey); }
+
+  .login-cta {
+    margin-top: 22px; width: 100%;
+    background: var(--accent-honey); color: var(--oled-black); border: 0;
+    padding: 16px; border-radius: 8px;
+    font: inherit; font-size: 13px; font-weight: 800; letter-spacing: 0.12em;
+    font-family: var(--font-mono); text-transform: uppercase;
+    cursor: pointer; position: relative; overflow: hidden;
+    box-shadow: 0 0 28px rgba(244,184,96,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .login-cta:hover { transform: translateY(-1px); box-shadow: 0 0 36px rgba(244,184,96,0.4); }
+  .login-cta::after {
+    content: '→'; margin-left: 12px; font-family: var(--font);
+  }
+
+  .login-divider {
+    display: flex; align-items: center; gap: 10px; margin: 22px 0 14px;
+    font-size: 9px; color: var(--dark-text-muted); letter-spacing: 0.18em;
+    font-family: var(--font-mono); text-transform: uppercase;
+  }
+  .login-divider::before, .login-divider::after {
+    content: ''; flex: 1; height: 1px; background: rgba(245,239,230,0.08);
+  }
+  .social-row { display: flex; gap: 8px; }
+  .social-btn {
+    flex: 1; background: var(--oled-card); border: 1px solid rgba(245,239,230,0.08);
+    color: var(--dark-text); padding: 12px; border-radius: 6px;
+    font: inherit; font-size: 10px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .signup-row {
+    text-align: center; margin-top: 22px;
+    font-size: 10px; color: var(--dark-text-muted);
+    font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .signup-row a { color: var(--accent-honey); font-weight: 700; text-decoration: none; }
+  .signup-row a::after { content: ' →'; }
+
+  /* ═══════════════════════════════════════════════ */
+  /* ═══════════ SCENE 2 — MAIN (v2) ═══════════ */
+  /* ═══════════════════════════════════════════════ */
+  .main-content {
+    flex: 1; overflow: hidden; position: relative; z-index: 4;
+    display: flex; flex-direction: column;
+    padding: 0 0 78px;
+  }
+  .main-scroll { flex: 1; overflow-y: auto; padding: 4px 22px; }
+  .main-scroll::-webkit-scrollbar { display: none; }
+
+  /* 상단 시스템 라인 */
+  .sys-line {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 4px 8px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em;
+    color: var(--dark-text-muted); text-transform: uppercase;
+  }
+  .sys-line .left { color: var(--accent-honey); display: flex; align-items: center; gap: 6px; }
+  .sys-line .left::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 6px var(--teal);
+    animation: ptw 1.6s ease-in-out infinite;
+  }
+
+  .greet-row {
+    padding: 4px 4px 16px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .greet-row .gname {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.015em;
+    line-height: 1.15; margin: 0; color: white;
+  }
+  .greet-row .gname b { color: var(--accent-honey); font-weight: 800; }
+  .greet-row .gsub {
+    font-size: 9px; color: var(--dark-text-muted);
+    font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .greet-row .date-tag {
+    font-family: var(--font-mono); font-size: 9px;
+    color: var(--dark-text-muted); letter-spacing: 0.1em;
+    border: 1px solid rgba(245,239,230,0.1);
+    padding: 4px 8px; border-radius: 4px;
+  }
+  .greet-row .date-tag b { color: var(--accent-honey); font-weight: 700; }
+
+  /* 영웅 입자 구체 */
+  .hero-orb-wrap {
+    margin: 4px 0 8px; position: relative;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .hero-orb-eyebrow {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.22em; color: var(--dark-text-muted); text-transform: uppercase;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-orb-eyebrow::before, .hero-orb-eyebrow::after {
+    content: ''; width: 18px; height: 1px; background: rgba(245,239,230,0.15);
+  }
+  .hero-arrows {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--dark-text-muted); letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .hero-arrows span { color: var(--dark-text); }
+
+  .hero-orb {
+    position: relative;
+    width: 240px; height: 240px;
+  }
+  .hero-orb-sphere {
+    position: absolute; inset: 0; border-radius: 50%;
+    background:
+      radial-gradient(ellipse at 30% 25%, rgba(244,184,96,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 80%, rgba(232,122,62,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at center, #0F0905 0%, #050302 80%);
+    box-shadow:
+      inset 0 0 40px rgba(244,184,96,0.18),
+      inset 0 -30px 50px rgba(0,0,0,0.6),
+      0 0 50px rgba(232,122,62,0.18);
+    animation: orb-rot 90s linear infinite;
+  }
+  @keyframes orb-rot { to { transform: rotate(360deg); } }
+  .hero-particles { position: absolute; inset: 0; pointer-events: none; }
+  .hero-particles .p {
+    position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%;
+    background: var(--accent-honey);
+    box-shadow: 0 0 3px rgba(244,184,96,0.7);
+    animation: ptw 3s ease-in-out infinite;
+  }
+  .hero-particles .p.teal { background: var(--teal); box-shadow: 0 0 4px rgba(79,209,197,0.8); width: 2px; height: 2px; }
+  .hero-particles .p.dim { opacity: 0.3 !important; }
+
+  .hero-orb-content {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .hero-orb-content .value {
+    font-size: 64px; font-weight: 800; letter-spacing: -0.04em;
+    line-height: 0.9; color: white;
+    text-shadow: 0 0 24px rgba(244,184,96,0.4);
+  }
+  .hero-orb-content .unit {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--accent-honey); letter-spacing: 0.18em;
+    margin-top: 8px; font-weight: 700;
+  }
+  .hero-orb-content .delta {
+    font-family: var(--font-mono); font-size: 9px;
+    color: var(--teal); letter-spacing: 0.08em; margin-top: 4px;
+  }
+  .hero-orb-content .delta::before { content: '▲ '; }
+
+  /* 페이스 슬라이더 */
+  .pace-row { margin: 18px 0 14px; }
+  .pace-label {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em;
+    color: var(--dark-text-muted); text-transform: uppercase;
+  }
+  .pace-label b { color: var(--dark-text); font-weight: 700; }
+  .pace-track {
+    position: relative; height: 26px;
+    display: flex; align-items: center;
+  }
+  .pace-track .line {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: rgba(245,239,230,0.1);
+    top: 50%;
+  }
+  .pace-track .tick {
+    position: absolute; width: 1px; height: 6px; background: rgba(245,239,230,0.15);
+    top: 50%; transform: translateY(-50%);
+  }
+  .pace-track .tick.major { height: 10px; background: rgba(245,239,230,0.3); }
+  .pace-track .pin {
+    position: absolute; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--accent-honey);
+    box-shadow: 0 0 12px var(--accent-honey), 0 0 0 4px rgba(244,184,96,0.18);
+    top: 50%; transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  .pace-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 4px;
+    font-family: var(--font-mono); font-size: 8px; color: var(--dark-text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* 시점 카드 (압축, 단색) */
+  .scene-card {
+    margin: 14px 0 12px;
+    background: var(--oled-card);
+    border: 1px solid rgba(244,184,96,0.18);
+    border-left: 2px solid var(--accent-honey);
+    border-radius: 4px; padding: 14px 16px;
+    position: relative;
+  }
+  .scene-card::before {
+    content: ''; position: absolute; top: 14px; right: 14px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-honey); box-shadow: 0 0 6px var(--accent-honey);
+    animation: ptw 2s ease-in-out infinite;
+  }
+  .scene-card .sc-eyebrow {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.16em; color: var(--accent-honey); text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .scene-card .sc-title {
+    font-size: 17px; font-weight: 800; letter-spacing: -0.01em;
+    line-height: 1.25; margin: 0 0 10px; color: white;
+  }
+  .scene-card .sc-meta {
+    display: flex; gap: 14px; margin-bottom: 12px;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--dark-text-muted); letter-spacing: 0.04em;
+  }
+  .scene-card .sc-meta b { color: var(--dark-text); font-weight: 700; }
+  .scene-card .sc-cta {
+    background: transparent; color: var(--accent-honey); border: 0;
+    padding: 0; font: inherit; font-size: 10px; font-weight: 700;
+    font-family: var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .scene-card .sc-cta::after { content: ' →'; }
+
+  /* 인사이트 (코치 카드) */
+  .coach {
+    margin: 6px 0 10px;
+    background: var(--oled-card-elev);
+    border: 1px solid rgba(245,239,230,0.06);
+    border-radius: 4px; padding: 14px 16px;
+  }
+  .coach .c-eyebrow {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.16em; color: var(--teal); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .coach .c-title { font-size: 13px; font-weight: 700; margin: 0 0 4px; color: white; }
+  .coach .c-body { font-size: 11px; color: var(--dark-text-muted); line-height: 1.55; margin: 0 0 10px; }
+  .coach .c-body b { color: var(--accent-honey); font-weight: 700; }
+  .coach .c-link {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.16em; color: var(--teal); text-transform: uppercase;
+    text-decoration: none;
+  }
+  .coach .c-link::after { content: ' →'; }
+
+  /* 미니 메트릭 1행 (mono) */
+  .mini-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+    margin: 6px 0 14px;
+  }
+  .mini {
+    text-align: left; padding: 10px 0;
+    border-top: 1px solid rgba(245,239,230,0.06);
+  }
+  .mini .ml {
+    font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.14em; color: var(--dark-text-muted); text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .mini .mv {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1; color: white;
+  }
+  .mini .mv .u {
+    font-size: 10px; font-weight: 600; color: var(--dark-text-muted);
+    margin-left: 2px; font-family: var(--font-mono);
+  }
+  .mini.warn .mv { color: var(--coral); }
+  .mini.ok .mv { color: var(--teal); }
+
+  /* FAB (미니 자비스 코어) */
+  .fab {
+    position: absolute; bottom: 88px; right: 18px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--oled-card); border: 1px solid rgba(244,184,96,0.3);
+    display: grid; place-items: center; cursor: pointer;
+    z-index: 12; position: absolute;
+  }
+  .fab .fab-core {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--accent-honey) 0%, var(--primary-500) 60%, var(--primary-700) 100%);
+    box-shadow: 0 0 16px var(--accent-honey), 0 0 32px rgba(232,122,62,0.5);
+    animation: core-breathe 1.8s ease-in-out infinite;
+  }
+  @keyframes core-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  .fab::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 50%;
+    border: 1px solid rgba(244,184,96,0.4);
+    animation: fab-rot 8s linear infinite;
+  }
+  .fab::after {
+    content: ''; position: absolute; inset: -7px; border-radius: 50%;
+    border: 1px dashed rgba(244,184,96,0.2);
+    animation: fab-rot 16s linear infinite reverse;
+  }
+  @keyframes fab-rot { to { transform: rotate(360deg); } }
+
+  /* 하단 네비 */
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 10px 24px 18px;
+    background: linear-gradient(180deg, transparent 0%, var(--oled-black) 40%);
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 6;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    cursor: pointer;
+    font-family: var(--font-mono); font-size: 8px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--dark-text-muted);
+  }
+  .nav-item.active { color: var(--accent-honey); }
+  .nav-item .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 6px currentColor;
+  }
+  .nav-item.active .dot { background: var(--accent-honey); box-shadow: 0 0 8px var(--accent-honey); }
+  .nav-item .ic { font-size: 13px; line-height: 1; margin-bottom: 2px; }
+
+  /* footer */
+  footer {
+    padding: 30px 32px 60px; text-align: center;
+    font-size: 11px; color: var(--dark-text-muted);
+    font-family: var(--font-mono); letter-spacing: 0.08em;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  footer b { color: var(--accent-honey); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="board">
+  <div class="brand">
+    <svg viewBox="0 0 80 80" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+      <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+      <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+      <circle cx="24" cy="32" r="5" fill="#F4B860"/><circle cx="56" cy="32" r="5" fill="#F4B860"/>
+      <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/><circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+      <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/><circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+      <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+      <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h1>라이언 — 시안 <b>v2</b></h1>
+  </div>
+  <div class="meta">[ DESIGN GUIDE v6.1 · <b>CYBER PATCH</b> · 2026-05-12 ]</div>
+  <div class="label-row">
+    <span class="pill">SCREEN 01 · LOGIN</span>
+    <span class="pill teal">SCREEN 02 · MAIN ORB</span>
+  </div>
+</header>
+
+<div class="board-stage">
+
+  <!-- ═══════════ SCENE 1 — LOGIN ═══════════ -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 01</span>
+      <p>auth · cyber halo</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="login-bg"></div>
+        <div class="hud-grid"></div>
+        <div class="vignette"></div>
+        <div class="scanline"></div>
+        <div class="status-bar"><span>9:41</span><span>LION OS · 24ms</span></div>
+        <div class="login-content">
+
+          <div class="login-top">
+            <div class="login-orb">
+              <div class="login-orb-rings"></div>
+              <div class="particle-field" id="loginParticles"></div>
+              <svg class="login-orb-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+                <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+                <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+                <circle cx="24" cy="32" r="5" fill="#F4B860"/><circle cx="56" cy="32" r="5" fill="#F4B860"/>
+                <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/><circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+                <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/><circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+                <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+                <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="login-brand-mono">LIFE OS · ONE · LION</div>
+            <h2 class="login-h1">다시 만나서<br><b>반가워요</b></h2>
+            <p class="login-sub">SYSTEM <b>ONLINE</b> · 24MS · KO-KR</p>
+          </div>
+
+          <form class="login-form" onsubmit="event.preventDefault();">
+            <div class="field-line">
+              <span class="lbl">ID</span>
+              <input type="email" placeholder="EMAIL" value="dahwan.oh@gmail.com" />
+              <span class="indicator"></span>
+            </div>
+            <div class="field-line">
+              <span class="lbl">KEY</span>
+              <input type="password" placeholder="PASSWORD" value="••••••••••" />
+            </div>
+            <div class="login-helper">
+              <label><input type="checkbox" checked /> KEEP SESSION</label>
+              <a href="#">FORGOT KEY</a>
+            </div>
+            <button type="submit" class="login-cta">AUTHENTICATE</button>
+
+            <div class="login-divider">OR · NEW SESSION</div>
+            <div class="social-row">
+              <button type="button" class="social-btn">KAKAO</button>
+              <button type="button" class="social-btn">APPLE ID</button>
+            </div>
+
+            <div class="signup-row">
+              FIRST CONTACT? <a href="#">REGISTER</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>✦ Cyber Patch — 적용 포인트</h4>
+      <ul>
+        <li><b>입자 헤일로</b> — 라이언 마크 둘레 60 dot + 회전 링 2겹 (honey · teal mix)</li>
+        <li><b>HUD 그리드</b> + scanline 미세 노이즈 → AI 시그널</li>
+        <li><b>Mono 라벨</b> — ID / KEY / KEEP SESSION / AUTHENTICATE 전부 mono</li>
+        <li><b>Field underline only</b> — 박스 인풋 폐기. 미니멀 라인 + 우측 teal indicator 점</li>
+        <li><b>Honey CTA + mono 캡션</b> — AUTHENTICATE → 시스템 진입감</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCENE 2 — MAIN (ORB HERO) ═══════════ -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 02</span>
+      <p>main · particle orb hero</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="hud-grid"></div>
+        <div class="vignette"></div>
+        <div class="scanline"></div>
+        <div class="status-bar"><span>9:41</span><span>LION OS · 78</span></div>
+
+        <div class="main-content">
+          <div class="main-scroll">
+
+            <div class="sys-line">
+              <span class="left">LION ACTIVE · GOOD MORNING</span>
+              <span>TUE · 05.12</span>
+            </div>
+
+            <div class="greet-row">
+              <div>
+                <p class="gname">좋은 아침,<br><b>다환</b>님.</p>
+                <div class="gsub">DAILY READOUT · 24MS</div>
+              </div>
+              <div class="date-tag">DAY · <b>132</b></div>
+            </div>
+
+            <div class="hero-orb-wrap">
+              <div class="hero-orb-eyebrow">LION SCORE</div>
+              <div class="hero-arrows">
+                <span>‹</span>
+                <span style="color:var(--dark-text);">MAY 06 — MAY 12</span>
+                <span>›</span>
+              </div>
+              <div class="hero-orb">
+                <div class="hero-orb-sphere"></div>
+                <div class="hero-particles" id="heroParticles"></div>
+                <div class="hero-orb-content">
+                  <div class="value">78</div>
+                  <div class="unit">READINESS · 100</div>
+                  <div class="delta">+6 FROM YESTERDAY</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pace-row">
+              <div class="pace-label"><span>PACE OF LIFE</span><b>1.18x</b></div>
+              <div class="pace-track">
+                <div class="line"></div>
+                <div class="tick major" style="left:0;"></div>
+                <div class="tick" style="left:12.5%;"></div>
+                <div class="tick" style="left:25%;"></div>
+                <div class="tick" style="left:37.5%;"></div>
+                <div class="tick major" style="left:50%;"></div>
+                <div class="tick" style="left:62.5%;"></div>
+                <div class="tick" style="left:75%;"></div>
+                <div class="tick" style="left:87.5%;"></div>
+                <div class="tick major" style="left:100%;"></div>
+                <div class="pin" style="left:67%;"></div>
+              </div>
+              <div class="pace-meta"><span>SLOW · 0.5x</span><span>NORMAL · 1.0x</span><span>FAST · 2.0x</span></div>
+            </div>
+
+            <div class="scene-card">
+              <div class="sc-eyebrow">▸ NEXT · MORNING COMMUTE</div>
+              <h3 class="sc-title">자켓 · 우산 챙기세요.</h3>
+              <div class="sc-meta">
+                <span>RAIN <b>80%</b></span>
+                <span>14°</span>
+                <span>10:00 <b>MEETING</b></span>
+              </div>
+              <button class="sc-cta">VIEW SCENE</button>
+            </div>
+
+            <div class="coach">
+              <div class="c-eyebrow">▸ LION COACH</div>
+              <h4 class="c-title">Steady Momentum</h4>
+              <p class="c-body">7일 평균 대비 <b>READINESS +6</b>. 단백질 보충만 챙기면 주간 목표 달성 페이스예요.</p>
+              <a class="c-link" href="#">VIEW COACH ANALYSIS</a>
+            </div>
+
+            <div class="mini-row">
+              <div class="mini ok">
+                <div class="ml">SLEEP</div>
+                <div class="mv">7.2<span class="u">H</span></div>
+              </div>
+              <div class="mini">
+                <div class="ml">STEPS</div>
+                <div class="mv">2.1<span class="u">K</span></div>
+              </div>
+              <div class="mini warn">
+                <div class="ml">PROTEIN</div>
+                <div class="mv">-38<span class="u">%</span></div>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="fab" aria-label="라이언 음성 진입">
+            <span class="fab-core"></span>
+          </button>
+
+          <nav class="bottom-nav">
+            <div class="nav-item active"><span class="ic">●</span><span>HOME</span><span class="dot"></span></div>
+            <div class="nav-item"><span class="ic">▣</span><span>SCENES</span></div>
+            <div class="nav-item"><span class="ic">◈</span><span>COACH</span></div>
+            <div class="nav-item"><span class="ic">◐</span><span>YOU</span></div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>✦ 5대 약점 — 어떻게 고쳤나</h4>
+      <ul>
+        <li><b>약점 1</b> — 7블록 → <b>입자 영웅 1개</b>로 정보 무게 재분배. 시점·코치는 보조 슬롯.</li>
+        <li><b>약점 2</b> — 입자 구체 + HUD 그리드 + scanline = <b>사이버틱 시그너처 3종</b> 메인에 강제 배치.</li>
+        <li><b>약점 3</b> — Hero <b>64px / 800</b> vs Label <b>10px mono</b> = <b>6배 콘트라스트</b>.</li>
+        <li><b>약점 4</b> — 그라데이션 컬러 카드 전부 폐기. <b>단색 OLED 카드 + borderLeft 액센트</b>.</li>
+        <li><b>약점 5</b> — <b>입자 분포 영웅</b> + 페이스 슬라이더 + 스파크 슬롯 = 데이터가 살아있음.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>LIFE OS.ONE</b> · 라이언 시안 v2 · 2026-05-12<br>
+  📂 <code style="background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:4px;">docs/mockup-v2.html</code>
+  · GUIDE <b>v6.1</b> CYBER PATCH
+</footer>
+
+<script>
+  /* 로그인 헤일로 입자 — 60 dots around mark */
+  const lp = document.getElementById('loginParticles');
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('span');
+    p.className = 'p' + (Math.random() < 0.08 ? ' teal' : '');
+    const a = (i / 60) * Math.PI * 2 + Math.random()*0.2;
+    const r = 50 + Math.random()*42;
+    const x = 50 + Math.cos(a) * (r/2);
+    const y = 50 + Math.sin(a) * (r/2);
+    p.style.left = x + '%';
+    p.style.top = y + '%';
+    p.style.animationDuration = (2 + Math.random()*3) + 's';
+    p.style.animationDelay = -Math.random()*3 + 's';
+    p.style.opacity = 0.3 + Math.random()*0.7;
+    lp.appendChild(p);
+  }
+
+  /* 영웅 입자 구체 — sphere point picking, z-depth */
+  const hp = document.getElementById('heroParticles');
+  const N = 160;
+  for (let i = 0; i < N; i++) {
+    const u = Math.random(), v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2*v - 1);
+    // project sphere → 2D circle; sin(phi) = ring radius
+    const radius = Math.sin(phi); // 0..1
+    const x = 50 + Math.cos(theta) * radius * 47;
+    const y = 50 + Math.sin(theta) * radius * 47;
+    const zFront = Math.cos(phi); // -1..1, +ve = front facing
+    const p = document.createElement('span');
+    const isTeal = Math.random() < 0.07;
+    p.className = 'p' + (isTeal ? ' teal' : '') + (zFront < -0.1 ? ' dim' : '');
+    p.style.left = x + '%';
+    p.style.top = y + '%';
+    const scale = 0.4 + (zFront + 1) / 2 * 1.0;
+    const op = 0.2 + (zFront + 1) / 2 * 0.8;
+    p.style.transform = `scale(${scale.toFixed(2)})`;
+    p.style.opacity = op.toFixed(2);
+    p.style.animationDuration = (2.5 + Math.random()*3.5) + 's';
+    p.style.animationDelay = -Math.random()*4 + 's';
+    hp.appendChild(p);
+  }
+</script>
+
+</body>
+</html>

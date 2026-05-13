@@ -1,0 +1,1632 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 시안 v7 — Cool Surface · 큰 음성 FAB</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+    --s-6:24px; --s-8:32px; --s-12:48px; --s-16:64px;
+    --r-sm:4px; --r-md:12px; --r-lg:20px;
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body {
+    min-height:100vh; background:#ECEFF3; color:#0F1419;
+    font-family:var(--font); -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+
+  /* ─── HEADER (white) ─── */
+  header.board{padding:var(--s-12) var(--s-8) var(--s-6); text-align:center; border-bottom:1px solid #DCE2EA; background:#FFFFFF;}
+  header.board .brand{display:inline-flex; align-items:center; gap:var(--s-3); color:#0F1419;}
+  header.board .brand svg{width:32px; height:32px; color:#5B8DEF;}
+  header.board h1{font-size:22px; font-weight:800; letter-spacing:-0.015em;}
+  header.board h1 b{color:#C8102E; font-weight:800;}
+  header.board .meta{margin-top:var(--s-3); font-family:var(--mono); font-size:14px; color:#444; letter-spacing:0.14em; text-transform:uppercase;}
+  header.board .meta b{color:#C8102E; font-weight:800;}
+  header.board .label-row{display:flex; gap:var(--s-1); justify-content:center; margin-top:var(--s-4); flex-wrap:wrap;}
+  .pill{display:inline-flex; padding:5px 12px; border-radius:var(--r-sm); font-family:var(--mono); font-size:12px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#C8102E; border:1px solid rgba(200,16,46,0.35);}
+
+  /* ─── STAGE ─── */
+  .board-stage{padding:var(--s-12) var(--s-6); background:#ECEFF3; display:flex; flex-direction:row; flex-wrap:nowrap; gap:var(--s-8); justify-content:center; align-items:flex-start; max-width:1700px; margin:0 auto; overflow-x:auto;}
+  .scene{display:flex; flex-direction:column; align-items:center; width:380px; flex-shrink:0;}
+  .scene-tag{margin-bottom:var(--s-4); text-align:center;}
+  .scene-tag .num{display:inline-block; padding:6px 12px; border-radius:var(--r-sm); font-family:var(--mono); font-size:14px; font-weight:800; letter-spacing:0.18em; color:#0F1419; border:1px solid #CFD6E0; background:#FFFFFF;}
+  .scene-tag p{margin-top:var(--s-2); font-family:var(--mono); font-size:14px; color:#4A5363; letter-spacing:0.08em; text-transform:uppercase;}
+
+  /* ─── PHONE ─── */
+  .phone{width:340px; max-width:92vw; aspect-ratio:9/19.5; background:#0A0A0A; border-radius:44px; padding:10px; box-shadow:0 36px 90px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06); position:relative;}
+  .phone::before{content:''; position:absolute; top:22px; left:50%; transform:translateX(-50%); width:110px; height:30px; background:#000; border-radius:16px; z-index:30;}
+  .phone::after{content:''; position:absolute; top:33px; right:calc(50% - 42px); width:8px; height:8px; border-radius:50%; background:#1A1A1A; border:1px solid #0A0A0A; z-index:31;}
+  .screen{width:100%; height:100%; border-radius:34px; overflow:hidden; position:relative; display:flex; flex-direction:column; background:var(--bg); color:var(--text-1);}
+
+  /* ═══ COOL SURFACES (v7) ═══ */
+  /* Accent: Lion Iris #5B5FE0 — iOS Blue 회피, indigo 잔향 시그너처 */
+  .surface-am{
+    --bg:#F8FAFC; --card:#FFFFFF; --card-soft:#EBEEF5;
+    --text-1:#0F1419; --text-2:#4A5363; --text-3:#8090A3;
+    --line:#E1E6ED; --line-2:#CFD6E0;
+    --accent:#5B5FE0; --accent-soft:#8F92F0;
+    --accent-tint:rgba(91,95,224,0.10);
+    --hero-text:#FFFFFF; --hero-text-soft:rgba(255,255,255,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#4A5363;
+  }
+  .surface-late-am{
+    --bg:#E8ECF3; --card:#FFFFFF; --card-soft:#D6DCE9;
+    --text-1:#1A1F26; --text-2:#4F5866; --text-3:#8492A3;
+    --line:#D0D6E2; --line-2:#BCC4D2;
+    --accent:#4A4ED0; --accent-soft:#7174E5;
+    --accent-tint:rgba(74,78,208,0.10);
+    --hero-text:#F8FAFC; --hero-text-soft:rgba(248,250,252,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#4F5866;
+  }
+  .surface-lunch{
+    --bg:#DEE4EE; --card:#FFFFFF; --card-soft:#CDD5E3;
+    --text-1:#1F2530; --text-2:#4F5866; --text-3:#8492A3;
+    --line:#C8D0DE; --line-2:#AEB7CA;
+    --accent:#3F43BD; --accent-soft:#5B5FE0;
+    --accent-tint:rgba(63,67,189,0.10);
+    --hero-text:#F8FAFC; --hero-text-soft:rgba(248,250,252,0.88); --hero-eye:#A8AAF5;
+    --status-tint:#4F5866;
+  }
+  .surface-pm{
+    --bg:#D2DAE6; --card:#FFFFFF; --card-soft:#C0CADA;
+    --text-1:#1A1F26; --text-2:#4A5363; --text-3:#7A8694;
+    --line:#BFC8D8; --line-2:#A6B1C4;
+    --accent:#3D41C5; --accent-soft:#5B5FE0;
+    --accent-tint:rgba(61,65,197,0.10);
+    --hero-text:#F8FAFC; --hero-text-soft:rgba(248,250,252,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#4A5363;
+  }
+  .surface-eve{
+    --bg:#222A38; --card:#2E384A; --card-soft:#1A2030;
+    --text-1:#E8EEF5; --text-2:#B0BCC9; --text-3:#78859A;
+    --line:#374258; --line-2:#475368;
+    --accent:#9094F5; --accent-soft:#7174E5;
+    --accent-tint:rgba(144,148,245,0.16);
+    --hero-text:#F2F5F9; --hero-text-soft:rgba(242,245,249,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#B0BCC9;
+  }
+  .surface-night{
+    --bg:#0B1024; --card:#171E3A; --card-soft:#070B1E;
+    --text-1:#DDE3EF; --text-2:#98A3B8; --text-3:#5E6A82;
+    --line:#272F4C; --line-2:#37405E;
+    --accent:#A8AAF5; --accent-soft:#9094F5;
+    --accent-tint:rgba(168,170,245,0.18);
+    --hero-text:#DDE3EF; --hero-text-soft:rgba(221,227,239,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#98A3B8;
+  }
+  .surface-auth{
+    --bg:#E8ECF3; --card:#FFFFFF; --card-soft:#D6DCE9;
+    --text-1:#1A1F26; --text-2:#4F5866; --text-3:#8492A3;
+    --line:#D0D6E2; --line-2:#BCC4D2;
+    --accent:#4A4ED0; --accent-soft:#7174E5;
+    --accent-tint:rgba(74,78,208,0.10);
+    --hero-text:#FFFFFF; --hero-text-soft:rgba(255,255,255,0.85); --hero-eye:#A8AAF5;
+    --status-tint:#4F5866;
+  }
+
+  /* Status bar */
+  .status-bar{flex-shrink:0; position:relative; z-index:5; padding:14px 24px 4px; display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:13px; font-weight:700; color:var(--text-1); letter-spacing:0.04em;}
+  .status-bar .right{color:var(--status-tint); font-size:11px; display:inline-flex; gap:6px; align-items:center;}
+  .status-bar .right::before{content:''; width:5px; height:5px; border-radius:50%; background:var(--accent); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+
+  .icon{display:inline-block; vertical-align:middle; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round;}
+
+  /* ─── CAPTION ─── */
+  .caption{margin-top:var(--s-4); width:340px; max-width:100%; background:#FFFFFF; border:1px solid #DDDDDD; border-radius:8px; padding:20px 22px; box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+  .caption h4{color:#C8102E; font-size:15px; font-weight:800; letter-spacing:0.12em; margin-bottom:14px; text-transform:uppercase; font-family:var(--mono);}
+  .caption .time{display:inline-block; padding:2px 8px; border-radius:4px; background:#C8102E; color:#FFFFFF; font-family:var(--mono); font-size:13px; font-weight:800; letter-spacing:0.06em; margin-bottom:10px;}
+  .caption ul{list-style:none; padding:0;}
+  .caption li{color:#111111; font-size:15px; line-height:1.65; margin-bottom:10px; padding-left:18px; position:relative;}
+  .caption li::before{content:'—'; position:absolute; left:0; color:#C8102E; font-family:var(--mono); font-weight:800;}
+  .caption li b{color:#C8102E; font-weight:800;}
+  .ink-row{margin-top:14px; padding-top:14px; border-top:1px solid #EEE; display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;}
+  .ink-col{display:flex; flex-direction:column; gap:4px; align-items:center;}
+  .ink-chip{width:100%; height:38px; border-radius:4px; border:1px solid rgba(0,0,0,0.06); display:grid; place-items:center; font-family:var(--mono); font-size:14px; font-weight:800;}
+  .ink-label{font-family:var(--mono); font-size:9px; font-weight:700; color:#777; letter-spacing:0.08em; text-transform:uppercase;}
+  .ink-hex{font-family:var(--mono); font-size:9px; color:#999;}
+
+  /* ═══ LOGIN ═══ */
+  .login-glow{position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse 60% 50% at 50% 25%, var(--accent-tint) 0%, transparent 70%); z-index:1;}
+  .login-content{position:relative; z-index:4; flex:1; display:flex; flex-direction:column; padding:var(--s-6);}
+  .login-top{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding-bottom:var(--s-4);}
+  .login-orb{position:relative; width:120px; height:120px; margin-bottom:var(--s-6);}
+  /* ambient glow 호흡 — orb 뒤 발광 */
+  .login-orb::before{
+    content:''; position:absolute; inset:-22px; border-radius:50%;
+    background: radial-gradient(circle, var(--accent-tint) 0%, transparent 65%);
+    animation: orb-glow 3.6s ease-in-out infinite;
+    pointer-events:none; z-index:0;
+  }
+  @keyframes orb-glow{
+    0%,100%{opacity:0.35; transform:scale(1);}
+    50%   {opacity:0.7;  transform:scale(1.15);}
+  }
+  /* 추가 외곽 ring (3겹째) */
+  .login-orb-rings-outer{
+    position:absolute; inset:-10px;
+    border:1px dotted var(--accent); opacity:0.32;
+    border-radius:50%;
+    animation:spin 28s linear infinite;
+    z-index:1;
+  }
+  /* ambient glow 호흡 — orb 뒤 발광 */
+  .login-orb::before{
+    content:''; position:absolute; inset:-22px; border-radius:50%;
+    background: radial-gradient(circle, var(--accent-tint) 0%, transparent 65%);
+    animation: orb-glow 3.6s ease-in-out infinite;
+    pointer-events:none; z-index:0;
+  }
+  @keyframes orb-glow{
+    0%,100%{opacity:0.35; transform:scale(1);}
+    50%   {opacity:0.7;  transform:scale(1.15);}
+  }
+  /* 추가 외곽 ring (3겹째) */
+  .login-orb-rings-outer{
+    position:absolute; inset:-10px;
+    border:1px dotted var(--accent); opacity:0.32;
+    border-radius:50%;
+    animation:spin 28s linear infinite;
+    z-index:1;
+  }
+  .login-orb-rings::before, .login-orb-rings::after{content:''; position:absolute; inset:0; border-radius:50%; z-index:1;}
+  .login-orb-rings::before{border:1px solid var(--accent); opacity:0.50; animation:spin 60s linear infinite;}
+  .login-orb-rings::after{inset:12px; border:1px dashed var(--accent); opacity:0.45; animation:spin 36s linear infinite reverse;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .login-orb-mark{position:absolute; inset:0; display:grid; place-items:center; color:var(--accent); z-index:5;}
+  .login-orb-mark svg{
+    width:56px; height:56px;
+    animation: lion-wake 4.5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 10px var(--accent-tint));
+  }
+  /* 라이언이 깨어나며 좌우로 갸웃거리는 동작 */
+  @keyframes lion-wake{
+    0%, 100% { transform: scale(1)    rotate(0deg);  }
+    25%      { transform: scale(1.06) rotate(-4deg); }
+    50%      { transform: scale(0.97) rotate(0deg);  }
+    75%      { transform: scale(1.06) rotate(4deg);  }
+  }
+  .particle-field{position:absolute; inset:0; pointer-events:none; z-index:3;}
+  .particle-field .p{position:absolute; width:1.5px; height:1.5px; border-radius:50%; background:var(--accent); animation:twinkle 3s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:0.15;transform:scale(0.8);}50%{opacity:0.95;transform:scale(1.4);}}
+  /* 앱 이름 워드마크 */
+  .login-wordmark{
+    font-size:32px; font-weight:800; letter-spacing:-0.025em;
+    color:var(--text-1); line-height:1;
+    margin-bottom:var(--s-2);
+  }
+  .login-brand{font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.36em; text-transform:uppercase; color:var(--accent); margin-bottom:0;}
+  /* 폐기 — HTML 미사용. CSS는 rollback용 보존 */
+  .login-h1{font-size:28px; font-weight:800; letter-spacing:-0.025em; line-height:1.1; color:var(--text-1); margin-bottom:var(--s-2);}
+  .login-sub{font-family:var(--mono); font-size:11px; color:var(--text-2); letter-spacing:0.12em; text-transform:uppercase;}
+  .login-sub b{color:var(--accent); font-weight:700;}
+  .login-form{margin-top:var(--s-6);}
+  .field{margin-bottom:var(--s-6);}
+  .field .lbl{display:block; margin-bottom:var(--s-2); font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.18em; color:var(--text-2); text-transform:uppercase;}
+  .field-row{display:flex; align-items:center; gap:var(--s-3); padding:var(--s-2) 0; border-bottom:1px solid var(--line-2); transition:border-color 0.2s;}
+  .field-row:focus-within{border-color:var(--accent);}
+  .field-row input{flex:1; background:transparent; border:0; outline:0; color:var(--text-1); font:inherit; font-size:15px;}
+  .field-row input::placeholder{color:var(--text-3);}
+  .field-row .dot{width:4px; height:4px; border-radius:50%; background:var(--accent); animation:pulse 1.6s ease-in-out infinite;}
+  .login-helper{display:flex; justify-content:space-between; align-items:center; margin-top:var(--s-4); font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-2);}
+  .login-helper label{display:inline-flex; gap:var(--s-2); align-items:center;}
+  .login-helper a{color:var(--text-2); text-decoration:none;}
+  .check{display:inline-block; width:12px; height:12px; border:1px solid var(--line-2); border-radius:2px; background:var(--accent); position:relative;}
+  .check::after{content:''; position:absolute; left:3px; top:1px; width:4px; height:7px; border:solid #FFFFFF; border-width:0 1.5px 1.5px 0; transform:rotate(45deg);}
+  .login-cta{margin-top:var(--s-8); width:100%; background:var(--accent); color:#FFFFFF; border:0; padding:18px; border-radius:var(--r-sm); font-family:var(--mono); font-size:12px; font-weight:800; letter-spacing:0.24em; text-transform:uppercase; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:var(--s-3);}
+  .login-cta .icon{stroke:#FFFFFF; stroke-width:2;}
+  .login-divider{display:flex; align-items:center; gap:var(--s-3); margin:var(--s-6) 0 var(--s-4); font-family:var(--mono); font-size:10px; letter-spacing:0.2em; color:var(--text-2); text-transform:uppercase;}
+  .login-divider::before, .login-divider::after{content:''; flex:1; height:1px; background:var(--line);}
+  .social-row{display:flex; gap:var(--s-2);}
+  .social-btn{flex:1; background:var(--card); border:1px solid var(--line-2); color:var(--text-1); padding:14px; border-radius:var(--r-sm); font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:var(--s-2);}
+  .signup-row{margin-top:var(--s-6); text-align:center; font-family:var(--mono); font-size:11px; color:var(--text-2); letter-spacing:0.12em; text-transform:uppercase;}
+  .signup-row a{color:var(--accent); font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;}
+
+  /* ═══ MAIN ═══ */
+  .main-content{flex:1; position:relative; z-index:4; overflow:hidden; display:flex; flex-direction:column; padding-bottom:82px;}
+  .main-scroll{flex:1; overflow-y:auto; padding:0 var(--s-6);}
+  .main-scroll::-webkit-scrollbar{display:none;}
+  .moment-head{padding:var(--s-4) 0 var(--s-3); display:flex; justify-content:space-between; align-items:center;}
+  .moment-head .left{display:inline-flex; align-items:center; gap:var(--s-2); font-family:var(--mono); font-size:10px; letter-spacing:0.24em; color:var(--text-2); text-transform:uppercase;}
+  .moment-head .left .lion-mini{width:18px; height:18px; color:var(--accent); display:grid; place-items:center;}
+  .moment-head .left b{color:var(--accent); font-weight:700;}
+  .moment-head .right{font-family:var(--mono); font-size:10px; color:var(--text-2); letter-spacing:0.12em; text-transform:uppercase;}
+  .greet{padding:var(--s-2) 0 var(--s-4);}
+  .greet .gname{font-size:24px; font-weight:800; letter-spacing:-0.02em; line-height:1.2; color:var(--text-1);}
+  .greet .gname b{color:var(--accent);}
+  .greet .gsub{margin-top:var(--s-2); font-size:14px; color:var(--text-2); line-height:1.5;}
+  .hero-card{margin-top:var(--s-2); border-radius:var(--r-lg); overflow:hidden; position:relative; height:248px; box-shadow:0 12px 32px rgba(0,0,0,0.12);}
+  .hero-bg{position:absolute; inset:0;}
+  .hero-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%);}
+  .hero-content{position:absolute; inset:0; padding:var(--s-4); display:flex; flex-direction:column; justify-content:flex-end;}
+  .hero-content .h-eye{font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--hero-text-soft); margin-bottom:var(--s-2); display:inline-flex; align-items:center; gap:var(--s-2);}
+  .hero-content .h-eye .ic{color:var(--hero-eye);}
+  .hero-content .h-title{font-size:26px; font-weight:800; letter-spacing:-0.025em; line-height:1.2; color:var(--hero-text); text-shadow:0 2px 12px rgba(0,0,0,0.35);}
+  .detail-grid{margin-top:var(--s-4); display:grid; gap:var(--s-2);}
+  .detail{background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); padding:var(--s-3) var(--s-4); display:flex; align-items:center; gap:var(--s-3);}
+  .detail .ic{width:32px; height:32px; flex-shrink:0; border-radius:50%; background:var(--accent-tint); display:grid; place-items:center; color:var(--accent);}
+  .detail .ic .icon{width:16px; height:16px;}
+  .detail .body{flex:1; min-width:0;}
+  .detail .body .lab{font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.16em; color:var(--text-2); text-transform:uppercase; margin-bottom:2px;}
+  .detail .body .val{font-size:14px; font-weight:700; color:var(--text-1); line-height:1.4;}
+  .detail .body .val b{color:var(--accent);}
+  .detail .chev{color:var(--text-3);}
+  .cta-row{margin-top:var(--s-4); display:flex; gap:var(--s-2);}
+  .cta{flex:1; background:var(--accent); color:#FFFFFF; border:0; padding:14px; border-radius:var(--r-md); font:inherit; font-weight:800; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;}
+  .cta.ghost{background:transparent; color:var(--text-1); border:1px solid var(--line-2);}
+
+  /* ─── SCREEN 02 v.3a SD — visual craft / hierarchy / restraint ─── */
+  .s3sd-body{height:100%; padding:56px 24px 22px; display:flex; flex-direction:column; gap:22px;}
+  .s3sd-hero{margin-top:0; flex-shrink:0; height:132px; border-radius:16px;}
+  .s3sd-hero .hero-content{padding:14px 16px;}
+  .s3sd-hero .h-title{display:none;}
+  .s3sd-meta{display:flex; align-items:baseline; gap:16px; padding:0 4px;}
+  .s3sd-temp{font-size:52px; font-weight:300; letter-spacing:-0.04em; color:var(--text-1); line-height:0.9;}
+  .s3sd-temp sup{font-size:22px; font-weight:300; margin-left:2px; top:-18px;}
+  .s3sd-temp-tag{display:flex; flex-direction:column; gap:3px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:0.18em; color:var(--text-2); text-transform:uppercase;}
+  .s3sd-temp-tag .hi{color:var(--accent); font-weight:700;}
+  .s3sd-thread{flex:1; min-height:0; overflow-y:auto; padding:0 4px;}
+  .s3sd-thread::-webkit-scrollbar{display:none;}
+  .s3sd-prose{font-size:15px; line-height:1.78; color:var(--text-1); letter-spacing:-0.005em; margin:0;}
+  .s3sd-prose b{font-weight:700;}
+  .s3sd-rule{height:1px; background:var(--line); margin:20px 0;}
+  .s3sd-input{flex-shrink:0; display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--card); border:1px solid var(--line); border-radius:18px;}
+  .s3sd-input .lion-glyph{width:22px; height:22px; color:var(--accent); flex-shrink:0;}
+  .s3sd-input-text{flex:1; font-size:11px; color:var(--text-2); font-family:var(--mono); letter-spacing:0.18em; text-transform:uppercase; font-weight:700;}
+  .s3sd-input-divider{width:1px; height:18px; background:var(--line-2);}
+  .s3sd-input-mic{border:0; background:transparent; padding:0; cursor:pointer; color:var(--text-2); display:grid; place-items:center;}
+
+  /* ─── SCREEN 02 v.3b UX — clarity / function / usability ─── */
+  .s3ux-body{height:100%; padding:56px 16px 14px; display:flex; flex-direction:column; gap:12px;}
+  .s3ux-bar{display:flex; align-items:center; justify-content:space-between; padding:0 4px;}
+  .s3ux-bar .left{font-family:var(--mono); font-size:13px; font-weight:700; color:var(--text-1); letter-spacing:0.04em;}
+  .s3ux-bar .right{display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10.5px; color:var(--text-2);}
+  .s3ux-bar .right svg{width:13px; height:13px; color:var(--accent);}
+  .s3ux-hero{margin-top:0; flex-shrink:0; height:122px; border-radius:14px;}
+  .s3ux-hero .hero-content{padding:12px 14px;}
+  .s3ux-hero .h-eye{font-size:10px;}
+  .s3ux-hero .h-title{font-size:18px;}
+  .s3ux-card-grid{display:flex; flex-direction:column; gap:7px;}
+  .s3ux-card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:9px 12px; display:flex; align-items:center; gap:10px;}
+  .s3ux-card .ic{width:30px; height:30px; flex-shrink:0; border-radius:50%; background:var(--accent-tint); display:grid; place-items:center; color:var(--accent);}
+  .s3ux-card .ic svg{width:14px; height:14px;}
+  .s3ux-card .body{flex:1; min-width:0;}
+  .s3ux-card .lab{font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:0.16em; color:var(--text-2); text-transform:uppercase; margin-bottom:1px;}
+  .s3ux-card .val{font-size:13px; font-weight:600; color:var(--text-1); line-height:1.35;}
+  .s3ux-card .val b{color:var(--accent); font-weight:700;}
+  .s3ux-card .stamp{font-family:var(--mono); font-size:9px; color:var(--text-3); flex-shrink:0;}
+  .s3ux-actions{display:flex; gap:6px; flex-wrap:wrap; padding:0 2px;}
+  .s3ux-actions button{background:var(--card); border:1px solid var(--line-2); color:var(--text-1); font:inherit; font-size:11.5px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer;}
+  .s3ux-actions button.primary{background:var(--accent); color:#FFFFFF; border-color:var(--accent);}
+  .s3ux-input{flex-shrink:0; display:flex; gap:6px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:6px 6px 6px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.04);}
+  .s3ux-input input{flex:1; border:0; background:transparent; font:inherit; font-size:13.5px; color:var(--text-1); outline:none; min-width:0;}
+  .s3ux-input input::placeholder{color:var(--text-3);}
+  .s3ux-input .btn-mic, .s3ux-input .btn-send{width:32px; height:32px; flex-shrink:0; border:0; border-radius:10px; display:grid; place-items:center; cursor:pointer;}
+  .s3ux-input .btn-mic{background:var(--accent-tint); color:var(--accent);}
+  .s3ux-input .btn-send{background:var(--accent); color:#FFFFFF;}
+  .s3ux-input .btn-send svg{stroke:#FFFFFF;}
+  .s3ux-input .btn-mic svg, .s3ux-input .btn-send svg{width:15px; height:15px;}
+
+  /* ─── SCREEN 02 v.3c MK — engagement / brand / personality ─── */
+  .s3mk-body{height:100%; padding:56px 20px 18px; display:flex; flex-direction:column; gap:14px;}
+  .s3mk-brand{display:flex; align-items:center; gap:12px; padding:0 2px;}
+  .s3mk-mascot{width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%); display:grid; place-items:center; flex-shrink:0; box-shadow:0 6px 16px rgba(91,95,224,0.28);}
+  .s3mk-mascot svg{width:34px; height:34px; color:#FFFFFF;}
+  .s3mk-greet{flex:1; min-width:0;}
+  .s3mk-greet .who{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.2em; color:var(--accent); text-transform:uppercase;}
+  .s3mk-greet .hi{font-size:18px; font-weight:800; letter-spacing:-0.02em; color:var(--text-1); margin-top:2px; line-height:1.25;}
+  .s3mk-streak{display:inline-flex; align-items:center; gap:6px; padding:5px 10px; background:var(--accent-tint); border-radius:999px; align-self:flex-start; font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.12em; color:var(--accent); text-transform:uppercase; width:fit-content;}
+  .s3mk-streak::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--accent);}
+  .s3mk-hero{margin-top:0; flex-shrink:0; height:140px; border-radius:14px;}
+  .s3mk-hero .hero-content{padding:12px 14px;}
+  .s3mk-hero .h-title{font-size:18px;}
+  .s3mk-bubble{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px 15px; position:relative;}
+  .s3mk-bubble::before{content:''; position:absolute; left:22px; top:-7px; width:12px; height:12px; background:var(--card); border-left:1px solid var(--line); border-top:1px solid var(--line); transform:rotate(45deg);}
+  .s3mk-bubble p{font-size:14px; line-height:1.6; color:var(--text-1); margin:0;}
+  .s3mk-bubble p + p{margin-top:6px;}
+  .s3mk-bubble b{color:var(--accent); font-weight:700;}
+  .s3mk-social{display:flex; align-items:center; gap:10px; padding:9px 12px; background:var(--card-soft); border-radius:12px;}
+  .s3mk-social-dots{display:flex;}
+  .s3mk-social-dots span{width:20px; height:20px; border-radius:50%; background:var(--accent-soft); border:2px solid var(--card-soft); margin-left:-7px;}
+  .s3mk-social-dots span:first-child{margin-left:0;}
+  .s3mk-social-txt{font-size:11.5px; color:var(--text-2); line-height:1.4;}
+  .s3mk-social-txt b{color:var(--text-1); font-weight:700;}
+  .s3mk-foot{flex:1;}
+  .s3mk-cta-row{display:flex; gap:8px;}
+  .s3mk-cta{flex:1; padding:12px; border-radius:14px; border:0; font:inherit; font-weight:700; font-size:13px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;}
+  .s3mk-cta.primary{background:var(--accent); color:#FFFFFF;}
+  .s3mk-cta.ghost{background:transparent; color:var(--text-1); border:1px solid var(--line-2);}
+  .s3mk-cta svg{width:14px; height:14px;}
+
+  /* ─── SCREEN 02 v.3 — consolidated (SD craft + UX function + MK brand) ─── */
+  .s3v3-body{height:100%; padding:56px 16px 14px; display:flex; flex-direction:column; gap:11px;}
+  .s3v3-bar{display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); padding:0 2px;}
+  .s3v3-bar .clock{font-size:13px; font-weight:700; color:var(--text-1); letter-spacing:0.04em;}
+  .s3v3-bar .meta{font-size:10.5px; color:var(--text-2); letter-spacing:0.06em; display:inline-flex; align-items:center; gap:6px;}
+  .s3v3-bar .meta svg{width:13px; height:13px; color:var(--accent);}
+  .s3v3-brand{display:flex; align-items:center; gap:11px; padding:0 2px;}
+  .s3v3-mascot{width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%); display:grid; place-items:center; flex-shrink:0; box-shadow:0 4px 12px rgba(91,95,224,0.22);}
+  .s3v3-mascot svg{width:26px; height:26px; color:#FFFFFF;}
+  .s3v3-greet{flex:1; min-width:0;}
+  .s3v3-greet .hi{font-size:16px; font-weight:800; letter-spacing:-0.02em; color:var(--text-1); line-height:1.2;}
+  .s3v3-greet .hi b{color:var(--accent);}
+  .s3v3-greet .streak{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.14em; color:var(--text-3); text-transform:uppercase; margin-top:3px;}
+  .s3v3-hero{margin-top:0; flex-shrink:0; height:120px; border-radius:14px;}
+  .s3v3-hero .hero-content{padding:11px 13px;}
+  .s3v3-hero .h-eye{font-size:10px;}
+  .s3v3-hero .h-title{font-size:17px;}
+  .s3v3-cards{display:flex; flex-direction:column; gap:5px;}
+  .s3v3-card{background:var(--card); border:1px solid var(--line); border-radius:11px; padding:8px 11px; display:flex; align-items:center; gap:10px;}
+  .s3v3-card .ic{width:26px; height:26px; flex-shrink:0; border-radius:50%; background:var(--accent-tint); display:grid; place-items:center; color:var(--accent);}
+  .s3v3-card .ic svg{width:13px; height:13px;}
+  .s3v3-card .body{flex:1; min-width:0;}
+  .s3v3-card .lab{font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:0.16em; color:var(--text-3); text-transform:uppercase;}
+  .s3v3-card .val{font-size:12.5px; font-weight:600; color:var(--text-1); line-height:1.3; margin-top:1px;}
+  .s3v3-card .val b{color:var(--accent); font-weight:700;}
+  .s3v3-nudge{display:flex; gap:8px; align-items:flex-start; padding:2px 4px;}
+  .s3v3-nudge .av{width:20px; height:20px; flex-shrink:0; border-radius:50%; background:var(--accent-tint); display:grid; place-items:center; color:var(--accent); margin-top:1px;}
+  .s3v3-nudge .av svg{width:13px; height:13px;}
+  .s3v3-nudge p{font-size:12.5px; line-height:1.5; color:var(--text-2); margin:0;}
+  .s3v3-nudge p b{color:var(--text-1); font-weight:700;}
+  .s3v3-chips{display:flex; gap:6px; flex-wrap:wrap; padding:0 2px;}
+  .s3v3-chips button{background:var(--card); border:1px solid var(--line-2); color:var(--text-1); font:inherit; font-size:11.5px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer;}
+  .s3v3-chips button.primary{background:var(--accent); color:#FFFFFF; border-color:var(--accent);}
+  .s3v3-input{flex-shrink:0; display:flex; gap:6px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:6px 6px 6px 14px; box-shadow:0 2px 6px rgba(0,0,0,0.04);}
+  .s3v3-input input{flex:1; border:0; background:transparent; font:inherit; font-size:13px; color:var(--text-1); outline:none; min-width:0;}
+  .s3v3-input input::placeholder{color:var(--text-3);}
+  .s3v3-input button{width:32px; height:32px; flex-shrink:0; border:0; border-radius:10px; display:grid; place-items:center; cursor:pointer;}
+  .s3v3-input .btn-mic{background:var(--accent-tint); color:var(--accent);}
+  .s3v3-input .btn-send{background:var(--accent); color:#FFFFFF;}
+  .s3v3-input button svg{width:14px; height:14px;}
+  .s3v3-input .btn-send svg{stroke:#FFFFFF;}
+
+  /* ═══ BIG VOICE FAB (v7 new) ═══ */
+  /* Voice FAB — nav 가운데로 이동 (이전 우측 floating 폐기) */
+  .voice-cluster{ display:none; }
+  .voice-fab{
+    width:48px; height:48px; border-radius:50%;
+    /* 3D Sphere body — 광원 고정 (top-left), 다층 명암 */
+    background:
+      /* 1. specular highlight spot — top-left 작은 반짝 */
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 8%, transparent 22%),
+      /* 2. soft top-light spread */
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,0.22) 0%, transparent 45%),
+      /* 3. bottom-right shade — 광원 반대편 어두움 */
+      radial-gradient(circle at 72% 80%, rgba(0,0,0,0.38) 0%, transparent 48%),
+      /* 4. outer rim shadow — sphere 가장자리 어둡 (3D 깊이) */
+      radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.22) 80%, rgba(0,0,0,0.48) 100%),
+      /* 5. base sphere color */
+      radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, var(--accent) 100%);
+    border:0;
+    display:grid; place-items:center; position:relative;
+    box-shadow:
+      0 6px 18px var(--accent-tint),
+      0 0 0 3px var(--bg),
+      0 0 14px rgba(91,95,224,0.20);
+    cursor:pointer; pointer-events:auto;
+    overflow:visible;
+    perspective: 220px;
+    perspective-origin: 50% 50%;
+    isolation: isolate;
+  }
+  /* atom-system: wireframe + 위성 묶음 (sphere body는 voice-fab에 고정). 통째로 자전 */
+  .voice-fab .atom-system{
+    position:absolute; inset:0;
+    border-radius:50%;
+    background: transparent;
+    transform-style: preserve-3d;
+    animation: atom-spin 8s linear infinite;
+    z-index:1;
+  }
+  @keyframes atom-spin{
+    from{transform: rotateZ(-12deg) rotateY(0deg);}
+    to  {transform: rotateZ(-12deg) rotateY(360deg);}
+  }
+  /* 자오선 (세로 ellipse) — sphere 자전을 시각화 */
+  .voice-fab .atom-system::before{
+    content:''; position:absolute;
+    inset: 0 9px;
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* 적도 (가로 ellipse) — globe wireframe */
+  .voice-fab .atom-system::after{
+    content:''; position:absolute;
+    inset: 9px 0;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* 라이언 핵 — wrapper 밖이라 항상 정면 (얼굴 회전 X) */
+  .voice-fab .lion-core{
+    width:20px; height:20px;
+    color:rgba(255,255,255,0.97);
+    animation:lion-breathe 2.6s ease-in-out infinite;
+    position:relative; z-index:3;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+  }
+  @keyframes lion-breathe{
+    0%,100%{transform:scale(1);    opacity:0.95;}
+    50%    {transform:scale(0.93); opacity:1;}
+  }
+  /* 전자 궤도 1~3 — atom-system 안 → wrapper와 같은 좌표계로 함께 회전 */
+  .voice-fab .orbit{
+    position:absolute; inset:-7px; border-radius:50%;
+    border:1px solid var(--accent);
+    opacity:0.65; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-1 3.6s linear infinite;
+  }
+  .voice-fab .orbit::before{
+    content:''; position:absolute;
+    width:6px; height:6px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:
+      0 0 0 1.5px rgba(255,255,255,0.9),
+      0 0 8px var(--accent);
+    top:-3px; left:50%; transform:translateX(-50%);
+  }
+  .voice-fab .orbit::after{
+    content:''; position:absolute;
+    width:4px; height:4px; border-radius:50%;
+    background:var(--accent); opacity:0.75;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.7),
+      0 0 6px var(--accent);
+    bottom:-2px; left:50%; transform:translateX(-50%);
+  }
+  @keyframes atom-orbit-1{
+    from{transform:rotateX(72deg) rotateZ(0deg);}
+    to  {transform:rotateX(72deg) rotateZ(360deg);}
+  }
+  .voice-fab .orbit2{
+    position:absolute; inset:-7px; border-radius:50%;
+    border:1px solid var(--accent);
+    opacity:0.55; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-2 5s linear infinite reverse;
+  }
+  .voice-fab .orbit2::before{
+    content:''; position:absolute;
+    width:5px; height:5px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:
+      0 0 0 1.2px rgba(255,255,255,0.85),
+      0 0 7px var(--accent);
+    top:-2.5px; left:50%; transform:translateX(-50%);
+  }
+  .voice-fab .orbit2::after{
+    content:''; position:absolute;
+    width:3.5px; height:3.5px; border-radius:50%;
+    background:var(--accent); opacity:0.65;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.65),
+      0 0 5px var(--accent);
+    bottom:-1.75px; left:50%; transform:translateX(-50%);
+  }
+  @keyframes atom-orbit-2{
+    from{transform:rotateX(72deg) rotateY(60deg) rotateZ(0deg);}
+    to  {transform:rotateX(72deg) rotateY(60deg) rotateZ(360deg);}
+  }
+  .voice-fab .orbit3{
+    position:absolute; inset:-7px; border-radius:50%;
+    border:1px solid var(--accent);
+    opacity:0.50; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-3 4.2s linear infinite;
+  }
+  .voice-fab .orbit3::before{
+    content:''; position:absolute;
+    width:4.5px; height:4.5px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.85),
+      0 0 6px var(--accent);
+    top:-2.25px; left:50%; transform:translateX(-50%);
+  }
+  @keyframes atom-orbit-3{
+    from{transform:rotateX(72deg) rotateY(-60deg) rotateZ(0deg);}
+    to  {transform:rotateX(72deg) rotateY(-60deg) rotateZ(360deg);}
+  }
+  /* 가장 외곽 pulse ring (wrapper 밖, 평면) */
+  .voice-fab .ring{
+    position:absolute; inset:0; border-radius:50%;
+    border:1px solid var(--accent); pointer-events:none;
+    animation:voice-pulse 2.2s ease-out infinite;
+    z-index:0;
+  }
+  @keyframes voice-pulse{
+    0%  {transform:scale(1);   opacity:0.5;}
+    80% {opacity:0;}
+    100%{transform:scale(1.55); opacity:0;}
+  }
+
+  /* Bottom nav (5 slots, voice center) */
+  .bottom-nav{
+    position:absolute; bottom:0; left:0; right:0;
+    padding:10px 12px 22px;
+    background:linear-gradient(180deg, transparent, var(--bg) 35%);
+    display:grid; grid-template-columns:repeat(5, 1fr); align-items:end; z-index:6;
+    gap:0;
+  }
+  .nav-item{
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    font-family:var(--font); font-size:11px; font-weight:700;
+    letter-spacing:-0.005em; color:var(--text-2);
+    cursor:pointer; background:transparent; border:0; padding:6px 0;
+  }
+  .nav-item .icon{width:22px; height:22px;}
+  .nav-item.active{color:var(--accent);}
+  .nav-item.active .icon{stroke-width:1.8;}
+
+  /* Voice nav — 가운데 슬롯, sphere 시각 유지 */
+  .nav-voice{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:transparent; border:0; padding:0;
+    cursor:pointer; pointer-events:auto;
+    transform: translateY(-4px);
+  }
+  .nav-voice .voice-orb{
+    width:40px; height:40px; border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 8%, transparent 22%),
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 72% 80%, rgba(0,0,0,0.38) 0%, transparent 48%),
+      radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.22) 80%, rgba(0,0,0,0.48) 100%),
+      radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, var(--accent) 100%);
+    display:grid; place-items:center; position:relative;
+    box-shadow:
+      0 5px 14px var(--accent-tint),
+      0 0 0 3px var(--bg),
+      0 0 12px rgba(91,95,224,0.20);
+    perspective: 180px;
+    perspective-origin: 50% 50%;
+    isolation: isolate;
+  }
+  .nav-voice .voice-orb .ring{
+    position:absolute; inset:0; border-radius:50%;
+    border:1px solid var(--accent); pointer-events:none;
+    animation: voice-pulse 2.2s ease-out infinite;
+    z-index:0;
+  }
+  .nav-voice .atom-system{
+    position:absolute; inset:0; border-radius:50%;
+    background: transparent;
+    transform-style: preserve-3d;
+    animation: atom-spin 8s linear infinite;
+    z-index:1;
+  }
+  .nav-voice .atom-system::before{
+    content:''; position:absolute; inset:0 7px;
+    border:1px solid rgba(255,255,255,0.45);
+    border-radius:50%; pointer-events:none;
+  }
+  .nav-voice .atom-system::after{
+    content:''; position:absolute; inset:7px 0;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:50%; pointer-events:none;
+  }
+  .nav-voice .lion-core{
+    width:18px; height:18px;
+    color:rgba(255,255,255,0.97);
+    animation: lion-breathe 2.6s ease-in-out infinite;
+    position:relative; z-index:3;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+  }
+  /* 위성 dot — nav 안이라 약간 작게 */
+  .nav-voice .orbit{
+    position:absolute; inset:-5px; border-radius:50%;
+    border:1px solid var(--accent); opacity:0.6; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-1 3.6s linear infinite;
+  }
+  .nav-voice .orbit::before{
+    content:''; position:absolute; width:5px; height:5px; border-radius:50%;
+    background:var(--accent);
+    box-shadow: 0 0 0 1.2px rgba(255,255,255,0.9), 0 0 6px var(--accent);
+    top:-2.5px; left:50%; transform:translateX(-50%);
+  }
+  .nav-voice .orbit::after{
+    content:''; position:absolute; width:3.5px; height:3.5px; border-radius:50%;
+    background:var(--accent); opacity:0.7;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.7), 0 0 5px var(--accent);
+    bottom:-1.75px; left:50%; transform:translateX(-50%);
+  }
+  .nav-voice .orbit2{
+    position:absolute; inset:-5px; border-radius:50%;
+    border:1px solid var(--accent); opacity:0.5; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-2 5s linear infinite reverse;
+  }
+  .nav-voice .orbit2::before{
+    content:''; position:absolute; width:4px; height:4px; border-radius:50%;
+    background:var(--accent);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 0 5px var(--accent);
+    top:-2px; left:50%; transform:translateX(-50%);
+  }
+  .nav-voice .orbit3{
+    position:absolute; inset:-5px; border-radius:50%;
+    border:1px solid var(--accent); opacity:0.45; pointer-events:none;
+    transform-style:preserve-3d;
+    animation:atom-orbit-3 4.2s linear infinite;
+  }
+  .nav-voice .orbit3::before{
+    content:''; position:absolute; width:3.5px; height:3.5px; border-radius:50%;
+    background:var(--accent);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 0 4px var(--accent);
+    top:-1.75px; left:50%; transform:translateX(-50%);
+  }
+  .nav-voice .label{
+    font-family:var(--font); font-size:11px; font-weight:800;
+    letter-spacing:-0.005em; color:var(--accent);
+  }
+
+  /* ─── HERO BG (v6 그대로 — 평가에서 잡힘) ─── */
+  .hero-rain .hero-bg{background:radial-gradient(ellipse at 70% 25%, rgba(255,237,213,0.35) 0%, transparent 55%), linear-gradient(160deg, #8A95A3 0%, #5C6478 60%, #3D4453 100%);}
+  .hero-rain .rain-d{position:absolute; width:1px; background:linear-gradient(180deg, transparent, rgba(220,235,250,0.6)); animation:rain-fall linear infinite;}
+  @keyframes rain-fall{0%{transform:translate3d(0,-100px,0);}100%{transform:translate3d(-20px,320px,0);}}
+  .hero-prelunch .hero-bg{background:radial-gradient(ellipse at 30% 30%, rgba(123,163,245,0.32) 0%, transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(91,141,239,0.18) 0%, transparent 60%), linear-gradient(160deg, #6E8AC0 0%, #4A6BA0 55%, #2D4670 100%);}
+  .hero-prelunch .clock-ring{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:130px; height:130px; border-radius:50%; border:1px solid rgba(255,255,255,0.45); border-top-color:rgba(255,255,255,0.9); animation:spin 14s linear infinite;}
+  .hero-prelunch .clock-ring::after{content:''; position:absolute; inset:16px; border-radius:50%; border:1px dashed rgba(255,255,255,0.3);}
+  .hero-prelunch .big-time{position:absolute; top:40%; left:0; right:0; text-align:center; font-family:var(--mono); font-size:42px; font-weight:800; color:var(--hero-text); letter-spacing:-0.02em; text-shadow:0 2px 12px rgba(0,0,0,0.25);}
+  .hero-lunch .hero-bg{background:radial-gradient(ellipse at 50% 35%, rgba(170,200,220,0.5) 0%, transparent 55%), radial-gradient(ellipse at 50% 80%, rgba(91,141,239,0.28) 0%, transparent 60%), linear-gradient(135deg, #6F8AAE 0%, #3F5C82 60%, #1E2E48 100%);}
+  .hero-lunch .plate{position:absolute; top:28%; left:50%; transform:translateX(-50%); width:140px; height:140px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #7BAB3C 0%, #5D8826 25%, transparent 38%), radial-gradient(circle at 70% 50%, #E25D3B 0%, transparent 22%), radial-gradient(circle at 50% 75%, #F0AC52 0%, transparent 28%), radial-gradient(circle at 20% 70%, #7BAB3C 0%, transparent 18%), radial-gradient(ellipse at center, #3D2618 0%, #2A1A0E 70%); box-shadow:0 16px 32px rgba(0,0,0,0.32); animation:plate-breathe 4s ease-in-out infinite;}
+  @keyframes plate-breathe{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.03);}}
+  .hero-afternoon .hero-bg{background:radial-gradient(ellipse at 30% 50%, rgba(180,205,225,0.45) 0%, transparent 65%), linear-gradient(160deg, #7B97BD 0%, #4D6A8E 60%, #2A3D5A 100%);}
+  .hero-afternoon .cal-frame{position:absolute; top:22%; left:50%; transform:translateX(-50%); width:160px; height:80px; border-radius:10px; border:1px solid rgba(255,255,255,0.4); background:rgba(255,255,255,0.10); display:flex; flex-direction:column; padding:12px;}
+  .hero-afternoon .cal-frame .cf-line{height:6px; background:rgba(255,255,255,0.3); border-radius:2px; margin-bottom:6px;}
+  .hero-afternoon .cal-frame .cf-line:nth-child(1){width:40%; background:rgba(255,255,255,0.85);}
+  .hero-afternoon .cal-frame .cf-line:nth-child(2){width:70%;}
+  .hero-afternoon .cal-frame .cf-line:nth-child(3){width:55%;}
+  .hero-evening .hero-bg{background:radial-gradient(ellipse at 70% 30%, rgba(168,200,232,0.55) 0%, transparent 60%), radial-gradient(ellipse at 30% 80%, rgba(106,124,160,0.5) 0%, transparent 60%), linear-gradient(170deg, #78A0C9 0%, #5878A0 45%, #384668 80%, #1E2438 100%);}
+  .hero-evening .glow-circle{position:absolute; top:28%; right:18%; width:80px; height:80px; border-radius:50%; background:radial-gradient(circle, rgba(213,228,245,0.7) 0%, rgba(168,200,232,0.3) 60%, transparent 100%); filter:blur(2px); animation:sun-pulse 5s ease-in-out infinite;}
+  @keyframes sun-pulse{0%,100%{transform:scale(1);opacity:0.7;}50%{transform:scale(1.12);opacity:1;}}
+  .hero-evening .city{position:absolute; bottom:30%; left:0; right:0; height:25%; background:linear-gradient(180deg, transparent 0%, rgba(20,15,35,0.5) 100%); clip-path:polygon(0 65%, 8% 45%, 14% 60%, 22% 35%, 32% 55%, 40% 40%, 50% 60%, 58% 30%, 68% 55%, 78% 40%, 88% 60%, 100% 35%, 100% 100%, 0 100%);}
+  .hero-night .hero-bg{background:radial-gradient(ellipse at 50% 30%, rgba(160,170,200,0.18) 0%, transparent 60%), linear-gradient(180deg, #2D2A4A 0%, #1E1D38 40%, #14132B 80%, #0A0A1A 100%);}
+  .hero-night .moon{position:absolute; top:18%; right:22%; width:50px; height:50px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #F5F5DC 0%, #D6D5B8 60%, #9CA08F 100%); box-shadow:0 0 24px rgba(245,245,220,0.35), 0 0 50px rgba(245,245,220,0.16);}
+  .hero-night .star{position:absolute; width:2px; height:2px; border-radius:50%; background:white; animation:twinkle 3s ease-in-out infinite;}
+
+  footer{padding:var(--s-8) var(--s-8) var(--s-12); text-align:center; background:#FFFFFF; border-top:1px solid #DDD; font-family:var(--mono); font-size:14px; color:#444; letter-spacing:0.08em;}
+  footer b{color:#C8102E; font-weight:800;}
+  footer code{background:#F5F5F5; color:#111; padding:2px 8px; border-radius:4px; font-size:13px;}
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* v.5 — SLIDE DOMAIN + CHAT (Senior Designer rework)                  */
+  /* ═══════════════════════════════════════════════════════════════════ */
+
+  /* ── 공통 셸 ───────────────────────────────────────── */
+  .s5-body{height:100%; padding:56px 0 14px; display:flex; flex-direction:column;}
+  .s5-topbar{flex-shrink:0; display:flex; align-items:center; justify-content:space-between; padding:0 18px 10px; font-family:var(--mono); font-size:11px; color:var(--text-2); letter-spacing:0.06em;}
+  .s5-topbar .clock{font-size:13px; font-weight:700; color:var(--text-1); letter-spacing:0.04em;}
+  .s5-topbar .meta{display:inline-flex; align-items:center; gap:6px;}
+  .s5-topbar .meta svg{width:13px; height:13px; color:var(--accent);}
+
+  /* ── 도메인 캐러셀 (수평 스와이프) ──────────────── */
+  .s5-carousel{flex-shrink:0; padding:0 0 6px;}
+  .s5-track{
+    display:flex; gap:10px; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; scroll-padding-left:18px;
+    padding:0 18px 8px; -webkit-overflow-scrolling:touch;
+  }
+  .s5-track::-webkit-scrollbar{display:none;}
+  .s5-track{scrollbar-width:none;}
+  .s5-slide{
+    flex:0 0 232px; aspect-ratio:232/132;
+    scroll-snap-align:start; border-radius:14px; overflow:hidden;
+    position:relative; box-shadow:0 8px 22px rgba(0,0,0,0.10);
+    background:var(--card);
+  }
+  .s5-slide .s5-bg{position:absolute; inset:0;}
+  .s5-slide .s5-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 100%);}
+  .s5-slide .s5-fg{position:absolute; inset:0; padding:11px 13px; display:flex; flex-direction:column; justify-content:space-between; color:var(--hero-text);}
+  .s5-slide .s5-eye{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--hero-text-soft); display:inline-flex; align-items:center; gap:6px; align-self:flex-start; padding:4px 8px; background:rgba(0,0,0,0.28); border-radius:999px; backdrop-filter:blur(4px);}
+  .s5-slide .s5-eye svg{width:10px; height:10px; color:var(--hero-eye);}
+  .s5-slide .s5-ttl{font-size:15px; font-weight:800; letter-spacing:-0.02em; line-height:1.22; color:var(--hero-text); text-shadow:0 2px 10px rgba(0,0,0,0.32);}
+  .s5-slide .s5-sub{margin-top:3px; font-size:11.5px; font-weight:600; color:var(--hero-text-soft); line-height:1.35;}
+
+  /* 슬라이드 BG 변형 (도메인별 톤) */
+  .s5-bg-rain{background:radial-gradient(ellipse at 70% 22%, rgba(255,237,213,0.32) 0%, transparent 55%), linear-gradient(160deg, #8A95A3 0%, #5C6478 60%, #3D4453 100%);}
+  .s5-bg-outfit{background:radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.25) 0%, transparent 60%), linear-gradient(150deg, #B79F86 0%, #84684C 60%, #5A4530 100%);}
+  .s5-bg-meal{background:radial-gradient(ellipse at 60% 35%, rgba(255,220,180,0.32) 0%, transparent 60%), linear-gradient(160deg, #C28A5A 0%, #8E5A36 55%, #5F3A22 100%);}
+  .s5-bg-cal{background:radial-gradient(ellipse at 30% 50%, rgba(180,205,225,0.45) 0%, transparent 65%), linear-gradient(160deg, #7B97BD 0%, #4D6A8E 60%, #2A3D5A 100%);}
+  .s5-bg-pulse{background:radial-gradient(ellipse at 70% 30%, rgba(255,200,200,0.35) 0%, transparent 60%), linear-gradient(160deg, #B47D86 0%, #84495A 55%, #5A2E3C 100%);}
+
+  /* 페이지 인디케이터 */
+  .s5-dots{display:flex; justify-content:center; gap:6px; padding:0 0 4px;}
+  .s5-dots span{width:5px; height:5px; border-radius:50%; background:var(--line-2); transition:background 0.2s, width 0.2s;}
+  .s5-dots span.on{width:16px; border-radius:3px; background:var(--accent);}
+
+  /* ── 채팅 스레드 ───────────────────────────────── */
+  .s5-thread{flex:1; min-height:0; overflow-y:auto; padding:10px 18px 8px; display:flex; flex-direction:column; gap:8px;}
+  .s5-thread::-webkit-scrollbar{display:none;}
+  .s5-thread{scrollbar-width:none;}
+  .s5-time{align-self:center; font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:0.18em; color:var(--text-3); text-transform:uppercase; padding:4px 0;}
+  .s5-msg{max-width:78%; padding:10px 13px; border-radius:16px; font-size:13.5px; line-height:1.5; word-break:break-word;}
+  .s5-msg b{color:var(--accent); font-weight:700;}
+  .s5-msg.lion{
+    align-self:flex-start; background:var(--card); color:var(--text-1);
+    border:1px solid var(--line); border-bottom-left-radius:5px;
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .s5-msg.lion .av{width:22px; height:22px; flex-shrink:0; border-radius:50%; background:var(--accent-tint); color:var(--accent); display:grid; place-items:center; margin-top:-1px;}
+  .s5-msg.lion .av svg{width:14px; height:14px;}
+  .s5-msg.lion .txt{flex:1; min-width:0;}
+  .s5-msg.user{
+    align-self:flex-end; background:var(--accent); color:#FFFFFF;
+    border-bottom-right-radius:5px;
+  }
+  .s5-msg.user b{color:#FFFFFF;}
+  .s5-typing{
+    align-self:flex-start; background:var(--card); border:1px solid var(--line);
+    border-radius:16px; border-bottom-left-radius:5px;
+    padding:10px 13px; display:inline-flex; gap:4px; align-items:center;
+  }
+  .s5-typing span{width:5px; height:5px; border-radius:50%; background:var(--text-3); animation:s5-dot 1.2s ease-in-out infinite;}
+  .s5-typing span:nth-child(2){animation-delay:0.15s;}
+  .s5-typing span:nth-child(3){animation-delay:0.3s;}
+  @keyframes s5-dot{0%,60%,100%{opacity:0.3; transform:scale(0.85);} 30%{opacity:1; transform:scale(1.1);}}
+
+  /* 빠른 답변 칩 (채팅 하단) */
+  .s5-quicks{flex-shrink:0; display:flex; gap:6px; padding:4px 18px 8px; overflow-x:auto;}
+  .s5-quicks::-webkit-scrollbar{display:none;}
+  .s5-quicks{scrollbar-width:none;}
+  .s5-quicks button{
+    flex-shrink:0; background:var(--card); border:1px solid var(--line-2);
+    color:var(--text-1); font:inherit; font-size:11.5px; font-weight:600;
+    padding:6px 12px; border-radius:999px; cursor:pointer; white-space:nowrap;
+  }
+  .s5-quicks button.primary{background:var(--accent-tint); color:var(--accent); border-color:transparent;}
+
+  /* ── 채팅 입력 (확실한 채팅 affordance) ────────── */
+  .s5-input{
+    flex-shrink:0; margin:4px 14px 0;
+    display:flex; gap:6px; align-items:center;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:22px; padding:5px 5px 5px 16px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+  }
+  .s5-input input{flex:1; border:0; background:transparent; outline:none; font:inherit; font-size:13.5px; color:var(--text-1); min-width:0; padding:8px 0;}
+  .s5-input input::placeholder{color:var(--text-3);}
+  .s5-input .btn{width:34px; height:34px; flex-shrink:0; border:0; border-radius:50%; display:grid; place-items:center; cursor:pointer;}
+  .s5-input .btn-mic{background:var(--accent-tint); color:var(--accent);}
+  .s5-input .btn-send{background:var(--accent); color:#FFFFFF;}
+  .s5-input .btn svg{width:15px; height:15px; stroke-width:2;}
+  .s5-input .btn-send svg{stroke:#FFFFFF;}
+
+  /* ── v.5a SD 톤 (절제) ──────────────────────────── */
+  .s5sd .s5-msg.lion{border-radius:4px 16px 16px 4px;}
+  .s5sd .s5-msg.user{border-radius:16px 4px 4px 16px;}
+  .s5sd .s5-input{border-radius:6px; box-shadow:none; border-color:var(--line-2);}
+  .s5sd .s5-input .btn{border-radius:4px;}
+  .s5sd .s5-slide{border-radius:6px;}
+  .s5sd .s5-quicks button{border-radius:4px;}
+
+  /* ── v.5c MK 톤 (관계형) — 미니 아바타 노출 ────── */
+  .s5mk-greet{flex-shrink:0; padding:0 18px 8px; display:flex; align-items:center; gap:10px;}
+  .s5mk-mascot{
+    width:32px; height:32px; flex-shrink:0; border-radius:50%;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+    display:grid; place-items:center; box-shadow:0 4px 10px rgba(91,95,224,0.22);
+  }
+  .s5mk-mascot svg{width:20px; height:20px; color:#FFFFFF;}
+  .s5mk-greet-txt{flex:1; min-width:0;}
+  .s5mk-greet-hi{font-size:14.5px; font-weight:800; letter-spacing:-0.015em; color:var(--text-1); line-height:1.2;}
+  .s5mk-greet-hi b{color:var(--accent);}
+  .s5mk-greet-meta{font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:0.14em; color:var(--text-3); text-transform:uppercase; margin-top:2px;}
+
+  /* ── v.5b PURE CHAT — AI 주체 시그너처 ─────────── */
+  /* AI agent 헤더: 살아있는 mini-orb + LIVE 상태 */
+  .s5pc{padding-top:56px;}
+  .s5pc-header{
+    flex-shrink:0; position:relative;
+    margin:0 14px 8px; padding:10px 12px;
+    display:flex; align-items:center; gap:10px;
+    background:linear-gradient(135deg, var(--card) 0%, var(--card-soft) 100%);
+    border:1px solid var(--line); border-radius:18px;
+    box-shadow:0 4px 14px rgba(91,95,224,0.10);
+    overflow:hidden;
+  }
+  /* AI 시그너처 ambient sweep — 헤더 뒤에서 천천히 흐름 */
+  .s5pc-header::before{
+    content:''; position:absolute; inset:-50% -20%;
+    background:conic-gradient(from 0deg, transparent 0%, var(--accent-tint) 12%, transparent 28%, transparent 70%, var(--accent-tint) 82%, transparent 100%);
+    animation:s5pc-sweep 9s linear infinite;
+    pointer-events:none; opacity:0.6;
+  }
+  @keyframes s5pc-sweep{
+    from{transform:rotate(0deg);}
+    to  {transform:rotate(360deg);}
+  }
+  /* 살아있는 mini-orb (v.4 voice-orb 축소판) */
+  .s5pc-orb{
+    position:relative; z-index:2;
+    width:38px; height:38px; flex-shrink:0; border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 8%, transparent 22%),
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 72% 80%, rgba(0,0,0,0.38) 0%, transparent 48%),
+      radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.22) 80%, rgba(0,0,0,0.48) 100%),
+      radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, var(--accent) 100%);
+    box-shadow:0 4px 12px var(--accent-tint), 0 0 0 2px var(--card), 0 0 10px rgba(91,95,224,0.25);
+    display:grid; place-items:center; isolation:isolate;
+  }
+  .s5pc-orb::before{
+    content:''; position:absolute; inset:-4px; border-radius:50%;
+    border:1px solid var(--accent); opacity:0.5;
+    animation:s5pc-pulse 2.2s ease-out infinite;
+    pointer-events:none;
+  }
+  @keyframes s5pc-pulse{
+    0%  {transform:scale(1);    opacity:0.55;}
+    80% {opacity:0;}
+    100%{transform:scale(1.6);  opacity:0;}
+  }
+  .s5pc-orb svg{width:20px; height:20px; color:#FFFFFF; filter:drop-shadow(0 1px 2px rgba(0,0,0,0.3)); animation:s5pc-breathe 2.6s ease-in-out infinite;}
+  @keyframes s5pc-breathe{0%,100%{transform:scale(1); opacity:0.95;} 50%{transform:scale(0.92); opacity:1;}}
+
+  .s5pc-meta{position:relative; z-index:2; flex:1; min-width:0;}
+  .s5pc-name{display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:800; letter-spacing:-0.01em; color:var(--text-1); line-height:1.15;}
+  .s5pc-live{
+    display:inline-flex; align-items:center; gap:4px;
+    font-family:var(--mono); font-size:8.5px; font-weight:800; letter-spacing:0.16em;
+    color:var(--accent); text-transform:uppercase;
+    padding:2px 7px; border-radius:999px; background:var(--accent-tint);
+  }
+  .s5pc-live::before{
+    content:''; width:5px; height:5px; border-radius:50%;
+    background:var(--accent); animation:s5pc-live-blink 1.4s ease-in-out infinite;
+  }
+  @keyframes s5pc-live-blink{0%,100%{opacity:0.35;}50%{opacity:1;}}
+  .s5pc-status{margin-top:2px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.12em; color:var(--text-2); text-transform:uppercase;}
+  .s5pc-status b{color:var(--accent); font-weight:700;}
+  /* AI 음성 wave — 듣고 있다는 시그널 */
+  .s5pc-wave{position:relative; z-index:2; flex-shrink:0; display:flex; align-items:flex-end; gap:2px; height:18px;}
+  .s5pc-wave span{
+    width:2.5px; border-radius:1.5px; background:var(--accent); opacity:0.85;
+    animation:s5pc-wave 1.2s ease-in-out infinite;
+  }
+  .s5pc-wave span:nth-child(1){height:6px; animation-delay:0s;}
+  .s5pc-wave span:nth-child(2){height:14px; animation-delay:0.1s;}
+  .s5pc-wave span:nth-child(3){height:9px; animation-delay:0.2s;}
+  .s5pc-wave span:nth-child(4){height:16px; animation-delay:0.3s;}
+  .s5pc-wave span:nth-child(5){height:7px; animation-delay:0.4s;}
+  @keyframes s5pc-wave{
+    0%,100%{transform:scaleY(0.55);}
+    50%   {transform:scaleY(1.1);}
+  }
+
+  /* 채팅 안 인포 카드형 메시지 — 슬라이드 자리를 흡수 */
+  .s5pc-info{
+    align-self:flex-start; max-width:84%;
+    display:flex; gap:8px;
+    animation:s5pc-msg-in 0.4s ease-out;
+  }
+  @keyframes s5pc-msg-in{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .s5pc-info .av{
+    width:22px; height:22px; flex-shrink:0; border-radius:50%;
+    background:var(--accent-tint); color:var(--accent);
+    display:grid; place-items:center; margin-top:2px;
+  }
+  .s5pc-info .av svg{width:14px; height:14px;}
+  .s5pc-info-card{
+    flex:1; min-width:0; border-radius:14px;
+    border-bottom-left-radius:5px;
+    overflow:hidden; position:relative;
+    box-shadow:0 6px 16px rgba(0,0,0,0.10);
+    border:1px solid var(--line);
+  }
+  .s5pc-info-card .bg{position:absolute; inset:0;}
+  .s5pc-info-card .ov{position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.55) 100%);}
+  .s5pc-info-card .fg{
+    position:relative; z-index:2; padding:10px 13px;
+    display:flex; align-items:center; gap:10px;
+    color:#FFFFFF; min-height:60px;
+  }
+  .s5pc-info-card .ic{
+    width:30px; height:30px; flex-shrink:0; border-radius:50%;
+    background:rgba(255,255,255,0.18); backdrop-filter:blur(6px);
+    display:grid; place-items:center; color:#FFFFFF;
+  }
+  .s5pc-info-card .ic svg{width:15px; height:15px;}
+  .s5pc-info-card .body{flex:1; min-width:0;}
+  .s5pc-info-card .lab{
+    font-family:var(--mono); font-size:8.5px; font-weight:800;
+    letter-spacing:0.18em; color:rgba(255,255,255,0.85);
+    text-transform:uppercase; margin-bottom:2px;
+  }
+  .s5pc-info-card .val{
+    font-size:14px; font-weight:800; letter-spacing:-0.015em;
+    color:#FFFFFF; line-height:1.25;
+    text-shadow:0 1px 6px rgba(0,0,0,0.35);
+  }
+  .s5pc-info-card .val b{color:#FFFFFF;}
+  .s5pc-info-card .sub{
+    margin-top:1px; font-size:11px; font-weight:600;
+    color:rgba(255,255,255,0.85); line-height:1.3;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════ */
+  /* v.5.1 REFINED — 정제 (SD 처방: 신호 통합 · 라인 데이터 · 위계 회복) */
+  /* ═══════════════════════════════════════════════════════════════════ */
+  .s5r{padding-top:56px;}
+
+  /* AI 시그너처 — 통합된 단일 시그널 (헤더 1개) */
+  .s5r-header{
+    flex-shrink:0; margin:0 18px 12px;
+    display:flex; align-items:center; gap:10px;
+    padding:6px 10px 6px 6px;
+  }
+  .s5r-orb{
+    position:relative; width:34px; height:34px; flex-shrink:0; border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 8%, transparent 22%),
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 72% 80%, rgba(0,0,0,0.38) 0%, transparent 48%),
+      radial-gradient(circle at 50% 50%, transparent 48%, rgba(0,0,0,0.22) 80%, rgba(0,0,0,0.48) 100%),
+      radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, var(--accent) 100%);
+    box-shadow:0 2px 8px var(--accent-tint);
+    display:grid; place-items:center;
+  }
+  .s5r-orb svg{
+    width:18px; height:18px; color:#FFFFFF;
+    animation:s5r-breathe 3.2s ease-in-out infinite;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));
+  }
+  @keyframes s5r-breathe{0%,100%{transform:scale(1); opacity:0.95;} 50%{transform:scale(0.93); opacity:1;}}
+
+  .s5r-meta{flex:1; min-width:0;}
+  .s5r-name{font-size:15px; font-weight:800; letter-spacing:-0.015em; color:var(--text-1); line-height:1.15;}
+  .s5r-sub{margin-top:3px; display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:9.5px; letter-spacing:0.14em; color:var(--text-3); text-transform:uppercase;}
+  .s5r-live{
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:8.5px; font-weight:800; letter-spacing:0.18em;
+    color:var(--accent);
+  }
+  .s5r-live::before{
+    content:''; width:5px; height:5px; border-radius:50%;
+    background:var(--accent);
+    animation:s5r-live-blink 1.6s ease-in-out infinite;
+  }
+  @keyframes s5r-live-blink{0%,100%{opacity:0.35;}50%{opacity:1;}}
+  .s5r-time{color:var(--text-2);}
+
+  /* 채팅 스레드 — 호흡 회복 */
+  .s5r-thread{padding-top:4px; gap:10px;}
+
+  /* 그룹 번들 — 라인 데이터 (그라데이션 BG 없음) */
+  .s5r-bundle{
+    align-self:flex-start; max-width:88%; min-width:78%;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:14px; border-bottom-left-radius:5px;
+    padding:10px 12px 6px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  }
+  .s5r-bundle-tag{
+    font-family:var(--mono); font-size:9px; font-weight:800;
+    letter-spacing:0.2em; color:var(--text-3);
+    text-transform:uppercase; padding:0 2px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .s5r-rows{list-style:none; padding:0; margin:0;}
+  .s5r-rows li{
+    display:flex; align-items:center; gap:10px;
+    padding:7px 2px; font-size:13.5px; color:var(--text-1);
+    border-bottom:1px solid var(--line);
+  }
+  .s5r-rows li:last-child{border-bottom:0;}
+  .s5r-rows .ic{
+    width:22px; height:22px; flex-shrink:0; border-radius:50%;
+    background:var(--accent-tint); color:var(--accent);
+    display:grid; place-items:center;
+  }
+  .s5r-rows .ic svg{width:12px; height:12px;}
+  .s5r-rows .lab{
+    flex-shrink:0; min-width:42px;
+    font-family:var(--mono); font-size:9.5px; font-weight:700;
+    letter-spacing:0.16em; color:var(--text-3); text-transform:uppercase;
+  }
+  .s5r-rows .val{flex:1; font-weight:600; line-height:1.35;}
+  .s5r-rows .val b{color:var(--accent); font-weight:700;}
+
+  /* 키 이벤트 — 단독 카드, 시각 비중 회복 */
+  .s5r-key{
+    align-self:flex-start; max-width:88%; min-width:78%;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+    color:#FFFFFF; border-radius:14px;
+    border-bottom-left-radius:5px;
+    padding:12px 14px;
+    box-shadow:0 6px 16px var(--accent-tint);
+    position:relative; overflow:hidden;
+  }
+  .s5r-key::before{
+    content:''; position:absolute; right:-20px; top:-20px;
+    width:100px; height:100px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
+  }
+  .s5r-key-stamp{
+    font-family:var(--mono); font-size:8.5px; font-weight:800;
+    letter-spacing:0.22em; color:rgba(255,255,255,0.85);
+    text-transform:uppercase; margin-bottom:4px;
+  }
+  .s5r-key-time{
+    font-family:var(--mono); font-size:24px; font-weight:800;
+    letter-spacing:-0.01em; line-height:1;
+    color:#FFFFFF;
+  }
+  .s5r-key-ttl{
+    margin-top:3px; font-size:16px; font-weight:800;
+    letter-spacing:-0.015em; color:#FFFFFF;
+  }
+  .s5r-key-sub{
+    margin-top:3px; font-size:11.5px; font-weight:600;
+    color:rgba(255,255,255,0.85);
+  }
+
+  /* 연속 라이언 메시지 — 아바타 1회만 (iMessage 스타일) */
+  .s5-msg.lion.s5r-cont{margin-left:30px; padding-left:13px;}
+  .s5-msg.lion.s5r-cont .av{display:none;}
+
+  @media (prefers-reduced-motion: reduce) {*,*::before,*::after{animation-duration:0.01ms !important; animation-iteration-count:1 !important;}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="ic-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="ic-rain" viewBox="0 0 24 24"><path d="M16 14v6M8 14v6M12 14v6M3 13c0-4 3-7 7-7 2.5 0 4.5 1.2 6 3 3 0 5 2 5 5 0 2-1 4-3 4"/></symbol>
+    <symbol id="ic-shirt" viewBox="0 0 24 24"><path d="M6 4l3 2 3-1 3 1 3-2 3 3-3 3v11H6V9L3 6z"/></symbol>
+    <symbol id="ic-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0zM7 7c0-1 .5-2 2-2M11 7c0-1 .5-2 2-2"/></symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 22s8-7 8-13a8 8 0 0 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></symbol>
+    <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="ic-protein" viewBox="0 0 24 24"><path d="M7 21c-2-2-2-6 0-8s4-1 5 0c1-1 3-2 5 0s2 6 0 8M9 7l6 6M9 13l6-6M12 3v3M9 4h6"/></symbol>
+    <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="ic-scenes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="11"/></symbol>
+    <symbol id="ic-coach" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></symbol>
+    <symbol id="ic-you" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6 19c1-3 3-5 6-5s5 2 6 5"/></symbol>
+    <symbol id="ic-note" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 7-8 12-8 12z"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 13a8 8 0 1 1-10-10 6 6 0 0 0 10 10z"/></symbol>
+    <symbol id="ic-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M8 8a3 3 0 0 1 4-4 3 3 0 0 1 4 4"/></symbol>
+    <symbol id="ic-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 22l3-7-2-3 4-4 3 4 4 2M14 14l-1 4"/></symbol>
+    <symbol id="ic-kakao" viewBox="0 0 24 24"><ellipse cx="12" cy="10" rx="9" ry="7"/><path d="M9 16l-2 4 5-3"/></symbol>
+    <symbol id="ic-apple" viewBox="0 0 24 24"><path d="M12 6c0-2 2-3 3-3 0 2-2 3-3 3zM7 10c0-2 2-3 4-3 1 0 2 .5 3 .5s2-.5 3-.5c2 0 4 2 4 5 0 3-2 8-5 8-1 0-2-.5-3-.5s-2 .5-3 .5c-3 0-5-5-5-8z"/></symbol>
+    <symbol id="lion-mono" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="30" cy="33" rx="14.5" ry="13"/>
+        <circle cx="18" cy="22" r="3.6"/><circle cx="42" cy="22" r="3.6"/>
+        <circle cx="24" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="36" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <path d="M 28 36.5 L 32 36.5 L 30 38.5 Z" fill="currentColor" stroke="none"/>
+        <path d="M 24 42 Q 30 45 36 42"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="board">
+  <div class="brand">
+    <svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg>
+    <h1>라이언 — 시안 <b>v.5.1 · PURE CHAT 정제</b></h1>
+  </div>
+  <div class="meta">[ 시니어 디자이너 비판 · v.5b 약점 5개 → <b>v.5.1 REFINED</b> · 2026-05-13 ]</div>
+  <div class="label-row">
+    <span class="pill">v.5b PURE · ORIGINAL (난잡)</span>
+    <span class="pill">v.5.1 REFINED · 정제</span>
+  </div>
+</header>
+
+<div class="board-stage">
+
+
+
+
+  <!-- v.5a — SENIOR DESIGNER REWORK (v.3a 개선) -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">v.5a · SD</span><p>SD REWORK · SLIDE + CHAT</p></div>
+    <div class="phone">
+      <div class="screen surface-am">
+        <div class="s5-body s5sd">
+
+          <!-- 상단: 시간/날씨 컨텍스트 (절제) -->
+          <div class="s5-topbar">
+            <span class="clock">6:42</span>
+            <span class="meta"><svg class="icon"><use href="#ic-rain"/></svg> 14° · RAIN 80% · TUE 05.12</span>
+          </div>
+
+          <!-- 슬라이드 도메인 카루셀 (5장) -->
+          <div class="s5-carousel">
+            <div class="s5-track">
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-rain"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-rain"/></svg> WEATHER</span>
+                  <div>
+                    <div class="s5-ttl">비, 종일.</div>
+                    <div class="s5-sub">강수 80% · 14° · 우산 필수</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-outfit"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-shirt"/></svg> OUTFIT</span>
+                  <div>
+                    <div class="s5-ttl">트렌치코트.</div>
+                    <div class="s5-sub">긴팔 셔츠 위 · 베이지</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-meal"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-bowl"/></svg> BREAKFAST</span>
+                  <div>
+                    <div class="s5-ttl">그릭 요거트.</div>
+                    <div class="s5-sub">가볍게 · 미팅 전 컨디션</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-cal"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-pin"/></svg> 10:00 · KEY</span>
+                  <div>
+                    <div class="s5-ttl">강남 미팅.</div>
+                    <div class="s5-sub">3시간 18분 · 출발 8:50</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-pulse"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-heart"/></svg> PULSE</span>
+                  <div>
+                    <div class="s5-ttl">수면 7h 12m.</div>
+                    <div class="s5-sub">컨디션 양호 · HRV 정상</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s5-dots">
+              <span class="on"></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <!-- 채팅 스레드 (양방향) -->
+          <div class="s5-thread">
+            <span class="s5-time">06:42 · 오늘</span>
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt">밖이 흐려요. <b>트렌치코트</b> 어떠세요? 우산도 꼭이요.</span>
+            </div>
+            <div class="s5-msg user">10시 미팅 전에 카페 들를 시간 있어?</div>
+            <div class="s5-typing"><span></span><span></span><span></span></div>
+          </div>
+
+          <!-- 빠른 답변 칩 -->
+          <div class="s5-quicks">
+            <button class="primary">출발 시간 알려줘</button>
+            <button>다른 옷</button>
+            <button>30분 뒤 다시</button>
+          </div>
+
+          <!-- 채팅 입력 -->
+          <div class="s5-input">
+            <input type="text" placeholder="라이언에게 메시지">
+            <button class="btn btn-mic" aria-label="음성"><svg class="icon"><use href="#ic-mic"/></svg></button>
+            <button class="btn btn-send" aria-label="보내기"><svg class="icon"><use href="#ic-arrow"/></svg></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- v.5c — SENIOR MARKETER REWORK (v.3c 개선) -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">v.5c · MK</span><p>MK REWORK · SLIDE + CHAT (관계형)</p></div>
+    <div class="phone">
+      <div class="screen surface-am">
+        <div class="s5-body s5mk">
+
+          <!-- 상단: 미니 마스코트 + 친근한 인사 (이중 카운터 → 한 줄로 통합) -->
+          <div class="s5mk-greet">
+            <span class="s5mk-mascot"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+            <div class="s5mk-greet-txt">
+              <div class="s5mk-greet-hi"><b>다하</b>님, 좋은 아침이에요</div>
+              <div class="s5mk-greet-meta">함께한 47일 · 6:42 · 비</div>
+            </div>
+          </div>
+
+          <!-- 슬라이드 도메인 카루셀 (5장) -->
+          <div class="s5-carousel">
+            <div class="s5-track">
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-rain"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-rain"/></svg> 오늘 · 비</span>
+                  <div>
+                    <div class="s5-ttl">우산, 잊지 마요.</div>
+                    <div class="s5-sub">강수 80% · 14°</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-outfit"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-shirt"/></svg> 옷</span>
+                  <div>
+                    <div class="s5-ttl">트렌치 어때요?</div>
+                    <div class="s5-sub">긴팔 셔츠 위 · 베이지 추천</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-meal"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-bowl"/></svg> 아침</span>
+                  <div>
+                    <div class="s5-ttl">가벼운 요거트.</div>
+                    <div class="s5-sub">10시 미팅 전 컨디션 ↑</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-cal"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-pin"/></svg> 10:00 · 미팅</span>
+                  <div>
+                    <div class="s5-ttl">강남 클라이언트.</div>
+                    <div class="s5-sub">8:50 출발하면 여유</div>
+                  </div>
+                </div>
+              </div>
+              <div class="s5-slide">
+                <div class="s5-bg s5-bg-pulse"></div>
+                <div class="s5-overlay"></div>
+                <div class="s5-fg">
+                  <span class="s5-eye"><svg><use href="#ic-heart"/></svg> 컨디션</span>
+                  <div>
+                    <div class="s5-ttl">잘 주무셨네요.</div>
+                    <div class="s5-sub">수면 7h 12m · HRV 정상</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="s5-dots">
+              <span class="on"></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <!-- 채팅 스레드 (관계형 — 친근한 톤 유지, 양방향) -->
+          <div class="s5-thread">
+            <span class="s5-time">방금</span>
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt"><b>어제는 우산 깜빡하셨죠?</b> 오늘은 강수 80%예요 ☔ 트렌치 코트 챙겨드릴게요.</span>
+            </div>
+            <div class="s5-msg user">고마워! 미팅 자료는 챙겼지?</div>
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt">네, 어제 메일에 보낸 PDF 폰에 띄워뒀어요. 8:50 출발이면 카페도 들를 수 있어요.</span>
+            </div>
+          </div>
+
+          <!-- 빠른 답변 칩 (행동 어포던스 구체적) -->
+          <div class="s5-quicks">
+            <button class="primary">8:50 알람 맞춰줘</button>
+            <button>카페 추천</button>
+            <button>다른 옷</button>
+            <button>밤에 보자</button>
+          </div>
+
+          <!-- 채팅 입력 -->
+          <div class="s5-input">
+            <input type="text" placeholder="라이언에게 말 걸기">
+            <button class="btn btn-mic" aria-label="음성"><svg class="icon"><use href="#ic-mic"/></svg></button>
+            <button class="btn btn-send" aria-label="보내기"><svg class="icon"><use href="#ic-arrow"/></svg></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- v.5b — PURE CHAT ORIGINAL (비교용 · 시니어 디자이너 비판 대상) -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">v.5b · PURE (원본)</span><p>BEFORE — 난잡함 진단</p></div>
+    <div class="phone">
+      <div class="screen surface-am">
+        <div class="s5-body s5pc">
+
+          <!-- AI 대화 주체 시그너처: 살아있는 mini-orb + LIVE 상태 + 음성 wave -->
+          <div class="s5pc-header">
+            <span class="s5pc-orb">
+              <svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg>
+            </span>
+            <div class="s5pc-meta">
+              <div class="s5pc-name">라이언 <span class="s5pc-live">LIVE</span></div>
+              <div class="s5pc-status">듣고 있어요 · <b>온디바이스</b></div>
+            </div>
+            <div class="s5pc-wave"><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+
+          <!-- 완전 채팅 스레드: 슬라이드 5도메인을 메시지 + 인포카드로 풀어냄 -->
+          <div class="s5-thread">
+            <span class="s5-time">06:42 · 화요일 아침</span>
+
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt"><b>다하</b>님, 잘 주무셨어요? 오늘 아침 브리핑 보내드릴게요.</span>
+            </div>
+
+            <!-- 인포 카드 1 · 날씨 -->
+            <div class="s5pc-info">
+              <span class="av"><svg class="icon"><use href="#ic-rain"/></svg></span>
+              <div class="s5pc-info-card">
+                <div class="bg s5-bg-rain"></div>
+                <div class="ov"></div>
+                <div class="fg">
+                  <span class="ic"><svg class="icon"><use href="#ic-rain"/></svg></span>
+                  <div class="body">
+                    <div class="lab">날씨 · 종일 비</div>
+                    <div class="val">14° · 강수 80%</div>
+                    <div class="sub">우산 꼭 챙겨요</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt">옷은 <b>트렌치코트</b> 어때요? 어제처럼 우산 깜빡하지 마요 ☔</span>
+            </div>
+
+            <!-- 인포 카드 2 · 옷 -->
+            <div class="s5pc-info">
+              <span class="av"><svg class="icon"><use href="#ic-shirt"/></svg></span>
+              <div class="s5pc-info-card">
+                <div class="bg s5-bg-outfit"></div>
+                <div class="ov"></div>
+                <div class="fg">
+                  <span class="ic"><svg class="icon"><use href="#ic-shirt"/></svg></span>
+                  <div class="body">
+                    <div class="lab">오늘 옷</div>
+                    <div class="val">트렌치 + 긴팔 셔츠</div>
+                    <div class="sub">베이지 톤 추천</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="s5-msg user">고마워. 미팅 자료는?</div>
+
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt">PDF 챙겨뒀어요. 아침은 가볍게, 출발은 <b>8:50</b>이면 여유 있어요.</span>
+            </div>
+
+            <!-- 인포 카드 3 · 식사 -->
+            <div class="s5pc-info">
+              <span class="av"><svg class="icon"><use href="#ic-bowl"/></svg></span>
+              <div class="s5pc-info-card">
+                <div class="bg s5-bg-meal"></div>
+                <div class="ov"></div>
+                <div class="fg">
+                  <span class="ic"><svg class="icon"><use href="#ic-bowl"/></svg></span>
+                  <div class="body">
+                    <div class="lab">아침</div>
+                    <div class="val">그릭 요거트</div>
+                    <div class="sub">가볍게 · 미팅 전 컨디션 ↑</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 인포 카드 4 · 일정 -->
+            <div class="s5pc-info">
+              <span class="av"><svg class="icon"><use href="#ic-pin"/></svg></span>
+              <div class="s5pc-info-card">
+                <div class="bg s5-bg-cal"></div>
+                <div class="ov"></div>
+                <div class="fg">
+                  <span class="ic"><svg class="icon"><use href="#ic-pin"/></svg></span>
+                  <div class="body">
+                    <div class="lab">10:00 · 키 이벤트</div>
+                    <div class="val">강남 클라이언트</div>
+                    <div class="sub">8:50 출발 · 3시간 18분 남음</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 인포 카드 5 · 건강 -->
+            <div class="s5pc-info">
+              <span class="av"><svg class="icon"><use href="#ic-heart"/></svg></span>
+              <div class="s5pc-info-card">
+                <div class="bg s5-bg-pulse"></div>
+                <div class="ov"></div>
+                <div class="fg">
+                  <span class="ic"><svg class="icon"><use href="#ic-heart"/></svg></span>
+                  <div class="body">
+                    <div class="lab">컨디션</div>
+                    <div class="val">수면 7h 12m</div>
+                    <div class="sub">HRV 정상 · 잘 주무셨어요</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="s5-typing"><span></span><span></span><span></span></div>
+          </div>
+
+          <!-- 빠른 답변 칩 -->
+          <div class="s5-quicks">
+            <button class="primary">8:50 알람 맞춰줘</button>
+            <button>카페 추천</button>
+            <button>다른 옷</button>
+            <button>고마워</button>
+          </div>
+
+          <!-- 채팅 입력 -->
+          <div class="s5-input">
+            <input type="text" placeholder="라이언에게 메시지">
+            <button class="btn btn-mic" aria-label="음성"><svg class="icon"><use href="#ic-mic"/></svg></button>
+            <button class="btn btn-send" aria-label="보내기"><svg class="icon"><use href="#ic-arrow"/></svg></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- v.5.1 — PURE CHAT REFINED (시니어 디자이너 정제) -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">v.5.1 · REFINED</span><p>AFTER — 정제 · 절제</p></div>
+    <div class="phone">
+      <div class="screen surface-am">
+        <div class="s5-body s5r">
+
+          <!-- AI 시그너처: 하나로 통합 — orb 하나 + LIVE만 -->
+          <div class="s5r-header">
+            <span class="s5r-orb">
+              <svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg>
+            </span>
+            <div class="s5r-meta">
+              <div class="s5r-name">라이언</div>
+              <div class="s5r-sub"><span class="s5r-live">LIVE</span><span class="s5r-time">06:42 · 비</span></div>
+            </div>
+          </div>
+
+          <!-- 채팅 스레드: 인포 5장 → 2그룹으로 묶기, 키 이벤트만 별격 -->
+          <div class="s5-thread s5r-thread">
+            <span class="s5-time">오늘 아침</span>
+
+            <!-- 인사 -->
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt"><b>다하</b>님, 잘 주무셨어요? 오늘 아침 브리핑이에요.</span>
+            </div>
+
+            <!-- 그룹 A: 출근 준비 — 라인형 데이터로 다이어트 -->
+            <div class="s5r-bundle">
+              <div class="s5r-bundle-tag">출근 준비</div>
+              <ul class="s5r-rows">
+                <li><span class="ic"><svg class="icon"><use href="#ic-rain"/></svg></span><span class="lab">날씨</span><span class="val">14° · 비 <b>80%</b></span></li>
+                <li><span class="ic"><svg class="icon"><use href="#ic-shirt"/></svg></span><span class="lab">옷</span><span class="val">트렌치 + 긴팔</span></li>
+                <li><span class="ic"><svg class="icon"><use href="#ic-bowl"/></svg></span><span class="lab">아침</span><span class="val">그릭 요거트</span></li>
+              </ul>
+            </div>
+
+            <!-- 키 이벤트 한 가지만 비주얼 강조 (위계 회복) -->
+            <div class="s5r-key">
+              <div class="s5r-key-stamp">오늘의 키 이벤트</div>
+              <div class="s5r-key-time">10:00</div>
+              <div class="s5r-key-ttl">강남 클라이언트 미팅</div>
+              <div class="s5r-key-sub">8:50 출발 · 3시간 18분 남음</div>
+            </div>
+
+            <div class="s5-msg user">자료는 챙겼지?</div>
+
+            <!-- 연속 라이언 메시지 — 아바타 1회만 -->
+            <div class="s5-msg lion">
+              <span class="av"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span>
+              <span class="txt">PDF 띄워뒀어요. 카페 들를 시간도 있어요.</span>
+            </div>
+            <div class="s5-msg lion s5r-cont">
+              <span class="txt">컨디션은 어제 잘 자서 좋아요 — 수면 <b>7h 12m</b>, HRV 정상.</span>
+            </div>
+
+            <div class="s5-typing"><span></span><span></span><span></span></div>
+          </div>
+
+          <!-- 빠른 답변 칩 -->
+          <div class="s5-quicks">
+            <button class="primary">8:50 알람</button>
+            <button>카페 추천</button>
+            <button>고마워</button>
+          </div>
+
+          <!-- 채팅 입력 -->
+          <div class="s5-input">
+            <input type="text" placeholder="라이언에게 메시지">
+            <button class="btn btn-mic" aria-label="음성"><svg class="icon"><use href="#ic-mic"/></svg></button>
+            <button class="btn btn-send" aria-label="보내기"><svg class="icon"><use href="#ic-arrow"/></svg></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>LIFE OS · ONE</b> · 라이언 시안 <b>v.5.1</b> · PURE CHAT 정제 (v.5b 5약점 → REFINED) · 2026-05-13<br><br>
+  <code>라이언 디자인 시안_v.5.1.html</code> · 시니어 디자이너 비판 · 신호 통합 · 라인 데이터 · 위계 회복
+</footer>
+
+<script>
+  const lp = document.getElementById('loginParticles');
+  if (lp) for (let i = 0; i < 80; i++) {
+    const p = document.createElement('span'); p.className = 'p';
+    const a = (i / 80) * Math.PI * 2 + Math.random()*0.6;
+    const r = 32 + Math.random()*22;
+    p.style.left = (50 + Math.cos(a) * r) + '%';
+    p.style.top  = (50 + Math.sin(a) * r) + '%';
+    p.style.animationDuration = (1.6 + Math.random()*3) + 's';
+    p.style.animationDelay = -Math.random()*3 + 's';
+    p.style.opacity = 0.3 + Math.random()*0.65;
+    if (Math.random() < 0.15) { p.style.width = '2.5px'; p.style.height = '2.5px'; }
+    lp.appendChild(p);
+  }
+  document.querySelectorAll('.rain-layer').forEach(rl => {
+    for (let i = 0; i < 70; i++) {
+      const d = document.createElement('div'); d.className = 'rain-d';
+      d.style.left = (Math.random() * 110) + '%';
+      d.style.height = (30 + Math.random()*40) + 'px';
+      d.style.animationDuration = (0.6 + Math.random()*0.6) + 's';
+      d.style.animationDelay = -Math.random()*1.5 + 's';
+      d.style.opacity = 0.3 + Math.random()*0.5;
+      d.style.transform = 'rotate(12deg)';
+      rl.appendChild(d);
+    }
+  });
+  const sl = document.getElementById('starLayer');
+  if (sl) for (let i = 0; i < 35; i++) {
+    const s = document.createElement('div'); s.className = 'star';
+    const sz = 1 + Math.random()*1.5;
+    s.style.width = sz + 'px'; s.style.height = sz + 'px';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top = (5 + Math.random()*55) + '%';
+    s.style.animationDuration = (2 + Math.random()*2.5) + 's';
+    s.style.animationDelay = -Math.random()*3 + 's';
+    s.style.opacity = 0.4 + Math.random()*0.6;
+    sl.appendChild(s);
+  }
+</script>
+
+</body>
+</html>

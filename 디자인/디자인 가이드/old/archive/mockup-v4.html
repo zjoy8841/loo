@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 시안 v4 — Apple Senior Patch · 시점별 7화면</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #050505;
+    --ink-1:      #0A0908;
+    --ink-2:      #11100E;
+    --text:       #F5EFE6;
+    --text-dim:   #6E665A;
+    --text-muted: #3A352C;
+    --line:       rgba(245,239,230,0.06);
+    --line-2:     rgba(245,239,230,0.10);
+    --line-3:     rgba(245,239,230,0.18);
+    --honey:      #F4B860;
+    --honey-2:    #E87A3E;
+    --teal:       #4FD1C5;
+    --rose:       #FF8C7A;
+    --sage:       #7BA98F;
+    --hud:        rgba(244,184,96,0.06);
+
+    --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;
+    --s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
+
+    --r-sm: 4px; --r-md: 12px; --r-lg: 20px;
+
+    --font: 'Pretendard Variable', system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html, body {
+    min-height: 100vh; background: #FFFFFF;
+    color: #111111; font-family: var(--font);
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+  }
+
+  /* ──────────── BOARD HEADER (LIGHT) ──────────── */
+  header.board {
+    padding: var(--s-12) var(--s-8) var(--s-6);
+    text-align: center; border-bottom: 1px solid #E5E5E5;
+    background: #FFFFFF;
+  }
+  header.board .brand { display: inline-flex; align-items: center; gap: var(--s-3); color: #111111; }
+  header.board .brand svg { width: 32px; height: 32px; color: var(--honey-2); }
+  header.board h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header.board h1 b { color: #C8102E; font-weight: 800; }
+  header.board .meta {
+    margin-top: var(--s-3); font-family: var(--mono); font-size: 14px;
+    color: #444444; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  header.board .meta b { color: #C8102E; font-weight: 800; }
+  header.board .label-row { display: flex; gap: var(--s-1); justify-content: center; margin-top: var(--s-4); flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; padding: 5px 12px; border-radius: var(--r-sm);
+    font-family: var(--mono); font-size: 12px; font-weight: 800;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #C8102E; border: 1px solid rgba(200,16,46,0.35);
+  }
+
+  /* ─────────── BOARD STAGE (LIGHT) ─────────── */
+  .board-stage {
+    padding: var(--s-12) var(--s-6);
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: var(--s-8); justify-items: center;
+    max-width: 1700px; margin: 0 auto;
+  }
+  .scene { display: flex; flex-direction: column; align-items: center; max-width: 380px; }
+  .scene-tag { margin-bottom: var(--s-4); text-align: center; }
+  .scene-tag .num {
+    display: inline-block; padding: 6px 12px; border-radius: var(--r-sm);
+    font-family: var(--mono); font-size: 14px; font-weight: 800;
+    letter-spacing: 0.18em; color: #111111; border: 1px solid #CFCFCF;
+  }
+  .scene-tag p {
+    margin-top: var(--s-2); font-family: var(--mono); font-size: 14px;
+    color: #555555; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* ─────────── PHONE FRAME ─────────── */
+  .phone {
+    width: 340px; max-width: 92vw; aspect-ratio: 9 / 19.5;
+    background: #0A0A0A; border-radius: 44px; padding: 10px;
+    box-shadow: 0 36px 90px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 30px; background: #000; border-radius: 16px; z-index: 30;
+  }
+  .phone::after {
+    content: ''; position: absolute; top: 33px; right: calc(50% - 42px);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #1A1A1A; border: 1px solid #0A0A0A; z-index: 31;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+    background: var(--ink); position: relative;
+    display: flex; flex-direction: column;
+  }
+  .screen::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(180deg,
+      transparent 0, transparent 2px,
+      rgba(255,255,255,0.008) 2px, rgba(255,255,255,0.008) 3px);
+    z-index: 2;
+  }
+
+  /* Status bar */
+  .status-bar {
+    flex-shrink: 0; position: relative; z-index: 5;
+    padding: 14px 24px 4px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    color: var(--text); letter-spacing: 0.04em;
+  }
+  .status-bar .right {
+    color: var(--text-dim); font-size: 11px;
+    display: inline-flex; gap: 6px; align-items: center;
+  }
+  .status-bar .right::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 5px var(--teal);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* ─────────── Icon library ─────────── */
+  .icon { display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ─────────── CAPTION (LIGHT — 사용자 룰) ─────────── */
+  .caption {
+    margin-top: var(--s-4); width: 340px; max-width: 100%;
+    background: #FFFFFF; border: 1px solid #DDDDDD; border-radius: 8px;
+    padding: 20px 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .caption h4 {
+    color: #C8102E; font-size: 15px; font-weight: 800;
+    letter-spacing: 0.12em; margin-bottom: 14px; text-transform: uppercase;
+    font-family: var(--mono);
+  }
+  .caption .time {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    background: #C8102E; color: #FFFFFF; font-family: var(--mono);
+    font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .caption ul { list-style: none; padding: 0; }
+  .caption li {
+    color: #111111; font-size: 15px; line-height: 1.65;
+    margin-bottom: 10px; padding-left: 18px; position: relative;
+  }
+  .caption li::before {
+    content: '—'; position: absolute; left: 0; color: #C8102E;
+    font-family: var(--mono); font-weight: 800;
+  }
+  .caption li b { color: #C8102E; font-weight: 800; }
+
+  /* ─────────── SVG defs ─────────── */
+
+  /* Lion mono mark */
+  .lion-mono { color: var(--honey); }
+
+  /* ═══════════════════════════════════════════════ */
+  /* ═════════════ SCREEN 01 — LOGIN ═══════════════ */
+  /* ═══════════════════════════════════════════════ */
+  .login-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(244,184,96,0.10) 0%, transparent 70%);
+    z-index: 1;
+  }
+  .login-content {
+    position: relative; z-index: 4; flex: 1;
+    display: flex; flex-direction: column; padding: var(--s-6);
+  }
+  .login-top { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .login-orb { position: relative; width: 144px; height: 144px; margin-bottom: var(--s-8); }
+  .login-orb-rings::before, .login-orb-rings::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+  }
+  .login-orb-rings::before { border: 1px solid var(--line-2); animation: spin 80s linear infinite; }
+  .login-orb-rings::after { inset: 14px; border: 1px dashed rgba(244,184,96,0.16); animation: spin 60s linear infinite reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .login-orb-mark { position: absolute; inset: 0; display: grid; place-items: center; color: var(--honey); }
+  .login-orb-mark svg { width: 64px; height: 64px; }
+  .particle-field { position: absolute; inset: 0; pointer-events: none; }
+  .particle-field .p {
+    position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%;
+    background: var(--honey); animation: twinkle 3s ease-in-out infinite;
+  }
+  .particle-field .p.teal { background: var(--teal); }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50%      { opacity: 0.9; transform: scale(1.2); }
+  }
+  .login-brand {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--honey); margin-bottom: var(--s-4); opacity: 0.85;
+  }
+  .login-h1 {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.1; color: var(--text); margin-bottom: var(--s-2);
+  }
+  .login-sub {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .login-sub b { color: var(--teal); font-weight: 700; }
+  .login-form { margin-top: var(--s-12); }
+  .field { margin-bottom: var(--s-6); }
+  .field .lbl {
+    display: block; margin-bottom: var(--s-2);
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em; color: var(--text-dim); text-transform: uppercase;
+  }
+  .field-row {
+    display: flex; align-items: center; gap: var(--s-3);
+    padding: var(--s-2) 0; border-bottom: 1px solid var(--line-2); transition: border-color 0.2s;
+  }
+  .field-row:focus-within { border-color: var(--honey); }
+  .field-row input {
+    flex: 1; background: transparent; border: 0; outline: 0;
+    color: var(--text); font: inherit; font-size: 15px; padding: 0;
+  }
+  .field-row input::placeholder { color: var(--text-muted); }
+  .field-row .dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--teal); animation: pulse 1.6s ease-in-out infinite;
+  }
+  .login-helper {
+    display: flex; justify-content: space-between; align-items: center; margin-top: var(--s-4);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .login-helper label { display: inline-flex; gap: var(--s-2); align-items: center; color: var(--text-dim); }
+  .login-helper a { color: var(--text-dim); text-decoration: none; }
+  .check {
+    display: inline-block; width: 12px; height: 12px;
+    border: 1px solid var(--line-3); border-radius: 2px;
+    background: var(--honey); position: relative;
+  }
+  .check::after {
+    content: ''; position: absolute; left: 3px; top: 1px;
+    width: 4px; height: 7px; border: solid var(--ink); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg);
+  }
+  .login-cta {
+    margin-top: var(--s-8); width: 100%;
+    background: var(--honey); color: var(--ink); border: 0; padding: 18px;
+    border-radius: var(--r-sm); font-family: var(--mono); font-size: 12px; font-weight: 800;
+    letter-spacing: 0.24em; text-transform: uppercase; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: var(--s-3);
+  }
+  .login-cta .icon { stroke: var(--ink); stroke-width: 2; }
+  .login-divider {
+    display: flex; align-items: center; gap: var(--s-3); margin: var(--s-6) 0 var(--s-4);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase;
+  }
+  .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .social-row { display: flex; gap: var(--s-2); }
+  .social-btn {
+    flex: 1; background: transparent; border: 1px solid var(--line-2); color: var(--text);
+    padding: 14px; border-radius: var(--r-sm);
+    font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  }
+  .signup-row {
+    margin-top: var(--s-6); text-align: center;
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .signup-row a {
+    color: var(--honey); font-weight: 700; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* ═════════════ MAIN — SHARED SHELL ═════════════ */
+  /* ═══════════════════════════════════════════════ */
+  .main-content {
+    flex: 1; position: relative; z-index: 4; overflow: hidden;
+    display: flex; flex-direction: column; padding-bottom: 78px;
+  }
+  .main-scroll { flex: 1; overflow-y: auto; padding: 0 var(--s-6); }
+  .main-scroll::-webkit-scrollbar { display: none; }
+
+  /* 시점 헤더 */
+  .moment-head {
+    padding: var(--s-4) 0 var(--s-3);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .moment-head .left {
+    display: inline-flex; align-items: center; gap: var(--s-2);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .moment-head .left .lion-mini {
+    width: 18px; height: 18px; color: var(--honey);
+    display: grid; place-items: center;
+  }
+  .moment-head .left b { color: var(--honey); font-weight: 700; }
+  .moment-head .right {
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* Greeting */
+  .greet { padding: var(--s-2) 0 var(--s-4); }
+  .greet .gname {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.2; color: var(--text);
+  }
+  .greet .gname b { color: var(--honey); }
+  .greet .gsub {
+    margin-top: var(--s-2); font-size: 14px; color: var(--text-dim); line-height: 1.5;
+  }
+
+  /* Hero card — single decision */
+  .hero-card {
+    margin-top: var(--s-2); border-radius: var(--r-lg); overflow: hidden;
+    position: relative; height: 248px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+  }
+  .hero-bg { position: absolute; inset: 0; }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.7) 100%);
+  }
+  .hero-content {
+    position: absolute; inset: 0; padding: var(--s-4) var(--s-4) var(--s-4);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    color: white;
+  }
+  .hero-content .h-eye {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--honey); margin-bottom: var(--s-2);
+    display: inline-flex; align-items: center; gap: var(--s-2);
+  }
+  .hero-content .h-title {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.2; color: white; text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  }
+
+  /* Detail cards */
+  .detail-grid {
+    margin-top: var(--s-4);
+    display: grid; gap: var(--s-2);
+  }
+  .detail {
+    background: var(--ink-1); border: 1px solid var(--line);
+    border-radius: var(--r-md); padding: var(--s-3) var(--s-4);
+    display: flex; align-items: center; gap: var(--s-3);
+  }
+  .detail .ic {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 50%; background: rgba(244,184,96,0.12);
+    display: grid; place-items: center; color: var(--honey);
+  }
+  .detail .ic .icon { width: 16px; height: 16px; }
+  .detail .body { flex: 1; min-width: 0; }
+  .detail .body .lab {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .detail .body .val {
+    font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4;
+  }
+  .detail .body .val b { color: var(--honey); }
+  .detail .chev { color: var(--text-dim); }
+
+  /* Primary CTA in card */
+  .cta-row {
+    margin-top: var(--s-4); display: flex; gap: var(--s-2);
+  }
+  .cta {
+    flex: 1; background: var(--honey); color: var(--ink);
+    border: 0; padding: 14px; border-radius: var(--r-md);
+    font: inherit; font-weight: 800; font-size: 14px;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .cta.ghost { background: transparent; color: var(--text); border: 1px solid var(--line-2); }
+
+  /* FAB */
+  .fab {
+    position: absolute; bottom: 84px; right: 16px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--ink-1); border: 1px solid rgba(244,184,96,0.30);
+    cursor: pointer; z-index: 12;
+    display: grid; place-items: center; color: var(--honey);
+  }
+  .fab .core {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--honey); box-shadow: 0 0 18px var(--honey);
+    animation: breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+  .fab::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 50%;
+    border: 1px solid rgba(244,184,96,0.2); animation: spin 10s linear infinite;
+  }
+  .fab::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 1px dashed rgba(244,184,96,0.12); animation: spin 20s linear infinite reverse;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: var(--s-3) var(--s-6) 22px;
+    background: linear-gradient(180deg, transparent, var(--ink) 40%);
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 6;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim); cursor: pointer;
+  }
+  .nav-item .icon { width: 18px; height: 18px; }
+  .nav-item.active { color: var(--honey); }
+  .nav-item.active::after {
+    content: ''; width: 3px; height: 3px; border-radius: 50%;
+    background: var(--honey); margin-top: 2px;
+    box-shadow: 0 0 6px var(--honey);
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* ═════════════ HERO BACKGROUNDS ═══════════════ */
+  /* ═══════════════════════════════════════════════ */
+
+  /* Morning rain */
+  .hero-rain .hero-bg {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(120,150,180,0.45) 0%, transparent 65%),
+      linear-gradient(160deg, #2A3548 0%, #1A2230 60%, #0B1018 100%);
+  }
+  .hero-rain .rain-d {
+    position: absolute; width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(220,235,250,0.7));
+    animation: rain-fall linear infinite;
+  }
+  @keyframes rain-fall {
+    0%   { transform: translate3d(0, -100px, 0); }
+    100% { transform: translate3d(-20px, 320px, 0); }
+  }
+
+  /* Late morning — clear cyber */
+  .hero-prelunch .hero-bg {
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(244,184,96,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 70%, rgba(79,209,197,0.10) 0%, transparent 60%),
+      linear-gradient(160deg, #1A1612 0%, #0A0908 100%);
+  }
+  .hero-prelunch .clock-ring {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 140px; height: 140px; border-radius: 50%;
+    border: 1px solid rgba(244,184,96,0.3);
+    border-top-color: var(--honey); animation: spin 14s linear infinite;
+  }
+  .hero-prelunch .clock-ring::after {
+    content: ''; position: absolute; inset: 18px; border-radius: 50%;
+    border: 1px dashed rgba(244,184,96,0.18);
+  }
+  .hero-prelunch .big-time {
+    position: absolute; top: 38%; left: 0; right: 0; text-align: center;
+    font-family: var(--mono); font-size: 44px; font-weight: 800;
+    color: white; letter-spacing: -0.02em; text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+
+  /* Lunch — warm food gradient */
+  .hero-lunch .hero-bg {
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(244,184,96,0.4) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 80%, rgba(232,122,62,0.35) 0%, transparent 60%),
+      linear-gradient(135deg, #78350F 0%, #451A03 60%, #1C1917 100%);
+  }
+  .hero-lunch .plate {
+    position: absolute; top: 30%; left: 50%; transform: translateX(-50%);
+    width: 140px; height: 140px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #65A30D 0%, #4D7C0F 25%, transparent 38%),
+      radial-gradient(circle at 70% 50%, #DC2626 0%, transparent 22%),
+      radial-gradient(circle at 50% 75%, #F59E0B 0%, transparent 28%),
+      radial-gradient(circle at 20% 70%, #65A30D 0%, transparent 18%),
+      radial-gradient(ellipse at center, #2A1810 0%, #1C1108 70%);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    animation: plate-breathe 4s ease-in-out infinite;
+  }
+  @keyframes plate-breathe {
+    0%,100% { transform: translateX(-50%) scale(1); }
+    50%     { transform: translateX(-50%) scale(1.03); }
+  }
+
+  /* Afternoon — soft amber */
+  .hero-afternoon .hero-bg {
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(244,184,96,0.2) 0%, transparent 65%),
+      linear-gradient(160deg, #1F1A12 0%, #0F0A05 60%, #050302 100%);
+  }
+  .hero-afternoon .cal-frame {
+    position: absolute; top: 22%; left: 50%; transform: translateX(-50%);
+    width: 160px; height: 80px; border-radius: 10px;
+    border: 1px solid rgba(244,184,96,0.4);
+    background: rgba(244,184,96,0.06);
+    display: flex; flex-direction: column;
+    padding: 12px;
+  }
+  .hero-afternoon .cal-frame .cf-line {
+    height: 6px; background: rgba(244,184,96,0.2); border-radius: 2px;
+    margin-bottom: 6px;
+  }
+  .hero-afternoon .cal-frame .cf-line:nth-child(1) { width: 40%; background: var(--honey); }
+  .hero-afternoon .cal-frame .cf-line:nth-child(2) { width: 70%; }
+  .hero-afternoon .cal-frame .cf-line:nth-child(3) { width: 55%; }
+
+  /* Evening — warm sunset */
+  .hero-evening .hero-bg {
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(255,140,122,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse at 30% 80%, rgba(167,139,250,0.35) 0%, transparent 60%),
+      linear-gradient(180deg, #DC2626 0%, #9F1239 30%, #5B21B6 70%, #1E1B4B 100%);
+  }
+  .hero-evening .glow-circle {
+    position: absolute; top: 30%; right: 18%;
+    width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,237,213,0.6) 0%, rgba(255,140,122,0.2) 60%, transparent 100%);
+    filter: blur(2px); animation: sun-pulse 5s ease-in-out infinite;
+  }
+  @keyframes sun-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50%      { transform: scale(1.15); opacity: 1; }
+  }
+  .hero-evening .city {
+    position: absolute; bottom: 30%; left: 0; right: 0; height: 25%;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
+    clip-path: polygon(0 65%, 8% 45%, 14% 60%, 22% 35%, 32% 55%, 40% 40%, 50% 60%, 58% 30%, 68% 55%, 78% 40%, 88% 60%, 100% 35%, 100% 100%, 0 100%);
+  }
+
+  /* Night — deep + stars */
+  .hero-night .hero-bg {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(167,139,250,0.18) 0%, transparent 60%),
+      linear-gradient(180deg, #0F0C29 0%, #1E1B4B 35%, #312E81 60%, #0A0A0F 100%);
+  }
+  .hero-night .moon {
+    position: absolute; top: 18%; right: 22%;
+    width: 50px; height: 50px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #F5F5DC 0%, #D6D5B8 60%, #9CA08F 100%);
+    box-shadow: 0 0 30px rgba(245,245,220,0.4), 0 0 60px rgba(245,245,220,0.18);
+  }
+  .hero-night .star {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: white; animation: twinkle 3s ease-in-out infinite;
+  }
+
+  /* ─────────── Footer ─────────── */
+  footer {
+    padding: var(--s-8) var(--s-8) var(--s-12); text-align: center;
+    background: #FFFFFF; border-top: 1px solid #DDDDDD;
+    font-family: var(--mono); font-size: 14px; color: #444444;
+    letter-spacing: 0.08em;
+  }
+  footer b { color: #C8102E; font-weight: 800; }
+  footer code { background: #F5F5F5; color: #111111; padding: 2px 8px; border-radius: 4px; font-size: 13px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ──────────── ICON DEFS ──────────── -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="ic-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="ic-rain" viewBox="0 0 24 24"><path d="M16 14v6M8 14v6M12 14v6M3 13c0-4 3-7 7-7 2.5 0 4.5 1.2 6 3 3 0 5 2 5 5 0 2-1 4-3 4"/></symbol>
+    <symbol id="ic-shirt" viewBox="0 0 24 24"><path d="M6 4l3 2 3-1 3 1 3-2 3 3-3 3v11H6V9L3 6z"/></symbol>
+    <symbol id="ic-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0zM7 7c0-1 .5-2 2-2M11 7c0-1 .5-2 2-2"/></symbol>
+    <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 22s8-7 8-13a8 8 0 0 0-16 0c0 6 8 13 8 13z"/><circle cx="12" cy="9" r="3"/></symbol>
+    <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="ic-protein" viewBox="0 0 24 24"><path d="M7 21c-2-2-2-6 0-8s4-1 5 0c1-1 3-2 5 0s2 6 0 8M9 7l6 6M9 13l6-6M12 3v3M9 4h6"/></symbol>
+    <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="ic-scenes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="11"/></symbol>
+    <symbol id="ic-coach" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></symbol>
+    <symbol id="ic-you" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6 19c1-3 3-5 6-5s5 2 6 5"/></symbol>
+    <symbol id="ic-note" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="ic-heart" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 7-8 12-8 12z"/></symbol>
+    <symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 13a8 8 0 1 1-10-10 6 6 0 0 0 10 10z"/></symbol>
+    <symbol id="ic-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 12h18M12 8v13M8 8a3 3 0 0 1 4-4 3 3 0 0 1 4 4"/></symbol>
+    <symbol id="ic-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 22l3-7-2-3 4-4 3 4 4 2M14 14l-1 4"/></symbol>
+    <symbol id="ic-kakao" viewBox="0 0 24 24"><ellipse cx="12" cy="10" rx="9" ry="7"/><path d="M9 16l-2 4 5-3"/></symbol>
+    <symbol id="ic-apple" viewBox="0 0 24 24"><path d="M12 6c0-2 2-3 3-3 0 2-2 3-3 3zM7 10c0-2 2-3 4-3 1 0 2 .5 3 .5s2-.5 3-.5c2 0 4 2 4 5 0 3-2 8-5 8-1 0-2-.5-3-.5s-2 .5-3 .5c-3 0-5-5-5-8z"/></symbol>
+    <symbol id="lion-mono" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="30" cy="33" rx="14.5" ry="13"/>
+        <circle cx="18" cy="22" r="3.6"/><circle cx="42" cy="22" r="3.6"/>
+        <circle cx="24" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="36" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <path d="M 28 36.5 L 32 36.5 L 30 38.5 Z" fill="currentColor" stroke="none"/>
+        <path d="M 24 42 Q 30 45 36 42"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ──────────── HEADER ──────────── -->
+<header class="board">
+  <div class="brand">
+    <svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg>
+    <h1>라이언 — 시안 <b>v4</b></h1>
+  </div>
+  <div class="meta">[ GUIDE v6.3 · <b>CONTEXT AWARE</b> · 7 SCREENS · 2026-05-12 ]</div>
+  <div class="label-row">
+    <span class="pill">시점 6종</span>
+    <span class="pill">단일 결정 영웅</span>
+    <span class="pill">시간 변수</span>
+    <span class="pill">시연 핵심 = 점심</span>
+  </div>
+</header>
+
+<!-- ──────────── BOARD STAGE — 7 SCREENS ──────────── -->
+<div class="board-stage">
+
+  <!-- ═══ SCREEN 01 — LOGIN ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 01</span><p>auth / login</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="login-glow"></div>
+        <div class="status-bar"><span>9:41</span><span class="right">LION · ONLINE</span></div>
+        <div class="login-content">
+          <div class="login-top">
+            <div class="login-orb">
+              <div class="login-orb-rings"></div>
+              <div class="particle-field" id="loginParticles"></div>
+              <div class="login-orb-mark"><svg><use href="#lion-mono"/></svg></div>
+            </div>
+            <div class="login-brand">LIFE OS · ONE</div>
+            <h2 class="login-h1">다시 만나서<br>반가워요</h2>
+            <p class="login-sub">SYSTEM <b>ONLINE</b></p>
+          </div>
+          <form class="login-form" onsubmit="event.preventDefault();">
+            <div class="field"><label class="lbl">EMAIL</label>
+              <div class="field-row"><input type="email" value="dahwan.oh@gmail.com" /><span class="dot"></span></div>
+            </div>
+            <div class="field"><label class="lbl">PASSWORD</label>
+              <div class="field-row"><input type="password" value="••••••••••" /></div>
+            </div>
+            <div class="login-helper">
+              <label><span class="check"></span> KEEP SESSION</label>
+              <a href="#">FORGOT</a>
+            </div>
+            <button type="submit" class="login-cta">AUTHENTICATE <svg class="icon" width="14" height="14"><use href="#ic-arrow"/></svg></button>
+            <div class="login-divider">OR · NEW SESSION</div>
+            <div class="social-row">
+              <button type="button" class="social-btn"><svg class="icon" width="12" height="12"><use href="#ic-kakao"/></svg> KAKAO</button>
+              <button type="button" class="social-btn"><svg class="icon" width="12" height="12"><use href="#ic-apple"/></svg> APPLE</button>
+            </div>
+            <div class="signup-row">FIRST CONTACT? <a href="#">REGISTER <svg class="icon" width="10" height="10"><use href="#ic-arrow"/></svg></a></div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4>SCREEN 01 — LOGIN</h4>
+      <ul>
+        <li><b>라이언 모노라인 마크</b>가 입자 헤일로 안에서 호흡 — 시스템 ONLINE 상태</li>
+        <li>입력은 <b>라인 only</b> · 라벨은 mono · 빈 상태에서도 정돈됨</li>
+        <li><b>AUTHENTICATE</b> CTA + 카카오·Apple ID 소셜 로그인</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 02 — MORNING (06:42) ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 02</span><p>morning · 06:42</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>6:42</span><span class="right">14° · RAIN 80%</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>MORNING</b></span>
+              <span class="right">TUE · 05.12</span>
+            </div>
+            <div class="greet">
+              <p class="gname">좋은 아침,<br><b>다환</b>님.</p>
+              <p class="gsub">오늘은 비가 오고 쌀쌀해요. 천천히 준비하셔도 돼요.</p>
+            </div>
+            <div class="hero-card hero-rain">
+              <div class="hero-bg"><div class="rain-layer" id="rainLayer"></div></div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-rain"/></svg> TODAY · MORNING COMMUTE</div>
+                <h3 class="h-title">자켓·우산을<br>꼭 챙기세요.</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-shirt"/></svg></div>
+                <div class="body"><div class="lab">OUTFIT</div><div class="val">긴팔 셔츠 + <b>트렌치코트</b></div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-bowl"/></svg></div>
+                <div class="body"><div class="lab">BREAKFAST</div><div class="val">가벼운 <b>그릭 요거트</b> · 어제 야식 보완</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-pin"/></svg></div>
+                <div class="body"><div class="lab">KEY EVENT</div><div class="val"><b>10:00</b> 강남 클라이언트 미팅</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">06:42</span><br>MORNING — 출근 준비</h4>
+      <ul>
+        <li><b>날씨 기반 옷차림</b> — 14° 비 80% → 자켓·우산·트렌치 추천</li>
+        <li><b>어제 식단 보완</b> — 야식 기록 → 가벼운 그릭 요거트 제안</li>
+        <li><b>키워드 일정</b> — 10:00 강남 미팅 1개만 큰 카드로</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 03 — LATE MORNING (11:14) ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 03</span><p>late morning · 11:14</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>11:14</span><span class="right">FOCUS · LION</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>LATE MORNING</b></span>
+              <span class="right">16 MIN TO LUNCH</span>
+            </div>
+            <div class="greet">
+              <p class="gname"><b>다환</b>님,<br>미팅 잘 끝내셨어요?</p>
+              <p class="gsub">10시 미팅 끝났네요. 16분 뒤 점심 시간이에요.</p>
+            </div>
+            <div class="hero-card hero-prelunch">
+              <div class="hero-bg">
+                <div class="clock-ring"></div>
+                <div class="big-time">11:30</div>
+              </div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-clock"/></svg> NEXT · LUNCH IN 16 MIN</div>
+                <h3 class="h-title">점심엔 단백질<br>위주로 어떠세요?</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-protein"/></svg></div>
+                <div class="body"><div class="lab">YESTERDAY</div><div class="val">단백질 <b>-38%</b> 부족했어요</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-bowl"/></svg></div>
+                <div class="body"><div class="lab">SUGGESTED</div><div class="val"><b>닭가슴살 샐러드</b> · 단백질 38g</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-pin"/></svg></div>
+                <div class="body"><div class="lab">NEARBY</div><div class="val"><b>B카페 강남점</b> · 도보 6분</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">11:14</span><br>LATE MORNING — 점심 전조</h4>
+      <ul>
+        <li><b>오전 회의 안부</b> — 10시 미팅 종료 인식, "잘 끝내셨어요?"</li>
+        <li><b>점심 전조 카운트다운</b> — 16분 뒤 점심 시간 시각화</li>
+        <li><b>어제 영양 보완</b> 페르소나 — 단백질 −38% → 닭가슴살 추천</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 04 — LUNCH (12:08) ★ 시연 핵심 ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 04 ★</span><p>lunch · 12:08 · demo core</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>12:08</span><span class="right">LUNCH · LIVE</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>LUNCH TIME</b></span>
+              <span class="right">12:08</span>
+            </div>
+            <div class="greet">
+              <p class="gname">점심 시간이에요,<br><b>다환</b>님.</p>
+              <p class="gsub">콜레스테롤 관리 페이스 · 단백질 보강이 필요한 날이에요.</p>
+            </div>
+            <div class="hero-card hero-lunch">
+              <div class="hero-bg"><div class="plate"></div></div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-bowl"/></svg> TODAY · LUNCH RECOMMENDATION</div>
+                <h3 class="h-title">닭가슴살<br>샐러드 어떠세요?</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-pin"/></svg></div>
+                <div class="body"><div class="lab">RESTAURANT</div><div class="val"><b>B카페 강남점</b> · 도보 6분</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-protein"/></svg></div>
+                <div class="body"><div class="lab">NUTRITION</div><div class="val">단백질 <b>38g</b> · 580 kcal</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+            <div class="cta-row">
+              <button class="cta">예약 + 결제 <svg class="icon" width="14" height="14"><use href="#ic-arrow"/></svg></button>
+              <button class="cta ghost">다른 추천</button>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">12:08</span><br>LUNCH ★ — <span style="color:#C8102E">시연 핵심</span></h4>
+      <ul>
+        <li><b>음식 cover hero</b> — 풀스크린 플레이트 · 그라데이션</li>
+        <li><b>가맹점 노출</b> — B카페 강남점 · 결제 진입점 (Merchant DB 연동)</li>
+        <li><b>예약 + 결제 CTA</b> 큰 honey 버튼 — 시연 데모 흐름의 시작</li>
+        <li><b>"다른 추천"</b> ghost — 라이언이 대안 제시 (다양성)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 05 — AFTERNOON (15:23) ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 05</span><p>afternoon · 15:23</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>15:23</span><span class="right">FOCUS · LION</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>AFTERNOON</b></span>
+              <span class="right">2H TO REVIEW</span>
+            </div>
+            <div class="greet">
+              <p class="gname">오전 미팅,<br>어떠셨어요?</p>
+              <p class="gsub">10시 강남 미팅 후 4시간 지났어요. 메모는 정리하셨나요?</p>
+            </div>
+            <div class="hero-card hero-afternoon">
+              <div class="hero-bg"><div class="cal-frame"><div class="cf-line"></div><div class="cf-line"></div><div class="cf-line"></div></div></div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-cal"/></svg> NEXT · 17:00 DESIGN REVIEW</div>
+                <h3 class="h-title">디자인 리뷰<br>1시간 37분 뒤.</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-note"/></svg></div>
+                <div class="body"><div class="lab">FOLLOW UP</div><div class="val"><b>회의 메모 1건</b> 정리 안 됨</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-pin"/></svg></div>
+                <div class="body"><div class="lab">PREP</div><div class="val">디자인 리뷰 <b>자료 전달</b> 필요</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-walk"/></svg></div>
+                <div class="body"><div class="lab">BREAK</div><div class="val"><b>5분 산책</b> — 집중 회복 추천</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">15:23</span><br>AFTERNOON — 회고 + 다음 일정</h4>
+      <ul>
+        <li><b>오전 미팅 회고</b> — 메모 정리 안 된 follow-up 알림</li>
+        <li><b>다음 일정 카운트다운</b> — 17:00 디자인 리뷰 영웅 노출</li>
+        <li><b>휴식 제안</b> — 집중 회복용 5분 산책</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 06 — EVENING (19:42) ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 06</span><p>evening · 19:42 · 감성</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>19:42</span><span class="right">EVENING · HOME</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>EVENING</b></span>
+              <span class="right">SUNSET</span>
+            </div>
+            <div class="greet">
+              <p class="gname">오늘 하루,<br>어떠셨어요?</p>
+              <p class="gsub">오전 미팅 · 점심 · 디자인 리뷰까지 무사히 끝났어요.</p>
+            </div>
+            <div class="hero-card hero-evening">
+              <div class="hero-bg">
+                <div class="glow-circle"></div>
+                <div class="city"></div>
+              </div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-heart"/></svg> TONIGHT · FAMILY TIME</div>
+                <h3 class="h-title">지원이와<br>저녁 시간이에요.</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-walk"/></svg></div>
+                <div class="body"><div class="lab">TODAY</div><div class="val">걸음 <b>6,240</b> · 스트레스 보통</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-heart"/></svg></div>
+                <div class="body"><div class="lab">SUGGESTED</div><div class="val">아이와 <b>가벼운 산책</b> 어떠세요?</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-cal"/></svg></div>
+                <div class="body"><div class="lab">TOMORROW</div><div class="val">일정 <b>3개</b> · 09:00부터</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">19:42</span><br>EVENING — 감성 터치</h4>
+      <ul>
+        <li><b>하루 안부 인사</b> — "어떠셨어요?" · 오늘 일정 회고</li>
+        <li><b>가족 시간 강조</b> — 지원이와 산책 영웅 카드</li>
+        <li><b>내일 일정 미리</b> — 3개 일정 · 09:00 시작</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 07 — NIGHT (22:18) ═══ -->
+  <div class="scene">
+    <div class="scene-tag"><span class="num">SCREEN 07</span><p>night · 22:18 · 미래 일정</p></div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>22:18</span><span class="right">WIND DOWN</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+            <div class="moment-head">
+              <span class="left"><span class="lion-mini"><svg viewBox="0 0 60 60"><use href="#lion-mono"/></svg></span> <b>NIGHT</b></span>
+              <span class="right">42 MIN TO SLEEP</span>
+            </div>
+            <div class="greet">
+              <p class="gname">오늘도<br>수고하셨어요.</p>
+              <p class="gsub">취침 권장 23:00 — 42분 남았어요.</p>
+            </div>
+            <div class="hero-card hero-night">
+              <div class="hero-bg">
+                <div class="moon"></div>
+                <div class="star-layer" id="starLayer"></div>
+              </div>
+              <div class="hero-overlay"></div>
+              <div class="hero-content">
+                <div class="h-eye"><svg class="icon" width="12" height="12"><use href="#ic-moon"/></svg> THIS WEEK · UPCOMING</div>
+                <h3 class="h-title">토요일,<br>지원이 생일이에요.</h3>
+              </div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-gift"/></svg></div>
+                <div class="body"><div class="lab">SAT · 05.17</div><div class="val"><b>지원이 생일</b> · 5일 남음</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-cal"/></svg></div>
+                <div class="body"><div class="lab">TUE · 05.20</div><div class="val">분기 보고 · <b>자료 준비 필요</b></div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+              <div class="detail">
+                <div class="ic"><svg class="icon"><use href="#ic-moon"/></svg></div>
+                <div class="body"><div class="lab">TONIGHT</div><div class="val">취침 <b>23:00</b> · 7h 충분</div></div>
+                <div class="chev"><svg class="icon" width="14" height="14"><use href="#ic-chev"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <button class="fab"><span class="core"></span></button>
+          <nav class="bottom-nav">
+            <div class="nav-item active"><svg class="icon"><use href="#ic-home"/></svg>HOME</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-scenes"/></svg>SCENES</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-coach"/></svg>COACH</div>
+            <div class="nav-item"><svg class="icon"><use href="#ic-you"/></svg>YOU</div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <h4><span class="time">22:18</span><br>NIGHT — 미래 일정 + 취침</h4>
+      <ul>
+        <li><b>미래 일정 미리</b> — 토 지원이 생일 영웅 (5일 남음)</li>
+        <li><b>다음 주 주요 일정</b> — 분기 보고 자료 준비 알림</li>
+        <li><b>취침 권장</b> — 23:00 · 7h 충분 보장</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>LIFE OS · ONE</b> · 라이언 시안 v4 · 2026-05-12<br><br>
+  <code>docs/mockup-v4.html</code> · 7 SCREENS · CONTEXT AWARE
+</footer>
+
+<script>
+  /* Login halo particles */
+  const lp = document.getElementById('loginParticles');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('span');
+    p.className = 'p' + (Math.random() < 0.06 ? ' teal' : '');
+    const a = (i / 50) * Math.PI * 2 + Math.random()*0.3;
+    const r = 48 + Math.random()*5;
+    p.style.left = (50 + Math.cos(a) * r) + '%';
+    p.style.top  = (50 + Math.sin(a) * r) + '%';
+    p.style.animationDuration = (2 + Math.random()*3) + 's';
+    p.style.animationDelay = -Math.random()*3 + 's';
+    p.style.opacity = 0.3 + Math.random()*0.6;
+    lp.appendChild(p);
+  }
+
+  /* Rain layer */
+  const rl = document.getElementById('rainLayer');
+  if (rl) {
+    for (let i = 0; i < 70; i++) {
+      const d = document.createElement('div');
+      d.className = 'rain-d';
+      d.style.left = (Math.random() * 110) + '%';
+      d.style.height = (30 + Math.random()*40) + 'px';
+      d.style.animationDuration = (0.6 + Math.random()*0.6) + 's';
+      d.style.animationDelay = -Math.random()*1.5 + 's';
+      d.style.opacity = 0.3 + Math.random()*0.5;
+      d.style.transform = 'rotate(12deg)';
+      rl.appendChild(d);
+    }
+  }
+
+  /* Night stars */
+  const sl = document.getElementById('starLayer');
+  if (sl) {
+    for (let i = 0; i < 35; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const sz = 1 + Math.random()*1.5;
+      s.style.width = sz + 'px'; s.style.height = sz + 'px';
+      s.style.left = Math.random()*100 + '%';
+      s.style.top = (5 + Math.random()*55) + '%';
+      s.style.animationDuration = (2 + Math.random()*2.5) + 's';
+      s.style.animationDelay = -Math.random()*3 + 's';
+      s.style.opacity = 0.4 + Math.random()*0.6;
+      sl.appendChild(s);
+    }
+  }
+</script>
+
+</body>
+</html>

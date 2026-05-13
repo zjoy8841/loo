@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>라이언 — Life OS.ONE 디자인 가이드 v8.0 (Apple HIG 정렬)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+
+  :root {
+    /* ─── 1.x v8.0 의미론 토큰 (Apple HIG 4-mode 구조) ─── */
+    /* Light / Default */
+    --ink-primary:    #0F1419;
+    --ink-secondary:  #3D4453;
+    --ink-tertiary:   #5C6478;
+    --ink-quaternary: #8A95A3;
+    --surface-base:     #FFFFFF;
+    --surface-elevated: #F8FAFC;
+    --surface-grouped:  #ECEFF5;
+    --surface-overlay:  rgba(255,255,255,0.92);
+    --separator:        rgba(15,20,25,0.08);
+    --fill-primary:     rgba(15,20,25,0.05);
+    --fill-secondary:   rgba(15,20,25,0.03);
+
+    /* Brand (v7 유지) */
+    --primary-100: #FCE7D2; --primary-300: #F2A879; --primary-500: #E87A3E;
+    --primary-600: #C8651F; --primary-700: #A04F12;
+    --secondary-300: #7BA98F; --secondary-500: #3D7A5C; --secondary-700: #2A5A42;
+    --accent-honey: #F4B860; --accent-cream: #FAF3E0;
+    --accent-iris-light: #5B5FE0; --accent-iris-deep: #3D41C5;
+    --accent-iris-dark: #9094F5; --accent-iris-pale: #A8AAF5;
+
+    /* Neutrals (라이언 warm — 백그라운드 보조용) */
+    --neutral-0: #FAF7F2; --neutral-50: #F5F1EA; --neutral-100: #ECE6DA;
+    --neutral-200: #D9D2C0; --neutral-400: #A39B85; --neutral-500: #82795F;
+    --neutral-700: #4A4332; --neutral-800: #2E2A20; --neutral-900: #1F1B16;
+
+    /* Dark Lion stage */
+    --dark-bg: #0F0D0A; --dark-card: #1A1612; --dark-card-hover: #221C16;
+    --dark-border: rgba(255,255,255,0.08); --dark-text: #F5EFE6;
+    --dark-text-muted: #A39B85;
+    --oled-black: #050505; --oled-card: #0A0908; --oled-card-elev: #11100E;
+    --hud-line: rgba(232,122,62,0.12); --hud-tick: rgba(245,239,230,0.06);
+
+    /* HUD */
+    --teal: #4FD1C5; --cyan: #00D4FF; --purple: #A78BFA; --coral: #FF8C7A;
+
+    /* Status */
+    --success: #2E7D5B; --warning: #E0A341; --danger: #C44536; --info: #3F43BD;
+
+    /* ─── Dynamic Type (Apple HIG iOS Large default 1:1) ─── */
+    --type-display:  clamp(31px, 2.125rem, 40px); /* Large Title 34pt */
+    --type-h1:       clamp(25px, 1.75rem, 34px);  /* Title 1 28pt */
+    --type-h2:       clamp(19px, 1.375rem, 28px); /* Title 2 22pt */
+    --type-h3:       clamp(17px, 1.25rem, 26px);  /* Title 3 20pt */
+    --type-headline: 1.0625rem;                   /* Headline 17pt Semibold */
+    --type-body:     1.0625rem;                   /* Body 17pt */
+    --type-callout:  1rem;                        /* Callout 16pt */
+    --type-subhead:  0.9375rem;                   /* Subhead 15pt */
+    --type-footnote: 0.8125rem;                   /* Footnote 13pt */
+    --type-caption:  0.75rem;                     /* Caption 1 12pt */
+    --type-mono:     0.6875rem;                   /* Caption 2 11pt */
+
+    /* ─── Safe Area ─── */
+    --safe-top:    env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left:   env(safe-area-inset-left, 0px);
+    --safe-right:  env(safe-area-inset-right, 0px);
+
+    /* ─── Gutter ─── */
+    --gutter-compact: 16px;
+    --gutter-regular: 20px;
+    --gutter-wide:    32px;
+
+    /* ─── Material (Apple HIG 4단계 + Liquid Glass 별도) ─── */
+    --material-ultra-thin: blur(4px)  saturate(120%);
+    --material-thin:       blur(10px) saturate(140%);
+    --material-regular:    blur(20px) saturate(160%);
+    --material-thick:      blur(40px) saturate(180%);
+
+    /* ─── Motion ─── */
+    --motion-fast: 160ms;  --motion-base: 280ms;  --motion-mode: 480ms;  --motion-hero: 800ms;
+    --ease-out:    cubic-bezier(.2,.8,.2,1);
+    --ease-in-out: cubic-bezier(.4,0,.2,1);
+    --ease-snappy: cubic-bezier(.16,1,.3,1);
+
+    /* ─── Touch & z-layer ─── */
+    --touch-default: 44px; --touch-minimum: 32px;
+    --touch-gap-icon: 8px; --touch-gap-label: 12px;
+    --z-bg: 0; --z-content: 10; --z-overlay: 20; --z-nav: 30; --z-atom: 40; --z-modal: 50; --z-toast: 60;
+
+    /* Font */
+    --font: 'Pretendard Variable', system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px; --r-2xl: 32px;
+  }
+
+  /* === Dark / Default === */
+  [data-scheme="dark"] {
+    --ink-primary:    #F8FAFC;
+    --ink-secondary:  #B0BCC9;
+    --ink-tertiary:   #78859A;
+    --ink-quaternary: #4F5866;
+    --surface-base:     #0B1024;
+    --surface-elevated: #171E3A;
+    --surface-grouped:  #0F1530;
+    --surface-overlay:  rgba(11,16,36,0.88);
+    --separator:        rgba(248,250,252,0.10);
+    --fill-primary:     rgba(248,250,252,0.06);
+    --fill-secondary:   rgba(248,250,252,0.03);
+  }
+
+  /* === Light / Increased Contrast === */
+  [data-contrast="high"] {
+    --ink-primary:    #000000;
+    --ink-secondary:  #1A1F26;
+    --ink-tertiary:   #2A3340;
+    --separator:      rgba(0,0,0,0.30);
+    --fill-primary:   rgba(0,0,0,0.10);
+  }
+  /* === Dark / Increased Contrast === */
+  [data-scheme="dark"][data-contrast="high"] {
+    --ink-primary:    #FFFFFF;
+    --ink-secondary:  #E2E8F0;
+    --surface-base:   #000000;
+    --separator:      rgba(255,255,255,0.40);
+    --fill-primary:   rgba(255,255,255,0.14);
+  }
+
+  /* === 시스템 적응 모드 (옵트인) === */
+  @media (prefers-color-scheme: dark) {
+    [data-adapt="system"] {
+      --ink-primary:    #F8FAFC;
+      --surface-base:   #0B1024;
+      --surface-elevated: #171E3A;
+    }
+  }
+
+  html, body { margin: 0; padding: 0; background: var(--surface-grouped); color: var(--ink-primary); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+  body { line-height: 1.55; }
+
+  /* ───── 레이아웃 ───── */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--gutter-wide); }
+
+  /* 헤더 */
+  header.hero {
+    background: linear-gradient(135deg, #0B1024 0%, #1F2540 50%, #0B1024 100%);
+    color: #F8FAFC;
+    padding: calc(var(--safe-top) + 56px) 0 56px;
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid rgba(168,170,245,0.30);
+  }
+  header.hero::before {
+    content:''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 18% 28%, rgba(232,122,62,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 82% 72%, rgba(168,170,245,0.18) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  header.hero .wrap { position: relative; }
+  .brand { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
+  .brand svg { width: 56px; height: 56px; }
+  .brand-name { font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(248,250,252,0.55); margin-bottom: 4px; }
+  .brand h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.01em; color: #F8FAFC; }
+  header.hero h2 { font-size: var(--type-display); font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; margin: 0 0 18px; }
+  header.hero h2 .a { color: var(--primary-500); }
+  header.hero h2 .b { color: var(--accent-iris-pale); }
+  header.hero p.lead { font-size: var(--type-headline); max-width: 720px; color: rgba(248,250,252,0.85); margin: 0 0 24px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+    font-size: var(--type-mono); font-weight: 700; letter-spacing: 0.05em;
+    color: rgba(248,250,252,0.88);
+  }
+  .badge.new { background: rgba(168,170,245,0.20); border-color: rgba(168,170,245,0.45); color: #DDE3F5; }
+  .badge.warn { background: rgba(224,163,65,0.18); border-color: rgba(224,163,65,0.4); color: #FACC15; }
+
+  /* TOC */
+  nav.toc {
+    background: var(--surface-overlay); padding: 18px 0; border-bottom: 1px solid var(--separator);
+    position: sticky; top: 0; z-index: var(--z-nav);
+    backdrop-filter: var(--material-regular);
+    -webkit-backdrop-filter: var(--material-regular);
+  }
+  nav.toc .wrap { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+  nav.toc a {
+    font-size: var(--type-footnote); font-weight: 700; color: var(--ink-secondary);
+    text-decoration: none; padding: 6px 10px; border-radius: 6px;
+    transition: all var(--motion-fast) var(--ease-out);
+  }
+  nav.toc a:hover { background: var(--fill-primary); color: var(--accent-iris-deep); }
+  nav.toc .toc-label { font-size: var(--type-mono); font-weight: 800; color: var(--ink-tertiary); letter-spacing: 0.12em; text-transform: uppercase; padding-right: 4px; }
+  /* 모드 토글 */
+  .mode-toggle { display: inline-flex; gap: 4px; margin-left: auto; align-items: center; }
+  .mode-toggle button {
+    font: inherit; font-size: var(--type-mono); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1px solid var(--separator); background: var(--surface-elevated); color: var(--ink-secondary);
+    padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    transition: all var(--motion-fast) var(--ease-out);
+  }
+  .mode-toggle button[aria-pressed="true"] { background: var(--accent-iris-deep); color: white; border-color: var(--accent-iris-deep); }
+
+  /* 섹션 */
+  section { padding: 64px 0; border-bottom: 1px solid var(--separator); background: var(--surface-base); }
+  section.alt { background: var(--surface-elevated); }
+  section.dark { background: var(--dark-bg); color: var(--dark-text); border-color: rgba(255,255,255,0.06); }
+  section.dark h2, section.dark h3, section.dark h4 { color: #F5EFE6; }
+  section.dark p, section.dark li, section.dark td { color: rgba(245,239,230,0.78); }
+
+  h2.section-title {
+    font-size: var(--type-footnote); font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent-iris-deep); margin: 0 0 10px;
+  }
+  section.dark h2.section-title { color: var(--accent-iris-pale); }
+  h2.section-title + h3.section-head {
+    font-size: var(--type-h1); font-weight: 800; letter-spacing: -0.02em;
+    margin: 0 0 14px; line-height: 1.15; color: var(--ink-primary);
+  }
+  section.dark h3.section-head { color: #FFFFFF; }
+  .section-lead { font-size: var(--type-headline); max-width: 720px; color: var(--ink-secondary); margin: 0 0 40px; }
+  section.dark .section-lead { color: rgba(245,239,230,0.78); }
+
+  h4 { font-size: var(--type-h3); font-weight: 700; margin: 28px 0 12px; letter-spacing: -0.005em; color: var(--ink-primary); }
+  section.dark h4 { color: rgba(245,239,230,0.95); }
+  p { margin: 0 0 12px; font-size: var(--type-body); color: var(--ink-primary); }
+  section.dark p { color: rgba(245,239,230,0.85); }
+  ul, ol { padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+  code {
+    font-family: var(--font-mono); font-size: 0.88em;
+    background: var(--fill-primary); padding: 2px 6px; border-radius: 4px; color: var(--accent-iris-deep);
+  }
+  section.dark code { background: rgba(255,255,255,0.08); color: var(--accent-honey); }
+
+  /* ─── Apple Caveat 박스 ─── */
+  .caveat {
+    background: linear-gradient(135deg, rgba(168,170,245,0.10), rgba(168,170,245,0.04));
+    border: 1px solid rgba(168,170,245,0.30);
+    border-left: 3px solid var(--accent-iris-deep);
+    padding: 16px 18px; border-radius: var(--r-md); margin: 16px 0;
+    font-size: var(--type-subhead); color: var(--ink-primary);
+  }
+  .caveat .h {
+    font-size: var(--type-mono); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent-iris-deep); margin-bottom: 6px;
+  }
+  section.dark .caveat { background: rgba(168,170,245,0.08); }
+  section.dark .caveat .h { color: var(--accent-iris-pale); }
+
+  /* ─── 컬러 swatch ─── */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .swatch { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--separator); background: var(--surface-elevated); }
+  .swatch .chip { height: 80px; display: grid; place-items: center; color: white; font-weight: 700; font-size: var(--type-subhead); }
+  .swatch .chip.lt { color: var(--neutral-900); }
+  .swatch .meta { padding: 8px 10px; background: var(--surface-base); }
+  .swatch .name { font-size: var(--type-caption); font-weight: 700; color: var(--ink-primary); }
+  .swatch .hex { font-size: var(--type-mono); color: var(--ink-tertiary); font-family: var(--font-mono); }
+
+  /* ─── 4-mode 미니 매트릭스 ─── */
+  .mode-matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  @media (max-width: 720px) { .mode-matrix { grid-template-columns: repeat(2, 1fr); } }
+  .mode-cell {
+    border: 1px solid var(--separator); border-radius: var(--r-md); padding: 14px;
+    min-height: 110px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .mode-cell .label { font-size: var(--type-mono); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+  .mode-cell .swatch-row { display: flex; gap: 4px; margin-top: auto; }
+  .mode-cell .swatch-row span { width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06); }
+
+  /* ─── 타이포 row ─── */
+  .type-row { display: flex; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px dashed var(--separator); }
+  .type-row .lbl { width: 200px; font-size: var(--type-mono); color: var(--ink-tertiary); font-family: var(--font-mono); flex-shrink: 0; letter-spacing: 0.04em; }
+  .type-row .sample { flex: 1; color: var(--ink-primary); }
+
+  /* ─── 표 ─── */
+  table { width: 100%; border-collapse: collapse; font-size: var(--type-subhead); margin: 10px 0 20px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--separator); color: var(--ink-primary); }
+  th { background: var(--surface-elevated); font-weight: 700; font-size: var(--type-caption); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-secondary); }
+  section.dark th { background: var(--dark-card); color: rgba(245,239,230,0.7); border-color: var(--dark-border); }
+  section.dark td { border-color: var(--dark-border); color: rgba(245,239,230,0.85); }
+
+  /* ─── Material 데모 ─── */
+  .material-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .material-grid { grid-template-columns: repeat(2, 1fr); } }
+  .material-demo {
+    aspect-ratio: 4/3; border-radius: var(--r-lg); position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 30% 30%, var(--primary-500) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 70%, var(--accent-iris-deep) 0%, transparent 55%),
+      linear-gradient(135deg, var(--accent-honey), var(--secondary-500));
+  }
+  .material-demo .panel {
+    position: absolute; inset: 28% 12% 12% 12%;
+    background: rgba(255,255,255,0.30);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: var(--r-md);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    color: white; text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .material-demo.thin    .panel { backdrop-filter: var(--material-thin);    -webkit-backdrop-filter: var(--material-thin); }
+  .material-demo.regular .panel { backdrop-filter: var(--material-regular); -webkit-backdrop-filter: var(--material-regular); }
+  .material-demo.thick   .panel { backdrop-filter: var(--material-thick);   -webkit-backdrop-filter: var(--material-thick); }
+  .material-demo.ultra   .panel { backdrop-filter: var(--material-ultra-thin); -webkit-backdrop-filter: var(--material-ultra-thin); }
+  .material-demo .panel .h { font-size: var(--type-caption); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+  .material-demo .panel .v { font-size: var(--type-mono); font-family: var(--font-mono); letter-spacing: 0.05em; opacity: 0.92; }
+
+  /* ─── 체크리스트 ─── */
+  .check-list { list-style: none; padding: 0; }
+  .check-list li { padding: 8px 0 8px 28px; position: relative; }
+  .check-list li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-iris-deep); font-weight: 800; }
+  .check-list li.done::before { content: '☑'; color: var(--success); }
+
+  /* ─── 푸터 ─── */
+  footer { padding: 40px 0 calc(var(--safe-bottom) + 60px); background: var(--surface-grouped); font-size: var(--type-footnote); color: var(--ink-tertiary); }
+  footer .meta { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ─── Callout (v7 호환) ─── */
+  .callout {
+    background: rgba(232,122,62,0.08); border-left: 3px solid var(--primary-500);
+    padding: 14px 18px; border-radius: var(--r-md); margin: 16px 0; font-size: var(--type-subhead);
+  }
+  section.dark .callout { background: rgba(232,122,62,0.12); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: var(--motion-fast) !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────── HEADER ─────────────────────────── -->
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 80 80" width="56" height="56" xmlns="http://www.w3.org/2000/svg">
+        <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+        <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+        <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+        <circle cx="24" cy="32" r="5" fill="#F4B860"/><circle cx="56" cy="32" r="5" fill="#F4B860"/>
+        <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/><circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+        <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/><circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+        <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+        <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-name">Life OS.ONE — 라이언</div>
+        <h1>디자인 가이드 v8.0 · Apple HIG 정렬</h1>
+      </div>
+    </div>
+    <h2>매일의 결정을 <span class="a">차분히</span> 안내하는<br><span class="b">네이티브</span> 라이프스타일 OS</h2>
+    <p class="lead">v7 Cool Surface · Atom Voice Nav 룰은 유지. 그 위에 Apple HIG 토큰 레이어 — 의미론 컬러 4-mode · Dynamic Type · Material 4단계 · 17pt 대비 경계 · safe-area env() 의무화를 정렬했습니다.</p>
+    <div class="badges">
+      <span class="badge new">v8.0 · 2026-05-13</span>
+      <span class="badge">📐 Apple HIG 정렬</span>
+      <span class="badge">🌗 4-mode 컬러</span>
+      <span class="badge">🔤 Dynamic Type</span>
+      <span class="badge warn">⚠ 시연 D-day 2026-05-29 (16일)</span>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────────────────────── TOC + Mode Toggle ─────────────────────────── -->
+<nav class="toc">
+  <div class="wrap">
+    <span class="toc-label">목차</span>
+    <a href="#summary">0 변경 요지</a>
+    <a href="#tokens">1 토큰 레이어</a>
+    <a href="#colors">2 컬러</a>
+    <a href="#scenes">3 6 시점</a>
+    <a href="#a11y">4 접근성</a>
+    <a href="#components">5 컴포넌트</a>
+    <a href="#voice">6 보이스</a>
+    <a href="#preserved">7 v7 유지</a>
+    <a href="#checklist">8 체크리스트</a>
+    <a href="#history">9 히스토리</a>
+    <span class="mode-toggle" role="group" aria-label="미리보기 모드">
+      <button id="btn-light"    aria-pressed="true">Light</button>
+      <button id="btn-dark"     aria-pressed="false">Dark</button>
+      <button id="btn-contrast" aria-pressed="false">High Contrast</button>
+    </span>
+  </div>
+</nav>
+
+<!-- ─────────────────────────── 0. 변경 요지 ─────────────────────────── -->
+<section id="summary">
+  <div class="wrap">
+    <h2 class="section-title">0 · 변경 요지</h2>
+    <h3 class="section-head">v7 → v7.1 → v8.0</h3>
+    <p class="section-lead">v7.1 초안의 토큰 7개를 Apple HIG 공식 페이지 1차 fetch(2026-05-13)로 검증·교정하여 정식 명세화했습니다.</p>
+
+    <table>
+      <thead><tr><th>차수</th><th>핵심 변경</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr><td><b>v7</b></td><td>Cool Surface 전환, Atom Voice Nav 통합, 한글 nav</td><td>본문 = <code>old/design-guide.html</code></td></tr>
+        <tr><td><b>v7.1 초안</b></td><td>의미론 컬러 · Dynamic Type · safe area · material · 모션 토큰 + 접근성 정량 룰 (HIG widely-known 표준)</td><td>초안 보존 (<code>design-guide-v7.1-초안.md</code>)</td></tr>
+        <tr><td><b>v8.0</b></td><td>v7.1 초안을 Apple HIG 공식 fetch로 검증·교정. 4-mode 컬러, 17pt 대비, Material 4단계 + Liquid Glass, env() 의무화, hex hard-code caveat</td><td><b>본 문서</b> + <code>design-guide-v8.0.md</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4>v7.1 → v8.0 6가지 교정</h4>
+    <ol>
+      <li><b>WCAG 대비 경계</b> — <code>14pt+bold</code> (W3C 정의) → Apple <code>17pt 경계</code> + Bold any-size = 3:1</li>
+      <li><b>Material 단계</b> — 3단계(thin/regular/thick) → 4단계(<code>ultraThin</code> 추가) + Liquid Glass 별도 functional 레이어</li>
+      <li><b>컬러 토큰 스키마</b> — 2-mode(light/dark) → 4-mode(default L/D + increased contrast L/D)</li>
+      <li><b>hex hard-code 비권장</b> — Apple 공식 caveat 명문화 ("값은 OS 업데이트로 변함")</li>
+      <li><b>터치 타깃</b> — 44×44pt 기본 + <b>최소 28×28pt</b> 명시 (Apple iOS 공식)</li>
+      <li><b>safe-area 검증</b> — 픽셀값 검증 → <code>env(safe-area-inset-*)</code> / <code>safeAreaInsets</code> API 사용 의무화</li>
+    </ol>
+
+    <div class="caveat">
+      <div class="h">★ Apple 공식 caveat</div>
+      "Avoid hard-coding system color values in your app. Documented color values are for your reference during the app design process. <b>The actual color values may fluctuate from release to release</b>, based on a variety of environmental variables. Use APIs like Color to apply system colors." — developer.apple.com/design/human-interface-guidelines/color
+      <br><br>
+      → v8.0의 시스템 컬러 hex는 <b>웹 시연용</b>. 네이티브(iOS/Android) 포팅 시 시스템 토큰(<code>UIColor.label</code>, <code>Color.primary</code> 등) 호출로 교체.
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 1. 토큰 레이어 ─────────────────────────── -->
+<section id="tokens" class="alt">
+  <div class="wrap">
+    <h2 class="section-title">1 · 토큰 레이어</h2>
+    <h3 class="section-head">8 레이어 · Apple HIG 정렬</h3>
+    <p class="section-lead">컴포넌트는 hex 직접 호출 금지. 모든 시각 결정은 의미론 토큰을 통해서만. 시점·시스템 적응·고대비 모드가 자동 매핑됩니다.</p>
+
+    <h4>1.1 — 의미론 컬러 (4-mode 매트릭스)</h4>
+    <p>iOS의 Default(L/D) + Increased Contrast(L/D) 4개 모드 매핑. 사용자 시스템 설정(<code>prefers-color-scheme</code>, <code>prefers-contrast</code>) 자동 추종 옵션 + 시점(time of day) 강제 옵션.</p>
+
+    <div class="mode-matrix">
+      <div class="mode-cell" style="background:#FFFFFF;color:#0F1419;">
+        <div class="label" style="color:#5C6478;">Light · Default</div>
+        <div>본문 가독성 우선, 라이트 시점 기본</div>
+        <div class="swatch-row">
+          <span style="background:#FFFFFF;"></span>
+          <span style="background:#F8FAFC;"></span>
+          <span style="background:#0F1419;"></span>
+          <span style="background:#5C6478;"></span>
+        </div>
+      </div>
+      <div class="mode-cell" style="background:#0B1024;color:#F8FAFC;">
+        <div class="label" style="color:#B0BCC9;">Dark · Default</div>
+        <div>저녁·야간 시점, OLED 친화</div>
+        <div class="swatch-row">
+          <span style="background:#0B1024;"></span>
+          <span style="background:#171E3A;"></span>
+          <span style="background:#F8FAFC;"></span>
+          <span style="background:#78859A;"></span>
+        </div>
+      </div>
+      <div class="mode-cell" style="background:#FFFFFF;color:#000000;border:2px solid #000;">
+        <div class="label" style="color:#2A3340;">Light · High Contrast</div>
+        <div>Increase Contrast ON, 시각 보조</div>
+        <div class="swatch-row">
+          <span style="background:#FFFFFF;"></span>
+          <span style="background:#F3F5FA;"></span>
+          <span style="background:#000000;"></span>
+          <span style="background:#2A3340;"></span>
+        </div>
+      </div>
+      <div class="mode-cell" style="background:#000000;color:#FFFFFF;border:2px solid #FFF;">
+        <div class="label" style="color:#E2E8F0;">Dark · High Contrast</div>
+        <div>다크 + 고대비 동시 활성</div>
+        <div class="swatch-row">
+          <span style="background:#000000;"></span>
+          <span style="background:#0B1024;"></span>
+          <span style="background:#FFFFFF;"></span>
+          <span style="background:#B0BCC9;"></span>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>의미론 토큰</th><th>Apple iOS UIKit</th><th>Light Default</th><th>Dark Default</th></tr></thead>
+      <tbody>
+        <tr><td><code>--ink-primary</code></td><td>label</td><td>#0F1419</td><td>#F8FAFC</td></tr>
+        <tr><td><code>--ink-secondary</code></td><td>secondaryLabel</td><td>#3D4453</td><td>#B0BCC9</td></tr>
+        <tr><td><code>--ink-tertiary</code></td><td>tertiaryLabel</td><td>#5C6478</td><td>#78859A</td></tr>
+        <tr><td><code>--ink-quaternary</code></td><td>quaternaryLabel</td><td>#8A95A3</td><td>#4F5866</td></tr>
+        <tr><td><code>--surface-base</code></td><td>systemBackground</td><td>#FFFFFF</td><td>#0B1024</td></tr>
+        <tr><td><code>--surface-elevated</code></td><td>secondarySystemBackground</td><td>#F8FAFC</td><td>#171E3A</td></tr>
+        <tr><td><code>--surface-grouped</code></td><td>systemGroupedBackground</td><td>#ECEFF5</td><td>#0F1530</td></tr>
+        <tr><td><code>--separator</code></td><td>separator</td><td>rgba(15,20,25,0.08)</td><td>rgba(248,250,252,0.10)</td></tr>
+        <tr><td><code>--fill-primary</code></td><td>(systemFill)</td><td>rgba(15,20,25,0.05)</td><td>rgba(248,250,252,0.06)</td></tr>
+      </tbody>
+    </table>
+
+    <h4>1.2 — Dynamic Type (Apple iOS Large default 1:1)</h4>
+    <p>11 스타일 모두 Apple HIG <code>/typography</code> 표 매핑. 헤로만 <code>clamp()</code> 상한. 본문·캡션은 무제한 — iOS Dynamic Type AX1(28pt) ~ AX5(53pt)까지 깨지지 않게.</p>
+
+    <div class="type-row"><div class="lbl">Display · 34pt (Large Title)</div><div class="sample" style="font-size:var(--type-display);font-weight:800;letter-spacing:-0.025em;line-height:1.05;">매일의 결정을 차분히</div></div>
+    <div class="type-row"><div class="lbl">H1 · 28pt (Title 1)</div><div class="sample" style="font-size:var(--type-h1);font-weight:800;letter-spacing:-0.02em;">자켓 · 우산 챙기세요</div></div>
+    <div class="type-row"><div class="lbl">H2 · 22pt (Title 2)</div><div class="sample" style="font-size:var(--type-h2);font-weight:700;">오늘 점심 · 닭가슴살 샐러드</div></div>
+    <div class="type-row"><div class="lbl">H3 · 20pt (Title 3)</div><div class="sample" style="font-size:var(--type-h3);font-weight:600;">컨디션 좋은 하루를 만드는 결정</div></div>
+    <div class="type-row"><div class="lbl">Headline · 17pt (semibold)</div><div class="sample" style="font-size:var(--type-headline);font-weight:600;">콜레스테롤 관리 페이스</div></div>
+    <div class="type-row"><div class="lbl">Body · 17pt</div><div class="sample" style="font-size:var(--type-body);font-weight:500;">콜레스테롤 관리 페이스 · 단백질 38g · 도보 6분</div></div>
+    <div class="type-row"><div class="lbl">Callout · 16pt</div><div class="sample" style="font-size:var(--type-callout);font-weight:500;">근거를 한 줄로 보여주는 보조 카피</div></div>
+    <div class="type-row"><div class="lbl">Subhead · 15pt</div><div class="sample" style="font-size:var(--type-subhead);font-weight:500;color:var(--ink-secondary);">15:00 — 오후 회의 후 짧은 산책 어때요?</div></div>
+    <div class="type-row"><div class="lbl">Footnote · 13pt</div><div class="sample" style="font-size:var(--type-footnote);font-weight:500;color:var(--ink-secondary);">B카페 강남점 — 11:30 예약 대기</div></div>
+    <div class="type-row"><div class="lbl">Caption · 12pt</div><div class="sample" style="font-size:var(--type-caption);font-weight:600;color:var(--ink-tertiary);">데이터 출처 · 최근 7일 평균</div></div>
+    <div class="type-row"><div class="lbl">Mono · 11pt (Caption 2)</div><div class="sample" style="font-family:var(--font-mono);font-size:var(--type-mono);font-weight:700;letter-spacing:0.12em;color:var(--ink-tertiary);">LION · LISTENING · 24MS</div></div>
+
+    <h4>1.3 — Safe Area · Gutter</h4>
+    <p>iPhone 14 Pro <b>393×852pt @3x</b> 시연 기준. 고정값 사용 금지 — <code>env()</code>로 동적 처리.</p>
+    <table>
+      <thead><tr><th>토큰</th><th>값</th><th>적용 예</th></tr></thead>
+      <tbody>
+        <tr><td><code>--safe-top</code></td><td>env(safe-area-inset-top, 0)</td><td>header padding-top</td></tr>
+        <tr><td><code>--safe-bottom</code></td><td>env(safe-area-inset-bottom, 0)</td><td>Atom Voice Nav bottom</td></tr>
+        <tr><td><code>--gutter-compact</code></td><td>16px</td><td>width &lt; 375px (iPhone SE)</td></tr>
+        <tr><td><code>--gutter-regular</code></td><td>20px</td><td>iPhone 14/15/16 Pro 표준</td></tr>
+        <tr><td><code>--gutter-wide</code></td><td>32px</td><td>iPad / 데스크</td></tr>
+      </tbody>
+    </table>
+
+    <h4>1.4 — System Material (4단계)</h4>
+    <p>Apple HIG는 standard material을 4단계로 정의. 블러 px는 미공개 — 아래 값은 가이드용 (시뮬레이터 비교 후 캘리브레이션).</p>
+
+    <div class="material-grid">
+      <div class="material-demo ultra"><div class="panel"><div class="h">ultraThin</div><div class="v">blur(4px)</div></div></div>
+      <div class="material-demo thin"><div class="panel"><div class="h">thin</div><div class="v">blur(10px)</div></div></div>
+      <div class="material-demo regular"><div class="panel"><div class="h">regular</div><div class="v">blur(20px)</div></div></div>
+      <div class="material-demo thick"><div class="panel"><div class="h">thick</div><div class="v">blur(40px)</div></div></div>
+    </div>
+
+    <table style="margin-top:14px;">
+      <thead><tr><th>Material</th><th>의미론 (Apple 권장)</th><th>v8.0 적용</th></tr></thead>
+      <tbody>
+        <tr><td><code>ultraThin</code></td><td>Full-screen views requiring a light color scheme</td><td>상단 status bar 위 영역</td></tr>
+        <tr><td><code>thin</code></td><td>Light-scheme overlays partially obscuring content</td><td>키보드 위 입력바</td></tr>
+        <tr><td><code>regular</code></td><td>General overlays partially obscuring content</td><td>BottomNav, TOC sticky, 시트 헤더</td></tr>
+        <tr><td><code>thick</code></td><td>Dark-scheme overlays partially obscuring content</td><td>모드 A→B 트랜지션 중간</td></tr>
+        <tr><td><b>Liquid Glass</b> (별도 레이어)</td><td>Functional layer for controls/navigation (iOS 시스템만 자동 적용)</td><td>커스텀 사용 보류 (v9 후보)</td></tr>
+      </tbody>
+    </table>
+
+    <h4>1.5 — Motion</h4>
+    <table>
+      <thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td><code>--motion-fast</code></td><td>160ms</td><td>버튼 탭, hover</td></tr>
+        <tr><td><code>--motion-base</code></td><td>280ms</td><td>카드 트랜지션, 페이드</td></tr>
+        <tr><td><code>--motion-mode</code></td><td>480ms</td><td>모드 A↔B 전환</td></tr>
+        <tr><td><code>--motion-hero</code></td><td>800ms</td><td>JARVIS 링, 입자 영웅 빌드인</td></tr>
+        <tr><td><code>--ease-out</code></td><td>cubic-bezier(.2,.8,.2,1)</td><td>기본 모션</td></tr>
+        <tr><td><code>--ease-snappy</code></td><td>cubic-bezier(.16,1,.3,1)</td><td>음성 FAB 활성</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:var(--type-footnote);color:var(--ink-tertiary);">시각 시그너처(Atom 자전 8s, 위성 공전 3.6/5/4.2s, 입자 자전 75s)는 별도 카테고리 <code>--motion-orbit-*</code>. <code>prefers-reduced-motion: reduce</code> 시 정지.</p>
+
+    <h4>1.6 — Touch · z-layer</h4>
+    <table>
+      <thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td><code>--touch-default</code></td><td>44px (Apple iOS 공식)</td><td>모든 주요 액션</td></tr>
+        <tr><td><code>--touch-minimum</code></td><td>32px (시연 안전 마진)</td><td>시각 작은 요소 hit-area</td></tr>
+        <tr><td><code>--z-content</code></td><td>10</td><td>일반 콘텐츠</td></tr>
+        <tr><td><code>--z-nav</code></td><td>30</td><td>BottomNav, sticky TOC</td></tr>
+        <tr><td><code>--z-atom</code></td><td>40</td><td>Atom Voice Nav sphere</td></tr>
+        <tr><td><code>--z-modal</code></td><td>50</td><td>모달, alert</td></tr>
+        <tr><td><code>--z-toast</code></td><td>60</td><td>토스트, snackbar</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 2. 컬러 ─────────────────────────── -->
+<section id="colors">
+  <div class="wrap">
+    <h2 class="section-title">2 · 컬러 시스템</h2>
+    <h3 class="section-head">Brand × Apple System × 6 시점</h3>
+    <p class="section-lead">라이언 브랜드 컬러 + Apple SwiftUI 표준 12 + 시점별 surface 패밀리 — 3 레이어. 의미론 토큰을 통해서만 접근.</p>
+
+    <h4>2.1 — Brand (라이언 시그너처, v7 유지)</h4>
+    <p><b>Primary — Lion Orange</b></p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip lt" style="background:#FCE7D2;">100</div><div class="meta"><div class="name">Primary 100</div><div class="hex">#FCE7D2</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#F2A879;">300</div><div class="meta"><div class="name">Primary 300</div><div class="hex">#F2A879</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#E87A3E;">500 ★</div><div class="meta"><div class="name">Primary 500</div><div class="hex">#E87A3E</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#C8651F;">600</div><div class="meta"><div class="name">Primary 600</div><div class="hex">#C8651F</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#A04F12;">700</div><div class="meta"><div class="name">Primary 700</div><div class="hex">#A04F12</div></div></div>
+    </div>
+
+    <p style="margin-top:18px;"><b>Iris Accent (v7 신설, 라이언 쿨 시그너처)</b></p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#5B5FE0;">Light</div><div class="meta"><div class="name">Iris Light</div><div class="hex">#5B5FE0</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#3D41C5;">Deep</div><div class="meta"><div class="name">Iris Deep</div><div class="hex">#3D41C5</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#9094F5;">Soft</div><div class="meta"><div class="name">Iris Soft</div><div class="hex">#9094F5</div></div></div>
+      <div class="swatch"><div class="chip lt" style="background:#A8AAF5;">Pale</div><div class="meta"><div class="name">Iris Pale</div><div class="hex">#A8AAF5</div></div></div>
+      <div class="swatch"><div class="chip lt" style="background:#F4B860;">Honey</div><div class="meta"><div class="name">Accent Honey</div><div class="hex">#F4B860</div></div></div>
+    </div>
+
+    <h4>2.2 — Apple SwiftUI 시스템 컬러 (12종)</h4>
+    <p>네이티브 포팅 시 <code>Color.red</code> 등 시스템 API로 호출. 아래 hex는 iOS 17 기준 참고용.</p>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#FF3B30;">red</div><div class="meta"><div class="name">systemRed</div><div class="hex">#FF3B30</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FF9500;">orange</div><div class="meta"><div class="name">systemOrange</div><div class="hex">#FF9500</div></div></div>
+      <div class="swatch"><div class="chip lt" style="background:#FFCC00;">yellow</div><div class="meta"><div class="name">systemYellow</div><div class="hex">#FFCC00</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#34C759;">green</div><div class="meta"><div class="name">systemGreen</div><div class="hex">#34C759</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#00C7BE;">mint</div><div class="meta"><div class="name">systemMint</div><div class="hex">#00C7BE</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#30B0C7;">teal</div><div class="meta"><div class="name">systemTeal</div><div class="hex">#30B0C7</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#32ADE6;">cyan</div><div class="meta"><div class="name">systemCyan</div><div class="hex">#32ADE6</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#007AFF;">blue</div><div class="meta"><div class="name">systemBlue</div><div class="hex">#007AFF</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#5856D6;">indigo</div><div class="meta"><div class="name">systemIndigo</div><div class="hex">#5856D6</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#AF52DE;">purple</div><div class="meta"><div class="name">systemPurple</div><div class="hex">#AF52DE</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#FF2D55;">pink</div><div class="meta"><div class="name">systemPink</div><div class="hex">#FF2D55</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#A2845E;">brown</div><div class="meta"><div class="name">systemBrown</div><div class="hex">#A2845E</div></div></div>
+    </div>
+
+    <div class="caveat">
+      <div class="h">★ Apple Blue ≠ Iris</div>
+      <code>systemBlue #007AFF</code>와 v7 <b>Iris Deep #3D41C5</b>는 의도적으로 다른 톤. Iris는 indigo 잔향이 있는 보라청. iOS 시스템 컴포넌트 기본 액센트는 systemBlue이므로, 라이언 컴포넌트는 <code>tint</code>를 Iris로 명시 오버라이드 필요.
+    </div>
+
+    <h4>2.3 — 상태 컬러 (의미론)</h4>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#2E7D5B;">OK</div><div class="meta"><div class="name">Success</div><div class="hex">#2E7D5B</div></div></div>
+      <div class="swatch"><div class="chip lt" style="background:#E0A341;">Warn</div><div class="meta"><div class="name">Warning</div><div class="hex">#E0A341</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#C44536;">Err</div><div class="meta"><div class="name">Danger</div><div class="hex">#C44536</div></div></div>
+      <div class="swatch"><div class="chip" style="background:#3F43BD;">Info</div><div class="meta"><div class="name">Info (Iris)</div><div class="hex">#3F43BD</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 3. 6 시점 (v7 유지) ─────────────────────────── -->
+<section id="scenes" class="alt">
+  <div class="wrap">
+    <h2 class="section-title">3 · 6 시점 Surface</h2>
+    <h3 class="section-head">라이트 4 + 다크 2 — 의미론 토큰에 자동 매핑</h3>
+    <p class="section-lead">시점 강제 = 기본 동작. 사용자가 마이페이지 → "시스템 적응 모드"를 켤 때만 OS appearance(light/dark/contrast) 추종.</p>
+
+    <table>
+      <thead><tr><th>시점</th><th>--surface-base</th><th>--ink-primary</th><th>--accent (Iris)</th></tr></thead>
+      <tbody>
+        <tr><td>AM 아침 (06-08)</td><td><code>#F8FAFC</code> warm-white-cool</td><td><code>#0F1419</code></td><td><code>#5B5FE0</code></td></tr>
+        <tr><td>Late-AM (10-11)</td><td><code>#E8ECF3</code> paper</td><td><code>#1A1F26</code></td><td><code>#4A4ED0</code></td></tr>
+        <tr><td>Lunch (12-13) ★</td><td><code>#DEE4EE</code> fresh cool</td><td><code>#1F2530</code></td><td><code>#3F43BD</code></td></tr>
+        <tr><td>PM (14-16)</td><td><code>#D2DAE6</code> cool shadow</td><td><code>#1A1F26</code></td><td><code>#3D41C5</code></td></tr>
+        <tr><td>Evening (19-21)</td><td><code>#222A38</code> blue charcoal</td><td><code>#E8EEF5</code></td><td><code>#9094F5</code></td></tr>
+        <tr><td>Night (22+)</td><td><code>#0B1024</code> deep midnight</td><td><code>#DDE3EF</code></td><td><code>#A8AAF5</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4>Hero 풀블리드 그라데이션 (모드 B)</h4>
+    <table>
+      <thead><tr><th>시점</th><th>Hero 그라데이션</th></tr></thead>
+      <tbody>
+        <tr><td>Morning rain</td><td><code>#8A95A3 → #5C6478 → #3D4453</code></td></tr>
+        <tr><td>Late-AM golden</td><td><code>#6E8AC0 → #4A6BA0 → #2D4670</code></td></tr>
+        <tr><td>Lunch ★</td><td><code>#6F8AAE → #3F5C82 → #1E2E48</code></td></tr>
+        <tr><td>Afternoon</td><td><code>#7B97BD → #4D6A8E → #2A3D5A</code></td></tr>
+        <tr><td>Evening</td><td><code>#78A0C9 → #5878A0 → #384668 → #1E2438</code></td></tr>
+        <tr><td>Night</td><td><code>#2D2A4A → #14132B → #0A0A1A</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 4. 접근성 ─────────────────────────── -->
+<section id="a11y">
+  <div class="wrap">
+    <h2 class="section-title">4 · 접근성</h2>
+    <h3 class="section-head">Apple HIG 17pt 경계 · Increased Contrast · Dynamic Type AX3</h3>
+    <p class="section-lead">v7.1의 "14pt+bold 경계"(W3C 정의) → Apple 17pt 경계로 교체. Increased Contrast 시스템 설정에 자동 추종.</p>
+
+    <h4>4.1 — WCAG AA 대비 (Apple 공식 기준)</h4>
+    <table>
+      <thead><tr><th>텍스트 크기</th><th>Weight</th><th>최소 대비</th></tr></thead>
+      <tbody>
+        <tr><td><b>17 pt 이하</b></td><td>All</td><td><b>4.5 : 1</b></td></tr>
+        <tr><td><b>18 pt 이상</b></td><td>All</td><td><b>3 : 1</b></td></tr>
+        <tr><td>All sizes</td><td><b>Bold</b></td><td><b>3 : 1</b></td></tr>
+        <tr><td>UI 컴포넌트 · 아이콘 외곽선</td><td>—</td><td>3 : 1</td></tr>
+        <tr><td>데코레이션 · 비활성</td><td>—</td><td>의무 없음 (시각 위계만)</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:var(--type-footnote);color:var(--ink-tertiary);">출처: developer.apple.com/design/human-interface-guidelines/accessibility (fetch 2026-05-13). W3C WCAG 1.4.3는 "18pt OR 14pt+bold"를 large text 경계로 정의하지만, Apple은 17pt 컷오프 + Bold any-size = 3:1 룰을 사용. v8.0은 Apple 기준 채택.</p>
+
+    <h4>4.2 — 터치 타깃</h4>
+    <table>
+      <thead><tr><th>Apple iOS</th><th>v8.0 룰</th></tr></thead>
+      <tbody>
+        <tr><td>Default 44 × 44 pt</td><td>모든 주요 액션 (Primary 버튼, BottomNav 슬롯, FAB)</td></tr>
+        <tr><td><b>Minimum 28 × 28 pt</b></td><td>시각만 작게 — hit-area는 32 이상 (<code>::after</code> overlay)</td></tr>
+      </tbody>
+    </table>
+
+    <h4>4.3 — Dynamic Type AX3 검증</h4>
+    <ul class="check-list">
+      <li>iOS 설정 → 손쉬운 사용 → 화면 표시 및 텍스트 크기 → 더 큰 글자 → <b>AX3까지 홈 화면 통과</b></li>
+      <li>회원가입 7단계 폼 라벨/플레이스홀더 잘림 없음</li>
+      <li>빠른 답변 칩 멀티라인 허용 (truncate 금지)</li>
+    </ul>
+
+    <h4>4.4 — Reduce Motion (<code>prefers-reduced-motion: reduce</code>)</h4>
+    <div class="grid-2">
+      <div>
+        <p><b>정지</b></p>
+        <ul>
+          <li>입자 영웅 자전 · 트윙클</li>
+          <li>Atom Voice Nav 자전 · 위성 공전 (3개 모두)</li>
+          <li>JARVIS 링 확장</li>
+          <li>헤로 BG 비 · 구름 · 달 애니메이션</li>
+        </ul>
+      </div>
+      <div>
+        <p><b>유지 (인지 도움)</b></p>
+        <ul>
+          <li>페이드 인/아웃</li>
+          <li>LIVE 점 깜박임 (≤0.5s)</li>
+          <li>모드 A↔B 트랜지션 페이드</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>4.5 — VoiceOver 라벨 패턴</h4>
+    <table>
+      <thead><tr><th>컴포넌트</th><th>VoiceOver 라벨 패턴</th></tr></thead>
+      <tbody>
+        <tr><td>Atom Voice Nav (sphere)</td><td>"라이언과 대화 시작, 버튼"</td></tr>
+        <tr><td>MetricCard</td><td>"{지표명} {값}, {N} 중 {n}번째 카드" 예: "수면 7시간 12분, 4 중 1번째"</td></tr>
+        <tr><td>TagChip</td><td>"{태그명}, {선택됨/선택 안 됨}"</td></tr>
+        <tr><td>SceneCard</td><td>"{시점명} 화면으로 이동, 버튼"</td></tr>
+        <tr><td>BottomNav 항목</td><td>"{탭명}, {현재 탭/탭 N개 중 M번째}"</td></tr>
+        <tr><td>빠른 답변 칩</td><td>"{답변 텍스트}, 버튼"</td></tr>
+        <tr><td>라이언 인사이트 박스</td><td>"라이언 인사이트, {텍스트}"</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>색 단독 의존 금지</b> — 상태 전달은 항상 <b>색 + 아이콘 + 텍스트</b> 셋 중 둘 이상. (좋음: 초록 점 + 체크 아이콘 + "완료" / 나쁨: 초록 점만으로 "완료")
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 5. 컴포넌트 (v7 유지) ─────────────────────────── -->
+<section id="components" class="alt">
+  <div class="wrap">
+    <h2 class="section-title">5 · 컴포넌트</h2>
+    <h3 class="section-head">v7 인벤토리 유지</h3>
+    <p class="section-lead">v7의 컴포넌트 인벤토리(Button · TagChip · MetricCard · SceneCard · FAB · Hero Typo · BottomNav)는 v8.0에서 변경 없음. 위 토큰 레이어를 통해 의미론 토큰만 받아쓰면 됨. <a href="old/design-guide.html#components" style="color:var(--accent-iris-deep);font-weight:700;">v7 design-guide.html § 5 ↗</a></p>
+
+    <div class="callout">
+      <b>마이그레이션 룰</b> — 컴포넌트 hex 직접 호출 제거. <code>background: #1A1612</code> → <code>background: var(--surface-elevated)</code>. <code>color: #F5EFE6</code> → <code>color: var(--ink-primary)</code>. <code>backdrop-filter: blur(20px)</code> → <code>backdrop-filter: var(--material-regular)</code>.
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 6. 보이스 (v7.1 §2.7 + v7 유지) ─────────────────────────── -->
+<section id="voice">
+  <div class="wrap">
+    <h2 class="section-title">6 · 보이스 톤 · i18n</h2>
+    <h3 class="section-head">라이언이 말하는 법 + 다국어 호명 빈도</h3>
+    <p class="section-lead">v7 보이스 4원칙 + 마이크로카피 패턴은 그대로. v7.1에서 정한 호명 빈도 i18n 룰을 추가.</p>
+
+    <table>
+      <thead><tr><th>로케일</th><th>호명 룰</th><th>1인칭</th><th>이모지</th></tr></thead>
+      <tbody>
+        <tr><td>한국어 (ko-KR)</td><td>"<b>{이름}님</b>" — 친근한 1인칭 ("저는", "제가"), 매 인사·중요 컨텍스트</td><td>저/제</td><td>메시지당 0~1개</td></tr>
+        <tr><td>영문 (en-US)</td><td>한국어 빈도 <b>1/2</b> — 첫·마지막·중요 컨텍스트만, 매 메시지 X</td><td>I (단순)</td><td>메시지당 0~1개 동일</td></tr>
+        <tr><td>베트남어 (vi-VN, v9 후보)</td><td>영문 기준으로 시작, 현지 톤 검토 후 별도 룰</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <h4>금지</h4>
+    <ul>
+      <li>호명 남용 ("다환님, 다환님, …")</li>
+      <li>라이언 외 인격 호명</li>
+      <li>이모지 2개 이상 연속</li>
+      <li>존댓말 + 반말 혼용</li>
+      <li>"권장합니다 / 추천드립니다" — "어떠세요?"로 대체</li>
+    </ul>
+
+    <p style="margin-top:14px;">v7 마이크로카피 패턴 표 (인사 · 날씨 · 식사 · 인사이트 · 저녁 회상 · 취침 · 에러 · 로딩 · 빈 상태)는 변경 없음. <a href="old/design-guide.html#voice-tone" style="color:var(--accent-iris-deep);font-weight:700;">v7 § 6 ↗</a></p>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 7. v7 유지 항목 ─────────────────────────── -->
+<section id="preserved" class="alt">
+  <div class="wrap">
+    <h2 class="section-title">7 · v7 룰 유지 항목</h2>
+    <h3 class="section-head">v8.0에서 변경 없는 영역</h3>
+    <p class="section-lead">아래 항목은 v7 본문을 그대로 따릅니다 — v8.0은 위에 시스템 토큰 레이어만 얹은 형태.</p>
+
+    <table>
+      <thead><tr><th>항목</th><th>위치 (v7)</th></tr></thead>
+      <tbody>
+        <tr><td>0. 컨셉 맵 (3 모드)</td><td><code>old/design-guide.html § 0</code></td></tr>
+        <tr><td>1.1 디자인 원칙 · 1.2 흡수한 DNA</td><td><code>§ 1.1 / 1.2</code></td></tr>
+        <tr><td>1.6 라이언 마스코트 (풀컬러/모노, 최소 32/40px)</td><td><code>§ 1.6</code></td></tr>
+        <tr><td>1.7 사이버틱 시그너처 (OLED, HUD 그리드, 입자 영웅, Mono 라벨)</td><td><code>§ 1.7</code></td></tr>
+        <tr><td>1.7.1 입자 영웅 · 1.7.2 HUD 그리드 · 1.7.3 타이포 콘트라스트</td><td><code>§ 1.7.x</code></td></tr>
+        <tr><td>1.8.4 Atom Voice Nav (3D 자전 + 위성 공전)</td><td><code>§ 1.8.4</code></td></tr>
+        <tr><td>1.8.5 한글 nav (홈 · 장면 · sphere · 코치 · 나)</td><td><code>§ 1.8.5</code></td></tr>
+        <tr><td>MODE A · B · C 본문 (구성요소, 인터랙션 톤, 대화 사이클 타이밍)</td><td><code>§ 2 · 3 · 4</code></td></tr>
+        <tr><td>5 컴포넌트 인벤토리 (Button, Field, TagChip 등)</td><td><code>§ 5</code></td></tr>
+        <tr><td>6 보이스 4원칙 + 마이크로카피 패턴</td><td><code>§ 6</code></td></tr>
+        <tr><td>8 i18n 구조 (ko/en JSON 키 평탄화 등)</td><td><code>§ 8</code></td></tr>
+        <tr><td>10 외부 참고 레퍼런스 (Oura·WHOOP·Cal AI·Calm·JARVIS 등)</td><td><code>§ 10</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      v7 문서는 <code>디자인/old/design-guide.html</code>에 보존. v8.0은 그 위에 토큰 레이어와 접근성 정량 룰만 정렬. 시각 정체성(컬러 패밀리, 시점 surface, 라이언 마스코트, Atom Voice Nav)은 v7 결정 그대로.
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 8. 체크리스트 ─────────────────────────── -->
+<section id="checklist">
+  <div class="wrap">
+    <h2 class="section-title">8 · 적용 체크리스트</h2>
+    <h3 class="section-head">시연 D-day 2026-05-29까지</h3>
+    <div class="grid-2">
+      <div>
+        <h4>v8.0 토큰 → 코드 동기화</h4>
+        <ul class="check-list">
+          <li><code>web/src/app/globals.css</code> 의미론 컬러 토큰 도입 (4-mode)</li>
+          <li>Dynamic Type 11 스타일을 Tailwind <code>@theme</code>에 매핑</li>
+          <li><code>--safe-*</code> env() 변수를 layout 컨테이너에 적용</li>
+          <li>BottomNav · TOC sticky → <code>--material-regular</code> 사용</li>
+          <li>버튼·필드 focus-visible outline → <code>--accent-iris-deep</code> 2px</li>
+          <li>모든 hex 직접 호출 제거 (Grep으로 검출)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>접근성 정량 검증</h4>
+        <ul class="check-list">
+          <li>WebAIM Contrast Checker로 라이트 시점 4종 본문 대비 ≥ 4.5:1</li>
+          <li>다크 시점 2종 본문 대비 ≥ 4.5:1</li>
+          <li>Hero 카피 (≥18pt 또는 Bold) ≥ 3:1</li>
+          <li>iPhone 14 Pro Safari 실기 — Dynamic Island 가림 없음</li>
+          <li>iOS 설정 AX3 폰트 크기에서 홈 화면 통과</li>
+          <li>VoiceOver — 7개 컴포넌트 라벨 패턴 검증</li>
+          <li>prefers-reduced-motion ON — Atom 정지 확인</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── 9. 히스토리 ─────────────────────────── -->
+<section id="history" class="dark">
+  <div class="wrap">
+    <h2 class="section-title" style="color:var(--accent-honey);">9 · 버전 히스토리</h2>
+    <h3 class="section-head">v6 → v7 → v8.0</h3>
+
+    <table>
+      <thead><tr><th>버전</th><th>날짜</th><th>요약</th><th>위치</th></tr></thead>
+      <tbody>
+        <tr><td>v6 통합본</td><td>2026-05-11</td><td>3 모드 통합 · 단일 데모 · 5개 가이드 → 1개</td><td><code>old/design-guide.html</code> (v6 라벨, 1.8까지 추가됨)</td></tr>
+        <tr><td>v6.1~v6.5</td><td>2026-05-12</td><td>사이버틱 시그너처 · 6 시점 · adaptive surface · tinted ink</td><td>중간 mockup 시리즈</td></tr>
+        <tr><td>v7</td><td>2026-05-12</td><td>Cool Surface 전환 (베이지 폐기) · Iris #5B5FE0 · Atom Voice Nav · 한글 nav</td><td><code>old/design-guide.html § 1.8</code></td></tr>
+        <tr><td>v7.1 초안</td><td>2026-05-13</td><td>의미론 토큰 7개 + 접근성 정량 룰 (HIG widely-known 표준)</td><td><code>design-guide-v7.1-초안.md</code> (보존)</td></tr>
+        <tr><td><b>v8.0 ★</b></td><td><b>2026-05-13</b></td><td><b>Apple HIG 공식 fetch 검증 후 정식 명세. 4-mode 컬러 / 17pt 대비 / Material 4단계 / env() 의무화 / hex caveat</b></td><td><b>본 문서</b> + <code>design-guide-v8.0.md</code></td></tr>
+      </tbody>
+    </table>
+
+    <h4>v7.1 → v8.0 fetch 검증 결과 (HIG-fetch-2026-05-13.md 요약)</h4>
+    <ul>
+      <li>Typography Dynamic Type 11 스타일 → v7.1 매핑 <b>정확</b> (Display=Large Title 34pt 등)</li>
+      <li>Accessibility WCAG → Apple <b>17pt 경계</b> (v7.1 "14pt+bold"는 W3C 정의로 다름) — v8.0에서 17pt 경계로 교체</li>
+      <li>Materials → Apple은 <b>4단계</b> (ultraThin 추가) + Liquid Glass 별도. 블러 px 미공개 — v8.0 가이드값으로 격하</li>
+      <li>Layout safe-area → 고정 pt 표 없음, <code>env()</code> 동적 — v8.0 의무화 룰로 전환</li>
+      <li>Color → "hex hard-code 비권장" Apple 공식 caveat — v8.0 §0 명문화</li>
+    </ul>
+
+    <p style="font-size:var(--type-footnote);color:rgba(245,239,230,0.6);">자세한 검증 raw는 <code>HIG-fetch-2026-05-13.md</code> 참조.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap meta">
+    <span>Life OS.ONE · 라이언 디자인 가이드 <b>v8.0</b> · 2026-05-13</span>
+    <span>📂 <code>디자인/design-guide-v8.0.html</code> · <code>design-guide-v8.0.md</code></span>
+  </div>
+</footer>
+
+<script>
+  // 모드 토글
+  (function () {
+    const btnLight = document.getElementById('btn-light');
+    const btnDark = document.getElementById('btn-dark');
+    const btnContrast = document.getElementById('btn-contrast');
+    const root = document.documentElement;
+    function setScheme(s) {
+      if (s === 'dark') root.setAttribute('data-scheme', 'dark');
+      else root.removeAttribute('data-scheme');
+      btnLight.setAttribute('aria-pressed', s === 'light' ? 'true' : 'false');
+      btnDark.setAttribute('aria-pressed', s === 'dark' ? 'true' : 'false');
+    }
+    function setContrast(on) {
+      if (on) root.setAttribute('data-contrast', 'high');
+      else root.removeAttribute('data-contrast');
+      btnContrast.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    btnLight.addEventListener('click', () => setScheme('light'));
+    btnDark.addEventListener('click', () => setScheme('dark'));
+    btnContrast.addEventListener('click', () => {
+      const cur = btnContrast.getAttribute('aria-pressed') === 'true';
+      setContrast(!cur);
+    });
+  })();
+</script>
+
+</body>
+</html>

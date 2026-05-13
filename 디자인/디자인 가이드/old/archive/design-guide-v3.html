@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>디자인 가이드 v3 — 라이언 Immersive Full-bleed</title>
+<meta name="description" content="시점별 풀 화면 실사 배경 + 헤로 타이포 — 라이언의 시점 시나리오 UI" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root {
+    --bg-base:     #0A0A0F;
+    --bg-surface:  #15171F;
+    --bg-elevated: #1E2030;
+    --bg-card:     #1A1D27;
+    --text-primary:   #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --text-tertiary:  #6B7280;
+    --text-muted:     #4B5563;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-strong: rgba(255,255,255,0.12);
+    --teal: #4FD1C5;
+    --purple: #A78BFA;
+    --coral: #FF8C7A;
+    --amber: #F4B860;
+    --lion: #E87A3E;
+    --lion-300: #F2A879;
+    --lion-100: #FCE7D2;
+    color-scheme: dark;
+  }
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Pretendard Variable', 'Pretendard', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.005em;
+  }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 80px 0; border-bottom: 1px solid var(--border-subtle); }
+  .section:last-child { border-bottom: 0; }
+  h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 12px; }
+  h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; display: flex; align-items: baseline; gap: 16px; }
+  h2 .num { color: var(--text-muted); font-weight: 600; font-size: 14px; font-feature-settings: 'tnum'; }
+  h3 { font-size: 18px; font-weight: 600; margin: 28px 0 12px; }
+  p { margin: 0 0 14px; color: var(--text-secondary); max-width: 64ch; }
+  code { background: var(--bg-elevated); color: var(--teal); padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Hero */
+  header.hero {
+    background:
+      radial-gradient(ellipse at top, rgba(167,139,250,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(79,209,197,0.10) 0%, transparent 60%),
+      var(--bg-base);
+    padding: 96px 0 80px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .hero-eyebrow { display: inline-block; padding: 6px 14px; border-radius: 999px; background: rgba(232,122,62,0.15); color: var(--lion-300); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 24px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--bg-surface); color: var(--text-secondary); font-size: 12px; font-weight: 600; border: 1px solid var(--border-subtle); }
+
+  /* Phone — Full-bleed mockup */
+  .mockup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 32px; }
+  .phone {
+    aspect-ratio: 9 / 19.5; max-width: 320px; margin: 0 auto;
+    border-radius: 44px; padding: 12px; background: #000;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 95px; height: 28px; background: #000; border-radius: 16px; z-index: 5;
+  }
+  .screen {
+    position: relative; overflow: hidden; border-radius: 32px;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+  }
+
+  /* Status bar */
+  .status-bar { position: absolute; top: 16px; left: 32px; right: 32px; display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: white; z-index: 10; }
+
+  /* Background scenes (실사 흉내 — CSS only) */
+  .bg-rain {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 30%, transparent 55%, rgba(0,0,0,0.85) 100%),
+      repeating-linear-gradient(105deg, transparent 0px, transparent 6px, rgba(255,255,255,0.06) 6px, rgba(255,255,255,0.06) 7px),
+      linear-gradient(160deg, #4A5568 0%, #2D3748 50%, #1A202C 100%);
+  }
+  .bg-rain::after {
+    content: ''; position: absolute; inset: 40% 0 30% 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(120,150,180,0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .bg-sunny {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 30%, transparent 55%, rgba(0,0,0,0.7) 100%),
+      linear-gradient(160deg, #FED7AA 0%, #FB923C 35%, #EA580C 70%, #7C2D12 100%);
+  }
+  .bg-sunny::after {
+    content: ''; position: absolute; top: 18%; right: 15%; width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(255,237,213,0.9) 0%, rgba(252,211,77,0.3) 50%, transparent 80%);
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+
+  .bg-lunch {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 25%, transparent 50%, rgba(0,0,0,0.85) 100%),
+      radial-gradient(ellipse at center, rgba(150,90,50,0.5) 0%, transparent 60%),
+      linear-gradient(135deg, #78350F 0%, #451A03 50%, #1C1917 100%);
+  }
+  .bg-lunch::after {
+    content: ''; position: absolute; inset: 30% 15% 35% 15%; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, #65A30D 0%, #4D7C0F 30%, transparent 40%),
+      radial-gradient(circle at 70% 60%, #DC2626 0%, transparent 25%),
+      radial-gradient(circle at 50% 80%, #F59E0B 0%, transparent 30%),
+      radial-gradient(ellipse at center, #2A1810 0%, #1C1108 70%);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  .bg-evening {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 25%, transparent 50%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(180deg, #DC2626 0%, #9F1239 25%, #5B21B6 50%, #1E1B4B 80%, #0F0C29 100%);
+  }
+  .bg-evening::after {
+    content: ''; position: absolute; bottom: 25%; left: 0; right: 0; height: 30%;
+    background:
+      linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.5) 100%),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.4) 0px, rgba(0,0,0,0.4) 8px, transparent 8px, transparent 14px);
+    clip-path: polygon(0 60%, 10% 40%, 18% 55%, 28% 30%, 40% 50%, 48% 35%, 60% 55%, 72% 25%, 85% 50%, 100% 35%, 100% 100%, 0 100%);
+  }
+
+  .bg-night {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 25%, transparent 50%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(180deg, #0F0C29 0%, #1E1B4B 30%, #312E81 50%, #1E1B4B 80%, #0A0A0F 100%);
+  }
+  .bg-night::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(1px 1px at 20% 15%, white 100%, transparent),
+      radial-gradient(1.5px 1.5px at 35% 25%, white 100%, transparent),
+      radial-gradient(1px 1px at 50% 10%, white 100%, transparent),
+      radial-gradient(2px 2px at 65% 30%, white 100%, transparent),
+      radial-gradient(1px 1px at 80% 18%, white 100%, transparent),
+      radial-gradient(1.5px 1.5px at 15% 35%, white 100%, transparent),
+      radial-gradient(1px 1px at 90% 22%, white 100%, transparent);
+    background-size: 100% 50%; background-repeat: no-repeat;
+    opacity: 0.7;
+  }
+
+  /* Screen content layout */
+  .moment-label {
+    position: absolute; top: 60px; left: 28px; right: 28px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75); z-index: 10;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .moment-label::before { content: ''; width: 16px; height: 1px; background: rgba(255,255,255,0.5); }
+
+  .hero-text {
+    position: absolute; top: 100px; left: 28px; right: 28px;
+    z-index: 10;
+  }
+  .hero-text h2 {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2;
+    color: white; margin: 0; text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+
+  .meta-bottom {
+    position: absolute; bottom: 100px; left: 28px; right: 28px;
+    z-index: 10;
+  }
+  .meta-bottom .row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .meta-bottom .row:last-child { margin-bottom: 0; }
+  .meta-bottom .icon { width: 16px; height: 16px; opacity: 0.9; }
+  .meta-bottom .txt { font-size: 13px; color: rgba(255,255,255,0.92); font-weight: 500; }
+  .meta-bottom .txt strong { font-weight: 700; }
+
+  /* Bottom hint dots */
+  .hint-dots {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 10;
+  }
+  .hint-dots .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+  .hint-dots .dot.active { background: white; }
+
+  /* FAB overlay */
+  .fab-overlay {
+    position: absolute; bottom: 64px; right: 24px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    display: grid; place-items: center; font-size: 22px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    border: 0; cursor: pointer; z-index: 10;
+  }
+
+  /* Mockup caption */
+  .mockup-caption {
+    margin-top: 16px; text-align: center;
+  }
+  .mockup-caption .title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .mockup-caption .desc { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+
+  /* Pattern */
+  .pattern-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; align-items: start; }
+  @media (max-width: 768px) { .pattern-row { grid-template-columns: 1fr; } }
+  .pattern-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 24px; }
+  .pattern-card h4 { margin: 0 0 8px; font-size: 16px; font-weight: 700; }
+  .pattern-card .icon { font-size: 32px; margin-bottom: 12px; }
+
+  /* Layer guide */
+  .layer-stack { position: relative; height: 320px; width: 100%; max-width: 320px; margin: 0 auto; }
+  .layer { position: absolute; border: 1px solid var(--teal); border-radius: 12px; padding: 8px; font-size: 11px; color: var(--teal); font-family: ui-monospace, Menlo, monospace; }
+  .layer-1 { inset: 0; background: rgba(79,209,197,0.05); }
+  .layer-2 { inset: 12px; background: rgba(79,209,197,0.08); }
+  .layer-3 { inset: 24px; background: rgba(79,209,197,0.12); }
+
+  /* Checklist */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 10px 0; padding-left: 32px; position: relative; color: var(--text-secondary); }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 14px; width: 16px; height: 16px; border: 2px solid var(--border-strong); border-radius: 4px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { padding: 12px 14px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border-subtle); }
+  th { background: var(--bg-surface); font-weight: 700; color: var(--text-primary); }
+  td { color: var(--text-secondary); }
+
+  /* Comparison row */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 768px) { .compare { grid-template-columns: 1fr; } }
+  .compare-col h4 { font-size: 14px; font-weight: 700; color: var(--text-tertiary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  footer { padding: 48px 0 64px; text-align: center; color: var(--text-tertiary); font-size: 13px; }
+  footer a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Design Guide · v3 · Immersive</div>
+    <h1>풀 화면 실사 배경 + 헤로 타이포<br>시점 시나리오 UI</h1>
+    <p style="color: var(--text-secondary); font-size: 17px; max-width: 60ch;">시점 화면(아침·점심·저녁·취침)은 카드·UI 요소 대신 <strong style="color: white;">실사 배경 풀 화면</strong>으로. "비가 온다" "음식이 있다" "노을이 진다"를 직관적으로 보여주고, 텍스트는 단 2층 (헤로 + 메타) 만 노출. Frame 2 영감.</p>
+    <div class="badges">
+      <span class="badge">담당 · A (오다환)</span>
+      <span class="badge">v3 · 2026-05-11</span>
+      <span class="badge" style="color: var(--lion-300);">Full-bleed Immersive</span>
+      <span class="badge">이전: <a href="design-guide.html" style="color: var(--teal);">v2 (Dark Lion)</a> 보존</span>
+      <a href="scenes-demo.html" class="badge" style="background: var(--lion); color: #1A1D27; border-color: var(--lion); font-weight: 800; text-decoration: none;">▶️ 인터랙티브 데모 열기</a>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">01</span>v2 → v3 변화</h2>
+    <div class="compare">
+      <div class="compare-col">
+        <h4>v2 (Dark Lion · 메인 화면용)</h4>
+        <ul style="color: var(--text-secondary); line-height: 1.8;">
+          <li>다크 베이스 + 카드 그리드</li>
+          <li>4분할 메트릭 (Oura 스타일)</li>
+          <li>UI 컴포넌트 위주</li>
+          <li>정보 밀도 높음</li>
+          <li>→ <strong>메인 허브 / 데이터 대시보드 / 가맹점 시스템</strong></li>
+        </ul>
+      </div>
+      <div class="compare-col">
+        <h4>v3 (Immersive · 시점 시나리오용)</h4>
+        <ul style="color: white; line-height: 1.8;">
+          <li>풀 화면 실사 배경</li>
+          <li>UI 요소 최소화 (텍스트 2층만)</li>
+          <li>맥락 직관 (비·햇살·노을·음식)</li>
+          <li>정서 우선</li>
+          <li>→ <strong>아침·점심·저녁·취침 시점 화면</strong></li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 32px;"><strong style="color: var(--lion-300);">둘은 공존</strong>합니다. 메인은 v2 (정보 dashboard), 시점 시나리오는 v3 (몰입형 정서). 사용자가 시점 카드를 누르는 순간 화면이 풀 화면 모드로 전환.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">02</span>시점별 풀 화면 mockup</h2>
+    <p>Frame 2 영감. 한 화면에 한 메시지. 배경이 맥락을 직관 전달.</p>
+
+    <div class="mockup-grid">
+      <!-- Morning Rainy -->
+      <div>
+        <div class="phone">
+          <div class="screen bg-rain">
+            <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+            <div class="moment-label">🌅 Morning</div>
+            <div class="hero-text">
+              <h2>자켓 · 우산<br>꼭 챙기세요.</h2>
+            </div>
+            <div class="meta-bottom">
+              <div class="row">
+                <span class="icon">🌧</span>
+                <span class="txt">기온 <strong>14°</strong> · 비 80%</span>
+              </div>
+              <div class="row">
+                <span class="icon">💼</span>
+                <span class="txt"><strong>클라이언트 미팅</strong> 10:00</span>
+              </div>
+            </div>
+            <button class="fab-overlay" aria-label="라이언">🎤</button>
+            <div class="hint-dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="title">아침 · 비 오는 날 (Frame 2 영감)</div>
+          <div class="desc">배경=비, 헤로=액션, 메타=날씨+일정 맥락</div>
+        </div>
+      </div>
+
+      <!-- Morning Sunny -->
+      <div>
+        <div class="phone">
+          <div class="screen bg-sunny">
+            <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+            <div class="moment-label">🌅 Morning</div>
+            <div class="hero-text">
+              <h2>가벼운 옷차림<br>딱 좋은 날이에요.</h2>
+            </div>
+            <div class="meta-bottom">
+              <div class="row">
+                <span class="icon">☀️</span>
+                <span class="txt">기온 <strong>22°</strong> · 맑음</span>
+              </div>
+              <div class="row">
+                <span class="icon">📅</span>
+                <span class="txt">오늘 외부 일정 없음</span>
+              </div>
+            </div>
+            <button class="fab-overlay" aria-label="라이언">🎤</button>
+            <div class="hint-dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="title">아침 · 맑은 날 (대안)</div>
+          <div class="desc">노을 그라데이션 + 햇살 광원</div>
+        </div>
+      </div>
+
+      <!-- Lunch -->
+      <div>
+        <div class="phone">
+          <div class="screen bg-lunch">
+            <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+            <div class="moment-label">🍱 Lunch</div>
+            <div class="hero-text">
+              <h2>오늘 점심엔<br>닭가슴살 샐러드.</h2>
+            </div>
+            <div class="meta-bottom">
+              <div class="row">
+                <span class="icon">🥚</span>
+                <span class="txt">콜레스테롤 관리 · <strong>단백질 38g</strong></span>
+              </div>
+              <div class="row">
+                <span class="icon">📍</span>
+                <span class="txt"><strong>B카페 강남점</strong> · 도보 6분</span>
+              </div>
+            </div>
+            <button class="fab-overlay" aria-label="라이언">🎤</button>
+            <div class="hint-dots"><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="title">점심 · 음식 클로즈업</div>
+          <div class="desc">접시 일러스트 + 따뜻한 톤</div>
+        </div>
+      </div>
+
+      <!-- Evening -->
+      <div>
+        <div class="phone">
+          <div class="screen bg-evening">
+            <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+            <div class="moment-label">🌆 Evening</div>
+            <div class="hero-text">
+              <h2>오늘 하루<br>어떠셨어요?</h2>
+            </div>
+            <div class="meta-bottom">
+              <div class="row">
+                <span class="icon">🚶</span>
+                <span class="txt"><strong>5,200</strong>걸음 · 목표 74%</span>
+              </div>
+              <div class="row">
+                <span class="icon">💆</span>
+                <span class="txt">스트레스 받으셨네요. 매콤 한 그릇 어때요?</span>
+              </div>
+            </div>
+            <button class="fab-overlay" aria-label="라이언">🎤</button>
+            <div class="hint-dots"><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="title">저녁 · 노을 도시</div>
+          <div class="desc">붉은~보라 노을 + 도시 실루엣</div>
+        </div>
+      </div>
+
+      <!-- Night -->
+      <div>
+        <div class="phone">
+          <div class="screen bg-night">
+            <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+            <div class="moment-label">🌙 Night</div>
+            <div class="hero-text">
+              <h2>오늘 하루<br>수고하셨어요.</h2>
+            </div>
+            <div class="meta-bottom">
+              <div class="row">
+                <span class="icon">😴</span>
+                <span class="txt">취침 권장 <strong>23:00</strong></span>
+              </div>
+              <div class="row">
+                <span class="icon">📵</span>
+                <span class="txt">집중 모드 자동 활성화</span>
+              </div>
+            </div>
+            <button class="fab-overlay" aria-label="라이언">🎤</button>
+            <div class="hint-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div>
+          </div>
+        </div>
+        <div class="mockup-caption">
+          <div class="title">취침 · 밤하늘</div>
+          <div class="desc">짙은 보라+검정 + 별</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">03</span>시각 계층 — 단 3층</h2>
+    <p>풀 화면 UI의 핵심은 <strong style="color: white;">최소 요소 · 최대 임팩트</strong>. 화면 위에 텍스트는 3층만 노출.</p>
+
+    <div class="pattern-row">
+      <div class="pattern-card">
+        <div class="icon" style="color: var(--teal);">①</div>
+        <h4>Moment Label (상단 11px)</h4>
+        <p>"🌅 Morning" · "🍱 Lunch" — 시점 명시. uppercase letter-spacing 0.15em. opacity 0.75. 작고 절제됨.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="icon" style="color: var(--lion-300);">②</div>
+        <h4>Hero Text (28~32px, weight 800)</h4>
+        <p>핵심 액션·메시지. 2줄 최대. text-shadow로 가독성 보호. "자켓·우산 꼭 챙기세요."</p>
+      </div>
+      <div class="pattern-card" style="grid-column: span 2;">
+        <div class="icon" style="color: var(--coral);">③</div>
+        <h4>Meta Bottom (13px, 아이콘 + 텍스트)</h4>
+        <p>맥락 정보. 2~3줄. 각 줄: 아이콘(이모지 또는 SVG) + 텍스트. 핵심 숫자·키워드만 <strong>bold</strong>.</p>
+        <p style="margin: 0; padding: 12px; background: var(--bg-elevated); border-radius: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 12px;">🌧 기온 <strong style="color: var(--coral);">14°</strong> · 비 80%<br>💼 <strong style="color: var(--coral);">클라이언트 미팅</strong> 10:00</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">04</span>그라데이션 오버레이 — 가독성 보호</h2>
+    <p>실사 이미지는 밝기·대비가 일정하지 않음. 어떤 사진이 와도 텍스트 가독성을 위해 <strong style="color: white;">상하 다크 그라데이션</strong> 오버레이.</p>
+<pre style="background: #000; color: white; padding: 20px; border-radius: 14px; overflow-x: auto; font-size: 12px; line-height: 1.6; font-family: ui-monospace, Menlo, monospace; border: 1px solid var(--border-subtle);"><span style="color: var(--text-tertiary);">/* 풀 화면 시점 배경 위 가독성 보호 오버레이 */</span>
+.screen-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    <span style="color: var(--coral);">rgba(0,0,0,0.55)</span> 0%,    <span style="color: var(--text-tertiary);">/* 상단: 헤로 텍스트 영역 */</span>
+    <span style="color: var(--coral);">transparent</span>      30%,
+    <span style="color: var(--coral);">transparent</span>      55%,
+    <span style="color: var(--coral);">rgba(0,0,0,0.85)</span> 100%   <span style="color: var(--text-tertiary);">/* 하단: 메타 + FAB 영역 */</span>
+  );
+}</pre>
+    <ul style="margin-top: 16px;">
+      <li>상단 0~30%: 어두운 그라데이션 (헤로 흰 텍스트 대비)</li>
+      <li>중앙 30~55%: 투명 (배경 그대로 노출)</li>
+      <li>하단 55~100%: 강한 어두움 (메타·FAB 가독성)</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">05</span>배경 가이드 — 시점별 이미지·분위기</h2>
+    <p>실서비스에서는 실사 사진 사용. 시연 단계에서는 CSS 그라데이션+패턴으로 분위기만 표현.</p>
+    <table>
+      <thead>
+        <tr><th>시점</th><th>실사 이미지 후보</th><th>fallback CSS</th><th>액센트 컬러</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>🌅 Morning · 비</td><td>비 오는 거리, 우산 든 사람, 젖은 도로</td><td>회색·블루 그라데이션 + 사선 비 패턴</td><td>cool gray / slate blue</td></tr>
+        <tr><td>🌅 Morning · 맑음</td><td>해 뜨는 도시, 카페 창가, 햇살</td><td>오렌지~노란 그라데이션 + 광원</td><td>amber / coral</td></tr>
+        <tr><td>🍱 Lunch</td><td>음식 클로즈업 (샐러드·국·면)</td><td>warm brown + 음식 색 spots</td><td>warm brown / green</td></tr>
+        <tr><td>🌆 Evening</td><td>노을 도시 스카이라인</td><td>red~purple 그라데이션 + 실루엣</td><td>red / purple</td></tr>
+        <tr><td>🌙 Night</td><td>밤하늘, 도시 야경, 침실</td><td>deep blue~violet + 별</td><td>deep purple</td></tr>
+      </tbody>
+    </table>
+    <h3>실사 이미지 출처 (정식 서비스용)</h3>
+    <ul>
+      <li><strong>Unsplash · Pexels · Pixabay</strong> — 라이선스 무료</li>
+      <li>한국 풍경: <strong>크라우드픽 · 셔터스톡</strong> (유료, 자연스러운 한국 분위기)</li>
+      <li>날씨 API와 연동해 <strong>실제 그날 날씨</strong>에 맞는 이미지 자동 선택 (v5+)</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">06</span>인터랙션 + 모션 표현</h2>
+    <p>화면은 정지 사진이 아니라 <strong style="color: white;">살아있는 장면</strong>. 비가 실제로 내리고, 햇살이 펄스하고, 별이 깜빡임. 동영상이 아닌 <strong style="color: var(--lion-300);">CSS 애니메이션 + JS 파티클</strong>로 가벼우면서 인터랙티브.</p>
+
+    <h3>실제 데모</h3>
+    <p>실제 동작 확인: <a href="scenes-demo.html" style="font-weight: 700; font-size: 16px;">▶️ scenes-demo.html 열기</a></p>
+    <p style="font-size: 13px; color: var(--text-tertiary);">하단 5개 버튼으로 시점 전환 · 좌우 화살표 키 · 모바일 스와이프 · 키보드 1~5 모두 동작.</p>
+
+    <h3>시점별 모션 명세</h3>
+    <table>
+      <thead><tr><th>시점</th><th>주요 모션</th><th>구현</th></tr></thead>
+      <tbody>
+        <tr><td>🌧 Morning Rainy</td><td>비 140줄 사선 낙하 + 빗방울 튀김 30개 + 안개 그라데이션 호흡</td><td>CSS keyframes + JS 파티클 (drop 길이·속도·위치 random)</td></tr>
+        <tr><td>☀️ Morning Sunny</td><td>해 펄스 (scale 1→1.08, 4s) + 광선 회전 (30s/회) + 구름 좌→우 drift</td><td>CSS keyframes (sun-pulse, sun-rotate, cloud-drift)</td></tr>
+        <tr><td>🍱 Lunch</td><td>접시 호흡 (scale 1→1.02) + 김 상승·페이드 + 음식 색 spots 부드럽게</td><td>CSS keyframes (plate-breathe, steam-rise)</td></tr>
+        <tr><td>🌆 Evening</td><td>노을 그라데이션 hue-shift (8s) + 도시 윈도우 lights flicker (개별 random)</td><td>CSS filter hue-rotate + window-flicker random delay</td></tr>
+        <tr><td>🌙 Night</td><td>별 80개 깜빡임 (twinkle scale + opacity) + 달 정적</td><td>JS 별 80개 동적 생성 + CSS twinkle</td></tr>
+      </tbody>
+    </table>
+
+    <h3>기술 옵션 비교 — 어떻게 구현?</h3>
+    <table>
+      <thead><tr><th>방식</th><th>장점</th><th>단점</th><th>적용</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color: var(--lion-300);">CSS + JS 파티클</strong> ✅</td><td>가벼움 · GPU 가속 · 60fps · 5KB 이하</td><td>매우 사실적 비는 한계</td><td><strong>시연 채택</strong> (현재 데모 방식)</td></tr>
+        <tr><td>Lottie (AE 파일)</td><td>섬세한 모션 · 디자이너 친화</td><td>After Effects 필요 · 50~200KB</td><td>정식 서비스 v2+</td></tr>
+        <tr><td>WebM/MP4 영상</td><td>가장 사실적</td><td>1~5MB · 모바일 배터리·데이터</td><td>스플래시·온보딩 한정</td></tr>
+        <tr><td>Canvas + Three.js</td><td>WebGL GPU · 입자 수만 개</td><td>구현 복잡 · 200KB+ 라이브러리</td><td>정식 서비스 고도화 단계</td></tr>
+        <tr><td>SVG SMIL</td><td>벡터 정밀</td><td>iOS 지원 불안정</td><td>비추천</td></tr>
+      </tbody>
+    </table>
+
+    <h3>핵심 코드 패턴 (CSS + JS 파티클)</h3>
+<pre style="background: #000; color: white; padding: 20px; border-radius: 14px; overflow-x: auto; font-size: 12px; line-height: 1.6; font-family: ui-monospace, Menlo, monospace; border: 1px solid var(--border-subtle);"><span style="color: var(--text-tertiary);">/* 비 한 줄 */</span>
+.drop {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(220,235,250,0.9));
+  animation: drop-fall linear infinite;
+  will-change: transform;
+  <span style="color: var(--text-tertiary);">/* will-change로 GPU 레이어 생성 → 60fps 안정 */</span>
+}
+@keyframes drop-fall {
+  0%   { transform: translate3d(0, -120px, 0); }
+  100% { transform: translate3d(-30px, 110vh, 0); } <span style="color: var(--text-tertiary);">/* 사선 (좌하향) */</span>
+}
+
+<span style="color: var(--text-tertiary);">/* JS로 140개 생성, random 속성 */</span>
+for (let i = 0; i &lt; 140; i++) {
+  const d = document.createElement('div');
+  d.className = 'drop';
+  d.style.left = Math.random() * 110 + '%';
+  d.style.height = (30 + Math.random()*50) + 'px';
+  d.style.animationDuration = (0.5 + Math.random()*0.6) + 's';
+  d.style.animationDelay = -Math.random()*1.5 + 's';  <span style="color: var(--text-tertiary);">/* 음수 delay = 즉시 시작 분산 */</span>
+  d.style.transform = 'rotate(15deg)';
+  rainLayer.appendChild(d);
+}</pre>
+
+    <h3>제스처</h3>
+    <table>
+      <thead><tr><th>제스처</th><th>동작</th></tr></thead>
+      <tbody>
+        <tr><td>탭 (배경 아무 곳)</td><td>디테일 시트 펼침 (메뉴 추천·예약 흐름 — v2 컴포넌트로 전환)</td></tr>
+        <tr><td>스와이프 좌/우</td><td>이전/다음 시점으로 이동</td></tr>
+        <tr><td>스와이프 아래 (헤로 영역)</td><td>메인 화면 (v2 dashboard)로 돌아감</td></tr>
+        <tr><td>FAB 탭</td><td>음성 입력 모드 (라이언 호출)</td></tr>
+        <tr><td>키보드 1~5 / ←/→ / Space</td><td>시점 전환 (데모용)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>성능·배터리 가이드</h3>
+    <ul>
+      <li>파티클 수 모바일 ≤ 150개, 데스크탑 ≤ 300개</li>
+      <li><code>will-change: transform</code>으로 GPU 레이어 강제</li>
+      <li>화면 밖 (시점 비활성) 시 애니메이션 일시정지 — <code>animation-play-state: paused</code></li>
+      <li><code>prefers-reduced-motion</code> 대응 — 모든 애니메이션 끔</li>
+      <li>backdrop-blur는 모바일에서 무거움 → FAB 한 곳만 사용</li>
+      <li>background에 <code>image-set</code> + <code>loading="lazy"</code> 로 실사 사진 lazy load</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">07</span>컴포넌트 in Full-bleed</h2>
+    <p>풀 화면 위에 떠 있는 컴포넌트는 <strong style="color: white;">반투명 + backdrop-blur</strong>로 처리. 화면을 가리지 않고 배경과 조화.</p>
+
+    <h3>FAB (반투명 흰색)</h3>
+    <p style="margin-bottom: 12px;"><code>background: rgba(255,255,255,0.95)</code> + <code>backdrop-filter: blur(8px)</code></p>
+
+    <h3>하단 dots indicator</h3>
+    <p style="margin-bottom: 12px;">현재 시점 위치. 4개 (아침·점심·저녁·취침) 또는 3개 (취침 제외).</p>
+
+    <h3>모달·시트 (탭 시 펼침)</h3>
+    <p>바텀 시트 형태. <code>bg-elevated</code> 베이스. 풀 화면 위 80% 높이까지 올라오는 sheet.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">08</span>접근성 — 다크 오버레이 위 흰 텍스트</h2>
+    <table>
+      <thead><tr><th>요소</th><th>대비</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>헤로 (white on dark gradient 0.55)</td><td>≥ 13:1 ✓</td><td>text-shadow 추가로 더 안전</td></tr>
+        <tr><td>메타 (white 0.92 on gradient 0.85)</td><td>≥ 11:1 ✓</td><td>안전</td></tr>
+        <tr><td>moment label (white 0.75)</td><td>≥ 7:1 ✓</td><td>장식적 요소, 4.5:1만 넘으면 OK</td></tr>
+        <tr><td>FAB 검정 아이콘 on white</td><td>≥ 19:1 ✓</td><td>최고 가독성</td></tr>
+        <tr><td>Reduced motion</td><td>—</td><td>배경 애니메이션·비 효과 모두 끔</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">09</span>라이언 전체 화면 인덱스</h2>
+    <p>v3 풀-bleed 시점 외 화면들의 위치. v2와 v3는 공존 — 화면 유형에 따라 선택.</p>
+    <table>
+      <thead><tr><th>화면</th><th>패턴</th><th>참조</th></tr></thead>
+      <tbody>
+        <tr><td>Splash · 로그인 · 회원가입 7단계</td><td>v2 Dark Lion (다크 + 카드 폼)</td><td><a href="design-guide.html#s8">design-guide.html § 8 컴포넌트</a></td></tr>
+        <tr><td>메인 (활동 허브)</td><td>v2 Dark Lion (4분할 메트릭 + 시점 카드)</td><td><a href="design-guide.html#s10">design-guide.html § 10 메인 화면</a></td></tr>
+        <tr><td><strong>🌅 아침 · 🍱 점심 대화 · 🌆 저녁 · 🌙 취침</strong></td><td><strong>v3 Full-bleed Immersive</strong></td><td><a href="scenes-demo.html">scenes-demo.html (▶️ 인터랙티브)</a></td></tr>
+        <tr><td>점심 결제 모달 (더미 카드 폼)</td><td>v2 바텀 시트 + v3 풀스크린 위에 오버레이</td><td>design-guide.html § 8.5 Sheet</td></tr>
+        <tr><td>점심 예약 확정 (토스트 + 라이언 멘트)</td><td>v3 풀스크린에 다음 시점으로 자연 전환</td><td>scenes-demo lunch → evening 흐름</td></tr>
+        <tr><td>맛집 지도 (카카오맵)</td><td>v2 Dark Lion + 카카오맵 SDK</td><td>WIP</td></tr>
+        <tr><td>음성 입력 풀스크린</td><td>v3 Full-bleed (배경 흐릿 + waveform + 라이언 마크)</td><td>scenes-demo의 FAB → 음성 모드</td></tr>
+        <tr><td>알림 페이지</td><td>v2 Dark Lion (list + 시점 그라데이션 배경 카드)</td><td>WIP</td></tr>
+        <tr><td>가맹점 관리 시스템 (/merchant, PC)</td><td>v2 Dark Lion (대시보드)</td><td>design-guide.html § 8 컴포넌트</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 16px;"><strong style="color: var(--lion-300);">진입 흐름</strong>: 메인(v2) → 시점 카드 탭 → 풀스크린 시점(v3) → 탭 → 디테일 시트(v2 컴포넌트가 v3 위에 오버레이) → 결제 더미 → 토스트 → 자동으로 다음 시점(v3)로.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">10</span>체크리스트</h2>
+    <ul class="checklist">
+      <li>풀 화면 실사 배경이 사용되었는가? (UI 요소가 화면을 차지하지 않음)</li>
+      <li>다크 그라데이션 오버레이로 가독성 보호?</li>
+      <li>텍스트 계층 3층만 사용? (moment label · hero · meta)</li>
+      <li>맥락이 직관적으로 전달되는가? (비=비 사진, 음식=음식 사진)</li>
+      <li>헤로 텍스트는 2줄 이하인가?</li>
+      <li>메타는 2~3줄에 아이콘+텍스트 패턴?</li>
+      <li>FAB는 반투명+blur로 배경과 조화?</li>
+      <li>스와이프·탭 인터랙션이 동작하는가?</li>
+      <li>reduced-motion에서 배경 애니메이션 끔?</li>
+      <li>라이언 톤의 마이크로카피?</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>디자인 가이드 v3 · 2026-05-11 · 담당 A (오다환)</p>
+    <p>v3 = 시점 시나리오용 (Full-bleed Immersive) · <a href="design-guide.html">v2 = 메인 화면용 (Dark Lion Dashboard)</a> 보존</p>
+    <p>영감: Frame 2.png · Calm · Apple Weather · Headspace</p>
+    <p>관련 노션: <a href="https://www.notion.so/35dc2986e14081a2b4b9dd2b1ddcc486" target="_blank">Life OS ONE_v2</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

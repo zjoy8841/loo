@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-10 음성 입력 (AI 비서 호출)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ivory: '#FAF7F0', charcoal: '#1F2937', mustard: '#F59E0B', lavender: '#8B5CF6' }, fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); transform: scale(1); }
+      70% { box-shadow: 0 0 0 40px rgba(16,185,129,0); transform: scale(1.05); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); transform: scale(1); }
+    }
+    .pulse-ring { animation: pulse-ring 2s infinite; }
+    @keyframes wave {
+      0%, 100% { height: 12%; }
+      50% { height: 100%; }
+    }
+    .wave-bar { animation: wave 1s infinite ease-in-out; transform-origin: bottom; }
+    .wave-bar:nth-child(1) { animation-delay: 0s; }
+    .wave-bar:nth-child(2) { animation-delay: 0.12s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.24s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.36s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.48s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.36s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.24s; }
+    .wave-bar:nth-child(8) { animation-delay: 0.12s; }
+    .wave-bar:nth-child(9) { animation-delay: 0s; }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fade-up 0.4s ease-out; }
+  </style>
+</head>
+<body class="bg-gray-100 text-charcoal font-sans min-h-screen p-4 sm:p-8">
+  <a href="../index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500 hover:text-emerald-600">← 인덱스로</a>
+  <div class="max-w-[420px] mx-auto rounded-3xl shadow-xl overflow-hidden flex flex-col relative bg-gradient-to-b from-emerald-700 via-emerald-800 to-charcoal text-white" style="min-height: 844px;">
+
+    <header class="px-5 pt-6 pb-4 flex items-center gap-3">
+      <a href="08-home.html" class="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-white text-lg backdrop-blur">✕</a>
+      <span class="font-bold tracking-tight opacity-80">AI 비서</span>
+      <button class="ml-auto w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-base backdrop-blur" title="텍스트로 입력">⌨️</button>
+    </header>
+
+    <div class="flex-1 flex flex-col items-center justify-center px-8 pb-8">
+
+      <p class="text-xs uppercase tracking-widest opacity-60 mb-3 fade-up">듣고 있어요</p>
+
+      <div class="relative mb-12">
+        <div class="w-44 h-44 rounded-full bg-emerald-500/20 backdrop-blur flex items-center justify-center pulse-ring">
+          <div class="w-32 h-32 rounded-full bg-emerald-500 flex items-end justify-center gap-1 shadow-2xl shadow-emerald-500/50 px-6 py-8">
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+            <span class="wave-bar w-1.5 bg-white rounded-full"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center min-h-[100px]">
+        <p class="text-2xl font-bold leading-snug fade-up">"오늘 점심 뭐 먹지?"</p>
+        <p class="text-sm opacity-60 mt-3">실시간 인식 중...</p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-2 gap-2.5 w-full">
+        <div class="bg-white/10 backdrop-blur rounded-2xl px-4 py-3 text-center">
+          <p class="text-[10px] opacity-60 uppercase tracking-wider mb-1">이렇게 말해보세요</p>
+          <p class="text-xs font-semibold">"내일 일정 알려줘"</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-2xl px-4 py-3 text-center">
+          <p class="text-[10px] opacity-60 uppercase tracking-wider mb-1">이렇게 말해보세요</p>
+          <p class="text-xs font-semibold">"가벼운 운동 추천해줘"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-5 py-4 border-t border-white/10 backdrop-blur flex items-center justify-around">
+      <button class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <span class="text-xl">🌐</span>
+        <span class="text-[10px]">번역</span>
+      </button>
+      <a href="08-home.html" class="w-14 h-14 rounded-full bg-white text-emerald-600 flex items-center justify-center text-2xl shadow-lg active:scale-95 transition" title="대화 종료">⏹</a>
+      <button class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <span class="text-xl">🔇</span>
+        <span class="text-[10px]">음소거</span>
+      </button>
+    </div>
+  </div>
+</body>
+</html>

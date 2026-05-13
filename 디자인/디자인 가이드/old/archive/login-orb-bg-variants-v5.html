@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 Orb v5 — React Three Fiber</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ECEFF3; --card:#FFFFFF;
+    --ink:#1A1F26; --ink-2:#4F5866; --ink-3:#8492A3;
+    --line:#D6DCE5;
+    --accent:#5B5FE0; --accent-tint:rgba(91,95,224,0.10);
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+  header { padding: 48px 32px 32px; text-align: center; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header h1 b { color: #C8102E; }
+  header .meta { margin-top: 10px; font-family: var(--mono); font-size: 14px; color: #444; letter-spacing: 0.14em; text-transform: uppercase; }
+  header p.lead { max-width: 720px; margin: 16px auto 0; font-size: 15px; color: #444; line-height: 1.6; }
+  header p.lead code { background: #F5F5F5; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #C8102E; }
+
+  .board {
+    padding: 48px 32px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px; max-width: 1400px; margin: 0 auto;
+  }
+  .orb-card {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+  }
+  .orb-stage {
+    height: 420px; position: relative;
+    background: radial-gradient(ellipse at center, var(--bg) 0%, var(--card) 100%);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .orb-stage .canvas-wrap { position: absolute; inset: 0; }
+  .orb-stage .canvas-wrap canvas { display: block; width: 100% !important; height: 100% !important; }
+  .orb-num {
+    position: absolute; top: 14px; left: 14px;
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; color: var(--accent);
+    background: var(--accent-tint); padding: 4px 9px; border-radius: 4px;
+    z-index: 30;
+  }
+  .loading {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: var(--ink-3); font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.16em; z-index: 20; pointer-events: none;
+  }
+  .loading.gone { display: none; }
+  .orb-info { padding: 18px 20px 20px; }
+  .orb-info h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 4px; }
+  .orb-info h3 .ref { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.08em; margin-left: 6px; text-transform: uppercase; font-weight: 700; }
+  .orb-info p { font-size: 14px; color: var(--ink-2); line-height: 1.55; margin-bottom: 8px; }
+  .orb-info p b { color: var(--accent); font-weight: 700; }
+  .orb-info code { font-family: var(--mono); font-size: 12px; background: rgba(91,95,224,0.06); padding: 1px 6px; border-radius: 3px; color: var(--accent); }
+
+  footer {
+    padding: 32px; text-align: center; background: #FFFFFF;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 14px; color: #444;
+    letter-spacing: 0.08em;
+  }
+  footer code { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; color: #111; }
+  .note {
+    max-width: 720px; margin: 24px auto 0;
+    padding: 14px 18px;
+    background: rgba(200,16,46,0.04);
+    border-left: 3px solid #C8102E;
+    border-radius: 4px;
+    font-size: 13px; color: #444; line-height: 1.55;
+  }
+  .note b { color: #C8102E; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>라이언 — Orb <b>v5</b> · React Three Fiber</h1>
+  <div class="meta">[ R3F + DREI · TRUE 3D WEBGL · 2026-05-12 ]</div>
+  <p class="lead">
+    CSS 3D 폐기. <code>@react-three/fiber</code> + <code>@react-three/drei</code> 진짜 3D.
+    <code>&lt;Sparkles /&gt;</code> · <code>&lt;Float /&gt;</code> · <code>&lt;MeshTransmissionMaterial /&gt;</code> · <code>&lt;Environment preset='sunset' /&gt;</code> · <code>&lt;Stars /&gt;</code> 활용.
+    마우스 인터랙션 없이 자체 애니메이션만.
+  </p>
+  <div class="note">
+    <b>⚠ ESM CDN 의존</b> — esm.sh에서 React·three·R3F·drei를 import. 초기 로드 5-10초 소요(HDRI 환경맵 fetch). WebGL2 지원 브라우저 필요.
+    <br><b>제품 배포 시</b>: <code>npm i three @react-three/fiber @react-three/drei react react-dom</code> → 번들러(Vite·Next) 빌드.
+  </div>
+</header>
+
+<div class="board">
+
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">1</span>
+      <div class="loading">LOADING SUNSET HDRI…</div>
+      <div class="canvas-wrap" id="canvas-1"></div>
+    </div>
+    <div class="orb-info">
+      <h3>Glass Transmission <span class="ref">SUNSET · GLASS</span></h3>
+      <p>Sphere geometry + <b>MeshTransmissionMaterial</b> (실시간 굴절 유리). <code>Environment preset="sunset"</code> HDRI가 sphere 표면에 반사·굴절. <code>Float</code> 둥둥 + <code>Sparkles</code> 80개 외곽 회전. Spline glass sphere 톤.</p>
+    </div>
+  </div>
+
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">2</span>
+      <div class="loading">LOADING DAWN HDRI…</div>
+      <div class="canvas-wrap" id="canvas-2"></div>
+    </div>
+    <div class="orb-info">
+      <h3>Iris Aurora <span class="ref">DAWN · MULTI-LIGHT</span></h3>
+      <p>Sphere + <code>meshPhysicalMaterial</code>(metalness 0.4, clearcoat 1, sheen). <code>Environment preset="dawn"</code> + 3 point light (purple·teal·iris). <code>Sparkles</code> 2 layer (purple·teal). 가장 풍부한 컬러.</p>
+    </div>
+  </div>
+
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">3</span>
+      <div class="loading">LOADING NIGHT SKY…</div>
+      <div class="canvas-wrap" id="canvas-3"></div>
+    </div>
+    <div class="orb-info">
+      <h3>Cosmic Orb <span class="ref">NIGHT · STARS</span></h3>
+      <p>어두운 emissive sphere + <code>Stars</code> 4000개 배경 (drei). <code>Environment preset="night"</code>. <code>Sparkles</code> 100개 외곽. 천체 아이콘. AI 핵 톤.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/login-orb-bg-variants-v5.html</code> · R3F + DREI · 2026-05-12
+</footer>
+
+<!-- 글로벌 에러 → 화면 출력 (콘솔 안 봐도 원인 보임) -->
+<script>
+  function showErr(msg) {
+    document.querySelectorAll('.loading').forEach(el => {
+      el.innerHTML = '<div style="padding:18px;color:#C8102E;font-family:ui-monospace,Menlo,monospace;font-size:10px;line-height:1.5;text-align:left;overflow:auto;max-height:380px;">' + String(msg).replace(/</g,'&lt;') + '</div>';
+      el.style.zIndex = 100;
+      el.classList.remove('gone');
+    });
+  }
+  window.addEventListener('error', (e) => {
+    showErr('SCRIPT ERROR\n\n' + (e.message || '') + '\n\n' + (e.filename || '') + ':' + (e.lineno || '') + '\n\n' + (e.error?.stack || ''));
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    const r = e.reason;
+    showErr('PROMISE REJECT\n\n' + (r?.message || String(r)) + '\n\n' + (r?.stack || ''));
+  });
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@18.3.1?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?external=react,scheduler",
+    "scheduler": "https://esm.sh/scheduler@0.23.2",
+    "three": "https://esm.sh/three@0.160.1",
+    "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?external=react,react-dom,three,scheduler",
+    "@react-three/drei": "https://esm.sh/@react-three/drei@9.114.0?external=react,react-dom,three,@react-three/fiber",
+    "htm": "https://esm.sh/htm@3.1.1"
+  }
+}
+</script>
+
+<script type="module">
+  try {
+    var React = await import('react');
+    var { createRoot } = await import('react-dom/client');
+    var { Canvas } = await import('@react-three/fiber');
+    var drei = await import('@react-three/drei');
+    var { Float, Sparkles, MeshTransmissionMaterial, Environment, Stars } = drei;
+    var htmMod = await import('htm');
+    var htm = htmMod.default;
+  } catch (e) {
+    document.querySelectorAll('.loading').forEach(el => {
+      el.innerHTML = '<div style="padding:18px;color:#C8102E;font-family:ui-monospace,Menlo,monospace;font-size:10px;line-height:1.5;text-align:left;overflow:auto;max-height:380px;">' + ('IMPORT FAIL\n\n' + (e?.message || String(e)) + '\n\n' + (e?.stack || '')).replace(/</g,'&lt;') + '</div>';
+      el.style.zIndex = 100;
+      el.classList.remove('gone');
+    });
+    throw e;
+  }
+
+  const html = htm.bind(React.createElement);
+
+  // ─── Scene 1: Glass Transmission (Sunset) ───
+  const Scene1 = () => html`
+    <${Canvas} camera=${{ position: [0, 0, 4], fov: 35 }} dpr=${[1, 2]} gl=${{ antialias: true, alpha: true }}>
+      <color attach="background" args=${['#F0F2F7']} />
+      <${React.Suspense} fallback=${null}>
+        <${Environment} preset="sunset" />
+      </${React.Suspense}>
+      <ambientLight intensity=${0.4} />
+      <directionalLight position=${[5, 5, 5]} intensity=${1.2} />
+      <${Float} speed=${1.5} rotationIntensity=${0.6} floatIntensity=${0.8}>
+        <mesh>
+          <sphereGeometry args=${[1, 64, 64]} />
+          <${MeshTransmissionMaterial}
+            backside=${true}
+            samples=${4}
+            thickness=${0.5}
+            chromaticAberration=${0.05}
+            anisotropy=${0.3}
+            distortion=${0.2}
+            distortionScale=${0.4}
+            temporalDistortion=${0.1}
+            ior=${1.5}
+            color="#A8AAF5"
+          />
+        </mesh>
+      </${Float}>
+      <${Sparkles}
+        count=${80}
+        scale=${4}
+        size=${3}
+        speed=${0.4}
+        color="#5B5FE0"
+        opacity=${0.85}
+      />
+    </${Canvas}>
+  `;
+
+  // ─── Scene 2: Iris Aurora (Dawn + Multi light) ───
+  const Scene2 = () => html`
+    <${Canvas} camera=${{ position: [0, 0, 4], fov: 35 }} dpr=${[1, 2]} gl=${{ antialias: true, alpha: true }}>
+      <color attach="background" args=${['#F0F2F7']} />
+      <${React.Suspense} fallback=${null}>
+        <${Environment} preset="dawn" />
+      </${React.Suspense}>
+      <ambientLight intensity=${0.3} />
+      <pointLight position=${[-3, 2, 2]} intensity=${2} color="#A78BFA" />
+      <pointLight position=${[3, -2, 2]} intensity=${2} color="#4FD1C5" />
+      <pointLight position=${[0, 3, -2]} intensity=${1.5} color="#5B5FE0" />
+      <${Float} speed=${1.2} rotationIntensity=${0.8} floatIntensity=${0.6}>
+        <mesh>
+          <sphereGeometry args=${[1, 64, 64]} />
+          <meshPhysicalMaterial
+            color="#5B5FE0"
+            emissive="#A78BFA"
+            emissiveIntensity=${0.3}
+            roughness=${0.2}
+            metalness=${0.5}
+            clearcoat=${1}
+            clearcoatRoughness=${0.1}
+            sheen=${1}
+            sheenColor="#F0A3D9"
+            sheenRoughness=${0.4}
+          />
+        </mesh>
+      </${Float}>
+      <${Sparkles} count=${60} scale=${4} size=${4} speed=${0.5} color="#A78BFA" opacity=${0.9} />
+      <${Sparkles} count=${40} scale=${5} size=${2.5} speed=${0.3} color="#4FD1C5" opacity=${0.75} />
+    </${Canvas}>
+  `;
+
+  // ─── Scene 3: Cosmic Orb (Night + Stars) ───
+  const Scene3 = () => html`
+    <${Canvas} camera=${{ position: [0, 0, 4], fov: 35 }} dpr=${[1, 2]} gl=${{ antialias: true, alpha: true }}>
+      <color attach="background" args=${['#0A0F1E']} />
+      <${React.Suspense} fallback=${null}>
+        <${Environment} preset="night" />
+      </${React.Suspense}>
+      <ambientLight intensity=${0.15} />
+      <pointLight position=${[2, 2, 3]} intensity=${2} color="#5B5FE0" />
+      <pointLight position=${[-2, -1, 2]} intensity=${1.2} color="#A78BFA" />
+      <${Stars} radius=${50} depth=${50} count=${4000} factor=${4} saturation=${0.6} fade=${true} speed=${0.5} />
+      <${Float} speed=${1.0} rotationIntensity=${0.5} floatIntensity=${0.5}>
+        <mesh>
+          <sphereGeometry args=${[1, 64, 64]} />
+          <meshPhysicalMaterial
+            color="#1B1E3A"
+            emissive="#5B5FE0"
+            emissiveIntensity=${0.45}
+            roughness=${0.15}
+            metalness=${0.7}
+            clearcoat=${1}
+            clearcoatRoughness=${0.05}
+          />
+        </mesh>
+      </${Float}>
+      <${Sparkles} count=${100} scale=${4} size=${2.5} speed=${0.3} color="#8F92F0" opacity=${0.9} />
+    </${Canvas}>
+  `;
+
+  // ─── Mount each scene ───
+  const mount = (id, Comp, loadingMs = 800) => {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const root = createRoot(container);
+    root.render(html`<${Comp} />`);
+    // 로딩 라벨은 stage 안의 sibling
+    const stage = container.parentElement;
+    const loading = stage.querySelector('.loading');
+    setTimeout(() => loading?.classList.add('gone'), loadingMs);
+  };
+
+  mount('canvas-1', Scene1, 2500);
+  mount('canvas-2', Scene2, 2500);
+  mount('canvas-3', Scene3, 3000);
+
+  // 글로벌 에러 캐치
+  window.addEventListener('error', (e) => {
+    console.error('R3F error:', e.error || e.message);
+    document.querySelectorAll('.loading').forEach(el => {
+      el.textContent = 'WEBGL 또는 ESM 로드 실패 — DEVTOOLS 콘솔 확인';
+    });
+  });
+</script>
+
+</body>
+</html>

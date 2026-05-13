@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 시안 v3 — Senior Patch</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:        #050505;
+    --ink-1:      #0A0908;
+    --ink-2:      #11100E;
+    --text:       #F5EFE6;
+    --text-dim:   #6E665A;
+    --text-muted: #3A352C;
+    --line:       rgba(245,239,230,0.06);
+    --line-2:     rgba(245,239,230,0.10);
+    --line-3:     rgba(245,239,230,0.18);
+    --honey:      #F4B860;
+    --honey-dim:  rgba(244,184,96,0.18);
+    --teal:       #4FD1C5;
+    --hud:        rgba(244,184,96,0.06);
+
+    --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;
+    --s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
+
+    --r-sm: 4px;
+    --r-md: 12px;
+
+    --font: 'Pretendard Variable', system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html, body {
+    min-height: 100vh; background: #000;
+    color: var(--text); font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  /* ──────────────── BOARD HEADER ──────────────── */
+  header.board {
+    padding: var(--s-12) var(--s-8) var(--s-6);
+    text-align: center; border-bottom: 1px solid var(--line);
+  }
+  header.board .brand {
+    display: inline-flex; align-items: center; gap: var(--s-3);
+    color: var(--text);
+  }
+  header.board .brand svg { width: 28px; height: 28px; }
+  header.board h1 {
+    font-size: 18px; font-weight: 700; letter-spacing: -0.01em;
+  }
+  header.board h1 b { color: var(--honey); font-weight: 700; }
+  header.board .meta {
+    margin-top: var(--s-3);
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  header.board .label-row {
+    display: flex; gap: var(--s-1); justify-content: center;
+    margin-top: var(--s-4); flex-wrap: wrap;
+  }
+  header.board .pill {
+    display: inline-flex; padding: 4px 10px;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--honey); border: 1px solid var(--honey-dim);
+    border-radius: var(--r-sm);
+  }
+
+  /* ──────────────── BOARD STAGE ──────────────── */
+  .board-stage {
+    padding: var(--s-12) var(--s-8) var(--s-8);
+    display: flex; gap: var(--s-12); justify-content: center; flex-wrap: wrap;
+  }
+  .scene { display: flex; flex-direction: column; align-items: center; }
+  .scene-tag { margin-bottom: var(--s-4); text-align: center; }
+  .scene-tag .num {
+    display: inline-block; padding: 5px 10px;
+    font-family: var(--mono); font-size: 9px; font-weight: 800;
+    letter-spacing: 0.18em; color: var(--honey);
+    border: 1px solid var(--honey-dim); border-radius: var(--r-sm);
+  }
+  .scene-tag p {
+    margin-top: var(--s-2);
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  /* ──────────────── PHONE FRAME ──────────────── */
+  .phone {
+    width: 340px; max-width: 92vw; aspect-ratio: 9 / 19.5;
+    background: #0A0A0A; border-radius: 44px; padding: 10px;
+    box-shadow: 0 36px 90px rgba(0,0,0,0.8), 0 0 0 1px rgba(244,184,96,0.06);
+    position: relative;
+  }
+  .phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 102px; height: 28px; background: #000; border-radius: 14px; z-index: 30;
+  }
+  .phone::after {
+    content: ''; position: absolute; top: 33px; right: calc(50% - 38px);
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #1A1A1A; border: 1px solid #0A0A0A; z-index: 31;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+    background: var(--ink);
+    position: relative; display: flex; flex-direction: column;
+  }
+  .screen::before {
+    /* HUD grid */
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(var(--hud) 1px, transparent 1px),
+      linear-gradient(90deg, var(--hud) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 75%);
+  }
+  .screen::after {
+    /* scanline subtle */
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(180deg,
+      transparent 0, transparent 2px,
+      rgba(255,255,255,0.008) 2px, rgba(255,255,255,0.008) 3px);
+    z-index: 2;
+  }
+
+  /* Status bar */
+  .status-bar {
+    flex-shrink: 0; position: relative; z-index: 5;
+    padding: 14px 24px 4px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    color: var(--text); letter-spacing: 0.04em;
+  }
+  .status-bar .right {
+    color: var(--text-dim); font-size: 10px;
+    display: inline-flex; gap: 6px; align-items: center;
+  }
+  .status-bar .right::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 5px var(--teal);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* Icons */
+  .icon { display: inline-block; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ──────────────── CAPTION ──────────────── */
+  .caption {
+    margin-top: var(--s-4); max-width: 340px;
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    padding: var(--s-4) var(--s-4);
+    background: rgba(255,255,255,0.01);
+  }
+  .caption h4 {
+    font-family: var(--mono); font-size: 10px; font-weight: 800;
+    letter-spacing: 0.18em; color: var(--honey);
+    text-transform: uppercase; margin-bottom: var(--s-3);
+  }
+  .caption ul { list-style: none; padding: 0; }
+  .caption li {
+    font-size: 12px; color: var(--text); opacity: 0.78;
+    margin-bottom: var(--s-2); line-height: 1.6;
+    padding-left: 14px; position: relative;
+  }
+  .caption li::before {
+    content: '—'; position: absolute; left: 0; color: var(--honey);
+    font-family: var(--mono);
+  }
+  .caption li b { color: var(--honey); font-weight: 700; opacity: 1; }
+
+  /* ════════════════════════════════════════════════ */
+  /* ═════════════ SCENE 01 — LOGIN ═════════════════ */
+  /* ════════════════════════════════════════════════ */
+
+  .login-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(244,184,96,0.10) 0%, transparent 70%);
+    z-index: 1;
+  }
+  .login-content {
+    position: relative; z-index: 4; flex: 1;
+    display: flex; flex-direction: column;
+    padding: var(--s-6);
+  }
+
+  .login-top {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .login-orb {
+    position: relative; width: 144px; height: 144px;
+    margin-bottom: var(--s-8);
+  }
+  .login-orb-rings::before, .login-orb-rings::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+  }
+  .login-orb-rings::before {
+    border: 1px solid var(--line-2);
+    animation: spin 80s linear infinite;
+  }
+  .login-orb-rings::after {
+    inset: 14px;
+    border: 1px dashed rgba(244,184,96,0.16);
+    animation: spin 60s linear infinite reverse;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .login-orb-mark {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    color: var(--honey);
+  }
+  .login-orb-mark svg { width: 64px; height: 64px; }
+  .particle-field { position: absolute; inset: 0; pointer-events: none; }
+  .particle-field .p {
+    position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%;
+    background: var(--honey);
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  .particle-field .p.teal { background: var(--teal); }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50%      { opacity: 0.9; transform: scale(1.2); }
+  }
+
+  .login-brand {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--honey); margin-bottom: var(--s-4); opacity: 0.85;
+  }
+  .login-h1 {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.1; color: var(--text); margin-bottom: var(--s-2);
+  }
+  .login-sub {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .login-sub b { color: var(--teal); font-weight: 700; }
+
+  .login-form { margin-top: var(--s-12); }
+  .field {
+    margin-bottom: var(--s-6);
+  }
+  .field .lbl {
+    display: block; margin-bottom: var(--s-2);
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; color: var(--text-dim); text-transform: uppercase;
+  }
+  .field-row {
+    display: flex; align-items: center; gap: var(--s-3);
+    padding: var(--s-2) 0;
+    border-bottom: 1px solid var(--line-2);
+    transition: border-color 0.2s;
+  }
+  .field-row:focus-within { border-color: var(--honey); }
+  .field-row input {
+    flex: 1; background: transparent; border: 0; outline: 0;
+    color: var(--text); font: inherit; font-size: 15px;
+    padding: 0;
+  }
+  .field-row input::placeholder { color: var(--text-muted); }
+  .field-row .dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--teal);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  .login-helper {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: var(--s-4);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .login-helper label {
+    display: inline-flex; gap: var(--s-2); align-items: center;
+    color: var(--text-dim);
+  }
+  .login-helper a { color: var(--text-dim); text-decoration: none; }
+  .login-helper a:hover { color: var(--honey); }
+  .check {
+    display: inline-block; width: 12px; height: 12px;
+    border: 1px solid var(--line-3); border-radius: 2px;
+    background: var(--honey); position: relative;
+  }
+  .check::after {
+    content: ''; position: absolute; left: 3px; top: 1px;
+    width: 4px; height: 7px;
+    border: solid var(--ink); border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+  }
+
+  .login-cta {
+    margin-top: var(--s-8); width: 100%;
+    background: var(--honey); color: var(--ink);
+    border: 0; padding: 18px;
+    border-radius: var(--r-sm);
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: var(--s-3);
+    transition: transform 0.15s;
+  }
+  .login-cta:hover { transform: translateY(-1px); }
+  .login-cta .icon { stroke: var(--ink); stroke-width: 2; }
+
+  .login-divider {
+    display: flex; align-items: center; gap: var(--s-3);
+    margin: var(--s-6) 0 var(--s-4);
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .login-divider::before, .login-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--line);
+  }
+  .social-row { display: flex; gap: var(--s-2); }
+  .social-btn {
+    flex: 1; background: transparent;
+    border: 1px solid var(--line-2); color: var(--text);
+    padding: 14px; border-radius: var(--r-sm);
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  }
+  .signup-row {
+    margin-top: var(--s-6); text-align: center;
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .signup-row a {
+    color: var(--honey); font-weight: 700; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* ═════════════ SCENE 02 — MAIN ══════════════════ */
+  /* ════════════════════════════════════════════════ */
+
+  .main-content {
+    flex: 1; position: relative; z-index: 4; overflow: hidden;
+    display: flex; flex-direction: column;
+    padding-bottom: 78px;
+  }
+  .main-scroll {
+    flex: 1; overflow-y: auto;
+    padding: 0 var(--s-6);
+  }
+  .main-scroll::-webkit-scrollbar { display: none; }
+
+  .sys-line {
+    padding: var(--s-3) 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em;
+    color: var(--text-dim); text-transform: uppercase;
+  }
+  .sys-line .left {
+    color: var(--honey); display: inline-flex; gap: var(--s-2); align-items: center;
+  }
+  .sys-line .left .dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--teal);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  .greet {
+    padding: var(--s-2) 0 var(--s-6);
+  }
+  .greet .gname {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.15; color: var(--text);
+  }
+  .greet .gname b { color: var(--honey); font-weight: 800; }
+
+  /* ── Hero Orb ── */
+  .hero {
+    padding: var(--s-2) 0 var(--s-4);
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.32em; color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: var(--s-2);
+  }
+  .hero-week {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: var(--s-4);
+    display: inline-flex; align-items: center; gap: var(--s-3);
+  }
+  .hero-week b { color: var(--text); font-weight: 700; }
+  .hero-week .arrow {
+    width: 14px; height: 14px; display: inline-grid; place-items: center;
+    color: var(--text-muted);
+  }
+
+  .hero-orb {
+    position: relative; width: 220px; height: 220px;
+    margin-bottom: var(--s-6);
+  }
+  .hero-orb-sphere {
+    position: absolute; inset: 0; border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(244,184,96,0.22) 0%, transparent 50%),
+      radial-gradient(circle at 60% 75%, rgba(232,122,62,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse at center, #100A05 0%, #050302 75%);
+  }
+  .hero-particles { position: absolute; inset: 0; pointer-events: none; }
+  .hero-particles .p {
+    position: absolute; width: 1.5px; height: 1.5px; border-radius: 50%;
+    background: var(--honey);
+    animation: twinkle 3.5s ease-in-out infinite;
+  }
+  .hero-particles .p.teal { background: var(--teal); width: 1.8px; height: 1.8px; }
+  .hero-orb-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .hero-orb-content .v {
+    font-size: 72px; font-weight: 800; letter-spacing: -0.04em;
+    line-height: 0.9; color: var(--text);
+  }
+  .hero-orb-content .u {
+    margin-top: var(--s-3);
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.28em; color: var(--honey); text-transform: uppercase;
+  }
+  .hero-orb-content .d {
+    margin-top: var(--s-1);
+    font-family: var(--mono); font-size: 9px; color: var(--text-dim);
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* ── Pace ── */
+  .pace { padding: var(--s-2) 0 var(--s-6); }
+  .pace-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: var(--s-3);
+  }
+  .pace-head .lbl {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.22em; color: var(--text-dim); text-transform: uppercase;
+  }
+  .pace-head .val {
+    font-family: var(--mono); font-size: 13px; font-weight: 800;
+    color: var(--text); letter-spacing: 0.06em;
+  }
+  .pace-track {
+    position: relative; height: 18px;
+    display: flex; align-items: center;
+  }
+  .pace-track .line {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: var(--line-2); top: 50%;
+  }
+  .pace-track .tick {
+    position: absolute; width: 1px; height: 5px;
+    background: var(--line-3); top: 50%; transform: translateY(-50%);
+  }
+  .pace-track .tick.major { height: 8px; background: var(--text-dim); }
+  .pace-track .pin {
+    position: absolute; width: 10px; height: 10px;
+    border-radius: 50%; background: var(--honey);
+    top: 50%; transform: translate(-50%, -50%); z-index: 3;
+    box-shadow: 0 0 0 3px rgba(244,184,96,0.15);
+  }
+  .pace-meta {
+    margin-top: var(--s-2); display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 8px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+
+  /* ── Section divider ── */
+  .sec-divider {
+    display: flex; align-items: center; gap: var(--s-3);
+    margin: var(--s-4) 0;
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.28em; color: var(--text-dim); text-transform: uppercase;
+  }
+  .sec-divider::before, .sec-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--line);
+  }
+
+  /* ── Decision card (single) ── */
+  .decision {
+    background: var(--ink-1);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: var(--s-4) var(--s-4);
+    margin-bottom: var(--s-4);
+    position: relative;
+  }
+  .decision::before {
+    content: ''; position: absolute; left: 0; top: 16px; bottom: 16px;
+    width: 2px; background: var(--honey);
+    border-radius: 0 2px 2px 0;
+  }
+  .decision .d-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: var(--s-3);
+  }
+  .decision .d-eyebrow {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; color: var(--honey); text-transform: uppercase;
+  }
+  .decision .d-time {
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .decision .d-title {
+    font-size: 18px; font-weight: 700; line-height: 1.3;
+    letter-spacing: -0.01em; color: var(--text);
+    margin-bottom: var(--s-3);
+  }
+  .decision .d-meta {
+    display: flex; gap: var(--s-4); align-items: center;
+    padding-top: var(--s-3); border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px;
+    color: var(--text-dim); letter-spacing: 0.04em;
+  }
+  .decision .d-meta b { color: var(--text); font-weight: 700; }
+  .decision .d-meta .icon { color: var(--text-dim); }
+  .decision .d-meta .m { display: inline-flex; align-items: center; gap: var(--s-2); }
+
+  /* ── Mini metric row ── */
+  .mini-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: var(--s-6);
+  }
+  .mini {
+    padding: var(--s-3) 0;
+    text-align: center;
+    position: relative;
+  }
+  .mini + .mini::before {
+    content: ''; position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 1px; background: var(--line);
+  }
+  .mini .ml {
+    font-family: var(--mono); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: var(--s-1);
+  }
+  .mini .mv {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--text); line-height: 1;
+  }
+  .mini .mv .u {
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    color: var(--text-dim); margin-left: 2px;
+  }
+
+  /* ── FAB ── */
+  .fab {
+    position: absolute; bottom: 84px; right: 16px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--ink-1); border: 1px solid rgba(244,184,96,0.30);
+    cursor: pointer; z-index: 12;
+    display: grid; place-items: center;
+    color: var(--honey);
+  }
+  .fab .core {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--honey);
+    box-shadow: 0 0 18px var(--honey);
+    animation: breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+  .fab::before {
+    content: ''; position: absolute; inset: -1px; border-radius: 50%;
+    border: 1px solid rgba(244,184,96,0.2);
+    animation: spin 10s linear infinite;
+  }
+  .fab::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 1px dashed rgba(244,184,96,0.12);
+    animation: spin 20s linear infinite reverse;
+  }
+
+  /* ── Bottom nav ── */
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: var(--s-3) var(--s-6) 22px;
+    background: linear-gradient(180deg, transparent, var(--ink) 40%);
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 6;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-family: var(--mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .nav-item .icon { width: 18px; height: 18px; }
+  .nav-item.active { color: var(--honey); }
+  .nav-item.active::after {
+    content: ''; width: 3px; height: 3px; border-radius: 50%;
+    background: var(--honey); margin-top: 2px;
+    box-shadow: 0 0 6px var(--honey);
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: var(--s-8) var(--s-8) var(--s-12); text-align: center;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  footer b { color: var(--honey); }
+  footer code {
+    background: rgba(255,255,255,0.03); padding: 2px 8px; border-radius: 4px;
+    color: var(--text); font-size: 10px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* ═════════ LIGHT BOARD — 외부 영역만 ═════════════ */
+  /* (폰 내부 비주얼은 그대로 OLED 유지) */
+  /* ════════════════════════════════════════════════ */
+
+  body, .board-stage { background: #FFFFFF; }
+
+  header.board {
+    background: #FFFFFF;
+    border-bottom: 1px solid #E5E5E5;
+  }
+  header.board .brand,
+  header.board h1 { color: #111111; }
+  header.board h1 b { color: #C8102E; font-weight: 800; }
+  header.board .meta {
+    color: #444444;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+  }
+  header.board .meta b { color: #C8102E; font-weight: 800; }
+  header.board .pill {
+    color: #C8102E;
+    border-color: rgba(200,16,46,0.35);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .scene-tag .num {
+    color: #111111;
+    border-color: #CFCFCF;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .scene-tag p {
+    color: #555555;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .caption {
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 8px;
+    padding: 20px 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .caption h4 {
+    color: #C8102E;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+  .caption ul { padding: 0; }
+  .caption li {
+    color: #111111;
+    font-size: 15px;
+    opacity: 1;
+    line-height: 1.65;
+    margin-bottom: 10px;
+    padding-left: 18px;
+    font-family: var(--font);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .caption li::before {
+    content: '—';
+    color: #C8102E;
+    font-family: var(--mono);
+    font-weight: 800;
+  }
+  .caption li b {
+    color: #C8102E;
+    font-weight: 800;
+  }
+
+  footer {
+    background: #FFFFFF;
+    color: #444444;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    border-top: 1px solid #DDDDDD;
+  }
+  footer b { color: #C8102E; font-weight: 800; }
+  footer code {
+    background: #F5F5F5;
+    color: #111111;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ──────────────── ICON LIBRARY (defs) ──────────────── -->
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="ic-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="ic-rain" viewBox="0 0 24 24"><path d="M16 14v6M8 14v6M12 14v6M3 13c0-4 3-7 7-7 2.5 0 4.5 1.2 6 3 3 0 5 2 5 5 0 2-1 4-3 4"/></symbol>
+    <symbol id="ic-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="ic-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4v-7h-6v7H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="ic-scenes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="11"/></symbol>
+    <symbol id="ic-coach" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></symbol>
+    <symbol id="ic-you" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6 19c1-3 3-5 6-5s5 2 6 5"/></symbol>
+    <symbol id="ic-kakao" viewBox="0 0 24 24"><ellipse cx="12" cy="10" rx="9" ry="7"/><path d="M9 16l-2 4 5-3"/></symbol>
+    <symbol id="ic-apple" viewBox="0 0 24 24"><path d="M12 6c0-2 2-3 3-3 0 2-2 3-3 3zM7 10c0-2 2-3 4-3 1 0 2 .5 3 .5s2-.5 3-.5c2 0 4 2 4 5 0 3-2 8-5 8-1 0-2-.5-3-.5s-2 .5-3 .5c-3 0-5-5-5-8z"/></symbol>
+    <!-- Lion mono mark — stroke 1.4 -->
+    <symbol id="lion-mono" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="30" cy="33" rx="14.5" ry="13"/>
+        <circle cx="18" cy="22" r="3.6"/>
+        <circle cx="42" cy="22" r="3.6"/>
+        <circle cx="24" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="36" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <path d="M 28 36.5 L 32 36.5 L 30 38.5 Z" fill="currentColor" stroke="none"/>
+        <path d="M 24 42 Q 30 45 36 42"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ──────────────── BOARD ──────────────── -->
+<header class="board">
+  <div class="brand">
+    <svg viewBox="0 0 60 60" style="color: var(--honey);"><use href="#lion-mono"/></svg>
+    <h1>라이언 — 시안 <b>v3</b></h1>
+  </div>
+  <div class="meta">[ DESIGN GUIDE v6.2 · <b>SENIOR PATCH</b> · 2026-05-12 ]</div>
+  <div class="label-row">
+    <span class="pill">8PT GRID</span>
+    <span class="pill">2.5 COLOR</span>
+    <span class="pill">SVG ICON ONLY</span>
+    <span class="pill">MONO LINE LION</span>
+  </div>
+</header>
+
+<div class="board-stage">
+
+  <!-- ──────── SCENE 01 ──────── -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 01</span>
+      <p>auth · cyber halo</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="login-glow"></div>
+        <div class="status-bar"><span>9:41</span><span class="right">LION OS · 24MS</span></div>
+
+        <div class="login-content">
+          <div class="login-top">
+            <div class="login-orb">
+              <div class="login-orb-rings"></div>
+              <div class="particle-field" id="loginParticles"></div>
+              <div class="login-orb-mark">
+                <svg><use href="#lion-mono"/></svg>
+              </div>
+            </div>
+            <div class="login-brand">LIFE OS · ONE</div>
+            <h2 class="login-h1">다시 만나서<br>반가워요</h2>
+            <p class="login-sub">SYSTEM <b>ONLINE</b></p>
+          </div>
+
+          <form class="login-form" onsubmit="event.preventDefault();">
+            <div class="field">
+              <label class="lbl">EMAIL</label>
+              <div class="field-row">
+                <input type="email" value="dahwan.oh@gmail.com" />
+                <span class="dot"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="lbl">PASSWORD</label>
+              <div class="field-row">
+                <input type="password" value="••••••••••" />
+              </div>
+            </div>
+
+            <div class="login-helper">
+              <label><span class="check"></span> KEEP SESSION</label>
+              <a href="#">FORGOT</a>
+            </div>
+
+            <button type="submit" class="login-cta">
+              AUTHENTICATE
+              <svg class="icon" width="14" height="14"><use href="#ic-arrow"/></svg>
+            </button>
+
+            <div class="login-divider">OR · NEW SESSION</div>
+            <div class="social-row">
+              <button type="button" class="social-btn">
+                <svg class="icon" width="12" height="12"><use href="#ic-kakao"/></svg> KAKAO
+              </button>
+              <button type="button" class="social-btn">
+                <svg class="icon" width="12" height="12"><use href="#ic-apple"/></svg> APPLE
+              </button>
+            </div>
+            <div class="signup-row">
+              FIRST CONTACT? <a href="#">REGISTER
+                <svg class="icon" width="10" height="10"><use href="#ic-arrow"/></svg>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>SENIOR PATCH — 적용</h4>
+      <ul>
+        <li><b>모노라인 라이언 마크</b> — stroke 1.4 currentColor. OLED 톤과 융합</li>
+        <li><b>모든 글리프 → SVG 아이콘</b> — kakao · apple · arrow · check 통일</li>
+        <li><b>8pt 그리드</b> — padding/margin 전부 4·8·12·16·24·32 배수</li>
+        <li><b>3색 시스템</b> — black · cream(text) · honey. teal은 indicator만</li>
+        <li><b>위계 4층</b> — H1 28px · Section 9-10mono · Body 15 · Meta 9-10mono</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ──────── SCENE 02 ──────── -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 02</span>
+      <p>main · single hero</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="right">LION OS · 78</span></div>
+
+        <div class="main-content">
+          <div class="main-scroll">
+
+            <div class="sys-line">
+              <span class="left"><span class="dot"></span> LION · ACTIVE</span>
+              <span>TUE · 05.12</span>
+            </div>
+
+            <div class="greet">
+              <p class="gname">좋은 아침,<br><b>다환</b>님.</p>
+            </div>
+
+            <div class="hero">
+              <div class="hero-eyebrow">LION SCORE</div>
+              <div class="hero-week">
+                <span class="arrow"><svg class="icon" width="10" height="10"><use href="#ic-arrow-l"/></svg></span>
+                <span><b>MAY 06</b> — MAY 12</span>
+                <span class="arrow"><svg class="icon" width="10" height="10"><use href="#ic-arrow"/></svg></span>
+              </div>
+              <div class="hero-orb">
+                <div class="hero-orb-sphere"></div>
+                <div class="hero-particles" id="heroParticles"></div>
+                <div class="hero-orb-content">
+                  <div class="v">78</div>
+                  <div class="u">Readiness</div>
+                  <div class="d">+6 ▴ from yesterday</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pace">
+              <div class="pace-head">
+                <span class="lbl">PACE OF LIFE</span>
+                <span class="val">1.18x</span>
+              </div>
+              <div class="pace-track">
+                <div class="line"></div>
+                <div class="tick major" style="left:0;"></div>
+                <div class="tick" style="left:12.5%;"></div>
+                <div class="tick" style="left:25%;"></div>
+                <div class="tick" style="left:37.5%;"></div>
+                <div class="tick major" style="left:50%;"></div>
+                <div class="tick" style="left:62.5%;"></div>
+                <div class="tick" style="left:75%;"></div>
+                <div class="tick" style="left:87.5%;"></div>
+                <div class="tick major" style="left:100%;"></div>
+                <div class="pin" style="left:67%;"></div>
+              </div>
+              <div class="pace-meta"><span>0.5x</span><span>1.0x</span><span>2.0x</span></div>
+            </div>
+
+            <div class="sec-divider">TODAY · ONE DECISION</div>
+
+            <div class="decision">
+              <div class="d-head">
+                <span class="d-eyebrow">MORNING COMMUTE</span>
+                <span class="d-time">10:00</span>
+              </div>
+              <h3 class="d-title">자켓·우산을 꼭 챙기세요.</h3>
+              <div class="d-meta">
+                <span class="m"><svg class="icon" width="14" height="14"><use href="#ic-rain"/></svg> RAIN <b>80%</b></span>
+                <span class="m"><svg class="icon" width="14" height="14"><use href="#ic-cal"/></svg> <b>강남</b></span>
+                <span style="margin-left:auto; color: var(--honey);">
+                  <svg class="icon" width="14" height="14"><use href="#ic-arrow"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="mini-row">
+              <div class="mini"><div class="ml">SLEEP</div><div class="mv">7.2<span class="u">H</span></div></div>
+              <div class="mini"><div class="ml">STEPS</div><div class="mv">2.1<span class="u">K</span></div></div>
+              <div class="mini"><div class="ml">PROTEIN</div><div class="mv">62<span class="u">%</span></div></div>
+            </div>
+
+          </div>
+
+          <button class="fab" aria-label="라이언 음성 진입">
+            <span class="core"></span>
+          </button>
+
+          <nav class="bottom-nav">
+            <div class="nav-item active">
+              <svg class="icon"><use href="#ic-home"/></svg> HOME
+            </div>
+            <div class="nav-item">
+              <svg class="icon"><use href="#ic-scenes"/></svg> SCENES
+            </div>
+            <div class="nav-item">
+              <svg class="icon"><use href="#ic-coach"/></svg> COACH
+            </div>
+            <div class="nav-item">
+              <svg class="icon"><use href="#ic-you"/></svg> YOU
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>SENIOR PATCH — 적용</h4>
+      <ul>
+        <li><b>영웅 1개</b> — Hero Orb만 시각 무게 가짐. 결정 카드는 단색·평면 보조</li>
+        <li><b>여백 시스템 8pt</b> — 4·8·12·16·24·32만 사용. 폰 좌우 padding 24 통일</li>
+        <li><b>3색만</b> — black · cream · honey. teal은 indicator dot 1곳에만. coral·purple 제거</li>
+        <li><b>라운드 2종</b> — 4px(small) / 12px(card). 일관 적용</li>
+        <li><b>prefix 1종</b> — "—" 모노 대시 단일. ▸ ● ◐ 등 전부 폐기</li>
+        <li><b>아이콘 8종</b> — stroke 1.5 currentColor SVG. 이모지·글리프 0개</li>
+        <li><b>섹션 디바이더</b> — "TODAY · ONE DECISION" 모노 라벨 + 라인 → 위계 한눈에</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>LIFE OS · ONE</b> · 라이언 시안 v3 · 2026-05-12<br><br>
+  <code>docs/mockup-v3.html</code> · GUIDE <b>v6.2</b> SENIOR PATCH
+</footer>
+
+<script>
+  /* Login halo — 50 dots */
+  const lp = document.getElementById('loginParticles');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('span');
+    p.className = 'p' + (Math.random() < 0.06 ? ' teal' : '');
+    const a = (i / 50) * Math.PI * 2 + Math.random()*0.3;
+    const r = 48 + Math.random()*5;
+    p.style.left = (50 + Math.cos(a) * r) + '%';
+    p.style.top  = (50 + Math.sin(a) * r) + '%';
+    p.style.animationDuration = (2 + Math.random()*3) + 's';
+    p.style.animationDelay = -Math.random()*3 + 's';
+    p.style.opacity = 0.3 + Math.random()*0.6;
+    lp.appendChild(p);
+  }
+
+  /* Hero orb — sphere point picking 140 dots */
+  const hp = document.getElementById('heroParticles');
+  const N = 140;
+  for (let i = 0; i < N; i++) {
+    const u = Math.random(), v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2*v - 1);
+    const r = Math.sin(phi);
+    const x = 50 + Math.cos(theta) * r * 46;
+    const y = 50 + Math.sin(theta) * r * 46;
+    const z = Math.cos(phi);
+    const p = document.createElement('span');
+    p.className = 'p' + (Math.random() < 0.05 ? ' teal' : '');
+    p.style.left = x + '%';
+    p.style.top  = y + '%';
+    const s = 0.4 + (z + 1) / 2 * 1.0;
+    const o = 0.18 + (z + 1) / 2 * 0.72;
+    p.style.transform = `scale(${s.toFixed(2)})`;
+    p.style.opacity = o.toFixed(2);
+    p.style.animationDuration = (2.5 + Math.random()*3.5) + 's';
+    p.style.animationDelay = -Math.random()*4 + 's';
+    hp.appendChild(p);
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 Orb v6 — Spline Embed</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ECEFF3; --card:#FFFFFF;
+    --ink:#1A1F26; --ink-2:#4F5866; --ink-3:#8492A3;
+    --line:#D6DCE5;
+    --accent:#5B5FE0; --accent-tint:rgba(91,95,224,0.10);
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+  header { padding: 48px 32px 32px; text-align: center; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header h1 b { color: #C8102E; }
+  header .meta { margin-top: 10px; font-family: var(--mono); font-size: 14px; color: #444; letter-spacing: 0.14em; text-transform: uppercase; }
+  header p.lead { max-width: 720px; margin: 16px auto 0; font-size: 15px; color: #444; line-height: 1.6; }
+  header p.lead code { background: #F5F5F5; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #C8102E; }
+
+  .board { padding: 48px 32px; max-width: 1400px; margin: 0 auto; }
+
+  .scene-card {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    margin-bottom: 24px;
+  }
+  .scene-stage {
+    position: relative;
+    width: 100%; height: 720px;
+    background:
+      radial-gradient(ellipse at center, #1A1B3A 0%, #0A0F1E 100%);
+    overflow: hidden;
+  }
+  .scene-stage spline-viewer {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  .scene-num {
+    position: absolute; top: 16px; left: 16px;
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; color: #FFFFFF;
+    background: rgba(91,95,224,0.5); padding: 5px 11px; border-radius: 4px;
+    z-index: 30; backdrop-filter: blur(6px);
+  }
+  .loading-fallback {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    color: rgba(255,255,255,0.6); font-family: var(--mono);
+    font-size: 12px; letter-spacing: 0.16em;
+    z-index: 20; pointer-events: none;
+  }
+  .scene-info { padding: 22px 26px 26px; }
+  .scene-info h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 6px; }
+  .scene-info h3 .ref { font-family: var(--mono); font-size: 10px; color: var(--ink-3); letter-spacing: 0.08em; margin-left: 8px; text-transform: uppercase; font-weight: 700; }
+  .scene-info p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 8px; }
+  .scene-info p b { color: var(--accent); font-weight: 700; }
+  .scene-info code { font-family: var(--mono); font-size: 12px; background: rgba(91,95,224,0.06); padding: 1px 6px; border-radius: 3px; color: var(--accent); }
+  .scene-info .source-url {
+    margin-top: 12px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-3);
+    word-break: break-all;
+  }
+  .scene-info .source-url b { color: var(--accent); font-weight: 700; }
+
+  footer {
+    padding: 32px; text-align: center; background: #FFFFFF;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 14px; color: #444;
+    letter-spacing: 0.08em;
+  }
+  footer code { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; color: #111; }
+
+  .note {
+    max-width: 720px; margin: 24px auto 0;
+    padding: 14px 18px;
+    background: rgba(200,16,46,0.04);
+    border-left: 3px solid #C8102E;
+    border-radius: 4px;
+    font-size: 13px; color: #444; line-height: 1.55;
+  }
+  .note b { color: #C8102E; }
+</style>
+<!-- Spline web component (단일 script) -->
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.28/build/spline-viewer.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>라이언 — Orb <b>v6</b> · Spline Embed</h1>
+  <div class="meta">[ SPLINE WEB COMPONENT · TRUE 3D · 2026-05-12 ]</div>
+  <p class="lead">
+    R3F ESM 셋업 실패. <code>@splinetool/viewer</code> web component로 Spline scene을 <b>직접 임베드</b>.
+    Spline 디자이너가 만든 3D 씬을 그대로 — 별도 React·번들러·deps 없이 단일 <code>&lt;spline-viewer&gt;</code> 태그.
+  </p>
+  <div class="note">
+    <b>로딩</b> — Spline runtime + scene 파일을 <code>prod.spline.design</code>에서 fetch. 첫 로드 3-8초 (네트워크).
+  </div>
+</header>
+
+<div class="board">
+
+  <div class="scene-card">
+    <div class="scene-stage">
+      <span class="scene-num">SCENE 01</span>
+      <div class="loading-fallback">LOADING SPLINE SCENE…</div>
+      <spline-viewer
+        url="https://prod.spline.design/UVPewD9fAjoKeeMh/scene.splinecode"
+        loading-anim-type="none"
+        hint
+      ></spline-viewer>
+    </div>
+    <div class="scene-info">
+      <h3>Spline Scene 01 <span class="ref">USER REFERENCE · UVPewD9fAjoKeeMh</span></h3>
+      <p>사용자가 명시한 레퍼런스 Spline scene 그대로 임베드. <b>마우스 따라가는 효과는 Spline 씬 안의 인터랙션</b> — Spline 디자이너 도구에서 설정된 그대로 작동.</p>
+      <div class="source-url">
+        <b>SOURCE:</b> https://prod.spline.design/UVPewD9fAjoKeeMh/scene.splinecode
+      </div>
+    </div>
+  </div>
+
+  <div class="scene-card">
+    <div class="scene-stage">
+      <span class="scene-num">SCENE 02</span>
+      <div class="loading-fallback">LOADING SPLINE SCENE…</div>
+      <spline-viewer
+        url="https://prod.spline.design/ODQE7lAK-R3Q4sAu/scene.splinecode"
+        loading-anim-type="none"
+        hint
+      ></spline-viewer>
+    </div>
+    <div class="scene-info">
+      <h3>Spline Scene 02 <span class="ref">USER REFERENCE · ODQE7lAK-R3Q4sAu</span></h3>
+      <p>이전에 보내주신 두 번째 레퍼런스. 비교용으로 함께 임베드 — 어떤 톤이 라이언에 맞는지 옆에서 같이 보기.</p>
+      <div class="source-url">
+        <b>SOURCE:</b> https://prod.spline.design/ODQE7lAK-R3Q4sAu/scene.splinecode
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/login-orb-bg-variants-v6.html</code> · SPLINE EMBED · 2026-05-12
+</footer>
+
+<script>
+  // viewer가 mount되면 loading-fallback 자동 hide
+  // spline-viewer는 자체 loading event 발생 — 안전하게 timeout으로 fallback hide
+  setTimeout(() => {
+    document.querySelectorAll('.loading-fallback').forEach(el => {
+      el.style.display = 'none';
+    });
+  }, 8000);
+
+  // 에러 캐치
+  window.addEventListener('error', (e) => {
+    console.error('Spline embed error:', e);
+  });
+</script>
+
+</body>
+</html>

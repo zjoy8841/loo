@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 로그인 Orb — 6 시안</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ECEFF3;
+    --card:#FFFFFF;
+    --ink:#1A1F26;
+    --ink-2:#4F5866;
+    --ink-3:#8492A3;
+    --line:#D6DCE5;
+    --accent:#5B5FE0;
+    --accent-soft:#8F92F0;
+    --accent-tint:rgba(91,95,224,0.10);
+    --honey:#E87A3E;
+    --teal:#4FD1C5;
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+  header {
+    padding: 48px 32px 32px; text-align: center;
+    background: #FFFFFF; border-bottom: 1px solid var(--line);
+  }
+  header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header h1 b { color: #C8102E; }
+  header .meta {
+    margin-top: 10px; font-family: var(--mono); font-size: 14px;
+    color: #444; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  header p.lead {
+    max-width: 640px; margin: 16px auto 0; font-size: 15px; color: #444;
+    line-height: 1.6;
+  }
+
+  .board {
+    padding: 48px 32px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 24px; max-width: 1400px; margin: 0 auto;
+  }
+  .orb-card {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+  }
+  .orb-stage {
+    height: 280px; position: relative;
+    background:
+      radial-gradient(ellipse at center, var(--bg) 0%, var(--card) 100%);
+    display: grid; place-items: center;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .orb-num {
+    position: absolute; top: 14px; left: 14px;
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; color: var(--accent);
+    background: var(--accent-tint); padding: 4px 9px; border-radius: 4px;
+  }
+  .orb-info {
+    padding: 18px 20px 20px;
+  }
+  .orb-info h3 {
+    font-size: 17px; font-weight: 800; letter-spacing: -0.01em;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .orb-info h3 .ref {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.08em; margin-left: 6px;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .orb-info p {
+    font-size: 14px; color: var(--ink-2); line-height: 1.55;
+  }
+  .orb-info p b { color: var(--accent); font-weight: 700; }
+
+  /* Lion mark common */
+  .lion-mark { color: var(--accent); }
+  .lion-mark svg { width: 56px; height: 56px; }
+
+  /* ════════════════════════════════════════════════ */
+  /* V1 — Cosmic Halo (현재 v7 톤) */
+  /* ════════════════════════════════════════════════ */
+  .v1 { position: relative; width: 144px; height: 144px; }
+  .v1::before {
+    content:''; position:absolute; inset:-22px; border-radius:50%;
+    background: radial-gradient(circle, var(--accent-tint) 0%, transparent 65%);
+    animation: v1-glow 3.6s ease-in-out infinite;
+  }
+  @keyframes v1-glow {
+    0%,100%{opacity:0.35; transform:scale(1);}
+    50%   {opacity:0.7;  transform:scale(1.15);}
+  }
+  .v1 .r-outer { position:absolute; inset:-10px; border:1px dotted var(--accent); opacity:0.32; border-radius:50%; animation: v1-spin 28s linear infinite; }
+  .v1 .r-mid   { position:absolute; inset:0; border:1px solid var(--accent); opacity:0.50; border-radius:50%; animation: v1-spin 60s linear infinite; }
+  .v1 .r-inner { position:absolute; inset:12px; border:1px dashed var(--accent); opacity:0.45; border-radius:50%; animation: v1-spin 36s linear infinite reverse; }
+  @keyframes v1-spin { to { transform: rotate(360deg); } }
+  .v1 .particles { position:absolute; inset:0; }
+  .v1 .particles span {
+    position:absolute; width:1.5px; height:1.5px; border-radius:50%;
+    background:var(--accent);
+    animation: v1-twinkle 2.4s ease-in-out infinite;
+  }
+  @keyframes v1-twinkle {
+    0%,100%{opacity:0.15; transform:scale(0.8);}
+    50%   {opacity:0.95; transform:scale(1.4);}
+  }
+  .v1 .mark {
+    position:absolute; inset:0; display:grid; place-items:center;
+    color: var(--accent); z-index:5;
+    animation: v1-wake 4.5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 10px var(--accent-tint));
+  }
+  @keyframes v1-wake {
+    0%,100% { transform: scale(1)    rotate(0deg);  }
+    25%     { transform: scale(1.06) rotate(-4deg); }
+    50%     { transform: scale(0.97) rotate(0deg);  }
+    75%     { transform: scale(1.06) rotate(4deg);  }
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* V2 — Liquid Blob */
+  /* ════════════════════════════════════════════════ */
+  .v2 { position:relative; width:140px; height:140px; display:grid; place-items:center; }
+  .v2 .blob {
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 35% 30%, var(--accent-soft), var(--accent) 70%);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    animation: v2-morph 8s ease-in-out infinite;
+    filter: blur(0.5px);
+    box-shadow: 0 12px 32px var(--accent-tint);
+  }
+  .v2 .blob.b2 {
+    inset:8px;
+    background: radial-gradient(circle at 70% 60%, rgba(255,255,255,0.4), transparent 50%);
+    animation-duration: 12s; animation-direction: reverse;
+    border-radius: 30% 70% 60% 40% / 50% 60% 40% 50%;
+    filter: blur(2px); box-shadow:none;
+  }
+  @keyframes v2-morph {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(0deg); }
+    33%      { border-radius: 30% 70% 70% 30% / 50% 60% 30% 60%; transform: rotate(120deg); }
+    66%      { border-radius: 50% 50% 70% 30% / 30% 60% 70% 40%; transform: rotate(240deg); }
+  }
+  .v2 .mark {
+    position:relative; z-index:5; color:white;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* V3 — Pulse Wave (Siri 음파 영감) */
+  /* ════════════════════════════════════════════════ */
+  .v3 { position:relative; width:160px; height:160px; display:grid; place-items:center; }
+  .v3 .wave {
+    position:absolute; border-radius:50%;
+    border:1.5px solid var(--accent);
+    animation: v3-pulse 2.4s ease-out infinite;
+    opacity:0;
+  }
+  .v3 .wave.w1 { inset:0; animation-delay: 0s; }
+  .v3 .wave.w2 { inset:0; animation-delay: 0.6s; }
+  .v3 .wave.w3 { inset:0; animation-delay: 1.2s; }
+  .v3 .wave.w4 { inset:0; animation-delay: 1.8s; }
+  @keyframes v3-pulse {
+    0%  { transform: scale(0.4); opacity: 0.7; border-width: 1.5px; }
+    100%{ transform: scale(1.4); opacity: 0;   border-width: 0.5px; }
+  }
+  .v3 .core {
+    width:72px; height:72px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--accent-soft), var(--accent) 75%);
+    display:grid; place-items:center;
+    box-shadow: 0 0 30px var(--accent-tint), 0 8px 20px rgba(0,0,0,0.1);
+    animation: v3-breathe 2.4s ease-in-out infinite;
+    z-index: 5;
+  }
+  @keyframes v3-breathe {
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.08); }
+  }
+  .v3 .core .mark { color: white; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.25)); }
+  .v3 .core .mark svg { width: 36px; height: 36px; }
+
+  /* ════════════════════════════════════════════════ */
+  /* V4 — Iris Bloom (홍채 / 꽃잎) */
+  /* ════════════════════════════════════════════════ */
+  .v4 { position:relative; width:150px; height:150px; display:grid; place-items:center; }
+  .v4 .petal {
+    position:absolute; top:50%; left:50%;
+    width: 26px; height: 60px;
+    background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 100%);
+    border-radius: 50% 50% 30% 30%;
+    transform-origin: 50% 100%;
+    margin-top: -60px; margin-left: -13px;
+    opacity: 0.55;
+    animation: v4-bloom 4s ease-in-out infinite;
+  }
+  .v4 .petal:nth-child(1) { transform: rotate(0deg);   animation-delay: 0s; }
+  .v4 .petal:nth-child(2) { transform: rotate(45deg);  animation-delay: 0.15s; }
+  .v4 .petal:nth-child(3) { transform: rotate(90deg);  animation-delay: 0.3s; }
+  .v4 .petal:nth-child(4) { transform: rotate(135deg); animation-delay: 0.45s; }
+  .v4 .petal:nth-child(5) { transform: rotate(180deg); animation-delay: 0.6s; }
+  .v4 .petal:nth-child(6) { transform: rotate(225deg); animation-delay: 0.75s; }
+  .v4 .petal:nth-child(7) { transform: rotate(270deg); animation-delay: 0.9s; }
+  .v4 .petal:nth-child(8) { transform: rotate(315deg); animation-delay: 1.05s; }
+  @keyframes v4-bloom {
+    0%,100% { opacity: 0.55; transform: rotate(var(--rot, 0deg)) scaleY(0.8); }
+    50%     { opacity: 0.85; transform: rotate(var(--rot, 0deg)) scaleY(1.05); }
+  }
+  /* per-petal rotation via inline style 대안: 각자 keyframes — 단순화 위해 transform-origin 사용 */
+  .v4 .iris-bloom-wrap { position:absolute; inset:0; animation: v4-rotate 18s linear infinite; }
+  @keyframes v4-rotate { to { transform: rotate(360deg); } }
+  .v4 .core {
+    width:54px; height:54px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--accent-soft), var(--accent) 75%);
+    display:grid; place-items:center; z-index: 5;
+    box-shadow: 0 0 24px var(--accent-tint);
+  }
+  .v4 .core .mark { color: white; }
+  .v4 .core .mark svg { width: 28px; height: 28px; }
+
+  /* ════════════════════════════════════════════════ */
+  /* V5 — Particle Storm (입자 폭풍 + sweep) */
+  /* ════════════════════════════════════════════════ */
+  .v5 { position:relative; width:160px; height:160px; display:grid; place-items:center; }
+  .v5 .storm { position:absolute; inset:0; animation: v5-spin 14s linear infinite; }
+  @keyframes v5-spin { to { transform: rotate(360deg); } }
+  .v5 .storm .ring {
+    position:absolute; inset:0; border-radius:50%;
+    border: 1px solid transparent;
+    border-top-color: var(--accent);
+    animation: v5-spin 3s linear infinite;
+    opacity: 0.6;
+  }
+  .v5 .storm .ring.r2 {
+    inset: 12px;
+    border-top-color: transparent;
+    border-left-color: var(--accent-soft);
+    animation-duration: 5s; animation-direction: reverse; opacity: 0.5;
+  }
+  .v5 .storm .ring.r3 {
+    inset: 24px;
+    border-top-color: var(--accent);
+    animation-duration: 2s; opacity: 0.7;
+  }
+  .v5 .particles span {
+    position:absolute; width:2px; height:2px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: v5-orbit linear infinite;
+  }
+  @keyframes v5-orbit {
+    0%   { transform: rotate(0deg)   translateX(var(--r, 60px)) rotate(0deg); opacity: 0.3; }
+    50%  { opacity: 1; }
+    100% { transform: rotate(360deg) translateX(var(--r, 60px)) rotate(-360deg); opacity: 0.3; }
+  }
+  .v5 .core {
+    width:52px; height:52px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--accent-soft), var(--accent) 75%);
+    display:grid; place-items:center; z-index: 5;
+    box-shadow: 0 0 28px var(--accent-tint);
+  }
+  .v5 .core .mark { color: white; }
+  .v5 .core .mark svg { width: 28px; height: 28px; }
+
+  /* ════════════════════════════════════════════════ */
+  /* V6 — Mesh Aurora (Vision Pro 영감) */
+  /* ════════════════════════════════════════════════ */
+  .v6 { position:relative; width:160px; height:160px; }
+  .v6 .sphere {
+    position:absolute; inset:0; border-radius:50%; overflow:hidden;
+    box-shadow:
+      0 14px 38px var(--accent-tint),
+      inset 0 0 30px rgba(255,255,255,0.18);
+  }
+  .v6 .sphere::before {
+    content:''; position:absolute; inset:-50%;
+    background:
+      radial-gradient(circle at 30% 25%, var(--teal) 0%, transparent 35%),
+      radial-gradient(circle at 70% 35%, var(--accent-soft) 0%, transparent 40%),
+      radial-gradient(circle at 50% 70%, var(--honey) 0%, transparent 35%),
+      radial-gradient(circle at 30% 80%, var(--accent) 0%, transparent 40%);
+    animation: v6-flow 8s ease-in-out infinite;
+    filter: blur(20px);
+  }
+  .v6 .sphere::after {
+    content:''; position:absolute; inset:0; border-radius:50%;
+    background: radial-gradient(circle at 30% 22%, rgba(255,255,255,0.4) 0%, transparent 30%);
+  }
+  @keyframes v6-flow {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    33%      { transform: rotate(120deg) scale(1.15); }
+    66%      { transform: rotate(240deg) scale(0.95); }
+  }
+  .v6 .mark {
+    position:absolute; inset:0; display:grid; place-items:center;
+    color: rgba(255,255,255,0.95); z-index: 5;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+  }
+  .v6 .mark svg { width: 44px; height: 44px; }
+
+  footer {
+    padding: 32px; text-align: center; background: #FFFFFF;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 14px; color: #444;
+    letter-spacing: 0.08em;
+  }
+  footer code { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; color: #111; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="lion-mono" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="30" cy="33" rx="14.5" ry="13"/>
+        <circle cx="18" cy="22" r="3.6"/><circle cx="42" cy="22" r="3.6"/>
+        <circle cx="24" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="36" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <path d="M 28 36.5 L 32 36.5 L 30 38.5 Z" fill="currentColor" stroke="none"/>
+        <path d="M 24 42 Q 30 45 36 42"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <h1>라이언 — 로그인 Orb <b>6 시안</b></h1>
+  <div class="meta">[ ANIMATION VARIANTS · 2026-05-12 ]</div>
+  <p class="lead">v7 로그인 화면 앞단의 라이언 원형 이미지 애니메이션을 6가지 다른 컨셉으로 분리. 실제로 보면서 톤을 비교해보고 선택할 수 있도록.</p>
+</header>
+
+<div class="board">
+
+  <!-- V1 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V1</span>
+      <div class="v1">
+        <div class="r-outer"></div>
+        <div class="r-mid"></div>
+        <div class="r-inner"></div>
+        <div class="particles" id="p1"></div>
+        <div class="mark lion-mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Cosmic Halo <span class="ref">CURRENT V7</span></h3>
+      <p>현재 v7 톤. 3겹 회전 ring(dotted/solid/dashed) + 입자 80개 + ambient glow 호흡 + 라이언 좌우 갸웃. <b>차분하고 신비로움</b>. AI라기보다 라이프 OS의 따뜻한 입구.</p>
+    </div>
+  </div>
+
+  <!-- V2 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V2</span>
+      <div class="v2">
+        <div class="blob"></div>
+        <div class="blob b2"></div>
+        <div class="mark lion-mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Liquid Blob <span class="ref">VISION PRO · CHATGPT</span></h3>
+      <p>외곽이 부드러운 유체처럼 천천히 변형. <b>border-radius keyframe</b>으로 8s 사이클. <b>가장 AI스러운 톤</b>. Vision Pro Siri sphere · ChatGPT 음성 모드 영감.</p>
+    </div>
+  </div>
+
+  <!-- V3 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V3</span>
+      <div class="v3">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
+        <div class="wave w4"></div>
+        <div class="core">
+          <div class="mark"><svg><use href="#lion-mono"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Pulse Wave <span class="ref">SIRI · APPLE WATCH</span></h3>
+      <p>중심에서 외곽으로 ring 4겹이 0.6s 간격 연속 발산. 라이언 코어는 호흡. <b>활발하고 응답성 있는</b> 톤. 음성 인식 직전 같은 느낌. Siri 음파 영감.</p>
+    </div>
+  </div>
+
+  <!-- V4 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V4</span>
+      <div class="v4">
+        <div class="iris-bloom-wrap">
+          <div class="petal"></div><div class="petal"></div>
+          <div class="petal"></div><div class="petal"></div>
+          <div class="petal"></div><div class="petal"></div>
+          <div class="petal"></div><div class="petal"></div>
+        </div>
+        <div class="core">
+          <div class="mark"><svg><use href="#lion-mono"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Iris Bloom <span class="ref">DYNAMIC ISLAND · DUOLINGO</span></h3>
+      <p>꽃잎/홍채 8장이 천천히 회전(18s) + 각자 4s 호흡. <b>유기적이고 친근</b>. 캐릭터(사자)와 잘 어울리는 보조 시각. Duolingo·Dynamic Island 영감.</p>
+    </div>
+  </div>
+
+  <!-- V5 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V5</span>
+      <div class="v5">
+        <div class="storm">
+          <div class="ring"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+        </div>
+        <div class="particles" id="p5"></div>
+        <div class="core">
+          <div class="mark"><svg><use href="#lion-mono"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Particle Storm <span class="ref">APPLE MUSIC · NOTHING OS</span></h3>
+      <p>입자가 코어 주위를 다양한 반경(50-75px)으로 공전(2-5s). 외곽 ring 3겹도 다른 속도로 회전. <b>역동적·기술적</b>. AI 활성 시그널 강함. Apple Music visualizer · Nothing OS dot.</p>
+    </div>
+  </div>
+
+  <!-- V6 -->
+  <div class="orb-card">
+    <div class="orb-stage">
+      <span class="orb-num">V6</span>
+      <div class="v6">
+        <div class="sphere"></div>
+        <div class="mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Mesh Aurora <span class="ref">VISION PRO · LINEAR · STRIPE</span></h3>
+      <p>sphere 안에 4색 mesh gradient(teal·iris·honey·accent)가 흐름(8s). blur 20px + 자전 + scale 호흡. <b>고급스럽고 모던</b>. Linear·Stripe 결제·Vision Pro 라이센스.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/login-orb-variants.html</code> · 6 ORB CONCEPTS · 2026-05-12
+</footer>
+
+<script>
+  // V1 — Cosmic Halo 입자
+  const p1 = document.getElementById('p1');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('span');
+    const a = (i / 80) * Math.PI * 2 + Math.random()*0.6;
+    const r = 32 + Math.random()*22;
+    s.style.left = (50 + Math.cos(a) * r) + '%';
+    s.style.top  = (50 + Math.sin(a) * r) + '%';
+    s.style.animationDuration = (1.6 + Math.random()*3) + 's';
+    s.style.animationDelay = -Math.random()*3 + 's';
+    s.style.opacity = 0.3 + Math.random()*0.65;
+    if (Math.random() < 0.15) { s.style.width = '2.5px'; s.style.height = '2.5px'; }
+    p1.appendChild(s);
+  }
+
+  // V5 — Particle Storm orbits
+  const p5 = document.getElementById('p5');
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('span');
+    const r = 48 + Math.random()*28;
+    const dur = 2 + Math.random()*3;
+    const startAngle = (i / 18) * 360;
+    s.style.setProperty('--r', r + 'px');
+    s.style.left = '50%'; s.style.top = '50%';
+    s.style.animationDuration = dur + 's';
+    s.style.animationDelay = -Math.random()*dur + 's';
+    s.style.transformOrigin = '0 0';
+    p5.appendChild(s);
+  }
+</script>
+
+</body>
+</html>

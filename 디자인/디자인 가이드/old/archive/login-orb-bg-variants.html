@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 Orb — 3D 백그라운드 분기 5종</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ECEFF3;
+    --card:#FFFFFF;
+    --ink:#1A1F26;
+    --ink-2:#4F5866;
+    --ink-3:#8492A3;
+    --line:#D6DCE5;
+    --accent:#5B5FE0;
+    --accent-soft:#8F92F0;
+    --accent-deep:#3A3DB8;
+    --accent-tint:rgba(91,95,224,0.10);
+    --teal:#4FD1C5;
+    --purple:#A78BFA;
+    --honey:#F4B860;
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+  header {
+    padding: 48px 32px 32px; text-align: center;
+    background: #FFFFFF; border-bottom: 1px solid var(--line);
+  }
+  header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header h1 b { color: #C8102E; }
+  header .meta {
+    margin-top: 10px; font-family: var(--mono); font-size: 14px;
+    color: #444; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  header p.lead {
+    max-width: 680px; margin: 16px auto 0; font-size: 15px; color: #444; line-height: 1.6;
+  }
+
+  .board {
+    padding: 48px 32px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 24px; max-width: 1400px; margin: 0 auto;
+  }
+  .orb-card {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex; flex-direction: column;
+  }
+  .orb-stage {
+    height: 340px; position: relative;
+    background: radial-gradient(ellipse at center, var(--bg) 0%, var(--card) 100%);
+    display: grid; place-items: center;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .orb-num {
+    position: absolute; top: 14px; left: 14px;
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; color: var(--accent);
+    background: var(--accent-tint); padding: 4px 9px; border-radius: 4px;
+    z-index: 30;
+  }
+  .orb-info { padding: 18px 20px 20px; }
+  .orb-info h3 {
+    font-size: 17px; font-weight: 800; letter-spacing: -0.01em;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .orb-info h3 .ref {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.08em; margin-left: 6px;
+    text-transform: uppercase; font-weight: 700;
+  }
+  .orb-info p { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
+  .orb-info p b { color: var(--accent); font-weight: 700; }
+
+  .lion-mark svg { width: 56px; height: 56px; }
+
+  /* ════════════════════════════════════════════════ */
+  /* 1 — Constellation 3D (별자리 3D 회전) */
+  /* ════════════════════════════════════════════════ */
+  .stage-1 { perspective: 600px; }
+  .stars-3d {
+    position:absolute; inset:0;
+    transform-style: preserve-3d;
+    animation: stars-3d-spin 22s linear infinite;
+  }
+  @keyframes stars-3d-spin {
+    from { transform: rotateX(18deg) rotateY(0deg); }
+    to   { transform: rotateX(18deg) rotateY(360deg); }
+  }
+  .stars-3d span {
+    position: absolute; left: 50%; top: 50%;
+    width: 2.5px; height: 2.5px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 4px var(--accent);
+    transform-style: preserve-3d;
+    animation: star-twinkle 2.6s ease-in-out infinite;
+  }
+  @keyframes star-twinkle {
+    0%,100% { opacity: 0.25; }
+    50%     { opacity: 0.95; }
+  }
+  /* 별자리 연결선 — SVG 가 3D wrap 안에 들어가 transform 따라 회전 */
+  .stars-3d svg.lines {
+    position: absolute; inset: 0; pointer-events: none;
+    transform-style: preserve-3d;
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* 2 — Nebula Only (성운만) */
+  /* ════════════════════════════════════════════════ */
+  .stage-2 { perspective: 500px; }
+  .nebula-only {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+  }
+  .nebula-only .neb {
+    position: absolute;
+    width: 280px; height: 280px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 25%, var(--purple) 0%, transparent 30%),
+      radial-gradient(circle at 72% 38%, var(--teal) 0%, transparent 32%),
+      radial-gradient(circle at 50% 70%, var(--accent-soft) 0%, transparent 28%),
+      radial-gradient(circle at 22% 75%, var(--accent) 0%, transparent 32%),
+      radial-gradient(circle at 80% 80%, var(--honey) 0%, transparent 22%);
+    filter: blur(28px);
+    opacity: 0.55;
+    animation: nebula-flow 14s ease-in-out infinite;
+  }
+  .nebula-only .neb.n2 {
+    width: 200px; height: 200px;
+    filter: blur(14px); opacity: 0.5;
+    animation-duration: 18s; animation-direction: reverse;
+  }
+  .nebula-only .neb.n3 {
+    width: 140px; height: 140px;
+    filter: blur(8px); opacity: 0.55;
+    animation-duration: 10s;
+  }
+  @keyframes nebula-flow {
+    0%,100% { transform: scale(1)    rotate(0deg);   }
+    33%     { transform: scale(1.18) rotate(120deg); }
+    66%     { transform: scale(0.92) rotate(240deg); }
+  }
+  .nebula-only .core-glow {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, var(--accent-soft) 40%, transparent 70%);
+    filter: blur(4px);
+    animation: core-pulse 3s ease-in-out infinite;
+    position: relative; z-index: 5;
+  }
+  @keyframes core-pulse {
+    0%,100% { opacity: 0.6; transform: scale(1); }
+    50%     { opacity: 1;   transform: scale(1.12); }
+  }
+
+  /* ════════════════════════════════════════════════ */
+  /* 3-5 공통 Atom — Sphere body 정적 (광원 고정) */
+  /* ════════════════════════════════════════════════ */
+  .atom-stage { perspective: 360px; perspective-origin: 50% 50%; }
+  .atom {
+    position: relative; width: 140px; height: 140px;
+    isolation: isolate;
+  }
+  .atom .sphere {
+    position: absolute; inset: 0; border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 22%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.22) 8%, transparent 22%),
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,0.22) 0%, transparent 45%),
+      radial-gradient(circle at 72% 80%, rgba(0,0,0,0.42) 0%, transparent 48%),
+      radial-gradient(circle at 50% 50%, transparent 50%, rgba(0,0,0,0.22) 80%, rgba(0,0,0,0.5) 100%),
+      radial-gradient(circle at 50% 50%, var(--accent-soft) 0%, var(--accent) 100%);
+    box-shadow: 0 14px 36px var(--accent-tint), 0 0 22px var(--accent-tint);
+    z-index: 0;
+  }
+  /* wireframe wrapper — 자전 */
+  .atom .system {
+    position: absolute; inset: 0; border-radius: 50%;
+    transform-style: preserve-3d;
+    animation: atom-spin 10s linear infinite;
+    z-index: 1;
+  }
+  @keyframes atom-spin {
+    from { transform: rotateZ(-12deg) rotateY(0deg);   }
+    to   { transform: rotateZ(-12deg) rotateY(360deg); }
+  }
+  /* 자오선 (세로 ellipse) */
+  .atom .system::before {
+    content:''; position:absolute; inset: 0 22px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* 적도 (가로 ellipse) */
+  .atom .system::after {
+    content:''; position:absolute; inset: 22px 0;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  /* 라이언 핵 (정면 고정) */
+  .atom .core-mark {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    z-index: 5;
+    color: rgba(255,255,255,0.97);
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+  }
+  .atom .core-mark svg { width: 50px; height: 50px; }
+
+  /* 위성 ring 공통 */
+  .atom .orbit {
+    position: absolute; border-radius: 50%;
+    border: 1px solid var(--accent);
+    pointer-events: none;
+    transform-style: preserve-3d;
+  }
+  .atom .orbit::before, .atom .orbit::after {
+    content:''; position: absolute; border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* 3 — Solar Atom (3 위성, 다른 평면) */
+  .atom-solar .orbit.o1 {
+    inset: -18px;
+    opacity: 0.65;
+    animation: solar-1 4.2s linear infinite;
+  }
+  .atom-solar .orbit.o1::before {
+    width: 7px; height: 7px;
+    top: -3.5px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9), 0 0 9px var(--accent);
+  }
+  .atom-solar .orbit.o1::after {
+    width: 4.5px; height: 4.5px; opacity: 0.7;
+    bottom: -2.25px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.7), 0 0 6px var(--accent);
+  }
+  @keyframes solar-1 {
+    from { transform: rotateX(72deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateZ(360deg); }
+  }
+  .atom-solar .orbit.o2 {
+    inset: -18px;
+    opacity: 0.55;
+    border-color: var(--teal);
+    animation: solar-2 5.8s linear infinite reverse;
+  }
+  .atom-solar .orbit.o2::before {
+    width: 6px; height: 6px;
+    background: var(--teal);
+    top: -3px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.2px rgba(255,255,255,0.85), 0 0 8px var(--teal);
+  }
+  .atom-solar .orbit.o2::after {
+    width: 4px; height: 4px; opacity: 0.6;
+    background: var(--teal);
+    bottom: -2px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.65), 0 0 5px var(--teal);
+  }
+  @keyframes solar-2 {
+    from { transform: rotateX(72deg) rotateY(60deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateY(60deg) rotateZ(360deg); }
+  }
+  .atom-solar .orbit.o3 {
+    inset: -18px;
+    opacity: 0.5;
+    border-color: var(--purple);
+    animation: solar-3 4.8s linear infinite;
+  }
+  .atom-solar .orbit.o3::before {
+    width: 5px; height: 5px;
+    background: var(--purple);
+    top: -2.5px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 0 7px var(--purple);
+  }
+  .atom-solar .orbit.o3::after { display: none; }
+  @keyframes solar-3 {
+    from { transform: rotateX(72deg) rotateY(-60deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateY(-60deg) rotateZ(360deg); }
+  }
+
+  /* 4 — Dual Equator (2개 큰 ring, 직교 평면) */
+  .atom-dual .orbit.o1 {
+    inset: -26px;
+    opacity: 0.7;
+    border-width: 1.5px;
+    animation: dual-1 5s linear infinite;
+  }
+  .atom-dual .orbit.o1::before {
+    width: 8px; height: 8px;
+    top: -4px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9), 0 0 10px var(--accent);
+  }
+  .atom-dual .orbit.o1::after {
+    width: 5px; height: 5px; opacity: 0.75;
+    bottom: -2.5px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.2px rgba(255,255,255,0.8), 0 0 7px var(--accent);
+  }
+  @keyframes dual-1 {
+    from { transform: rotateX(75deg) rotateZ(0deg);   }
+    to   { transform: rotateX(75deg) rotateZ(360deg); }
+  }
+  .atom-dual .orbit.o2 {
+    inset: -26px;
+    opacity: 0.6;
+    border-color: var(--teal);
+    border-width: 1.5px;
+    animation: dual-2 7s linear infinite reverse;
+  }
+  .atom-dual .orbit.o2::before {
+    width: 7px; height: 7px;
+    background: var(--teal);
+    top: -3.5px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.2px rgba(255,255,255,0.85), 0 0 9px var(--teal);
+  }
+  .atom-dual .orbit.o2::after {
+    width: 4.5px; height: 4.5px; opacity: 0.65;
+    background: var(--teal);
+    bottom: -2.25px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.7), 0 0 6px var(--teal);
+  }
+  @keyframes dual-2 {
+    from { transform: rotateX(75deg) rotateY(90deg) rotateZ(0deg);   }
+    to   { transform: rotateX(75deg) rotateY(90deg) rotateZ(360deg); }
+  }
+
+  /* 5 — Multi Electron Cloud (4 위성, 다양한 속도·평면) */
+  .atom-multi .orbit { inset: -16px; }
+  .atom-multi .orbit.o1 {
+    opacity: 0.65;
+    animation: multi-1 3.6s linear infinite;
+  }
+  .atom-multi .orbit.o1::before {
+    width: 6px; height: 6px;
+    top: -3px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.3px rgba(255,255,255,0.9), 0 0 8px var(--accent);
+  }
+  .atom-multi .orbit.o1::after { display: none; }
+  @keyframes multi-1 {
+    from { transform: rotateX(72deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateZ(360deg); }
+  }
+  .atom-multi .orbit.o2 {
+    opacity: 0.6;
+    border-color: var(--teal);
+    animation: multi-2 4.8s linear infinite reverse;
+  }
+  .atom-multi .orbit.o2::before {
+    width: 5px; height: 5px;
+    background: var(--teal);
+    top: -2.5px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1.1px rgba(255,255,255,0.85), 0 0 7px var(--teal);
+  }
+  .atom-multi .orbit.o2::after { display: none; }
+  @keyframes multi-2 {
+    from { transform: rotateX(72deg) rotateY(45deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateY(45deg) rotateZ(360deg); }
+  }
+  .atom-multi .orbit.o3 {
+    opacity: 0.55;
+    border-color: var(--purple);
+    animation: multi-3 6s linear infinite;
+  }
+  .atom-multi .orbit.o3::before {
+    width: 4.5px; height: 4.5px;
+    background: var(--purple);
+    top: -2.25px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 0 6px var(--purple);
+  }
+  .atom-multi .orbit.o3::after { display: none; }
+  @keyframes multi-3 {
+    from { transform: rotateX(72deg) rotateY(90deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateY(90deg) rotateZ(360deg); }
+  }
+  .atom-multi .orbit.o4 {
+    opacity: 0.5;
+    border-color: var(--honey);
+    animation: multi-4 4.2s linear infinite reverse;
+  }
+  .atom-multi .orbit.o4::before {
+    width: 4px; height: 4px;
+    background: var(--honey);
+    top: -2px; left: 50%; transform: translateX(-50%);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.85), 0 0 5px var(--honey);
+  }
+  .atom-multi .orbit.o4::after { display: none; }
+  @keyframes multi-4 {
+    from { transform: rotateX(72deg) rotateY(135deg) rotateZ(0deg);   }
+    to   { transform: rotateX(72deg) rotateY(135deg) rotateZ(360deg); }
+  }
+
+  footer {
+    padding: 32px; text-align: center; background: #FFFFFF;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 14px; color: #444;
+    letter-spacing: 0.08em;
+  }
+  footer code { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; color: #111; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="lion-mono" viewBox="0 0 60 60">
+      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+        <ellipse cx="30" cy="33" rx="14.5" ry="13"/>
+        <circle cx="18" cy="22" r="3.6"/><circle cx="42" cy="22" r="3.6"/>
+        <circle cx="24" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="36" cy="31" r="1" fill="currentColor" stroke="none"/>
+        <path d="M 28 36.5 L 32 36.5 L 30 38.5 Z" fill="currentColor" stroke="none"/>
+        <path d="M 24 42 Q 30 45 36 42"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <h1>라이언 — 3D 백그라운드 <b>분기 5종</b></h1>
+  <div class="meta">[ 3D STARS · NEBULA · ATOM × 3 · 2026-05-12 ]</div>
+  <p class="lead">V2-B는 별자리만 살려 3D 회전. V2-C는 성운만. V2-E는 음성 nav처럼 자전+공전 atom 3종 분기. 라이언 마크는 atom 변형에만 핵으로 포함, 별자리·성운은 마크 없이 백그라운드 단독.</p>
+</header>
+
+<div class="board">
+
+  <!-- 1. Constellation 3D (별자리만 3D) -->
+  <div class="orb-card">
+    <div class="orb-stage stage-1">
+      <span class="orb-num">1</span>
+      <div class="stars-3d" id="stars3d">
+        <svg class="lines" viewBox="0 0 400 340" preserveAspectRatio="xMidYMid meet">
+          <g stroke="rgba(91,95,224,0.35)" stroke-width="0.6" fill="none">
+            <path id="conLines"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Constellation 3D <span class="ref">V2-B 변형 · 3D 회전</span></h3>
+      <p>blob 제거. 별 80개가 3D 공간(translateZ ±100px)에 분포 + 전체가 <b>perspective 600px 안에서 rotateY 22s 자전</b>. 별자리 연결선 SVG도 wrap 안에 들어가 함께 3D 회전. 별은 trans 깊이에 따라 가까울 땐 크고 밝게, 멀 땐 작고 흐릿하게.</p>
+    </div>
+  </div>
+
+  <!-- 2. Nebula Only (성운만) -->
+  <div class="orb-card">
+    <div class="orb-stage stage-2">
+      <span class="orb-num">2</span>
+      <div class="nebula-only">
+        <div class="neb"></div>
+        <div class="neb n2"></div>
+        <div class="neb n3"></div>
+        <div class="core-glow"></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Nebula Only <span class="ref">V2-C 변형 · 마크 제거</span></h3>
+      <p>blob·라이언 마크 모두 제거. <b>성운 3겹</b>(blur 28 · 14 · 8) 다른 속도(14s · 18s · 10s)로 회전. 5색(purple·teal·iris-soft·iris·honey) 혼합. 중심엔 white-iris 코어 glow가 3s 호흡. <b>마크 없는 신비로운 ambient</b>.</p>
+    </div>
+  </div>
+
+  <!-- 3. Solar Atom (3 위성) -->
+  <div class="orb-card">
+    <div class="orb-stage atom-stage">
+      <span class="orb-num">3</span>
+      <div class="atom atom-solar">
+        <div class="sphere"></div>
+        <div class="system">
+          <span class="orbit o1"></span>
+          <span class="orbit o2"></span>
+          <span class="orbit o3"></span>
+        </div>
+        <div class="core-mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Solar Atom <span class="ref">V2-E · 자전 + 3 위성</span></h3>
+      <p>음성 nav와 동일 구조 큰 사이즈. sphere 자전(10s) + <b>3 위성 다른 평면</b>: iris(수평 4.2s) · teal(60° 5.8s reverse) · purple(-60° 4.8s). 각 ring 앞뒤 dot 2개. 가장 균형 잡힌 atom.</p>
+    </div>
+  </div>
+
+  <!-- 4. Dual Equator (2개 큰 ring, 직교) -->
+  <div class="orb-card">
+    <div class="orb-stage atom-stage">
+      <span class="orb-num">4</span>
+      <div class="atom atom-dual">
+        <div class="sphere"></div>
+        <div class="system">
+          <span class="orbit o1"></span>
+          <span class="orbit o2"></span>
+        </div>
+        <div class="core-mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Dual Equator <span class="ref">V2-E · 직교 2 평면</span></h3>
+      <p>sphere 자전 + <b>2개 큰 ring 직교</b>(rotateY 0° vs 90°). 각 ring 1.5px 굵게 + 앞뒤 dot 2개. iris(5s) · teal(7s reverse). <b>대칭적이고 안정감</b> — 핵·전자 모델 가장 정확한 비유.</p>
+    </div>
+  </div>
+
+  <!-- 5. Multi Electron Cloud (4 위성) -->
+  <div class="orb-card">
+    <div class="orb-stage atom-stage">
+      <span class="orb-num">5</span>
+      <div class="atom atom-multi">
+        <div class="sphere"></div>
+        <div class="system">
+          <span class="orbit o1"></span>
+          <span class="orbit o2"></span>
+          <span class="orbit o3"></span>
+          <span class="orbit o4"></span>
+        </div>
+        <div class="core-mark"><svg><use href="#lion-mono"/></svg></div>
+      </div>
+    </div>
+    <div class="orb-info">
+      <h3>Multi Electron <span class="ref">V2-E · 4 위성 클라우드</span></h3>
+      <p>sphere 자전 + <b>4 위성 ring</b>: iris(0°·3.6s) · teal(45°·4.8s rev) · purple(90°·6s) · honey(135°·4.2s rev). 각 ring 위 dot 1개씩. <b>가장 역동적·복잡</b> — 전자구름 비유. 네 가지 컬러로 풍부함.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/login-orb-bg-variants.html</code> · 5 BACKGROUND VARIANTS · 2026-05-12
+</footer>
+
+<script>
+  // 1 — Constellation 3D: 80 stars with translateZ depth
+  const s3d = document.getElementById('stars3d');
+  const stagePoints = []; // for connecting lines
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('span');
+    // 분포: sphere shell 또는 box?
+    // box (cube 안에 분포): x,y,z 각 -180 ~ 180
+    const x = (Math.random()*2 - 1) * 180;
+    const y = (Math.random()*2 - 1) * 140;
+    const z = (Math.random()*2 - 1) * 100;
+    s.style.transform = `translate3d(${x}px, ${y}px, ${z}px)`;
+    s.style.marginLeft = '-1.25px';
+    s.style.marginTop  = '-1.25px';
+    s.style.animationDuration = (2 + Math.random()*2.5) + 's';
+    s.style.animationDelay = -Math.random()*3 + 's';
+    // depth에 따른 opacity·크기 조정 — z가 클수록(가까울수록) 밝고 크게
+    const zNorm = (z + 100) / 200; // 0~1
+    const op = 0.25 + zNorm * 0.7;
+    const sz = 1.5 + zNorm * 2;
+    s.style.width = sz + 'px';
+    s.style.height = sz + 'px';
+    s.style.opacity = op;
+    s3d.appendChild(s);
+    stagePoints.push({x: 200 + x*0.9, y: 170 + y*0.95});
+  }
+  // 별자리 연결선 — 가까운 별끼리 8쌍 연결
+  const lines = s3d.querySelector('svg.lines g');
+  for (let k = 0; k < 8; k++) {
+    const i = Math.floor(Math.random() * stagePoints.length);
+    let j = -1, minD = Infinity;
+    for (let m = 0; m < stagePoints.length; m++) {
+      if (m === i) continue;
+      const d = Math.hypot(stagePoints[i].x - stagePoints[m].x, stagePoints[i].y - stagePoints[m].y);
+      if (d < minD && d > 20) { minD = d; j = m; }
+    }
+    if (j === -1) continue;
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', stagePoints[i].x);
+    line.setAttribute('y1', stagePoints[i].y);
+    line.setAttribute('x2', stagePoints[j].x);
+    line.setAttribute('y2', stagePoints[j].y);
+    lines.appendChild(line);
+  }
+</script>
+
+</body>
+</html>

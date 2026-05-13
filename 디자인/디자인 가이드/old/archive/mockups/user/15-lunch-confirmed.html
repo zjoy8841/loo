@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>U-11 점심 · 예약 확정</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { ivory: '#FAF7F0', charcoal: '#1F2937', mustard: '#F59E0B', lavender: '#8B5CF6' }, fontFamily: { sans: ['Pretendard', 'system-ui', 'sans-serif'] } } } }
+  </script>
+  <style>
+    @keyframes scale-in { 0% { transform: scale(0); } 60% { transform: scale(1.1);} 100% { transform: scale(1);} }
+    .scale-in { animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  </style>
+</head>
+<body class="bg-gray-100 text-charcoal font-sans min-h-screen p-4 sm:p-8">
+  <a href="../index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500 hover:text-emerald-600">← 인덱스로</a>
+  <div class="max-w-[420px] mx-auto bg-ivory rounded-3xl shadow-xl overflow-hidden flex flex-col" style="min-height: 844px;">
+    <div class="flex-1 flex flex-col items-center justify-center px-8 text-center">
+      <div class="w-24 h-24 rounded-full bg-emerald-500 flex items-center justify-center text-5xl text-white mb-6 scale-in shadow-lg">✓</div>
+      <h1 class="text-2xl font-bold mb-2">예약이 확정됐어요</h1>
+      <p class="text-gray-500 text-sm mb-8">B카페 사장님이 수락하셨어요</p>
+
+      <div class="w-full bg-white rounded-2xl p-5 shadow-sm space-y-3 text-left">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-xl">🥗</div>
+          <div>
+            <h3 class="font-bold text-sm">닭가슴살 샐러드 세트</h3>
+            <p class="text-xs text-gray-500">8,500원 · 결제 완료(DEMO)</p>
+          </div>
+        </div>
+        <div class="border-t border-gray-100 pt-3 space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">📍 식당</span>
+            <span class="font-semibold">B카페 (강남점)</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">🕐 예약 시간</span>
+            <span class="font-semibold">오후 12:30</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">🚶 도보</span>
+            <span class="font-semibold">약 5분</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 text-sm text-emerald-700 flex gap-2 items-start">
+        <span>💡</span>
+        <p class="text-left leading-relaxed">예약 5분 전에 한 번 더 알려드릴게요</p>
+      </div>
+    </div>
+
+    <div class="px-6 py-4 border-t border-gray-200 grid grid-cols-2 gap-3">
+      <a href="07-home.html" class="bg-white border border-gray-200 text-charcoal font-semibold py-3.5 rounded-xl text-center">홈으로</a>
+      <a href="#" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl text-center transition">길찾기</a>
+    </div>
+  </div>
+</body>
+</html>

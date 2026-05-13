@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 — 유저 플로우 다이어그램</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#FAFAFA;
+    --card:#FFFFFF;
+    --ink:#1F2937;
+    --ink-2:#4B5563;
+    --ink-3:#9CA3AF;
+    --line:#E5E7EB;
+    --accent:#5B5FE0;
+    --accent-tint:rgba(91,95,224,0.10);
+    --critical:#C8102E;
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body {
+    min-height:100vh; background:var(--bg);
+    color:var(--ink); font-family:var(--font);
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+  header.board {
+    padding: 48px 32px 32px; text-align:center;
+    background:#FFFFFF; border-bottom:1px solid var(--line);
+  }
+  header.board h1 { font-size:24px; font-weight:800; letter-spacing:-0.02em; }
+  header.board h1 b { color:var(--critical); }
+  header.board .meta {
+    margin-top:10px; font-family:var(--mono); font-size:13px;
+    color:#555; letter-spacing:0.14em; text-transform:uppercase;
+  }
+  header.board p.lead {
+    max-width:760px; margin:14px auto 0;
+    font-size:15px; color:#444; line-height:1.6;
+  }
+  .legend {
+    margin-top:20px;
+    display:inline-flex; gap:14px; flex-wrap:wrap; justify-content:center;
+    font-size:13px; color:#555;
+  }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .legend .sw {
+    width:18px; height:18px; border-radius:5px;
+    border:1.5px solid; display:inline-block;
+  }
+  .legend .entry  { background:#F3F4F6; border-color:#9CA3AF; }
+  .legend .action { background:#DBEAFE; border-color:#3B82F6; }
+  .legend .decision { background:#DDD6FE; border-color:#7C3AED; }
+  .legend .success { background:#D1FAE5; border-color:#10B981; }
+  .legend .fail   { background:#FEE2E2; border-color:#EF4444; }
+  .legend .key    { background:#FEF3C7; border-color:#F59E0B; }
+
+  .stage {
+    padding:40px 24px 64px;
+    max-width:1280px; margin:0 auto;
+  }
+  .section {
+    background:#FFFFFF; border:1px solid var(--line);
+    border-radius:14px; padding:28px 24px;
+    margin-bottom:24px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.03);
+  }
+  .section .sec-head {
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:20px;
+  }
+  .section .sec-num {
+    font-family:var(--mono); font-size:14px; font-weight:800;
+    letter-spacing:0.18em; color:var(--accent);
+    background:var(--accent-tint);
+    padding:6px 12px; border-radius:5px;
+  }
+  .section .sec-head h2 {
+    font-size:20px; font-weight:800;
+    letter-spacing:-0.015em; color:var(--ink);
+  }
+  .section .sec-desc {
+    font-size:14px; color:var(--ink-2);
+    margin-bottom:20px; line-height:1.6;
+  }
+  .section .sec-desc b { color:var(--accent); font-weight:700; }
+
+  /* 한 카드 안에 한 흐름 다 보이게 — max-height 강제 */
+  .mermaid {
+    background:transparent;
+    display:flex; justify-content:center; align-items:center;
+    padding:8px 0;
+    min-height:200px;
+    max-height:360px;
+    overflow:hidden;
+  }
+  .mermaid svg {
+    max-width: 100% !important;
+    max-height: 340px !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  .mermaid .edgeLabel {
+    background: #FFFFFF !important;
+    padding: 2px 6px !important;
+    font-size: 12px !important;
+  }
+
+  footer {
+    padding:24px 32px; text-align:center; background:#FFFFFF;
+    border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:13px; color:#555;
+    letter-spacing:0.06em;
+  }
+  footer code { background:#F3F4F6; padding:2px 8px; border-radius:4px; color:#111; }
+</style>
+</head>
+<body>
+
+<header class="board">
+  <h1>라이언 — <b>유저 플로우 다이어그램</b></h1>
+  <div class="meta">[ MERMAID FLOWCHART · USER + MERCHANT · 2026-05-12 ]</div>
+  <p class="lead">사용자 앱 + 가맹점 앱의 전체 흐름을 노드·화살표·분기 다이어그램으로 시각화. 진입부터 메인 6 시점, 점심 시연 핵심, 음성 인터랙션, 가맹점 운영까지.</p>
+  <div class="legend">
+    <span><span class="sw entry"></span>진입점</span>
+    <span><span class="sw action"></span>액션 / 화면</span>
+    <span><span class="sw decision"></span>결정 / 분기</span>
+    <span><span class="sw success"></span>성공 / 완료</span>
+    <span><span class="sw fail"></span>실패 / 거절</span>
+    <span><span class="sw key"></span>핵심 (시연 진입점)</span>
+  </div>
+</header>
+
+<div class="stage">
+
+  <!-- 1. 진입 흐름 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2>진입 흐름</h2>
+    </div>
+    <p class="sec-desc">신규 사용자(7단계 회원가입) + 기존 사용자(로그인) 모두 메인으로 합류.</p>
+    <pre class="mermaid">
+flowchart LR
+  s(["Splash"]):::entry
+  q{"신규/기존?"}:::decision
+  su["회원가입 7단계"]:::action
+  g(["첫 인사"]):::success
+  l["로그인"]:::action
+  h(("메인")):::key
+
+  s --> q
+  q -->|"신규"| su --> g --> h
+  q -->|"기존"| l --> h
+
+  classDef entry fill:#F3F4F6,stroke:#9CA3AF,stroke-width:1.5px
+  classDef action fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+  classDef success fill:#D1FAE5,stroke:#10B981,stroke-width:1.5px
+  classDef key fill:#FEF3C7,stroke:#F59E0B,stroke-width:2px
+    </pre>
+  </div>
+
+  <!-- 2. 메인 6 시점 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2>메인 — 시점 6 자동 전환</h2>
+    </div>
+    <p class="sec-desc">시간 변수에 따라 메인이 6 시점 중 하나로 자동 전환. <b>음성 인터랙션</b>은 모든 시점에서 nav 가운데 sphere로 진입.</p>
+    <pre class="mermaid">
+flowchart LR
+  h(("메인")):::key
+  m1["아침"]:::moment
+  m2["오전"]:::moment
+  m3["점심 ★"]:::critical
+  m4["오후"]:::moment
+  m5["저녁"]:::moment
+  m6["야간"]:::moment
+  v{"음성 sphere"}:::decision
+
+  h --> m1 & m2 & m3 & m4 & m5 & m6
+  m3 -.-> v
+  m1 -.-> v
+  m6 -.-> v
+
+  classDef key fill:#FEF3C7,stroke:#F59E0B,stroke-width:2px
+  classDef moment fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef critical fill:#FED7AA,stroke:#EA580C,stroke-width:2px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+    </pre>
+  </div>
+
+  <!-- 3. 점심 핵심 흐름 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2>점심 흐름 — 시연 핵심</h2>
+    </div>
+    <p class="sec-desc">사용자 앱 + 가맹점 앱 양쪽의 실시간 동기화. <b>WebSocket</b>으로 결제 후 가맹점 알림 송신 → 수락 → 사용자 알림 복귀.</p>
+    <pre class="mermaid">
+flowchart LR
+  a["메인 점심"]:::moment
+  b["lunch 대화"]:::action
+  c{"추천 OK?"}:::decision
+  d["결제"]:::action
+  e["확정"]:::success
+  f["가맹점 알림"]:::merchant
+  g{"수락?"}:::decision
+  j["사용자 알림"]:::success
+
+  a --> b --> c
+  c -->|"예"| d --> e --> f --> g
+  c -->|"다른 추천"| b
+  g -->|"수락"| j
+  g -->|"거절"| j
+
+  classDef moment fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef action fill:#E0E7FF,stroke:#6366F1,stroke-width:1.5px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+  classDef success fill:#D1FAE5,stroke:#10B981,stroke-width:1.5px
+  classDef merchant fill:#FEF3C7,stroke:#F59E0B,stroke-width:1.5px
+    </pre>
+  </div>
+
+  <!-- 4. 음성 인터랙션 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2>음성 인터랙션 (어디서든)</h2>
+    </div>
+    <p class="sec-desc">모든 화면 nav 가운데 sphere에서 즉시 진입. STT → LLM → TTS or 액션 자동 진입.</p>
+    <pre class="mermaid">
+flowchart LR
+  a["어떤 화면"]:::action
+  b{"sphere 탭"}:::decision
+  c["voice 풀스크린"]:::action
+  d["STT→LLM→TTS"]:::system
+  e{"응답 유형"}:::decision
+  f["자연어 + 복귀"]:::success
+  g["액션 진입"]:::success
+
+  a --> b --> c --> d --> e
+  e -->|"자연어"| f
+  e -->|"액션"| g
+
+  classDef action fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+  classDef system fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px
+  classDef success fill:#D1FAE5,stroke:#10B981,stroke-width:1.5px
+    </pre>
+  </div>
+
+  <!-- 5. 가맹점 흐름 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <h2>가맹점 흐름</h2>
+    </div>
+    <p class="sec-desc">예약 수신·처리 + 메뉴·재고·취소 관리. WebSocket 실시간 알림.</p>
+    <pre class="mermaid">
+flowchart LR
+  a["로그인"]:::action
+  b[("메인 예약 리스트")]:::action
+  c["WebSocket"]:::system
+  d{"수락?"}:::decision
+  e["수락"]:::success
+  f["거절"]:::fail
+  g["사용자 앱 푸시"]:::action
+  h["메뉴 · 재고 · 취소"]:::action
+
+  a --> b --> c --> d
+  d -->|"수락"| e --> g
+  d -->|"거절"| f --> g
+  b -.-> h
+
+  classDef action fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef system fill:#F3F4F6,stroke:#6B7280,stroke-width:1.5px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+  classDef success fill:#D1FAE5,stroke:#10B981,stroke-width:1.5px
+  classDef fail fill:#FEE2E2,stroke:#EF4444,stroke-width:1.5px
+    </pre>
+  </div>
+
+  <!-- 6. 전체 통합 -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2>전체 통합 흐름</h2>
+    </div>
+    <p class="sec-desc">진입 → 메인 → 시점별 액션 → 가맹점 연동 → 알림 복귀의 전체 사이클.</p>
+    <pre class="mermaid">
+flowchart LR
+  s(["Splash"]):::entry
+  q{"신규/기존"}:::decision
+  h(("메인")):::key
+  m["시점 6"]:::moment
+  v["음성"]:::action
+  lf["점심 ★"]:::critical
+  mc["가맹점"]:::merchant
+  n["알림"]:::success
+
+  s --> q --> h --> m
+  m -.-> v
+  m -->|"점심"| lf --> mc --> n --> h
+
+  classDef entry fill:#F3F4F6,stroke:#9CA3AF,stroke-width:1.5px
+  classDef action fill:#DBEAFE,stroke:#3B82F6,stroke-width:1.5px
+  classDef decision fill:#DDD6FE,stroke:#7C3AED,stroke-width:1.5px
+  classDef key fill:#FEF3C7,stroke:#F59E0B,stroke-width:2px
+  classDef moment fill:#E0E7FF,stroke:#6366F1,stroke-width:1.5px
+  classDef critical fill:#FED7AA,stroke:#EA580C,stroke-width:2px
+  classDef merchant fill:#FEF3C7,stroke:#F59E0B,stroke-width:1.5px
+  classDef success fill:#D1FAE5,stroke:#10B981,stroke-width:1.5px
+    </pre>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/user-flow-diagram.html</code> · MERMAID FLOWCHART · 2026-05-12
+</footer>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: 'Pretendard Variable, system-ui, sans-serif',
+      fontSize: '16px',
+      lineColor: '#9CA3AF',
+      primaryColor: '#DBEAFE',
+      primaryTextColor: '#1F2937',
+      primaryBorderColor: '#93C5FD',
+      secondaryColor: '#F3F4F6',
+      tertiaryColor: '#FAFAFA',
+      mainBkg: '#FFFFFF',
+      nodeBkg: '#FFFFFF',
+      edgeLabelBackground: '#FFFFFF'
+    },
+    flowchart: {
+      curve: 'basis',
+      padding: 10,
+      nodeSpacing: 24,
+      rankSpacing: 36,
+      useMaxWidth: true
+    }
+  });
+</script>
+
+</body>
+</html>

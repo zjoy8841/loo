@@ -1,0 +1,114 @@
+{
+  "tables": [
+    {
+      "idx": 0,
+      "rows": 5,
+      "firstRow": "Material | Recommended for"
+    },
+    {
+      "idx": 1,
+      "rows": 7,
+      "firstRow": "Date | Changes"
+    }
+  ],
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Liquid Glass",
+      "id": "Liquid-Glass"
+    },
+    {
+      "tag": "H2",
+      "text": "Standard materials",
+      "id": "Standard-materials"
+    },
+    {
+      "tag": "H2",
+      "text": "Platform considerations",
+      "id": "Platform-considerations"
+    },
+    {
+      "tag": "H3",
+      "text": "iOS, iPadOS",
+      "id": "iOS-iPadOS"
+    },
+    {
+      "tag": "H3",
+      "text": "macOS",
+      "id": "macOS"
+    },
+    {
+      "tag": "H3",
+      "text": "tvOS",
+      "id": "tvOS"
+    },
+    {
+      "tag": "H3",
+      "text": "visionOS",
+      "id": "visionOS"
+    },
+    {
+      "tag": "H3",
+      "text": "watchOS",
+      "id": "watchOS"
+    },
+    {
+      "tag": "H2",
+      "text": "Resources",
+      "id": "Resources"
+    },
+    {
+      "tag": "H4",
+      "text": "Related",
+      "id": "Related"
+    },
+    {
+      "tag": "H4",
+      "text": "Developer documentation",
+      "id": "Developer-documentation"
+    },
+    {
+      "tag": "H4",
+      "text": "Videos",
+      "id": "Videos"
+    },
+    {
+      "tag": "H2",
+      "text": "Change log",
+      "id": "Change-log"
+    }
+  ],
+  "materialSentences": [
+    "\n\nThe regular variant blurs and adjusts the luminosity of background content to maintain legibility of text and other foreground elements.",
+    " Scroll edge effects further enhance legibility by blurring and reducing the opacity of background content.",
+    "\n\nStandard materials\n\nUse standard materials and effects — such as blur, vibrancy, and blending modes — to convey a sense of structure in the content beneath Liquid Glass.",
+    " Instead, match the material or vibrancy style to your specific use case.",
+    "\n\nPoor contrast between the material and systemGray3 label\n\nGood contrast between the material and vibrant color label\n\nConsider contrast and visual separation when choosing a material to combine with blur and vibrancy effects.",
+    "\n\nultraThin\n\nthin\n\nregular\n\nthick\n\niOS and iPadOS also define vibrant colors for labels, fills, and separators that are specifically designed to work with each material.",
+    " Labels and fills both have several levels of vibrancy; separators have one level.",
+    "\n\nExcept for quaternary, you can use the following vibrancy values for labels on any material.",
+    " In general, avoid using quaternary on top of the thin and ultraThin materials, because the contrast is too low.",
+    "\n\nUIVibrancyEffectStyle.",
+    "label (default)\n\nUIVibrancyEffectStyle.",
+    "secondaryLabel\n\nUIVibrancyEffectStyle.",
+    "tertiaryLabel\n\nUIVibrancyEffectStyle.",
+    "quaternaryLabel\n\nYou can use the following vibrancy values for fills on all materials.",
+    "\n\nUIVibrancyEffectStyle.",
+    "fill (default)\n\nUIVibrancyEffectStyle.",
+    "secondaryFill\n\nUIVibrancyEffectStyle.",
+    "tertiaryFill\n\nThe system provides a single, default vibrancy value for a separator, which works well on all materials.",
+    "\n\nChoose when to allow vibrancy in custom views and controls.",
+    " Depending on configuration and system settings, system views and controls use vibrancy to make foreground content stand out against any background.",
+    " Test your interface in a variety of contexts to discover when vibrancy enhances the appearance and improves communication.",
+    " For example, consider using standard materials in the following ways:\n\nMaterial\n\n\t\n\nRecommended for\n\n\n\n\nultraThin\n\n\t\n\nFull-screen views that require a light color scheme\n\n\n\n\nthin\n\n\t\n\nOverlay views that partially obscure onscreen content and require a light color scheme\n\n\n\n\nregular\n\n\t\n\nOverlay views that partially obscure onscreen content\n\n\n\n\nthick\n\n\t\n\nOverlay views that partially obscure onscreen content and require a dark color scheme\n\nvisionOS\n\nIn visionOS, windows generally use an unmodifiable system-defined material called glass that helps people stay grounded by letting light, the current Environment, virtual content, and objects in people’s surroundings show through.",
+    "\n\nThe thin material brings attention to interactive elements like buttons and selected items.",
+    "\n\nThe regular material can help you visually separate sections of your app, like a sidebar or a grouped table view.",
+    "\n\nThe thick material lets you create a dark element that remains visually distinct when it’s on top of an area that uses a regular background.",
+    "\n\nTo ensure foreground content remains legible when it displays on top of a material, visionOS applies vibrancy to text, symbols, and fills.",
+    " Vibrancy enhances the sense of depth by pulling light and color forward from both virtual and physical surroundings.",
+    "\n\nvisionOS defines three vibrancy values that help you communicate a hierarchy of text, symbols, and fills.",
+    "\n\nUse UIVibrancyEffectStyle.",
+    "\n\nUse UIVibrancyEffectStyle."
+  ],
+  "bodyLen": 11852
+}

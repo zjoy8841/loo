@@ -1,0 +1,54 @@
+{
+  "tables": [
+    {
+      "idx": 0,
+      "rows": 6,
+      "firstRow": "Platform | Default size | Minimum size"
+    },
+    {
+      "idx": 1,
+      "rows": 4,
+      "firstRow": "Text size | Text weight | Minimum contrast ratio"
+    },
+    {
+      "idx": 2,
+      "rows": 6,
+      "firstRow": "Platform | Default control size | Minimum control size"
+    },
+    {
+      "idx": 3,
+      "rows": 6,
+      "firstRow": "Date | Changes"
+    }
+  ],
+  "headingCount": 36,
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Vision",
+      "id": "Vision"
+    },
+    {
+      "tag": "H3",
+      "text": "visionOS",
+      "id": "visionOS"
+    }
+  ],
+  "contrastSentences": [
+    "\n\nStrive to meet color contrast minimum standards.",
+    " To ensure all information in your app is legible, it’s important that there’s enough contrast between foreground text and icons and background colors.",
+    " Two popular standards of measure for color contrast are the Web Content Accessibility Guidelines (WCAG) and the Accessible Perceptual Contrast Algorithm (APCA).",
+    " Use standard contrast calculators to ensure your UI meets acceptable levels.",
+    " Accessibility Inspector uses the following values from WCAG Level AA as guidance in determining whether your app’s colors have an acceptable contrast.",
+    "\n\nText size\n\n\t\n\nText weight\n\n\t\n\nMinimum contrast ratio\n\n\n\n\nUp to 17 pts\n\n\t\n\nAll\n\n\t\n\n4.",
+    "5:1\n\n\n\n\n18 pts\n\n\t\n\nAll\n\n\t\n\n3:1\n\n\n\n\nAll\n\n\t\n\nBold\n\n\t\n\n3:1\n\nIf your app doesn’t provide this minimum contrast by default, ensure it at least provides a higher contrast color scheme when the system setting Increase Contrast is turned on.",
+    " If your app supports Dark Mode, make sure to check the minimum contrast in both light and dark appearances.",
+    "\n\nA button with insufficient color contrast\n\nA button with sufficient color contrast\n\nPrefer system-defined colors.",
+    " These colors have their own accessible variants that automatically adapt when people adjust their color preferences, such as enabling Increase Contrast or toggling between the light and dark appearances.",
+    "\n\nAudio descriptions are interspersed between natural pauses in the main audio of a video and supply spoken narration of important information that’s presented only visually.",
+    " In iOS and iPadOS, you can also use Music Haptics and Audio graphs to let people experience music and infographics through vibration and texture.",
+    "\n\nPlatform considerations\n\nNo additional considerations for iOS, iPadOS, macOS, tvOS, or watchOS.",
+    "\n\nFor additional guidance, see Create accessible spatial experiences and Design considerations for vision and motion.",
+    "\n\nCurrent page is Accessibility\nSupported platforms\nAccessibility\nVision\nHearing\nMobility\nSpeech\nCognitive\nPlatform considerations\nResources\nChange log\nApple\nDeveloper\nDocumentation\nPlatforms\niOS\niPadOS\nmacOS\ntvOS\nvisionOS\nwatchOS\nTools\nSwift\nSwiftUI\nSwift Playground\nTestFlight\nXcode\nXcode Cloud\nSF Symbols\nTopics & Technologies\nAccessibility\nAccessories\nApp Extension\nApp Store\nAudio & Video\nAugmented Reality\nDesign\nDistribution\nEducation\nFonts\nGames\nHealth & Fitness\nIn-App Purchase\nLocalization\nMaps & Location\nMachine Learning & AI\nOpen Source\nSecurity\nSafari & Web\nResources\nDocumentation\nTutorials\nDownloads\nForums\nVideos\nSupport\nSupport Articles\nContact Us\nBug Reporting\nSystem Status\nAccount\nApple Developer\nApp Store Connect\nCertificates, IDs, & Profiles\nFeedback Assistant\nPrograms\nApple Developer Program\nApple Developer Enterprise Program\nApp Store Small Business Program\nMFi Program\nNews Partner Program\nVideo Partner Program\nSecurity Bounty Program\nSecurity Research Device Program\nEvents\nMeet with Apple\nApple Developer Centers\nApp Store Awards\nApple Design Awards\nApple Developer Academies\nWWDC\nTo submit feedback on documentation, visit Feedback Assistant."
+  ]
+}

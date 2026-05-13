@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 시안 — 로그인 · 메인 (v6 가이드 적용)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+
+  :root {
+    --primary-100: #FCE7D2; --primary-300: #F2A879; --primary-500: #E87A3E;
+    --primary-600: #C8651F; --primary-700: #A04F12;
+    --secondary-500: #3D7A5C;
+    --accent-honey: #F4B860; --accent-cream: #FAF3E0;
+    --neutral-0: #FAF7F2; --neutral-100: #ECE6DA;
+    --neutral-400: #A39B85; --neutral-500: #82795F; --neutral-700: #4A4332;
+    --neutral-800: #2E2A20; --neutral-900: #1F1B16;
+    --dark-bg: #0F0D0A; --dark-card: #1A1612; --dark-card-hover: #221C16;
+    --dark-border: rgba(255,255,255,0.08); --dark-text: #F5EFE6;
+    --dark-text-muted: #A39B85;
+    --teal: #4FD1C5; --cyan: #00D4FF; --purple: #A78BFA; --coral: #FF8C7A;
+    --success: #2E7D5B; --warning: #E0A341; --danger: #C44536;
+    --font: 'Pretendard Variable', system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  html, body {
+    margin: 0; padding: 0; min-height: 100vh;
+    background: radial-gradient(ellipse at top, #1F1B16 0%, #0F0D0A 60%, #050403 100%);
+    color: var(--dark-text); font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 시안 보드 헤더 */
+  header.board {
+    padding: 40px 32px 24px; text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  header.board .brand { display: inline-flex; align-items: center; gap: 14px; }
+  header.board h1 { font-size: 22px; font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+  header.board .meta {
+    font-size: 11px; color: var(--dark-text-muted); margin-top: 8px;
+    font-family: var(--font-mono); letter-spacing: 0.08em;
+  }
+  header.board .label-row { display: flex; gap: 6px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex; padding: 4px 10px; border-radius: 999px;
+    background: rgba(232,122,62,0.15); color: var(--accent-honey);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+  }
+  .pill.teal { background: rgba(79,209,197,0.15); color: var(--teal); }
+
+  /* 보드 */
+  .board-stage {
+    padding: 56px 32px 80px;
+    display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+  }
+  .scene { display: flex; flex-direction: column; align-items: center; }
+  .scene-tag {
+    margin-bottom: 16px; text-align: center;
+  }
+  .scene-tag .num {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    background: var(--primary-500); color: white;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  }
+  .scene:nth-child(2) .scene-tag .num { background: var(--teal); color: var(--dark-bg); }
+  .scene-tag p { font-size: 12px; color: var(--dark-text-muted); margin: 6px 0 0; font-family: var(--font-mono); }
+
+  /* 폰 프레임 */
+  .phone {
+    width: 340px; max-width: 92vw; aspect-ratio: 9 / 19.5;
+    border-radius: 44px; padding: 11px; background: #1A1A1A;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .phone::before {
+    content: ''; position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 28px; background: #000; border-radius: 14px; z-index: 30;
+  }
+  .screen {
+    width: 100%; height: 100%; border-radius: 33px; overflow: hidden;
+    background: var(--dark-bg); color: var(--dark-text);
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .status-bar {
+    padding: 14px 28px 8px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 700; color: var(--dark-text);
+    flex-shrink: 0;
+  }
+
+  /* ─── 캡션 ─── */
+  .caption {
+    margin-top: 18px; max-width: 340px;
+    text-align: left;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--dark-border);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .caption h4 {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+    color: var(--accent-honey); margin: 0 0 8px; text-transform: uppercase;
+  }
+  .caption ul { margin: 0; padding-left: 16px; }
+  .caption li {
+    font-size: 12px; color: rgba(245,239,230,0.78);
+    margin-bottom: 4px; line-height: 1.5;
+  }
+  .caption li b { color: var(--dark-text); font-weight: 700; }
+
+  /* ============================================== */
+  /* ═══════════ SCENE 1 — LOGIN ═══════════ */
+  /* ============================================== */
+  .login-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(232,122,62,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 100%, rgba(244,184,96,0.08) 0%, transparent 50%),
+      linear-gradient(180deg, #1F1B16 0%, #0F0D0A 100%);
+  }
+  .login-content {
+    position: relative; flex: 1;
+    display: flex; flex-direction: column;
+    padding: 30px 28px 32px;
+  }
+  .login-top {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .login-mark {
+    width: 96px; height: 96px;
+    filter: drop-shadow(0 10px 32px rgba(232,122,62,0.5));
+    margin-bottom: 24px;
+  }
+  .login-brand-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+    color: var(--accent-honey); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .login-h1 {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.15; margin: 0 0 8px; color: white;
+  }
+  .login-sub {
+    font-size: 13px; color: var(--dark-text-muted); margin: 0;
+  }
+
+  .login-form { margin-top: 36px; display: flex; flex-direction: column; gap: 10px; }
+  .field-dark { position: relative; }
+  .field-dark .ic {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; opacity: 0.5;
+  }
+  .field-dark input {
+    width: 100%; padding: 14px 16px 14px 42px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--dark-border);
+    border-radius: 12px; color: var(--dark-text);
+    font: inherit; font-size: 14px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .field-dark input:focus {
+    outline: none; border-color: var(--primary-500);
+    background: rgba(255,255,255,0.06);
+  }
+  .field-dark input::placeholder { color: rgba(245,239,230,0.35); }
+  .login-helper {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; margin-top: 4px;
+  }
+  .login-helper a { color: var(--dark-text-muted); text-decoration: none; font-weight: 500; }
+  .login-cta {
+    margin-top: 18px; width: 100%;
+    background: var(--primary-500); color: white; border: 0;
+    padding: 15px; border-radius: 999px;
+    font: inherit; font-size: 15px; font-weight: 800; letter-spacing: -0.005em;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(232,122,62,0.32);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .login-cta:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(232,122,62,0.45); }
+  .divider {
+    display: flex; align-items: center; gap: 10px; margin: 22px 0 14px;
+    font-size: 10px; color: var(--dark-text-muted); letter-spacing: 0.1em;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--dark-border);
+  }
+  .social-row { display: flex; gap: 8px; }
+  .social-btn {
+    flex: 1; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text); padding: 12px; border-radius: 12px;
+    font: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .signup-row {
+    text-align: center; margin-top: 18px;
+    font-size: 12px; color: var(--dark-text-muted);
+  }
+  .signup-row a { color: var(--accent-honey); font-weight: 700; text-decoration: none; }
+
+  /* ============================================== */
+  /* ═══════════ SCENE 2 — MAIN DASHBOARD ═══════════ */
+  /* ============================================== */
+  .main-content {
+    flex: 1; overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+    padding: 0 20px 84px;
+  }
+  .main-scroll {
+    flex: 1; overflow-y: auto; padding: 4px 0;
+  }
+  .main-scroll::-webkit-scrollbar { display: none; }
+
+  .greet { padding: 8px 4px 16px; }
+  .greet-eyebrow {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.15em;
+    color: var(--primary-500); text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .greet-eyebrow::before { content: '🌅'; font-size: 13px; }
+  .greet-name {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.015em;
+    line-height: 1.2; margin: 6px 0 0; color: white;
+  }
+  .greet-name b { color: var(--accent-honey); }
+  .greet-sub { font-size: 12px; color: var(--dark-text-muted); margin: 4px 0 0; }
+
+  /* 다음 시점 카드 */
+  .next-scene {
+    margin: 14px 0 16px;
+    border-radius: 18px; padding: 16px;
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(244,184,96,0.22) 0%, transparent 60%),
+      linear-gradient(135deg, rgba(232,122,62,0.18) 0%, rgba(168,82,32,0.06) 100%);
+    border: 1px solid rgba(232,122,62,0.32);
+    position: relative; overflow: hidden;
+  }
+  .next-scene::before {
+    content: ''; position: absolute; top: -20px; right: -20px;
+    width: 100px; height: 100px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(244,184,96,0.25) 0%, transparent 70%);
+    filter: blur(8px);
+  }
+  .ns-eyebrow {
+    font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+    color: var(--accent-honey); text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .ns-eyebrow::after { content: ''; flex: 1; height: 1px; background: rgba(244,184,96,0.3); }
+  .ns-title {
+    font-size: 18px; font-weight: 800; line-height: 1.25;
+    margin: 0 0 8px; color: white; letter-spacing: -0.01em;
+  }
+  .ns-meta { display: flex; flex-direction: column; gap: 4px; position: relative; }
+  .ns-meta .row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(245,239,230,0.88); }
+  .ns-meta .row .ic { font-size: 13px; }
+  .ns-meta .row b { font-weight: 700; }
+  .ns-cta-row {
+    margin-top: 10px; display: flex; gap: 6px; position: relative;
+  }
+  .ns-cta {
+    background: rgba(255,255,255,0.92); color: var(--neutral-900);
+    border: 0; padding: 7px 12px; border-radius: 999px;
+    font: inherit; font-size: 11px; font-weight: 700; cursor: pointer;
+  }
+  .ns-cta.ghost {
+    background: transparent; color: var(--dark-text);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+
+  /* 4분할 메트릭 */
+  .metrics-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .metric-card {
+    background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: 14px; padding: 11px 12px;
+    position: relative; overflow: hidden;
+  }
+  .mc-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--dark-text-muted); text-transform: uppercase;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .mc-value {
+    font-size: 20px; font-weight: 800; margin-top: 3px;
+    line-height: 1; letter-spacing: -0.02em;
+  }
+  .mc-unit { font-size: 11px; font-weight: 600; color: var(--dark-text-muted); margin-left: 2px; }
+  .mc-bar {
+    margin-top: 8px; height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.06); overflow: hidden;
+  }
+  .mc-bar > span {
+    display: block; height: 100%; border-radius: 2px;
+  }
+  .mc-trend { font-size: 10px; margin-top: 6px; color: var(--dark-text-muted); }
+  .mc-trend b { font-weight: 700; }
+  .mc-trend.up b { color: var(--coral); }
+  .mc-trend.ok b { color: var(--teal); }
+
+  .metric-card.coral .mc-value { color: var(--coral); }
+  .metric-card.coral .mc-bar > span { background: var(--coral); }
+  .metric-card.teal .mc-value { color: var(--teal); }
+  .metric-card.teal .mc-bar > span { background: var(--teal); }
+  .metric-card.honey .mc-value { color: var(--accent-honey); }
+  .metric-card.honey .mc-bar > span { background: var(--accent-honey); }
+  .metric-card.purple .mc-value { color: var(--purple); }
+  .metric-card.purple .mc-bar > span { background: var(--purple); }
+
+  /* 라이언 인사이트 1줄 */
+  .insight {
+    margin-bottom: 12px; padding: 12px 14px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--primary-500);
+    border-radius: 10px;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12px; line-height: 1.5;
+  }
+  .insight .ic { font-size: 16px; flex-shrink: 0; }
+  .insight .tx { color: var(--dark-text); }
+  .insight .tx b { color: var(--accent-honey); font-weight: 700; }
+
+  /* 다음 일정 카드 */
+  .agenda {
+    background: var(--dark-card); border: 1px solid var(--dark-border);
+    border-radius: 14px; padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .agenda-time {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    color: var(--teal); letter-spacing: 0.05em;
+    text-align: center; min-width: 38px;
+  }
+  .agenda-time .h { display: block; font-size: 15px; color: var(--dark-text); }
+  .agenda-body { flex: 1; min-width: 0; }
+  .agenda-body .t { font-size: 13px; font-weight: 700; color: var(--dark-text); margin-bottom: 2px; }
+  .agenda-body .s { font-size: 11px; color: var(--dark-text-muted); }
+  .agenda-tag {
+    padding: 3px 8px; border-radius: 999px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+    background: rgba(244,184,96,0.18); color: var(--accent-honey);
+  }
+
+  /* FAB */
+  .fab {
+    position: absolute; bottom: 100px; right: 16px;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary-500); color: white;
+    border: 0; display: grid; place-items: center;
+    font-size: 22px;
+    box-shadow: 0 14px 32px rgba(232,122,62,0.45), 0 0 0 6px rgba(232,122,62,0.12);
+    cursor: pointer;
+    animation: fab-pulse 2.5s ease-in-out infinite;
+    z-index: 10;
+  }
+  @keyframes fab-pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+  }
+  .fab::before {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    border: 2px solid rgba(232,122,62,0.4);
+    animation: fab-ring 2.5s ease-out infinite;
+  }
+  @keyframes fab-ring {
+    0%   { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  /* 하단 네비 */
+  .bottom-nav {
+    position: absolute; bottom: 14px; left: 16px; right: 16px;
+    display: flex; justify-content: space-around; align-items: center;
+    background: rgba(26,22,18,0.85); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 12px; border-radius: 999px;
+    z-index: 5;
+  }
+  .nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    padding: 4px 12px; cursor: pointer;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+    color: var(--dark-text-muted);
+  }
+  .nav-item.active { color: var(--primary-500); }
+  .nav-item .ic { font-size: 18px; line-height: 1; }
+
+  /* footer */
+  footer {
+    padding: 30px 32px 60px; text-align: center;
+    font-size: 12px; color: var(--dark-text-muted);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  footer code {
+    background: rgba(255,255,255,0.04); padding: 2px 6px;
+    border-radius: 4px; font-size: 11px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="board">
+  <div class="brand">
+    <svg viewBox="0 0 80 80" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+      <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+      <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+      <circle cx="24" cy="32" r="5" fill="#F4B860"/><circle cx="56" cy="32" r="5" fill="#F4B860"/>
+      <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/><circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+      <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/><circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+      <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+      <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h1>라이언 — 시안 보드</h1>
+  </div>
+  <div class="meta">DESIGN GUIDE v6 · 2026-05-12 · Dark Lion</div>
+  <div class="label-row">
+    <span class="pill">로그인</span>
+    <span class="pill teal">메인 Dashboard (모드 A)</span>
+  </div>
+</header>
+
+<div class="board-stage">
+
+  <!-- ═══════════ SCENE 1 — LOGIN ═══════════ -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 01</span>
+      <p>auth / login</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="login-bg"></div>
+        <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+        <div class="login-content">
+
+          <div class="login-top">
+            <svg class="login-mark" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+              <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+              <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+              <circle cx="24" cy="32" r="5" fill="#F4B860"/><circle cx="56" cy="32" r="5" fill="#F4B860"/>
+              <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/><circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+              <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/><circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+              <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+              <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="login-brand-label">LIFE OS · ONE</div>
+            <h2 class="login-h1">다시 만나서<br>반가워요</h2>
+            <p class="login-sub">오늘 하루도 라이언이 곁에 있을게요</p>
+          </div>
+
+          <form class="login-form" onsubmit="event.preventDefault();">
+            <div class="field-dark">
+              <span class="ic">✉️</span>
+              <input type="email" placeholder="이메일" value="dahwan.oh@gmail.com" />
+            </div>
+            <div class="field-dark">
+              <span class="ic">🔒</span>
+              <input type="password" placeholder="비밀번호" value="••••••••" />
+            </div>
+            <div class="login-helper">
+              <label style="display:inline-flex;gap:6px;align-items:center;color:var(--dark-text-muted);">
+                <input type="checkbox" checked /> 자동 로그인
+              </label>
+              <a href="#">비밀번호를 잊으셨나요?</a>
+            </div>
+            <button type="submit" class="login-cta">로그인</button>
+
+            <div class="divider">또는</div>
+            <div class="social-row">
+              <button type="button" class="social-btn"><span>💬</span> 카카오</button>
+              <button type="button" class="social-btn"><span>🍎</span> Apple</button>
+            </div>
+
+            <div class="signup-row">
+              아직 라이언과 만난 적 없으세요? <a href="#">회원가입</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>구성 요소</h4>
+      <ul>
+        <li><b>라이언 마크</b> 96px + Honey drop-shadow</li>
+        <li><b>헤로 카피</b> 2줄 · 26px / 800 · "다시 만나서 반가워요"</li>
+        <li><b>이메일·비번 입력</b> 다크 카드 + 아이콘 prefix</li>
+        <li><b>Primary CTA</b> 라운드 999px + Lion 그림자</li>
+        <li><b>소셜 로그인</b> 카카오 · Apple (시연 가맹점 진입)</li>
+        <li><b>회원가입 진입</b> 하단 Honey 텍스트 링크</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCENE 2 — MAIN DASHBOARD ═══════════ -->
+  <div class="scene">
+    <div class="scene-tag">
+      <span class="num">SCREEN 02</span>
+      <p>main · dashboard / mode A</p>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="status-bar"><span>9:41</span><span>📶 100%</span></div>
+        <div class="main-content">
+          <div class="main-scroll">
+
+            <div class="greet">
+              <span class="greet-eyebrow">Good Morning</span>
+              <p class="greet-name">좋은 아침이에요,<br><b>다환</b>님 👋</p>
+              <p class="greet-sub">화요일 · 5월 12일 · 14°</p>
+            </div>
+
+            <div class="next-scene">
+              <div class="ns-eyebrow">🌧 Next · Morning Commute</div>
+              <h3 class="ns-title">자켓 · 우산<br>꼭 챙기세요.</h3>
+              <div class="ns-meta">
+                <div class="row"><span class="ic">🌧</span><span>기온 <b>14°</b> · 비 80%</span></div>
+                <div class="row"><span class="ic">💼</span><span><b>클라이언트 미팅</b> 10:00 · 강남</span></div>
+              </div>
+              <div class="ns-cta-row">
+                <button class="ns-cta">상세 보기 →</button>
+                <button class="ns-cta ghost">택시 호출</button>
+              </div>
+            </div>
+
+            <div class="metrics-grid">
+              <div class="metric-card coral">
+                <div class="mc-label">😴 SLEEP</div>
+                <div class="mc-value">7h<span class="mc-unit">12m</span></div>
+                <div class="mc-bar"><span style="width: 88%"></span></div>
+                <div class="mc-trend ok">목표 <b>+12분</b> 초과</div>
+              </div>
+              <div class="metric-card teal">
+                <div class="mc-label">👟 STEPS</div>
+                <div class="mc-value">2,140</div>
+                <div class="mc-bar"><span style="width: 27%"></span></div>
+                <div class="mc-trend">/ 8,000 목표</div>
+              </div>
+              <div class="metric-card honey">
+                <div class="mc-label">🍱 MEALS</div>
+                <div class="mc-value">1<span class="mc-unit">/3</span></div>
+                <div class="mc-bar"><span style="width: 33%"></span></div>
+                <div class="mc-trend up">단백질 <b>38% 부족</b></div>
+              </div>
+              <div class="metric-card purple">
+                <div class="mc-label">💆 STRESS</div>
+                <div class="mc-value">낮음</div>
+                <div class="mc-bar"><span style="width: 24%"></span></div>
+                <div class="mc-trend">어제 대비 안정</div>
+              </div>
+            </div>
+
+            <div class="insight">
+              <span class="ic">💡</span>
+              <div class="tx">어제보다 <b>단백질 38%</b> 적게 드셨네요.<br>오늘 점심은 닭가슴살 샐러드 어떠세요?</div>
+            </div>
+
+            <div class="agenda">
+              <div class="agenda-time"><span class="h">10:00</span>오전</div>
+              <div class="agenda-body">
+                <div class="t">클라이언트 미팅</div>
+                <div class="s">강남 위워크 · 도보 6분</div>
+              </div>
+              <span class="agenda-tag">우산</span>
+            </div>
+            <div class="agenda">
+              <div class="agenda-time"><span class="h">12:30</span>오후</div>
+              <div class="agenda-body">
+                <div class="t">점심 · B카페 강남점</div>
+                <div class="s">닭가슴살 샐러드 · 단백질 38g</div>
+              </div>
+              <span class="agenda-tag">예약</span>
+            </div>
+
+          </div>
+
+          <button class="fab" aria-label="라이언과 대화">🎤</button>
+
+          <nav class="bottom-nav">
+            <div class="nav-item active"><span class="ic">🏠</span><span>홈</span></div>
+            <div class="nav-item"><span class="ic">📅</span><span>일정</span></div>
+            <div class="nav-item"><span class="ic">🍱</span><span>식단</span></div>
+            <div class="nav-item"><span class="ic">👤</span><span>마이</span></div>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">
+      <h4>구성 요소</h4>
+      <ul>
+        <li><b>인사 영역</b> 시간대 변수 · 호명 "다환님"</li>
+        <li><b>다음 시점 카드</b> Lion 그라데이션 · 헤로 2줄 + 메타 2행 + CTA 2개</li>
+        <li><b>4분할 메트릭</b> 수면(coral) · 활동(teal) · 식사(honey) · 컨디션(purple) + 진행 바</li>
+        <li><b>라이언 인사이트</b> Lion border-left · 1-2줄 · 핵심 수치 Honey 강조</li>
+        <li><b>오늘 일정</b> 시간 mono + 제목 + 메타 + 시점 태그</li>
+        <li><b>음성 FAB</b> 56px Lion · 펄스 링 애니메이션</li>
+        <li><b>하단 네비</b> Glassmorphic 4 항목 · 활성 Lion</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Life OS.ONE · 라이언 시안 v6 · 2026-05-12<br>
+  📂 <code>docs/mockup.html</code> · 토큰 출처: <code>docs/design-guide.html</code>
+</footer>
+
+</body>
+</html>

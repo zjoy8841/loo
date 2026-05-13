@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 Orb — v4 (Real 3D · Spline)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.48/build/spline-viewer.js"></script>
+<style>
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#ECEFF3; --card:#FFFFFF;
+    --ink:#1A1F26; --ink-2:#4F5866; --ink-3:#8492A3;
+    --line:#D6DCE5;
+    --accent:#5B5FE0; --accent-soft:#8F92F0; --accent-deep:#3A3DB8;
+    --accent-tint:rgba(91,95,224,0.10);
+    --teal:#4FD1C5; --purple:#A78BFA; --pink:#F0A3D9; --honey:#F4B860;
+    --font:'Pretendard Variable',system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html, body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+
+  header {
+    padding: 48px 32px 32px; text-align: center;
+    background: #FFFFFF; border-bottom: 1px solid var(--line);
+  }
+  header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.015em; }
+  header h1 b { color: #C8102E; }
+  header .meta {
+    margin-top: 10px; font-family: var(--mono); font-size: 14px;
+    color: #444; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  header p.lead {
+    max-width: 720px; margin: 16px auto 0; font-size: 15px; color: #444; line-height: 1.6;
+  }
+  header p.lead b { color: var(--accent); }
+
+  .board {
+    padding: 48px 32px;
+    max-width: 1200px; margin: 0 auto;
+    display: grid; gap: 24px;
+  }
+
+  /* 메인 카드 — Spline 실제 3D */
+  .hero-card {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 20px;
+    overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .hero-stage {
+    height: 640px; position: relative;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(91,95,224,0.06) 0%, transparent 60%),
+      linear-gradient(180deg, #F7F9FC 0%, #ECEFF3 100%);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero-stage spline-viewer {
+    width: 100%; height: 100%;
+    display: block;
+  }
+  .hero-stage .badge {
+    position: absolute; top: 20px; left: 20px; z-index: 30;
+    font-family: var(--mono); font-size: 11px; font-weight: 800;
+    letter-spacing: 0.2em; color: #FFF;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+    padding: 6px 12px; border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(91,95,224,0.3);
+  }
+  .hero-stage .tag {
+    position: absolute; top: 20px; right: 20px; z-index: 30;
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.15em; color: var(--ink-2);
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+    padding: 6px 10px; border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .hero-stage .loading {
+    position: absolute; inset: 0; z-index: 10;
+    display: grid; place-items: center;
+    color: var(--ink-3); font-family: var(--mono); font-size: 12px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    pointer-events: none;
+    opacity: 1; transition: opacity 0.6s ease;
+  }
+  .hero-stage.loaded .loading { opacity: 0; }
+  .hero-stage .loading .dot {
+    display: inline-block; width: 6px; height: 6px; margin: 0 3px;
+    background: var(--accent); border-radius: 50%;
+    animation: load-pulse 1.4s ease-in-out infinite;
+  }
+  .hero-stage .loading .dot:nth-child(2) { animation-delay: 0.2s; }
+  .hero-stage .loading .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes load-pulse {
+    0%,100% { opacity: 0.3; transform: scale(1); }
+    50%     { opacity: 1;   transform: scale(1.4); }
+  }
+
+  .hero-info { padding: 24px 28px 28px; }
+  .hero-info h2 {
+    font-size: 20px; font-weight: 800; letter-spacing: -0.01em;
+    color: var(--ink); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .hero-info h2 .ref {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase;
+  }
+  .hero-info p { font-size: 14px; color: var(--ink-2); line-height: 1.6; margin-bottom: 14px; }
+  .hero-info p b { color: var(--accent); font-weight: 700; }
+
+  .spec-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-top: 16px;
+  }
+  .spec {
+    background: #F7F9FC; border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .spec .k {
+    font-family: var(--mono); font-size: 10px; color: var(--ink-3);
+    letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .spec .v {
+    font-size: 13px; color: var(--ink); font-weight: 600;
+  }
+
+  /* 비교 노트 */
+  .compare-note {
+    background: linear-gradient(135deg, rgba(91,95,224,0.04) 0%, rgba(143,146,240,0.04) 100%);
+    border: 1px solid rgba(91,95,224,0.15);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+  }
+  .compare-note .icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #FFF;
+    display: grid; place-items: center;
+    font-size: 18px; font-weight: 800;
+    box-shadow: 0 2px 8px rgba(91,95,224,0.3);
+  }
+  .compare-note h3 {
+    font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .compare-note p {
+    font-size: 13px; color: var(--ink-2); line-height: 1.6;
+  }
+  .compare-note p code {
+    font-family: var(--mono); font-size: 12px;
+    background: rgba(91,95,224,0.08); color: var(--accent-deep);
+    padding: 1px 6px; border-radius: 3px;
+  }
+  .compare-note a {
+    color: var(--accent); font-weight: 600; text-decoration: none;
+    border-bottom: 1px dashed rgba(91,95,224,0.4);
+  }
+  .compare-note a:hover { border-bottom-style: solid; }
+
+  /* 통합 가이드 */
+  .integrate {
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px 28px;
+  }
+  .integrate h3 {
+    font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .integrate pre {
+    background: #1A1F26; color: #E8E8F0;
+    padding: 16px 18px; border-radius: 10px;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+    overflow-x: auto;
+  }
+  .integrate pre .c { color: #8492A3; }
+  .integrate pre .t { color: #F0A3D9; }
+  .integrate pre .a { color: #4FD1C5; }
+  .integrate pre .s { color: #F4B860; }
+  .integrate ul { padding-left: 20px; margin-top: 12px; }
+  .integrate li { font-size: 13px; color: var(--ink-2); line-height: 1.7; }
+  .integrate li b { color: var(--ink); }
+
+  footer {
+    padding: 32px; text-align: center; background: #FFFFFF;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 14px; color: #444;
+    letter-spacing: 0.08em;
+  }
+  footer code { background: #F5F5F5; padding: 2px 8px; border-radius: 4px; color: #111; }
+
+  @media (max-width: 720px) {
+    .hero-stage { height: 460px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>라이언 — Orb <b>v4</b> · Real 3D (Spline)</h1>
+  <div class="meta">[ 진짜 3D 엔진 · CSS 한계 돌파 · 2026-05-12 ]</div>
+  <p class="lead">v1·v2·v3까지의 CSS 3D 시도는 본질적 한계가 있었습니다. <b>v4는 Spline으로 만든 실제 3D 씬</b>을 임베드 — 라이팅·반사·머티리얼이 진짜 3D 엔진으로 렌더됩니다. 차이를 직접 비교해보세요.</p>
+</header>
+
+<div class="board">
+
+  <!-- 메인 — Spline 실제 3D -->
+  <div class="hero-card">
+    <div class="hero-stage" id="heroStage">
+      <span class="badge">v4 · LIVE 3D</span>
+      <span class="tag">SPLINE · CC0</span>
+      <div class="loading">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span style="margin-left: 12px;">3D 씬 로딩 중</span>
+      </div>
+      <spline-viewer
+        id="spline"
+        url="https://prod.spline.design/UVPewD9fAjoKeeMh/scene.splinecode"
+        events-target="global"
+        loading-anim-type="none">
+      </spline-viewer>
+    </div>
+    <div class="hero-info">
+      <h2>Black Animated AI Blobs <span class="ref">SPLINE COMMUNITY · CC0</span></h2>
+      <p>실제 3D 메시 + 라이팅 + 머티리얼. 마우스를 움직여보세요 — 카메라가 진짜로 반응합니다. CSS의 <code>perspective</code>·<code>translateZ</code>로는 절대 못 만드는 <b>물리 기반 광택과 깊이감</b>. 로그인 화면 백그라운드로 박으면 즉시 "수준급" 톤이 됩니다.</p>
+      <div class="spec-grid">
+        <div class="spec">
+          <div class="k">Source</div>
+          <div class="v">Spline Community</div>
+        </div>
+        <div class="spec">
+          <div class="k">License</div>
+          <div class="v">CC0 (상업 사용 가능)</div>
+        </div>
+        <div class="spec">
+          <div class="k">Engine</div>
+          <div class="v">WebGL · Real-time 3D</div>
+        </div>
+        <div class="spec">
+          <div class="k">Interaction</div>
+          <div class="v">마우스 추적 + 자동 애니메이션</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비교 노트 -->
+  <div class="compare-note">
+    <div class="icon">⚖</div>
+    <div>
+      <h3>v3 CSS vs v4 Spline — 본질적 차이</h3>
+      <p>v3의 Mesh Aurora가 CSS로는 가장 정교했지만, 결국 <b>2D 그라데이션의 시각적 트릭</b>이에요. v4는 진짜 3D 메시·법선·반사·셰이더가 매 프레임 계산됩니다. <a href="./login-orb-bg-variants-v3.html">v3 변형들 다시 보기 →</a> 한 화면에 띄워두고 비교하시면 차이가 즉각 보입니다.</p>
+    </div>
+  </div>
+
+  <!-- 통합 가이드 -->
+  <div class="integrate">
+    <h3>실제 Next.js 앱에 적용하는 법 (lifeosone/web)</h3>
+    <pre><span class="c"># 1) 패키지 설치</span>
+npm install <span class="s">@splinetool/react-spline @splinetool/runtime</span>
+
+<span class="c">// 2) 로그인 페이지 컴포넌트</span>
+<span class="t">import</span> Spline <span class="t">from</span> <span class="s">'@splinetool/react-spline/next'</span>;
+
+<span class="t">export default function</span> <span class="a">LoginBackground</span>() {
+  <span class="t">return</span> (
+    &lt;<span class="a">Spline</span>
+      <span class="a">scene</span>=<span class="s">"https://prod.spline.design/UVPewD9fAjoKeeMh/scene.splinecode"</span>
+      <span class="a">style</span>={{ position: <span class="s">'absolute'</span>, inset: 0, zIndex: 0 }}
+    /&gt;
+  );
+}</pre>
+      <ul>
+        <li><b>로딩 최적화</b>: `<code>next/dynamic</code>`로 lazy load 권장 (씬 파일 1~3MB)</li>
+        <li><b>모바일 성능</b>: 저사양 기기는 WebGL 부담 → `<code>prefers-reduced-motion</code>` 감지 시 정적 이미지로 폴백</li>
+        <li><b>레이어 순서</b>: Spline은 절대 위치 z:0, 로그인 폼은 z:10 이상으로 띄우기</li>
+        <li><b>색 톤 매칭</b>: 현재 씬은 검정 베이스 — 라이언 v6 다크 톤과 잘 맞음. 라이트 모드면 다른 씬 필요</li>
+      </ul>
+  </div>
+
+</div>
+
+<footer>
+  <code>docs/login-orb-bg-variants-v4.html</code> · REAL 3D · 2026-05-12
+</footer>
+
+<script>
+  const stage = document.getElementById('heroStage');
+  const viewer = document.getElementById('spline');
+  viewer.addEventListener('load', () => stage.classList.add('loaded'));
+  setTimeout(() => stage.classList.add('loaded'), 8000);
+</script>
+
+</body>
+</html>

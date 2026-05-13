@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" role="img" aria-label="Lion mark — Life OS.ONE">
+  <title>Lion Mark</title>
+  <!-- Rounded square background — Primary 500 -->
+  <rect width="80" height="80" rx="20" fill="#E87A3E"/>
+
+  <!-- Mane (Honey halo) -->
+  <circle cx="40" cy="44" r="28" fill="#F4B860"/>
+
+  <!-- Face (light tone) -->
+  <ellipse cx="40" cy="46" rx="20" ry="18" fill="#FCE7D2"/>
+
+  <!-- Ears -->
+  <circle cx="24" cy="32" r="5" fill="#F4B860"/>
+  <circle cx="56" cy="32" r="5" fill="#F4B860"/>
+  <circle cx="24" cy="32" r="2.5" fill="#FCE7D2"/>
+  <circle cx="56" cy="32" r="2.5" fill="#FCE7D2"/>
+
+  <!-- Eyes -->
+  <circle cx="32" cy="42" r="2.5" fill="#1F1B16"/>
+  <circle cx="48" cy="42" r="2.5" fill="#1F1B16"/>
+
+  <!-- Nose -->
+  <path d="M 37 50 L 43 50 L 40 53 Z" fill="#1F1B16"/>
+
+  <!-- Smile -->
+  <path d="M 32 58 Q 40 63 48 58" stroke="#1F1B16" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,862 @@
+{
+  "t0_platform_defaults": [
+    [
+      "Platform",
+      "Default size",
+      "Minimum size"
+    ],
+    [
+      "iOS, iPadOS",
+      "17 pt",
+      "11 pt"
+    ],
+    [
+      "macOS",
+      "13 pt",
+      "10 pt"
+    ],
+    [
+      "tvOS",
+      "29 pt",
+      "23 pt"
+    ],
+    [
+      "visionOS",
+      "17 pt",
+      "12 pt"
+    ],
+    [
+      "watchOS",
+      "16 pt",
+      "12 pt"
+    ]
+  ],
+  "t1_style_api": [
+    [
+      "Dynamic font variant",
+      "API"
+    ],
+    [
+      "Control content",
+      "controlContentFont(ofSize:)"
+    ],
+    [
+      "Label",
+      "labelFont(ofSize:)"
+    ],
+    [
+      "Menu",
+      "menuFont(ofSize:)"
+    ],
+    [
+      "Menu bar",
+      "menuBarFont(ofSize:)"
+    ],
+    [
+      "Message",
+      "messageFont(ofSize:)"
+    ],
+    [
+      "Palette",
+      "paletteFont(ofSize:)"
+    ],
+    [
+      "Title",
+      "titleBarFont(ofSize:)"
+    ],
+    [
+      "Tool tips",
+      "toolTipsFont(ofSize:)"
+    ],
+    [
+      "Document text (user)",
+      "userFont(ofSize:)"
+    ],
+    [
+      "Monospaced document text (user fixed pitch)",
+      "userFixedPitchFont(ofSize:)"
+    ],
+    [
+      "Bold system font",
+      "boldSystemFont(ofSize:)"
+    ],
+    [
+      "System font",
+      "systemFont(ofSize:)"
+    ]
+  ],
+  "t2_iOS_xSmall": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "31",
+      "38",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "25",
+      "31",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "19",
+      "24",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "17",
+      "22",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "14",
+      "19",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "14",
+      "19",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "13",
+      "18",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "12",
+      "16",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "12",
+      "16",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ]
+  ],
+  "t3_iOS_Small": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "32",
+      "39",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "26",
+      "32",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "20",
+      "25",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "18",
+      "23",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "15",
+      "20",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "15",
+      "20",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "14",
+      "19",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "13",
+      "18",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "12",
+      "16",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ]
+  ],
+  "t4_iOS_Medium": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "33",
+      "40",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "27",
+      "33",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "21",
+      "26",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "19",
+      "24",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "16",
+      "21",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "16",
+      "21",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "15",
+      "20",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "14",
+      "19",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "12",
+      "16",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ]
+  ],
+  "t5_iOS_Large_default": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "34",
+      "41",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "28",
+      "34",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "22",
+      "28",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "20",
+      "25",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "17",
+      "22",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "17",
+      "22",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "16",
+      "21",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "15",
+      "20",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "13",
+      "18",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "12",
+      "16",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "11",
+      "13",
+      "Semibold"
+    ]
+  ],
+  "t6_iOS_xLarge": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "36",
+      "43",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "30",
+      "37",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "24",
+      "30",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "22",
+      "28",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "19",
+      "24",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "19",
+      "24",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "18",
+      "23",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "17",
+      "22",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "15",
+      "20",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "14",
+      "19",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "13",
+      "18",
+      "Semibold"
+    ]
+  ],
+  "t7_iOS_xxLarge": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "38",
+      "46",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "32",
+      "39",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "26",
+      "32",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "24",
+      "30",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "21",
+      "26",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "21",
+      "26",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "20",
+      "25",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "19",
+      "24",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "17",
+      "22",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "16",
+      "21",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "15",
+      "20",
+      "Semibold"
+    ]
+  ],
+  "t8_iOS_xxxLarge": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "40",
+      "48",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "34",
+      "41",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "28",
+      "34",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "26",
+      "32",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "23",
+      "29",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "23",
+      "29",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "22",
+      "28",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "21",
+      "28",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "19",
+      "24",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "18",
+      "23",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "17",
+      "22",
+      "Semibold"
+    ]
+  ],
+  "t9_iOS_AX1": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "44",
+      "52",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "38",
+      "46",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "34",
+      "41",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "31",
+      "38",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "28",
+      "34",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "28",
+      "34",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "26",
+      "32",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "25",
+      "31",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "23",
+      "29",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "22",
+      "28",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "20",
+      "25",
+      "Semibold"
+    ]
+  ],
+  "t13_iOS_AX5": [
+    [
+      "Style",
+      "Weight",
+      "Size (points)",
+      "Leading (points)",
+      "Emphasized weight"
+    ],
+    [
+      "Large Title",
+      "Regular",
+      "60",
+      "70",
+      "Bold"
+    ],
+    [
+      "Title 1",
+      "Regular",
+      "58",
+      "68",
+      "Bold"
+    ],
+    [
+      "Title 2",
+      "Regular",
+      "56",
+      "66",
+      "Bold"
+    ],
+    [
+      "Title 3",
+      "Regular",
+      "55",
+      "65",
+      "Semibold"
+    ],
+    [
+      "Headline",
+      "Semibold",
+      "53",
+      "62",
+      "Semibold"
+    ],
+    [
+      "Body",
+      "Regular",
+      "53",
+      "62",
+      "Semibold"
+    ],
+    [
+      "Callout",
+      "Regular",
+      "51",
+      "60",
+      "Semibold"
+    ],
+    [
+      "Subhead",
+      "Regular",
+      "49",
+      "58",
+      "Semibold"
+    ],
+    [
+      "Footnote",
+      "Regular",
+      "44",
+      "52",
+      "Semibold"
+    ],
+    [
+      "Caption 1",
+      "Regular",
+      "43",
+      "51",
+      "Semibold"
+    ],
+    [
+      "Caption 2",
+      "Regular",
+      "40",
+      "48",
+      "Semibold"
+    ]
+  ]
+}

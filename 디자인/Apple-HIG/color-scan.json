@@ -1,0 +1,575 @@
+{
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Best practices",
+      "id": "Best-practices"
+    },
+    {
+      "tag": "H2",
+      "text": "Inclusive color",
+      "id": "Inclusive-color"
+    },
+    {
+      "tag": "H2",
+      "text": "System colors",
+      "id": "System-colors"
+    },
+    {
+      "tag": "H2",
+      "text": "Liquid Glass color",
+      "id": "Liquid-Glass-color"
+    },
+    {
+      "tag": "H2",
+      "text": "Color management",
+      "id": "Color-management"
+    },
+    {
+      "tag": "H2",
+      "text": "Platform considerations",
+      "id": "Platform-considerations"
+    },
+    {
+      "tag": "H3",
+      "text": "iOS, iPadOS",
+      "id": "iOS-iPadOS"
+    },
+    {
+      "tag": "H3",
+      "text": "macOS",
+      "id": "macOS"
+    },
+    {
+      "tag": "H4",
+      "text": "App accent colors",
+      "id": "App-accent-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "tvOS",
+      "id": "tvOS"
+    },
+    {
+      "tag": "H3",
+      "text": "visionOS",
+      "id": "visionOS"
+    },
+    {
+      "tag": "H3",
+      "text": "watchOS",
+      "id": "watchOS"
+    },
+    {
+      "tag": "H2",
+      "text": "Specifications",
+      "id": "Specifications"
+    },
+    {
+      "tag": "H3",
+      "text": "System colors",
+      "id": "System-colors"
+    },
+    {
+      "tag": "H3",
+      "text": "iOS, iPadOS system gray colors",
+      "id": "iOS-iPadOS-system-gray-colors"
+    },
+    {
+      "tag": "H2",
+      "text": "Resources",
+      "id": "Resources"
+    },
+    {
+      "tag": "H4",
+      "text": "Related",
+      "id": "Related"
+    },
+    {
+      "tag": "H4",
+      "text": "Developer documentation",
+      "id": "Developer-documentation"
+    },
+    {
+      "tag": "H4",
+      "text": "Videos",
+      "id": "Videos"
+    },
+    {
+      "tag": "H2",
+      "text": "Change log",
+      "id": "Change-log"
+    }
+  ],
+  "tables": [
+    {
+      "idx": 0,
+      "rows": 9,
+      "firstRow": "Color | Use for… | UIKit API"
+    },
+    {
+      "idx": 1,
+      "rows": 36,
+      "firstRow": "Color | Use for… | AppKit API"
+    },
+    {
+      "idx": 2,
+      "rows": 13,
+      "firstRow": "Name | SwiftUI API | Default (light) | Default (dark) | Increased contrast (light) | Increased contrast (dark)"
+    },
+    {
+      "idx": 3,
+      "rows": 7,
+      "firstRow": "Name | UIKit API | Default (light) | Default (dark) | Increased contrast (light) | Increased contrast (dark)"
+    },
+    {
+      "idx": 4,
+      "rows": 8,
+      "firstRow": "Date | Changes"
+    }
+  ],
+  "tableData": [
+    {
+      "idx": 0,
+      "data": [
+        [
+          "Color",
+          "Use for…",
+          "UIKit API"
+        ],
+        [
+          "Label",
+          "A text label that contains primary content.",
+          "label"
+        ],
+        [
+          "Secondary label",
+          "A text label that contains secondary content.",
+          "secondaryLabel"
+        ],
+        [
+          "Tertiary label",
+          "A text label that contains tertiary content.",
+          "tertiaryLabel"
+        ],
+        [
+          "Quaternary label",
+          "A text label that contains quaternary content.",
+          "quaternaryLabel"
+        ],
+        [
+          "Placeholder text",
+          "Placeholder text in controls or text views.",
+          "placeholderText"
+        ],
+        [
+          "Separator",
+          "A separator that allows some underlying content to be visible.",
+          "separator"
+        ],
+        [
+          "Opaque separator",
+          "A separator that doesn’t allow any underlying content to be visible.",
+          "opaqueSeparator"
+        ],
+        [
+          "Link",
+          "Text that functions as a link.",
+          "link"
+        ]
+      ]
+    },
+    {
+      "idx": 1,
+      "data": [
+        [
+          "Color",
+          "Use for…",
+          "AppKit API"
+        ],
+        [
+          "Alternate selected control text color",
+          "The text on a selected surface in a list or table.",
+          "alternateSelectedControlTextColor"
+        ],
+        [
+          "Alternating content background colors",
+          "The backgrounds of alternating rows or columns in a list, table, or collection view.",
+          "alternatingContentBackgroundColors"
+        ],
+        [
+          "Control accent",
+          "The accent color people select in System Settings.",
+          "controlAccentColor"
+        ],
+        [
+          "Control background color",
+          "The background of a large interface element, such as a browser or table.",
+          "controlBackgroundColor"
+        ],
+        [
+          "Control color",
+          "The surface of a control.",
+          "controlColor"
+        ],
+        [
+          "Control text color",
+          "The text of a control that is available.",
+          "controlTextColor"
+        ],
+        [
+          "Current control tint",
+          "The system-defined control tint.",
+          "currentControlTint"
+        ],
+        [
+          "Unavailable control text color",
+          "The text of a control that’s unavailable.",
+          "disabledControlTextColor"
+        ],
+        [
+          "Find highlight color",
+          "The color of a find indicator.",
+          "findHighlightColor"
+        ],
+        [
+          "Grid color",
+          "The gridlines of an interface element, such as a table.",
+          "gridColor"
+        ],
+        [
+          "Header text color",
+          "The text of a header cell in a table.",
+          "headerTextColor"
+        ],
+        [
+          "Highlight color",
+          "The virtual light source onscreen.",
+          "highlightColor"
+        ],
+        [
+          "Keyboard focus indicator color",
+          "The ring that appears around the currently focused control when using the keyboard for interface navigation.",
+          "keyboardFocusIndicatorColor"
+        ],
+        [
+          "Label color",
+          "The text of a label containing primary content.",
+          "labelColor"
+        ],
+        [
+          "Link color",
+          "A link to other content.",
+          "linkColor"
+        ],
+        [
+          "Placeholder text color",
+          "A placeholder string in a control or text view.",
+          "placeholderTextColor"
+        ],
+        [
+          "Quaternary label color",
+          "The text of a label of lesser importance than a tertiary label, such as watermark text.",
+          "quaternaryLabelColor"
+        ],
+        [
+          "Secondary label color",
+          "The text of a label of lesser importance than a primary label, such as a label used to represent a subheading or additional information.",
+          "secondaryLabelColor"
+        ],
+        [
+          "Selected content background color",
+          "The background for selected content in a key window or view.",
+          "selectedContentBackgroundColor"
+        ],
+        [
+          "Selected control color",
+          "The surface of a selected control.",
+          "selectedControlColor"
+        ],
+        [
+          "Selected control text color",
+          "The text of a selected control.",
+          "selectedControlTextColor"
+        ],
+        [
+          "Selected menu item text color",
+          "The text of a selected menu.",
+          "selectedMenuItemTextColor"
+        ],
+        [
+          "Selected text background color",
+          "The background of selected text.",
+          "selectedTextBackgroundColor"
+        ],
+        [
+          "Selected text color",
+          "The color for selected text.",
+          "selectedTextColor"
+        ],
+        [
+          "Separator color",
+          "A separator between different sections of content.",
+          "separatorColor"
+        ],
+        [
+          "Shadow color",
+          "The virtual shadow cast by a raised object onscreen.",
+          "shadowColor"
+        ],
+        [
+          "Tertiary label color",
+          "The text of a label of lesser importance than a secondary label.",
+          "tertiaryLabelColor"
+        ],
+        [
+          "Text background color",
+          "The background color behind text.",
+          "textBackgroundColor"
+        ],
+        [
+          "Text color",
+          "The text in a document.",
+          "textColor"
+        ],
+        [
+          "Under page background color",
+          "The background behind a document’s content.",
+          "underPageBackgroundColor"
+        ],
+        [
+          "Unemphasized selected content background color",
+          "The selected content in a non-key window or view.",
+          "unemphasizedSelectedContentBackgroundColor"
+        ],
+        [
+          "Unemphasized selected text background color",
+          "A background for selected text in a non-key window or view.",
+          "unemphasizedSelectedTextBackgroundColor"
+        ],
+        [
+          "Unemphasized selected text color",
+          "Selected text in a non-key window or view.",
+          "unemphasizedSelectedTextColor"
+        ],
+        [
+          "Window background color",
+          "The background of a window.",
+          "windowBackgroundColor"
+        ],
+        [
+          "Window frame text color",
+          "The text in the window’s title bar area.",
+          "windowFrameTextColor"
+        ]
+      ]
+    },
+    {
+      "idx": 2,
+      "data": [
+        [
+          "Name",
+          "SwiftUI API",
+          "Default (light)",
+          "Default (dark)",
+          "Increased contrast (light)",
+          "Increased contrast (dark)"
+        ],
+        [
+          "Red",
+          "red",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Orange",
+          "orange",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Yellow",
+          "yellow",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Green",
+          "green",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Mint",
+          "mint",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Teal",
+          "teal",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Cyan",
+          "cyan",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Blue",
+          "blue",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Indigo",
+          "indigo",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Purple",
+          "purple",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Pink",
+          "pink",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Brown",
+          "brown",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "idx": 3,
+      "data": [
+        [
+          "Name",
+          "UIKit API",
+          "Default (light)",
+          "Default (dark)",
+          "Increased contrast (light)",
+          "Increased contrast (dark)"
+        ],
+        [
+          "Gray",
+          "systemGray",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Gray (2)",
+          "systemGray2",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Gray (3)",
+          "systemGray3",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Gray (4)",
+          "systemGray4",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Gray (5)",
+          "systemGray5",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Gray (6)",
+          "systemGray6",
+          "",
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "idx": 4,
+      "data": [
+        [
+          "Date",
+          "Changes"
+        ],
+        [
+          "December 16, 2025",
+          "Updated guidance for Liquid Glass."
+        ],
+        [
+          "June 9, 2025",
+          "Updated system color values, and added guidance for Liquid Glass."
+        ],
+        [
+          "February 2, 2024",
+          "Distinguished UIKit and SwiftUI gray colors in iOS and iPadOS, and added guidance for balancing brightness levels in visionOS apps."
+        ],
+        [
+          "September 12, 2023",
+          "Enhanced guidance for using background color in watchOS views, and added color swatches for tvOS."
+        ],
+        [
+          "June 21, 2023",
+          "Updated to include guidance for visionOS."
+        ],
+        [
+          "June 5, 2023",
+          "Updated guidance for using background color in watchOS."
+        ],
+        [
+          "December 19, 2022",
+          "Corrected RGB values for system mint color (Dark Mode) in iOS and iPadOS."
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "t0_platform_text": [
+    [
+      "Platform",
+      "Default size",
+      "Minimum size"
+    ],
+    [
+      "iOS, iPadOS",
+      "17 pt",
+      "11 pt"
+    ],
+    [
+      "macOS",
+      "13 pt",
+      "10 pt"
+    ],
+    [
+      "tvOS",
+      "29 pt",
+      "23 pt"
+    ],
+    [
+      "visionOS",
+      "17 pt",
+      "12 pt"
+    ],
+    [
+      "watchOS",
+      "16 pt",
+      "12 pt"
+    ]
+  ],
+  "t1_wcag_contrast": [
+    [
+      "Text size",
+      "Text weight",
+      "Minimum contrast ratio"
+    ],
+    [
+      "Up to 17 pts",
+      "All",
+      "4.5:1"
+    ],
+    [
+      "18 pts",
+      "All",
+      "3:1"
+    ],
+    [
+      "All",
+      "Bold",
+      "3:1"
+    ]
+  ],
+  "t2_control_sizes": [
+    [
+      "Platform",
+      "Default control size",
+      "Minimum control size"
+    ],
+    [
+      "iOS, iPadOS",
+      "44x44 pt",
+      "28x28 pt"
+    ],
+    [
+      "macOS",
+      "28x28 pt",
+      "20x20 pt"
+    ],
+    [
+      "tvOS",
+      "66x66 pt",
+      "56x56 pt"
+    ],
+    [
+      "visionOS",
+      "60x60 pt",
+      "28x28 pt"
+    ],
+    [
+      "watchOS",
+      "44x44 pt",
+      "28x28 pt"
+    ]
+  ]
+}

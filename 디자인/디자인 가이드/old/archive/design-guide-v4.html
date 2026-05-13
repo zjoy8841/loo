@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>디자인 가이드 v4 — 라이언 Holographic Voice (JARVIS)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root {
+    --bg-base: #050810;
+    --bg-surface: #0A1929;
+    --bg-elevated: #15263D;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #6B7280;
+    --border-subtle: rgba(79,209,197,0.1);
+    --border-strong: rgba(79,209,197,0.25);
+    --teal: #4FD1C5;
+    --cyan: #00D4FF;
+    --lion: #E87A3E;
+    --lion-glow: #F4B860;
+    color-scheme: dark;
+  }
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Pretendard Variable', system-ui, sans-serif;
+    font-size: 15px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.005em;
+  }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 72px 0; border-bottom: 1px solid var(--border-subtle); }
+  .section:last-child { border-bottom: 0; }
+  h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 12px; }
+  h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 12px; display: flex; align-items: baseline; gap: 16px; }
+  h2 .num { color: var(--text-tertiary); font-weight: 600; font-size: 14px; }
+  h3 { font-size: 18px; font-weight: 600; margin: 24px 0 10px; }
+  p { margin: 0 0 14px; color: var(--text-secondary); max-width: 64ch; }
+  code { background: var(--bg-elevated); color: var(--teal); padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+  a { color: var(--teal); }
+
+  header.hero {
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse at center, var(--bg-surface) 0%, var(--bg-base) 80%);
+    padding: 96px 0 80px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  header.hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(rgba(79,209,197,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79,209,197,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; border-radius: 999px; background: rgba(0,212,255,0.12); color: var(--cyan); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px; border: 1px solid rgba(0,212,255,0.3); }
+  .hero-eyebrow::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; position: relative; z-index: 1; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--bg-surface); color: var(--text-secondary); font-size: 12px; font-weight: 600; border: 1px solid var(--border-subtle); }
+
+  .demo-cta {
+    background: var(--lion); color: #050810 !important; font-weight: 800;
+    border-color: var(--lion) !important;
+    text-decoration: none;
+  }
+
+  .states { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+  .state-card {
+    background: var(--bg-surface); border: 1px solid var(--border-subtle);
+    border-radius: 16px; padding: 20px; position: relative; overflow: hidden;
+  }
+  .state-card h4 { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+  .state-card .icon { font-size: 28px; margin-bottom: 10px; }
+  .state-card p { font-size: 12px; color: var(--text-tertiary); margin: 0; line-height: 1.5; }
+  .state-card .step { font-size: 10px; font-family: ui-monospace, Menlo, monospace; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 6px; }
+
+  .layer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  @media (max-width: 768px) { .layer-grid { grid-template-columns: 1fr; } }
+  .layer-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px; }
+  .layer-card h4 { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: var(--teal); }
+  .layer-card p { font-size: 12px; margin: 0 0 8px; color: var(--text-secondary); }
+  .layer-card .tech { font-size: 11px; color: var(--text-tertiary); font-family: ui-monospace, Menlo, monospace; padding: 8px; background: var(--bg-elevated); border-radius: 6px; }
+
+  /* Color swatches */
+  .palette { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 12px; }
+  .swatch { border-radius: 14px; padding: 14px; background: var(--bg-surface); border: 1px solid var(--border-subtle); }
+  .swatch .chip { width: 100%; height: 64px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 0 24px var(--glow, transparent); }
+  .swatch .tk { font-size: 12px; font-weight: 700; font-family: ui-monospace, Menlo, monospace; }
+  .swatch .hex { font-size: 11px; font-family: ui-monospace, Menlo, monospace; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* Mini preview */
+  .preview-frame {
+    background: var(--bg-base); border: 1px solid var(--border-subtle);
+    border-radius: 20px; padding: 0; overflow: hidden;
+    aspect-ratio: 16 / 10; position: relative;
+    margin-top: 16px;
+  }
+  .preview-frame iframe { width: 100%; height: 100%; border: 0; }
+
+  pre { background: #000; color: white; padding: 20px; border-radius: 12px; overflow-x: auto; font-size: 12px; line-height: 1.6; font-family: ui-monospace, Menlo, monospace; border: 1px solid var(--border-subtle); }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  th, td { padding: 12px 14px; text-align: left; font-size: 13px; border-bottom: 1px solid var(--border-subtle); }
+  th { background: var(--bg-surface); font-weight: 700; }
+  td { color: var(--text-secondary); }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 10px 0; padding-left: 32px; position: relative; color: var(--text-secondary); }
+  .checklist li::before { content: ''; position: absolute; left: 0; top: 14px; width: 16px; height: 16px; border: 2px solid var(--border-strong); border-radius: 4px; }
+
+  footer { padding: 48px 0 64px; text-align: center; color: var(--text-tertiary); font-size: 13px; }
+  footer a { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Design Guide · v4 · Holographic Voice</div>
+    <h1>음성·AI 인터랙션<br>JARVIS 영감 표현 모드</h1>
+    <p style="color: var(--text-secondary); font-size: 17px; max-width: 60ch;">사용자가 "라이언아"를 부르거나 음성 FAB을 탭하는 순간 화면은 <strong style="color: white;">홀로그래픽 인터페이스</strong>로 전환. 회전하는 링·동심원 펄스·떠다니는 노드·waveform이 AI가 살아 움직임을 표현. 메인은 v2, 시점은 v3, <strong style="color: var(--cyan);">음성 모드는 v4</strong>.</p>
+    <div class="badges">
+      <span class="badge">담당 · A (오다환)</span>
+      <span class="badge">v4 · 2026-05-11</span>
+      <span class="badge" style="color: var(--cyan);">Holographic</span>
+      <a href="voice-jarvis-demo.html" class="badge demo-cta">▶️ 자비스 데모 열기</a>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">01</span>실제 데모 — 5가지 상태 전환</h2>
+    <p>하단 5개 버튼 또는 키보드 1~5로 상태 전환. 음성 입력의 전체 생애주기를 한 화면에서 본다.</p>
+    <div class="preview-frame">
+      <iframe src="voice-jarvis-demo.html" loading="lazy" title="JARVIS Voice Demo"></iframe>
+    </div>
+    <p style="margin-top: 16px; font-size: 13px; color: var(--text-tertiary);">위 iframe이 잘 안 보이면 <a href="voice-jarvis-demo.html" style="font-weight: 700;">▶️ 새 탭에서 열기</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">02</span>5가지 상태</h2>
+    <p>음성 입력의 전체 생애주기. 각 상태마다 시각·텍스트가 모두 변화.</p>
+    <div class="states">
+      <div class="state-card">
+        <div class="step">STATE 1</div>
+        <div class="icon">🌙</div>
+        <h4>Idle (대기)</h4>
+        <p>코어 호흡만, 펄스·waveform 정지. 호출 대기 안내.</p>
+      </div>
+      <div class="state-card">
+        <div class="step">STATE 2</div>
+        <div class="icon">📡</div>
+        <h4>Calling (호출 감지)</h4>
+        <p>"라이언아" 감지. 동심원 펄스 시작, 링 가속.</p>
+      </div>
+      <div class="state-card">
+        <div class="step">STATE 3</div>
+        <div class="icon">🎙</div>
+        <h4>Listening (입력)</h4>
+        <p>STT 활성. waveform 막대 활기, 코어 청록으로 변환.</p>
+      </div>
+      <div class="state-card">
+        <div class="step">STATE 4</div>
+        <div class="icon">⚙</div>
+        <h4>Thinking (분석)</h4>
+        <p>코어 conic 그라데이션 회전. 측면 데이터 흐름 빨라짐.</p>
+      </div>
+      <div class="state-card">
+        <div class="step">STATE 5</div>
+        <div class="icon">✨</div>
+        <h4>Responding (응답)</h4>
+        <p>코어 호박빛 글로우 강화. 결과 카드 페이드인.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">03</span>시각 레이어 — 8개 층</h2>
+    <p>홀로그래픽 효과는 단일 SVG가 아닌 <strong style="color: white;">여러 CSS 레이어 합성</strong>으로 만든다. 각 레이어는 단순하지만 합쳐지면 자비스 느낌.</p>
+    <div class="layer-grid">
+      <div class="layer-card">
+        <h4>L1 · 배경 HUD 그리드</h4>
+        <p>60×60 px 청록 라인. radial mask로 가장자리 fade.</p>
+        <div class="tech">linear-gradient + background-size + mask-image</div>
+      </div>
+      <div class="layer-card">
+        <h4>L2 · 떠다니는 노드 40개</h4>
+        <p>constellation. 청록 dots, glow shadow, float + twinkle 애니메이션.</p>
+        <div class="tech">JS 동적 생성 · keyframes float, twinkle</div>
+      </div>
+      <div class="layer-card">
+        <h4>L3 · 외곽 회전 링 3개</h4>
+        <p>속도·방향·색 다른 3개 (8s/12s 역방향/6s). 부분 호 (border 일부만).</p>
+        <div class="tech">border-color 부분 + animation: spin</div>
+      </div>
+      <div class="layer-card">
+        <h4>L4 · 60개 tick 눈금</h4>
+        <p>시계 눈금 같은 디테일. 5의 배수는 더 길게.</p>
+        <div class="tech">JS 60개 생성, transform-origin rotate</div>
+      </div>
+      <div class="layer-card">
+        <h4>L5 · orbit 점 6개</h4>
+        <p>중간 ring 안 6개 점이 회전.</p>
+        <div class="tech">cos/sin 계산 + animation: spin 16s</div>
+      </div>
+      <div class="layer-card">
+        <h4>L6 · 동심원 펄스 3겹</h4>
+        <p>코어에서 바깥으로 확장. 0.6s 간격으로 계속.</p>
+        <div class="tech">keyframes pulse-out: scale 1→3 + opacity 1→0</div>
+      </div>
+      <div class="layer-card">
+        <h4>L7 · 중앙 코어 (라이언 마크)</h4>
+        <p>호박빛 글로우 + 호흡 (scale 1↔1.04). 상태별 색·애니메이션 변경.</p>
+        <div class="tech">radial-gradient + box-shadow glow + core-breathe</div>
+      </div>
+      <div class="layer-card">
+        <h4>L8 · waveform 32개 막대</h4>
+        <p>음성 입력 시 활기. 막대마다 random duration·delay.</p>
+        <div class="tech">JS bars + keyframes wave-bounce</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">04</span>컬러 시스템 — 라이언 + 청록 듀얼</h2>
+    <p>자비스의 차가운 청록(#00D4FF)에 라이언의 따뜻한 호박빛(#E87A3E)을 결합. 차가움 + 따뜻함의 긴장.</p>
+    <div class="palette">
+      <div class="swatch" style="--glow: rgba(0,212,255,0.4);"><div class="chip" style="background: #00D4FF;"></div><div class="tk">cyan</div><div class="hex">#00D4FF</div></div>
+      <div class="swatch" style="--glow: rgba(79,209,197,0.4);"><div class="chip" style="background: #4FD1C5;"></div><div class="tk">teal</div><div class="hex">#4FD1C5</div></div>
+      <div class="swatch" style="--glow: rgba(232,122,62,0.4);"><div class="chip" style="background: #E87A3E;"></div><div class="tk">lion</div><div class="hex">#E87A3E</div></div>
+      <div class="swatch" style="--glow: rgba(244,184,96,0.4);"><div class="chip" style="background: #F4B860;"></div><div class="tk">lion-glow</div><div class="hex">#F4B860</div></div>
+      <div class="swatch"><div class="chip" style="background: #0A1929; border: 1px solid var(--border-subtle);"></div><div class="tk">bg-surface</div><div class="hex">#0A1929</div></div>
+      <div class="swatch"><div class="chip" style="background: #050810; border: 1px solid var(--border-subtle);"></div><div class="tk">bg-base</div><div class="hex">#050810</div></div>
+    </div>
+
+    <h3>상태별 코어 컬러</h3>
+    <table>
+      <thead><tr><th>상태</th><th>코어 컬러</th><th>글로우</th></tr></thead>
+      <tbody>
+        <tr><td>Idle</td><td>lion (호박빛)</td><td>호박빛 부드럽게</td></tr>
+        <tr><td>Calling</td><td>lion + cyan 펄스</td><td>청록 확장</td></tr>
+        <tr><td>Listening</td><td>cyan/teal로 전환</td><td>강한 청록</td></tr>
+        <tr><td>Thinking</td><td>conic 회전 (lion → cyan → teal)</td><td>다색 회전</td></tr>
+        <tr><td>Responding</td><td>lion-glow (강화)</td><td>호박빛 강하게</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">05</span>측면 데이터 패널 (HUD 텍스트)</h2>
+    <p>자비스의 트레이드마크. 화면 좌우에 모노스페이스 작은 텍스트로 상태·메타 정보. 장식이지만 SF 무드 강화.</p>
+    <div class="layer-grid">
+      <div class="layer-card">
+        <h4>왼쪽 (시스템)</h4>
+        <p style="font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--teal); line-height: 1.8;">
+          • STT engine · web-speech<br>
+          • locale · ko-KR<br>
+          • noise · -42 dB<br>
+          • latency · 24ms<br>
+          • connection · stable
+        </p>
+      </div>
+      <div class="layer-card">
+        <h4>오른쪽 (컨텍스트)</h4>
+        <p style="font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--teal); line-height: 1.8; text-align: right;">
+          persona · loaded<br>
+          tags · 8 active<br>
+          moment · lunch<br>
+          weather · 14° rain<br>
+          llm · claude-sonnet-4.6
+        </p>
+      </div>
+    </div>
+    <p style="margin-top: 16px; font-size: 13px;"><strong style="color: var(--lion-glow);">규칙</strong>: 정보 진짜로 받아오면 표시, 더미는 X. 모바일에서는 숨김 (공간 부족).</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">06</span>타이핑 효과 — transcript</h2>
+    <p>사용자가 말하는 동안 화면 하단에 실시간 STT 결과가 타이핑되듯 한 글자씩 표시. 커서 깜빡임.</p>
+<pre><span style="color: var(--text-tertiary);">/* 핵심 JS */</span>
+function typeText(el, text, speed = 50) {
+  el.textContent = '';
+  let i = 0;
+  const timer = setInterval(() =&gt; {
+    if (i &lt; text.length) el.textContent += text[i++];
+    else clearInterval(timer);
+  }, speed);
+}
+
+<span style="color: var(--text-tertiary);">/* CSS 커서 */</span>
+.transcript::after {
+  content: '|';
+  animation: cursor 1s steps(1) infinite;
+  color: var(--teal);
+}
+@keyframes cursor { 50% { opacity: 0; } }</pre>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">07</span>인터랙션 — 호출에서 응답까지</h2>
+    <table>
+      <thead><tr><th>트리거</th><th>전환 상태</th><th>지속</th></tr></thead>
+      <tbody>
+        <tr><td>FAB 탭 또는 "라이언아" 음성 호출</td><td>Idle → Calling</td><td>0.5s</td></tr>
+        <tr><td>0.5s 후 자동</td><td>Calling → Listening</td><td>최대 5s (말 끝나면 즉시)</td></tr>
+        <tr><td>음성 끝 감지 (silence 1.5s) 또는 명시적 정지</td><td>Listening → Thinking</td><td>LLM 응답까지 1-3s</td></tr>
+        <tr><td>LLM 응답 수신</td><td>Thinking → Responding</td><td>응답 카드 표시 + TTS 재생</td></tr>
+        <tr><td>TTS 끝 또는 5s</td><td>Responding → Idle</td><td>—</td></tr>
+        <tr><td>화면 어디 탭 또는 ESC</td><td>모든 상태 → Idle (취소)</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">08</span>성능 가이드</h2>
+    <ul>
+      <li>레이어 8개지만 모두 CSS·SVG → <strong style="color: white;">총 50KB 미만</strong>, 60fps 안정</li>
+      <li>nodes·waveform 모두 <code>will-change: transform</code> 또는 <code>will-change: height</code> 명시</li>
+      <li>화면 비활성 시 (탭 백그라운드) <code>document.hidden</code>으로 애니메이션 일시정지</li>
+      <li>모바일에서 측면 데이터 패널 자동 숨김</li>
+      <li><code>prefers-reduced-motion</code> 시 모든 애니메이션 0.01ms로</li>
+      <li>backdrop-blur는 컨트롤 바 한 곳만 (모바일 부담)</li>
+      <li>음성 인식 실패 시 graceful fallback — 화면 끄지 말고 "다시 한 번..." 안내</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">09</span>접근성</h2>
+    <table>
+      <thead><tr><th>항목</th><th>대응</th></tr></thead>
+      <tbody>
+        <tr><td>회전·펄스 멀미 유발</td><td>prefers-reduced-motion 시 모두 정지</td></tr>
+        <tr><td>음성 인식 불가 사용자</td><td>텍스트 입력 fallback 항상 노출</td></tr>
+        <tr><td>스크린 리더</td><td>상태 변화마다 aria-live="polite" 알림</td></tr>
+        <tr><td>대비</td><td>흰 텍스트 on bg-base ≈ 19+ ✓</td></tr>
+        <tr><td>키보드</td><td>FAB → Enter/Space, ESC → 취소</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">10</span>v2 · v3 · v4 — 세 모드 공존</h2>
+    <table>
+      <thead><tr><th>화면 종류</th><th>모드</th><th>특징</th></tr></thead>
+      <tbody>
+        <tr><td>Splash · 회원가입 · 메인 · 가맹점</td><td><a href="design-guide.html"><strong>v2 Dark Lion</strong></a></td><td>다크 dashboard, 4분할 메트릭, 카드 그리드</td></tr>
+        <tr><td>아침 · 점심 · 저녁 · 취침 시점</td><td><a href="design-guide-v3.html"><strong>v3 Full-bleed Immersive</strong></a></td><td>풀스크린 실사 배경, 헤로 타이포, 살아있는 분위기</td></tr>
+        <tr><td><strong style="color: var(--cyan);">음성 호출 · AI 대화</strong></td><td><strong style="color: var(--cyan);">v4 Holographic (이 가이드)</strong></td><td>JARVIS 영감, 회전 링·펄스·waveform, 5단계 상태</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 16px;"><strong style="color: var(--lion-glow);">전환 흐름</strong>: 메인(v2) → 시점 카드 탭 → 시점 풀스크린(v3) → FAB 탭 또는 음성 호출 → 자비스 음성 모드(v4) → 응답 후 시점(v3)로 자연 복귀.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2><span class="num">11</span>체크리스트</h2>
+    <ul class="checklist">
+      <li>FAB 또는 wake word로 진입 가능?</li>
+      <li>5단계 상태 (Idle→Calling→Listening→Thinking→Responding) 모두 시각 변화?</li>
+      <li>중앙 코어가 라이언 마크 + 호박빛 글로우?</li>
+      <li>외곽 링·orbit·tick·nodes·펄스·waveform 8개 레이어 동작?</li>
+      <li>상태별 코어 컬러 (호박↔청록↔conic) 전환?</li>
+      <li>transcript 타이핑 효과 + 커서 깜빡임?</li>
+      <li>측면 HUD 패널 (모바일 숨김)?</li>
+      <li>ESC 또는 화면 탭으로 취소 가능?</li>
+      <li>음성 인식 실패 시 텍스트 입력 fallback?</li>
+      <li>prefers-reduced-motion 대응?</li>
+      <li>스크린 리더 aria-live 알림?</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>디자인 가이드 v4 · 2026-05-11 · 담당 A (오다환)</p>
+    <p>영감: Iron Man JARVIS · Apple Siri · Google Assistant · Halo Cortana</p>
+    <p>v2: <a href="design-guide.html">Dark Lion</a> · v3: <a href="design-guide-v3.html">Full-bleed Immersive</a> · v4: 여기 (Holographic Voice)</p>
+    <p>실제 데모: <a href="voice-jarvis-demo.html" style="font-weight: 700;">▶️ voice-jarvis-demo.html</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
