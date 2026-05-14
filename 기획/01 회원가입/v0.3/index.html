@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 v0.3 — Base + 인터랙션 Fragments</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Pretendard,system-ui,sans-serif}</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+<div class="max-w-5xl mx-auto p-8">
+  <a href="../v0.2/index.html" class="text-sm text-gray-500">← v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mb-1 mt-2">회원가입 v0.3 — Base + 인터랙션 Fragments</h1>
+  <p class="text-gray-600 text-sm mb-8">Figma 회원가입1 프레임(2-463)을 따른 구조: <strong>Base 화면 1개 + 컴포넌트 단위 fragment N개</strong>. 디자이너가 Base 위에 fragment 슬라이스를 교체/오버레이.</p>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.2 대비 변경 사항</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>구조 전환</strong>: 풀 phone 6번 반복(상태 시리즈) → <strong>Base 1개 + fragment N개</strong>. Figma 디자이너 작업 방식과 정합 (Base 캐노니컬 + 슬라이스 교체).</li>
+      <li><strong>오른쪽 320 캡션 컬럼 제거</strong> — 텍스트 라벨이 wireframe 안에 시각화로 흡수됨.</li>
+      <li><strong>이모지 → 라인 아이콘</strong> — Lucide 스타일 SVG symbol defs. stroke 1.8 / round caps.</li>
+      <li><strong>시멘틱 색 4종</strong> — 에러(빨강) · 경고(노랑) · 성공(초록) · 정보(파랑) + 그레이스케일. 실제 hex는 디자인 가이드 토큰에서 확정.</li>
+      <li><strong>통상 UI 추가</strong> — U-02-1에 이메일 중복 inline / 비번 show/hide / 비번 규칙 체크리스트 live / Caps Lock 경고 / "로그인" 링크 등. 각 화면별로 누락된 표준 패턴 보강.</li>
+    </ul>
+  </section>
+
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">소스 of Truth · SSoT 우선순위</h2>
+    <ol class="text-sm space-y-2 text-gray-800 leading-relaxed list-decimal pl-5">
+      <li><strong>Figma</strong> 화면설계서 = 캐노니컬 (fileKey <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">7gay0y94AxMz4Q82dMSdI7</code>) — 회원가입1 노드 <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">2-463</code>가 본 v0.3 구조의 원본 모델</li>
+      <li><strong>노션 description</strong> = 정책 본체 (API · DB · zod · ICU · 접근성) — <a href="https://www.notion.so/35fc2986e14081cc9890efbd525ab46d" class="underline">화면 Description 부모</a></li>
+      <li><strong>git v0.3 HTML</strong> = Figma 입력 보존 + 인터랙션 시각화 (본 폴더)</li>
+    </ol>
+    <p class="text-xs text-gray-500 mt-3">셋이 어긋날 시 Figma 캐노니컬. 노션·git이 보정.</p>
+  </section>
+
+  <h2 class="font-bold text-lg mb-4">7 화면 · Base + Fragments</h2>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <a href="02-signup-account.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-1 · 1/7</div>
+      <div class="font-semibold text-sm">계정</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 8 fragments · 이메일/비번 상태 다중</div>
+    </a>
+    <a href="03-signup-health.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-2 · 2/7</div>
+      <div class="font-semibold text-sm">건강</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 6 fragments · multi · healthy mutex</div>
+    </a>
+    <a href="04-signup-shape.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-3 · 3/7</div>
+      <div class="font-semibold text-sm">체형</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 4 fragments · single · radiogroup</div>
+    </a>
+    <a href="05-signup-diet.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-4 · 4/7</div>
+      <div class="font-semibold text-sm">식이/알레르기</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 6 fragments · 2 섹션 · AlertDialog</div>
+    </a>
+    <a href="06-signup-lifestyle.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-5 · 5/7</div>
+      <div class="font-semibold text-sm">라이프스타일</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 4 fragments · night_owl+early_bird</div>
+    </a>
+    <a href="07-signup-job.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-6 · 6/7</div>
+      <div class="font-semibold text-sm">직업</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 5 fragments · single · 서브텍스트</div>
+    </a>
+    <a href="08-signup-interests.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-7 · 7/7</div>
+      <div class="font-semibold text-sm">관심사 · 가입</div>
+      <div class="text-xs text-gray-500 mt-1">Base + 7 fragments · API 시퀀스 + 에러</div>
+    </a>
+  </div>
+
+  <section class="mt-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">Fragment 총량</h2>
+    <div class="text-sm text-gray-700 grid grid-cols-2 md:grid-cols-4 gap-2 leading-relaxed">
+      <div>U-02-1 계정 — <strong>8</strong></div>
+      <div>U-02-2 건강 — <strong>6</strong></div>
+      <div>U-02-3 체형 — <strong>4</strong></div>
+      <div>U-02-4 식이 — <strong>6</strong></div>
+      <div>U-02-5 라이프 — <strong>4</strong></div>
+      <div>U-02-6 직업 — <strong>5</strong></div>
+      <div>U-02-7 관심사 — <strong>7</strong></div>
+      <div class="font-bold">합계 — 40 fragments</div>
+    </div>
+  </section>
+
+  <section class="mt-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">시각 시그널 규칙</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>색</strong> — 시멘틱 4종만 (에러 빨강 / 경고 노랑 / 성공 초록 / 정보 파랑) + 그레이스케일. 실제 hex/토큰은 디자인 가이드 책임.</li>
+      <li><strong>아이콘</strong> — Lucide 스타일 line icon (SVG symbol defs · stroke 1.8 · round caps). 이모지 금지.</li>
+      <li><strong>Base 라벨</strong> — 회색 BASE 배지로 표시. fragment 라벨은 시멘틱 색.</li>
+      <li><strong>Fragment 폭</strong> — 360px 고정. 높이는 컨텐츠 hug.</li>
+      <li><strong>Fragment 테두리</strong> — 점선(dashed) 1px gray-300으로 슬라이스임을 시각 구분.</li>
+    </ul>
+  </section>
+
+  <p class="text-xs text-gray-500 mt-8 leading-relaxed">
+    ※ 본 wireframe은 인터랙션·동작 매핑 목적. 색·폰트·픽셀·radius·motion·WCAG는 디자인 가이드(v.7 / v.8 / v.9) 참조.<br>
+    ※ Splash(U-01) · 약관 본문 · SNS 가입 · 로그인 화면은 본 v0.3 범위 외 (별도 description 필요).
+  </p>
+</div>
+</body>
+</html>
