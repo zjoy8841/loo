@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .mist-overlay {
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "tertiary-container": "#007da8",
+                      "surface-container-high": "#efe7e0",
+                      "surface-dim": "#e0d9d2",
+                      "primary-fixed": "#ffdbce",
+                      "surface-container-low": "#faf2ec",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#004c68",
+                      "outline": "#8b7268",
+                      "surface-container": "#f4ece6",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#ffb59a",
+                      "primary": "#a13a06",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#e9e1db",
+                      "on-tertiary-fixed": "#001e2c",
+                      "outline-variant": "#dfc0b5",
+                      "tertiary": "#006386",
+                      "secondary-container": "#e4e2e1",
+                      "inverse-surface": "#33302c",
+                      "surface-tint": "#a53c09",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#fbfcff",
+                      "on-background": "#1e1b17",
+                      "on-primary-container": "#fffbff",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#fff8f3",
+                      "on-surface": "#1e1b17",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed": "#c3e8ff",
+                      "surface": "#fff8f3",
+                      "tertiary-fixed-dim": "#79d1ff",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed-variant": "#474746",
+                      "on-secondary-container": "#656464",
+                      "on-primary-fixed-variant": "#802a00",
+                      "secondary-fixed": "#e4e2e1",
+                      "inverse-primary": "#ffb59a",
+                      "background": "#fff8f3",
+                      "on-surface-variant": "#57423a",
+                      "surface-container-highest": "#e9e1db",
+                      "on-primary-fixed": "#370e00",
+                      "secondary": "#5f5e5e",
+                      "inverse-on-surface": "#f7efe9",
+                      "primary-container": "#c25220"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "group-gap": "4rem",
+                      "safe-area-top": "env(safe-area-inset-top)",
+                      "margin-page": "2rem",
+                      "element-gap": "1rem"
+              },
+              "fontFamily": {
+                      "label-refined": ["Plus Jakarta Sans"],
+                      "display-editorial": ["Plus Jakarta Sans"],
+                      "display-editorial-mobile": ["Plus Jakarta Sans"],
+                      "body-reading": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "label-refined": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "display-editorial": ["42px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "display-editorial-mobile": ["34px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-reading": ["18px", {"lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-page py-4 bg-surface/80 backdrop-blur-xl">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A clean, professional close-up portrait of a young man with a friendly expression. The photograph uses soft, morning light coming from a window, creating a gentle highlight on one side of his face. The background is a minimalist, softly blurred interior with warm cream tones, maintaining a high-end editorial aesthetic consistent with a premium personal assistant app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYUKuC03L0eKNFmBsG46qE5CfLfMrrNZBM-h3v4LUgTQq5XkxJ9bM2RFQcYIzQ5WeL_z4XRWUc6CiDoAxXbtQGPWDYpOXtC8WwPjPahHCkRUKeEZ99J4ZvlrxUFvDhI57p9fh3SbbC6e-n9GOTvoBLiBUDROJwwr8LTcZn5wu6upfFQRBodmLOftvJ-mRJXhbbQDPu_3sXmvk2OXDXMjUeXA9mLNRmEBs5FW9f-fNkGDzyJ4wKXpIT7e58H8FLWQ1Veaw9Pa0LiONj"/>
+</div>
+<h1 class="font-display-editorial-mobile text-display-editorial-mobile text-primary">좋은 아침입니다</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity p-2 active:scale-95 transition-transform duration-300">
+            settings
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="mt-28 px-margin-page max-w-lg mx-auto">
+<!-- 1. Greeting Section -->
+<section class="mb-group-gap">
+<h2 class="font-display-editorial-mobile text-display-editorial-mobile text-on-surface mb-2">다환님, 좋은 아침이에요</h2>
+<p class="font-label-refined text-label-refined text-on-surface-variant opacity-60">2026년 5월 14일 · 수요일</p>
+</section>
+<!-- 2 & 3. Daily Briefing & Stats -->
+<section class="mb-group-gap relative">
+<div class="flex items-start gap-4 mb-element-gap">
+<div class="flex-shrink-0 mt-1">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/40"></div>
+</div>
+<div class="flex-1">
+<p class="font-body-reading text-body-reading leading-relaxed text-on-surface">
+                        "오늘은 비 80%에 10시 강남 미팅이 있어요. 수면 7시간 12분으로 컨디션은 충분하니, 우산만 챙기면 든든한 하루예요."
+                    </p>
+</div>
+</div>
+<!-- Minimal Stats (Floating, no border) -->
+<div class="flex gap-6 mt-6 ml-14">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg">rainy</span>
+<span class="font-label-refined text-label-refined text-on-surface-variant">80%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">device_thermostat</span>
+<span class="font-label-refined text-label-refined text-on-surface-variant">14°</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant text-lg">bedtime</span>
+<span class="font-label-refined text-label-refined text-on-surface-variant">7h 12m</span>
+</div>
+</div>
+</section>
+<!-- 4. Headlines Section (Editorial Thin Dividers) -->
+<section class="mb-group-gap">
+<h3 class="font-label-refined text-label-refined uppercase tracking-widest text-primary mb-6 opacity-80">ì¤ëì ë¸´ë¦¬í</h3>
+<div class="space-y-6">
+<div class="pb-4 border-b border-outline-variant/20 group cursor-pointer hover:opacity-70 transition-opacity">
+<p class="font-label-refined text-label-refined text-on-surface-variant mb-1">ì¶ì</p>
+<p class="font-body-reading text-body-reading font-semibold">ì½ì¤í¼ 2,890 (-1.2%) · í¸ë¥´ë¬´ì¶ ê¸´ì¥ì ì ê°° 5% ìì¹ — ë§¤ì¼ê²½ì  28ë¶ ì </p>
+</div>
+<div class="pb-4 border-b border-outline-variant/20 group cursor-pointer hover:opacity-70 transition-opacity">
+<p class="font-label-refined text-label-refined text-on-surface-variant mb-1">IT·íí¬</p>
+<p class="font-body-reading text-body-reading font-semibold">Anthropic Claude 5 ì¶ì ìë°, ì¶ë¡ ·ì½ë 30% í¥ì — ëì¹í¸íìì¤ 3ìê° ì </p>
+</div>
+<div class="pb-4 border-b border-outline-variant/20 group cursor-pointer hover:opacity-70 transition-opacity">
+<p class="font-label-refined text-label-refined text-on-surface-variant mb-1">ìê¸±ê²±ë°</p>
+<p class="font-body-reading text-body-reading font-semibold">íë£¨ 30ë¶ ëì ì±ë¦°ì¸, ì¸±ì¥ì¸ 1ë§ ëª ì ì²­ — ëì¼ì¼ë³´ ì´ì </p>
+</div>
+</div>
+</section>
+<!-- 5. Lunch Recommendation (Tonal Layer) -->
+<section class="mb-group-gap">
+<h3 class="font-label-refined text-label-refined uppercase tracking-widest text-primary mb-6 opacity-80">ì¤ëì ì ì¬</h3>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="font-body-reading font-semibold">ë­ê°ì´ì´ ìë¬ë</span>
+<span class="text-on-surface-variant/40">·</span>
+<span class="font-label-refined text-on-surface-variant">Bì¹´í</span>
+<span class="text-on-surface-variant/40">·</span>
+<div class="flex items-center gap-0.5 text-primary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-refined font-bold">4.7</span>
+</div>
+</div>
+<span class="font-label-refined text-on-surface-variant opacity-60">ëë³´ 3ë¶</span>
+</div>
+<p class="font-label-refined text-primary">ë¯¸í ë§ì ë  · ë¸ë°±ì§</p>
+</div>
+</section>
+<!-- 6. Daily Mission (Progress focus) -->
+<section class="mb-group-gap">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-display-editorial-mobile text-[24px] text-on-surface">오늘의 미션</h3>
+<p class="font-label-refined text-label-refined text-primary">66% 완료</p>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full mb-8">
+<div class="w-2/3 h-full bg-primary rounded-full relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full shadow-lg"></div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-body-reading text-body-reading text-on-surface-variant line-through opacity-50">Morning briefing check</span>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-6 h-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-body-reading text-body-reading text-on-surface-variant line-through opacity-50">Drink 8 glasses of water</span>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-6 h-6 border-2 border-outline-variant/30 rounded-full"></div>
+<span class="font-body-reading text-body-reading text-on-surface">Low-salt menu</span>
+<span class="ml-auto w-1.5 h-1.5 rounded-full bg-[#E5D3C8]"></span> <!-- Morning Clay dot -->
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe-area-top h-20 bg-surface/80 backdrop-blur-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-refined text-label-refined text-[10px]">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">wb_twilight</span>
+<span class="font-label-refined text-label-refined text-[10px]">장면</span>
+</a>
+<!-- Ryan Button Emphasized -->
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-transform duration-300 -mt-6" href="#">
+<div class="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg mb-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<span class="font-label-refined text-label-refined text-[10px] text-primary">라이언</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">psychology</span>
+<span class="font-label-refined text-label-refined text-[10px]">코치</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-refined text-label-refined text-[10px]">나</span>
+</a>
+</nav>
+<!-- Ryan Soft Background Presence -->
+<div class="fixed bottom-32 right-8 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[180px] text-primary animate-pulse" style="animation-duration: 4s;">
+            smart_toy
+        </span>
+</div>
+</body></html>

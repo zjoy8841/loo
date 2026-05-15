@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 (Lion) · 메인 화면 탐색</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #f0eee9;
+    font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="variations.jsx"></script>
+
+<script type="text/babel">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "time": "lunch",
+    "showMark": true,
+    "compactSubtitles": false
+  }/*EDITMODE-END*/;
+
+  const TIME_LABEL = {
+    morning: '아침 · 7:23',
+    lunch:   '점심 · 11:48',
+    evening: '저녁 · 21:14',
+  };
+
+  function FrameWrap({ time, children }) {
+    // iOS frame at 380×800. LionScreen provides bg, voice dock, modals.
+    return (
+      <IOSDevice width={380} height={800}>
+        <LionScreen time={time}>
+          {children}
+        </LionScreen>
+      </IOSDevice>
+    );
+  }
+
+  function App() {
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+    const time = t.time;
+
+    const variants = [
+      { id: 'stack',    label: 'A · Soft Stack',     C: V1_SoftStack,
+        note: '가장 익숙한 카드 패턴. 영입·전환에 안전한 베이스라인.' },
+      { id: 'convo',    label: 'B · Conversation',   C: V2_Conversation,
+        note: '시간의 흐름이 보임. 라이언이 \"옆에서 한 일\"이 누적되는 느낌.' },
+      { id: 'orbit',    label: 'C · Orbit Focus',    C: V3_Orbit,
+        note: '지금 이 순간이 화면의 중심. 한 카드만 깊게 보는 사용자에게.' },
+      { id: 'edit',     label: 'D · Editorial',      C: V4_Editorial,
+        note: '편지 톤. \"AI 비서가 아니라 옆사람\" 무드를 가장 강하게.' },
+      { id: 'fan',      label: 'E · Card Fan',       C: V5_Fan,
+        note: '선택의 메타포. 점심 추천 3장을 자연스럽게 펼침.' },
+    ];
+
+    return (
+      <>
+        <DesignCanvas>
+          <DCSection id="home" title="라이언 메인 화면 — 5가지 방향"
+            subtitle={`시점: ${TIME_LABEL[time]} · 카드 탭 → 점심 예약 흐름 · 하단 바 탭 → 음성 풀스크린`}>
+            {variants.map((v) => (
+              <DCArtboard key={v.id} id={v.id} label={v.label} width={380} height={800}>
+                <FrameWrap time={time}>
+                  <v.C time={time} />
+                </FrameWrap>
+              </DCArtboard>
+            ))}
+          </DCSection>
+
+          <DCSection id="notes" title="설계 노트" subtitle="시스템·페르소나·인터랙션 의도">
+            <DCArtboard id="system" label="Design system" width={380} height={520}>
+              <SystemNoteCard />
+            </DCArtboard>
+            <DCArtboard id="persona" label="Persona (서연)" width={380} height={520}>
+              <PersonaNoteCard />
+            </DCArtboard>
+            <DCArtboard id="flow" label="Lunch flow" width={380} height={520}>
+              <FlowNoteCard />
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+
+        <TweaksPanel title="Tweaks">
+          <TweakSection label="시점" />
+          <TweakRadio
+            label="Time of day"
+            value={t.time}
+            options={['morning', 'lunch', 'evening']}
+            onChange={(v) => setTweak('time', v)}
+          />
+          <div style={{ fontSize: 11, color: 'rgba(41,38,27,0.5)', marginTop: -2, lineHeight: 1.4 }}>
+            세 시점이 5개 디자인에 동시에 적용돼요.
+          </div>
+
+          <TweakSection label="요소" />
+          <TweakToggle
+            label="라이언 마크 placeholder"
+            value={t.showMark}
+            onChange={(v) => setTweak('showMark', v)}
+          />
+          <TweakToggle
+            label="부제목 축약"
+            value={t.compactSubtitles}
+            onChange={(v) => setTweak('compactSubtitles', v)}
+          />
+
+          <TweakSection label="인터랙션 시연" />
+          <TweakButton
+            label="점심 예약 흐름 열기"
+            onClick={() => window.dispatchEvent(new CustomEvent('lion-demo-sheet'))}
+          />
+          <TweakButton
+            label="음성 풀스크린 열기"
+            onClick={() => window.dispatchEvent(new CustomEvent('lion-demo-voice'))}
+          />
+          <div style={{ fontSize: 11, color: 'rgba(41,38,27,0.5)', lineHeight: 1.4, marginTop: 2 }}>
+            모든 5개 아트보드에서 동시에 열려요. 다시 누르면 닫혀요.
+          </div>
+        </TweaksPanel>
+      </>
+    );
+  }
+
+  function SystemNoteCard() {
+    return (
+      <div style={{ padding: 22, height: '100%', overflow: 'auto',
+        fontFamily: Lion.font, color: Lion.ink, background: Lion.cream }}>
+        <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.6, fontWeight: 600 }}>
+          DESIGN SYSTEM
+        </div>
+        <h2 style={{ fontSize: 22, fontWeight: 600, margin: '6px 0 14px', letterSpacing: -0.4 }}>
+          무드: 옆에 있어주는 존재
+        </h2>
+        <div style={{ fontSize: 13, color: Lion.ink2, lineHeight: 1.55, marginBottom: 16 }}>
+          소프트 그라데이션 · 둥근 형태 · 페르소나가 인사말에 자연스럽게.
+          채도 0.06–0.08의 시점별 톤 (peach / sand / dusk).
+        </div>
+
+        <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.4, marginBottom: 6 }}>
+          시점별 컬러
+        </div>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+          {['morning', 'lunch', 'evening'].map((k) => {
+            const tt = Lion[k];
+            return (
+              <div key={k} style={{ flex: 1 }}>
+                <div style={{ height: 60, borderRadius: 14, marginBottom: 4,
+                  background: `linear-gradient(135deg, ${tt.tintA}, ${tt.tintB})` }} />
+                <div style={{ fontSize: 11, color: Lion.ink, fontWeight: 500 }}>{tt.label}</div>
+                <div style={{ fontFamily: Lion.mono, fontSize: 9.5, color: Lion.muted }}>{tt.accent}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.4, marginBottom: 6 }}>
+          타이포 · Pretendard + Noto Serif KR (editorial only)
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: -0.4 }}>점심 뭐 드실래요?</div>
+        <div style={{ fontFamily: Lion.serif, fontSize: 22, fontWeight: 600, letterSpacing: -0.4, marginTop: 4 }}>
+          오늘 비가 와요.
+        </div>
+
+        <div style={{ marginTop: 16, padding: 12, borderRadius: 14,
+          background: Lion.paper, border: `0.5px solid ${Lion.hairline}` }}>
+          <div style={{ fontSize: 11, color: Lion.muted, marginBottom: 6 }}>Radii · Shadow</div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {[14, 22, 28, 999].map((r) => (
+              <div key={r} style={{
+                width: 44, height: 44, borderRadius: r,
+                background: Lion.cream2, border: `0.5px solid ${Lion.hairline}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: Lion.mono, fontSize: 9.5, color: Lion.muted,
+              }}>{r === 999 ? '∞' : r}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function PersonaNoteCard() {
+    const facts = [
+      ['이름', '서연 · 디자이너'],
+      ['건강', '수면 평균 6h30, 가벼운 다이어트'],
+      ['식이', '글루텐 민감 · 견과류 알레르기 없음'],
+      ['라이프', '저녁 한강 러닝 (주 3회)'],
+      ['직업', '프로덕트 디자이너 (성수)'],
+      ['관심', '카페 · 일러스트 · 글쓰기'],
+    ];
+    return (
+      <div style={{ padding: 22, height: '100%', overflow: 'auto',
+        fontFamily: Lion.font, color: Lion.ink, background: Lion.cream }}>
+        <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.6, fontWeight: 600 }}>
+          PERSONA · 7 영역
+        </div>
+        <h2 style={{ fontSize: 22, fontWeight: 600, margin: '6px 0 6px', letterSpacing: -0.4 }}>
+          서연님
+        </h2>
+        <div style={{ fontSize: 13, color: Lion.muted, marginBottom: 16 }}>
+          은근하게: UI에 칩 없음. 인사말·추천 사유에만 묻어남.
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {facts.map(([k, v]) => (
+            <div key={k} style={{ display: 'flex', gap: 12,
+              padding: '10px 12px', borderRadius: 14,
+              background: Lion.paper, border: `0.5px solid ${Lion.hairline}` }}>
+              <div style={{ width: 56, fontSize: 11, color: Lion.muted, paddingTop: 1 }}>{k}</div>
+              <div style={{ flex: 1, fontSize: 13, color: Lion.ink }}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 16, padding: 14, borderRadius: 16,
+          background: `${Lion.lunch.tintA}55`,
+          border: `0.5px dashed ${Lion.lunch.accent}66` }}>
+          <div style={{ fontSize: 11, color: Lion.lunch.glyph, letterSpacing: 1.4, marginBottom: 4 }}>
+            이렇게 묻어남
+          </div>
+          <div style={{ fontSize: 13, color: Lion.ink, lineHeight: 1.5 }}>
+            "<span style={{ fontWeight: 600 }}>가볍게, 글루텐 없는 쪽으로</span> 세 가지 골라뒀어요."
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function FlowNoteCard() {
+    const t = Lion.lunch;
+    const steps = [
+      ['1', '메인에서 점심 카드 탭'],
+      ['2', '시트 열림 · 세 가지 추천'],
+      ['3', '결정 — 또는 음성으로 "다른 거"'],
+      ['4', '가맹점 예약 · 결제 진행'],
+      ['5', '확정 카드 + 가는 길'],
+    ];
+    return (
+      <div style={{ padding: 22, height: '100%', overflow: 'auto',
+        fontFamily: Lion.font, color: Lion.ink, background: Lion.cream }}>
+        <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.6, fontWeight: 600 }}>
+          LUNCH FLOW
+        </div>
+        <h2 style={{ fontSize: 22, fontWeight: 600, margin: '6px 0 14px', letterSpacing: -0.4 }}>
+          점심: 결정 → 예약 → 결제
+        </h2>
+        <div style={{ fontSize: 13, color: Lion.ink2, lineHeight: 1.55, marginBottom: 18 }}>
+          모든 메인 변주는 점심 카드 탭으로 같은 시트를 엽니다.
+          시트는 list → reserving → confirmed 세 단계.
+        </div>
+
+        <div style={{ position: 'relative', paddingLeft: 22 }}>
+          <div style={{
+            position: 'absolute', left: 9, top: 14, bottom: 14,
+            width: 1, background: Lion.hairline2,
+          }} />
+          {steps.map(([n, txt]) => (
+            <div key={n} style={{ display: 'flex', gap: 14, paddingBottom: 14, position: 'relative' }}>
+              <div style={{
+                position: 'absolute', left: -22, top: 2,
+                width: 18, height: 18, borderRadius: 9,
+                background: t.accent, color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 10.5, fontWeight: 600,
+              }}>{n}</div>
+              <div style={{ fontSize: 13.5, color: Lion.ink, lineHeight: 1.4 }}>{txt}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ marginTop: 8, padding: 12, borderRadius: 14,
+          background: Lion.paper, border: `0.5px solid ${Lion.hairline}`,
+          fontSize: 12, color: Lion.muted, lineHeight: 1.5 }}>
+          음성 호출은 모든 화면에서 가능. 하단 바 또는 "라이언아" 키워드.
+        </div>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "tertiary-container": "#007da8",
+                    "surface-container-high": "#efe7e0",
+                    "surface-dim": "#e0d9d2",
+                    "primary-fixed": "#ffdbce",
+                    "surface-container-low": "#faf2ec",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#004c68",
+                    "outline": "#8b7268",
+                    "surface-container": "#f4ece6",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#ffb59a",
+                    "primary": "#a13a06",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e9e1db",
+                    "on-tertiary-fixed": "#001e2c",
+                    "outline-variant": "#dfc0b5",
+                    "tertiary": "#006386",
+                    "secondary-container": "#e4e2e1",
+                    "inverse-surface": "#33302c",
+                    "surface-tint": "#a53c09",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#fbfcff",
+                    "on-background": "#1e1b17",
+                    "on-primary-container": "#fffbff",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#fff8f3",
+                    "on-surface": "#1e1b17",
+                    "on-tertiary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#c3e8ff",
+                    "surface": "#fff8f3",
+                    "tertiary-fixed-dim": "#79d1ff",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-secondary-container": "#656464",
+                    "on-primary-fixed-variant": "#802a00",
+                    "secondary-fixed": "#e4e2e1",
+                    "inverse-primary": "#ffb59a",
+                    "background": "#fff8f3",
+                    "on-surface-variant": "#57423a",
+                    "surface-container-highest": "#e9e1db",
+                    "on-primary-fixed": "#370e00",
+                    "secondary": "#5f5e5e",
+                    "inverse-on-surface": "#f7efe9",
+                    "primary-container": "#c25220"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "group-gap": "4rem",
+                    "safe-area-top": "env(safe-area-inset-top)",
+                    "margin-page": "2rem",
+                    "element-gap": "1rem"
+            },
+            "fontFamily": {
+                    "label-refined": ["Plus Jakarta Sans"],
+                    "display-editorial": ["Plus Jakarta Sans"],
+                    "display-editorial-mobile": ["Plus Jakarta Sans"],
+                    "body-reading": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-refined": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-editorial": ["42px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "display-editorial-mobile": ["34px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-reading": ["18px", {"lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f3;
+            color: #1e1b17;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .ryan-glow {
+            background: radial-gradient(circle, rgba(161, 58, 6, 0.08) 0%, rgba(255, 248, 243, 0) 70%);
+        }
+        .glass-blur {
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-reading text-body-reading overflow-x-hidden min-h-screen flex flex-col">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-page py-4 backdrop-blur-xl bg-surface/80">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A clean and minimalist digital avatar of a young Korean man with a modern haircut. The artistic style is a soft vector illustration with a neutral cream and warm clay color palette, matching a quiet luxury UI aesthetic. The background is a simple, solid light sand color." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgthvLTkeB8k9mSZKJquG3SXNkJWnJuzPcbKvlVyATEV3exwm6ucENJBztKXDXUKwX72_vA3gAa0guyos9GMfLGOh2T0v26gIYW-lzzUYXgZMCZiKaMpLz0VX-UjhoNrKEtT1cuQjz8IsMgq7-JCwYbw8CjqBev16Y4GmE2PmKNgW4Y5lt_IgbRB28L1sLmhwIP8toQpGwX2gF9-LAc1Cs1oyJwUeMw6g4IUGx6qlXD8cHO6zB1XKUv8tptaV94YfOsFZNRH5cNr79"/>
+</div>
+<h1 class="font-display-editorial-mobile text-display-editorial-mobile text-primary">좋은 아침입니다</h1>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<main class="flex-grow flex flex-col pt-32 px-margin-page pb-32">
+<!-- Greeting & Subtext -->
+<section class="flex flex-col mb-group-gap">
+<h2 class="text-[28px] font-bold tracking-tight text-on-surface">다환님, 좋은 아침이에요</h2>
+<p class="text-on-surface-variant/60 font-medium mt-1">함께한 47일 · 수요일</p>
+</section>
+<!-- Hero Section: Ryan Character -->
+<section class="flex-grow flex flex-col items-center justify-center relative py-element-gap">
+<div class="absolute inset-0 ryan-glow -z-10 animate-pulse"></div>
+<div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center rounded-full bg-gradient-to-tr from-primary/10 to-primary/5 shadow-[0_0_40px_rgba(161,58,6,0.1)]"></div>
+<div class="mt-8 text-center max-w-xs mx-auto">
+<p class="text-on-surface leading-relaxed font-medium">
+                    비 80%에 강남 미팅 있는 날이에요.<br/>우산이랑 트렌치, 제가 챙길게요.
+                </p>
+</div>
+</section>
+<!-- Recommendation Chips Stack -->
+<section class="flex flex-col gap-element-gap mt-group-gap">
+<button class="flex items-center justify-between px-6 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
+<span class="text-on-surface-variant font-medium">오늘 점심 뭐 먹는 게 좋을까?</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors">north_east</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
+<span class="text-on-surface-variant font-medium">10시 미팅 자료 정리해줘</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors">north_east</span>
+</button>
+<button class="flex items-center justify-between px-6 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors group">
+<span class="text-on-surface-variant font-medium">이번 주 일정 한눈에 보여줘</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-colors">north_east</span>
+</button>
+</section>
+<!-- Info Widgets -->
+<section class="grid grid-cols-2 gap-4 mt-8">
+<div class="flex flex-col p-5 rounded-2xl bg-surface-container-lowest/50 border border-outline-variant/10">
+<span class="text-label-refined text-on-surface-variant/50 mb-1">날씨</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">rainy</span>
+<span class="font-semibold text-on-surface">비 80%</span>
+</div>
+</div>
+<div class="flex flex-col p-5 rounded-2xl bg-surface-container-lowest/50 border border-outline-variant/10">
+<span class="text-label-refined text-on-surface-variant/50 mb-1">다음 일정</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">event</span>
+<span class="font-semibold text-on-surface truncate">10:00 강남 미팅</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Input & Nav Area -->
+<div class="fixed bottom-0 w-full z-40 px-margin-page pb-24">
+<div class="relative flex items-center gap-2 bg-surface-container-highest/60 glass-blur rounded-full px-6 py-3 border border-white/20">
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-on-surface placeholder-on-surface-variant/40 py-2" placeholder="라이언에게 물어보세요..." type="text"/>
+<button class="flex items-center justify-center w-10 h-10 rounded-full text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-on-primary shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe-area-top h-20 backdrop-blur-xl bg-surface/80">
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-refined text-label-refined mt-1">홈</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">wb_twilight</span>
+<span class="font-label-refined text-label-refined mt-1">장면</span>
+</button>
+<!-- Specialized Ryan Button -->
+<button class="flex flex-col items-center justify-center -mt-8">
+<div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl shadow-primary/30 active:scale-110 transition-transform duration-300">
+<div class="w-9 h-9 rounded-full bg-white/25"></div>
+</div>
+<span class="font-label-refined text-label-refined mt-2 text-primary font-bold">라이언</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-refined text-label-refined mt-1">코치</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-refined text-label-refined mt-1">나</span>
+</button>
+</nav>
+</body></html>

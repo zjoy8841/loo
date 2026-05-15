@@ -1,0 +1,1533 @@
+<!doctype html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>v7 A · Soft Stack</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" rel="stylesheet"/>
+<style>html,body{margin:0;padding:0;background:#f0eee9;display:flex;align-items:center;justify-content:center;min-height:100vh}body{padding:8px;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel" data-presets="env,react">
+
+// iOS.jsx — Simplified iOS 26 (Liquid Glass) device frame
+// Based on the iOS 26 UI Kit + Figma status bar spec. No assets, no deps.
+// Exports: IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard
+
+// ─────────────────────────────────────────────────────────────
+// Status bar
+// ─────────────────────────────────────────────────────────────
+function IOSStatusBar({ dark = false, time = '9:41' }) {
+  const c = dark ? '#fff' : '#000';
+  return (
+    <div style={{
+      display: 'flex', gap: 154, alignItems: 'center', justifyContent: 'center',
+      padding: '21px 24px 19px', boxSizing: 'border-box',
+      position: 'relative', zIndex: 20, width: '100%',
+    }}>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 1.5 }}>
+        <span style={{
+          fontFamily: '-apple-system, "SF Pro", system-ui', fontWeight: 590,
+          fontSize: 17, lineHeight: '22px', color: c,
+        }}>{time}</span>
+      </div>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, paddingTop: 1, paddingRight: 1 }}>
+        <svg width="19" height="12" viewBox="0 0 19 12">
+          <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill={c}/>
+          <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill={c}/>
+          <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill={c}/>
+          <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill={c}/>
+        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12">
+          <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill={c}/>
+          <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill={c}/>
+          <circle cx="8.5" cy="10.5" r="1.5" fill={c}/>
+        </svg>
+        <svg width="27" height="13" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none"/>
+          <rect x="2" y="2" width="20" height="9" rx="2" fill={c}/>
+          <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill={c} fillOpacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Liquid glass pill — blur + tint + shine
+// ─────────────────────────────────────────────────────────────
+function IOSGlassPill({ children, dark = false, style = {} }) {
+  return (
+    <div style={{
+      height: 44, minWidth: 44, borderRadius: 9999,
+      position: 'relative', overflow: 'hidden',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: dark
+        ? '0 2px 6px rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.2)'
+        : '0 1px 3px rgba(0,0,0,0.07), 0 3px 10px rgba(0,0,0,0.06)',
+      ...style,
+    }}>
+      {/* blur + tint */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.28)' : 'rgba(255,255,255,0.5)',
+      }} />
+      {/* shine */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15), inset -1px -1px 1px rgba(255,255,255,0.08)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+      }} />
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', padding: '0 4px' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Navigation bar — glass pills + large title
+// ─────────────────────────────────────────────────────────────
+function IOSNavBar({ title = 'Title', dark = false, trailingIcon = true }) {
+  const muted = dark ? 'rgba(255,255,255,0.6)' : '#404040';
+  const text = dark ? '#fff' : '#000';
+  const pillIcon = (content) => (
+    <IOSGlassPill dark={dark}>
+      <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {content}
+      </div>
+    </IOSGlassPill>
+  );
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', gap: 10,
+      paddingTop: 62, paddingBottom: 10, position: 'relative', zIndex: 5,
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 16px',
+      }}>
+        {/* back chevron */}
+        {pillIcon(
+          <svg width="12" height="20" viewBox="0 0 12 20" fill="none" style={{ marginLeft: -1 }}>
+            <path d="M10 2L2 10l8 8" stroke={muted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+        {/* trailing ellipsis */}
+        {trailingIcon && pillIcon(
+          <svg width="22" height="6" viewBox="0 0 22 6">
+            <circle cx="3" cy="3" r="2.5" fill={muted}/>
+            <circle cx="11" cy="3" r="2.5" fill={muted}/>
+            <circle cx="19" cy="3" r="2.5" fill={muted}/>
+          </svg>
+        )}
+      </div>
+      {/* large title */}
+      <div style={{
+        padding: '0 16px',
+        fontFamily: '-apple-system, system-ui',
+        fontSize: 34, fontWeight: 700, lineHeight: '41px',
+        color: text, letterSpacing: 0.4,
+      }}>{title}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Grouped list (inset card, r:26) + row (52px)
+// ─────────────────────────────────────────────────────────────
+function IOSListRow({ title, detail, icon, chevron = true, isLast = false, dark = false }) {
+  const text = dark ? '#fff' : '#000';
+  const sec = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const ter = dark ? 'rgba(235,235,245,0.3)' : 'rgba(60,60,67,0.3)';
+  const sep = dark ? 'rgba(84,84,88,0.65)' : 'rgba(60,60,67,0.12)';
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', minHeight: 52,
+      padding: '0 16px', position: 'relative',
+      fontFamily: '-apple-system, system-ui', fontSize: 17,
+      letterSpacing: -0.43,
+    }}>
+      {icon && (
+        <div style={{
+          width: 30, height: 30, borderRadius: 7, background: icon,
+          marginRight: 12, flexShrink: 0,
+        }} />
+      )}
+      <div style={{ flex: 1, color: text }}>{title}</div>
+      {detail && <span style={{ color: sec, marginRight: 6 }}>{detail}</span>}
+      {chevron && (
+        <svg width="8" height="14" viewBox="0 0 8 14" style={{ flexShrink: 0 }}>
+          <path d="M1 1l6 6-6 6" stroke={ter} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )}
+      {!isLast && (
+        <div style={{
+          position: 'absolute', bottom: 0, right: 0,
+          left: icon ? 58 : 16, height: 0.5, background: sep,
+        }} />
+      )}
+    </div>
+  );
+}
+
+function IOSList({ header, children, dark = false }) {
+  const hc = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const bg = dark ? '#1C1C1E' : '#fff';
+  return (
+    <div>
+      {header && (
+        <div style={{
+          fontFamily: '-apple-system, system-ui', fontSize: 13,
+          color: hc, textTransform: 'uppercase',
+          padding: '8px 36px 6px', letterSpacing: -0.08,
+        }}>{header}</div>
+      )}
+      <div style={{
+        background: bg, borderRadius: 26,
+        margin: '0 16px', overflow: 'hidden',
+      }}>{children}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Device frame
+// ─────────────────────────────────────────────────────────────
+function IOSDevice({
+  children, width = 402, height = 874, dark = false,
+  title, keyboard = false,
+}) {
+  return (
+    <div style={{
+      width, height, borderRadius: 48, overflow: 'hidden',
+      position: 'relative', background: dark ? '#000' : '#F2F2F7',
+      boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
+      fontFamily: '-apple-system, system-ui, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      {/* dynamic island */}
+      <div style={{
+        position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
+        width: 126, height: 37, borderRadius: 24, background: '#000', zIndex: 50,
+      }} />
+      {/* status bar (absolute) */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+        <IOSStatusBar dark={dark} />
+      </div>
+      {/* nav + content */}
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {title !== undefined && <IOSNavBar title={title} dark={dark} />}
+        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        {keyboard && <IOSKeyboard dark={dark} />}
+      </div>
+      {/* home indicator — always on top */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 60,
+        height: 34, display: 'flex', justifyContent: 'center', alignItems: 'flex-end',
+        paddingBottom: 8, pointerEvents: 'none',
+      }}>
+        <div style={{
+          width: 139, height: 5, borderRadius: 100,
+          background: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.25)',
+        }} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Keyboard — iOS 26 liquid glass
+// ─────────────────────────────────────────────────────────────
+function IOSKeyboard({ dark = false }) {
+  const glyph = dark ? 'rgba(255,255,255,0.7)' : '#595959';
+  const sugg = dark ? 'rgba(255,255,255,0.6)' : '#333';
+  const keyBg = dark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.85)';
+
+  // special-key icons
+  const icons = {
+    shift: <svg width="19" height="17" viewBox="0 0 19 17"><path d="M9.5 1L1 9.5h4.5V16h8V9.5H18L9.5 1z" fill={glyph}/></svg>,
+    del: <svg width="23" height="17" viewBox="0 0 23 17"><path d="M7 1h13a2 2 0 012 2v11a2 2 0 01-2 2H7l-6-7.5L7 1z" fill="none" stroke={glyph} strokeWidth="1.6" strokeLinejoin="round"/><path d="M10 5l7 7M17 5l-7 7" stroke={glyph} strokeWidth="1.6" strokeLinecap="round"/></svg>,
+    ret: <svg width="20" height="14" viewBox="0 0 20 14"><path d="M18 1v6H4m0 0l4-4M4 7l4 4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  };
+
+  const key = (content, { w, flex, ret, fs = 25, k } = {}) => (
+    <div key={k} style={{
+      height: 42, borderRadius: 8.5,
+      flex: flex ? 1 : undefined, width: w, minWidth: 0,
+      background: ret ? '#08f' : keyBg,
+      boxShadow: '0 1px 0 rgba(0,0,0,0.075)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: '-apple-system, "SF Compact", system-ui',
+      fontSize: fs, fontWeight: 458, color: ret ? '#fff' : glyph,
+    }}>{content}</div>
+  );
+
+  const row = (keys, pad = 0) => (
+    <div style={{ display: 'flex', gap: 6.5, justifyContent: 'center', padding: `0 ${pad}px` }}>
+      {keys.map(l => key(l, { flex: true, k: l }))}
+    </div>
+  );
+
+  return (
+    <div style={{
+      position: 'relative', zIndex: 15, borderRadius: 27, overflow: 'hidden',
+      padding: '11px 0 2px',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      boxShadow: dark
+        ? '0 -2px 20px rgba(0,0,0,0.09)'
+        : '0 -1px 6px rgba(0,0,0,0.018), 0 -3px 20px rgba(0,0,0,0.012)',
+    }}>
+      {/* liquid glass bg — same recipe as nav pills */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.14)' : 'rgba(255,255,255,0.25)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* autocorrect bar */}
+      <div style={{
+        display: 'flex', gap: 20, alignItems: 'center',
+        padding: '8px 22px 13px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {['"The"', 'the', 'to'].map((w, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <div style={{ width: 1, height: 25, background: '#ccc', opacity: 0.3 }} />}
+            <div style={{
+              flex: 1, textAlign: 'center',
+              fontFamily: '-apple-system, system-ui', fontSize: 17,
+              color: sugg, letterSpacing: -0.43, lineHeight: '22px',
+            }}>{w}</div>
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* key layout */}
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: 13,
+        padding: '0 6.5px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {row(['q','w','e','r','t','y','u','i','o','p'])}
+        {row(['a','s','d','f','g','h','j','k','l'], 20)}
+        <div style={{ display: 'flex', gap: 14.25, alignItems: 'center' }}>
+          {key(icons.shift, { w: 45, k: 'shift' })}
+          <div style={{ display: 'flex', gap: 6.5, flex: 1 }}>
+            {['z','x','c','v','b','n','m'].map(l => key(l, { flex: true, k: l }))}
+          </div>
+          {key(icons.del, { w: 45, k: 'del' })}
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {key('ABC', { w: 92.25, fs: 18, k: 'abc' })}
+          {key('', { flex: true, k: 'space' })}
+          {key(icons.ret, { w: 92.25, ret: true, k: 'ret' })}
+        </div>
+      </div>
+
+      {/* bottom spacer (emoji+mic area, icons omitted) */}
+      <div style={{ height: 56, width: '100%', position: 'relative' }} />
+    </div>
+  );
+}
+
+Object.assign(window, {
+  IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard,
+});
+
+
+// shared.jsx — Lion (라이언) Life OS.ONE
+// Design tokens, persona, time-tone palettes, voice wave indicator,
+// lunch reserve-flow modal, and small atomic pieces shared by every variation.
+
+// ─── Design tokens ─────────────────────────────────────────────
+const Lion = {
+  font: '"Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+  serif: '"Noto Serif KR", "Source Han Serif K", "Nanum Myeongjo", serif',
+  mono: '"JetBrains Mono", "SF Mono", ui-monospace, monospace',
+  cream:    '#FAF6EF',
+  cream2:   '#F4ECDF',
+  paper:    '#FFFCF6',
+  ink:      '#2A251F',
+  ink2:     '#574F44',
+  muted:    '#8A8073',
+  hairline: 'rgba(42,37,31,0.08)',
+  hairline2:'rgba(42,37,31,0.14)',
+  // time tones — shared chroma so they feel cousins
+  morning: { tintA: '#FBE8C6', tintB: '#F4D9B0', accent: '#C97A3A', glyph: '#6B4520', label: '아침' },
+  lunch:   { tintA: '#F4D9B6', tintB: '#E8B68A', accent: '#B85F2E', glyph: '#5A2B13', label: '점심' },
+  evening: { tintA: '#D7CDE5', tintB: '#B9A9D2', accent: '#5E4A8A', glyph: '#2F2657', label: '저녁' },
+};
+
+// ─── Persona (used only in copy / reasoning text) ─────────────
+const Persona = {
+  firstName: '서연',
+  greeting: '서연님',
+  reasons: {
+    breakfast: '어젯밤 수면이 6시간 12분',
+    lunch: '글루텐 민감 · 가벼운 단백질 위주',
+    evening: '오후 비 70% · 가벼운 회복',
+  },
+};
+
+// ─── Time-of-day content ───────────────────────────────────────
+const TimeData = {
+  morning: {
+    time: '7:23',
+    headline: '오늘 좋은 아침이에요',
+    sub: '비 올지 몰라요. 챙겨드릴게요.',
+    weather: { temp: '18°', state: '흐림', rain: '오후 70%' },
+    outfit: ['얇은 카디건', '접이식 우산', '편한 운동화'],
+    schedule: [
+      { time: '11:00', what: '클라이언트 미팅', where: '성수' },
+      { time: '19:00', what: '한강 러닝', where: '뚝섬' },
+    ],
+    note: '어젯밤 수면 6h 12m. 오후 졸음 한 번 올 거예요.',
+  },
+  lunch: {
+    time: '11:48',
+    headline: '점심 뭐 드실래요?',
+    sub: '오늘은 가볍게 챙겨드릴게요.',
+    picks: [
+      { name: '평창동 그릭볼', tag: '글루텐 free · 480kcal', dist: '12분',
+        why: '단백질 28g, 어제보다 가벼움', img: 'photo-grain-bowl' },
+      { name: '한남 솥밥집',   tag: '잡곡 솥밥 · 단백질↑', dist: '15분',
+        why: '오후 미팅 전 부담 없음', img: 'photo-rice' },
+      { name: '도시락 배달',    tag: '15분 내 도착',       dist: '책상',
+        why: '미팅 전 시간 절약', img: 'photo-bento' },
+    ],
+  },
+  evening: {
+    time: '21:14',
+    headline: '오늘 하루, 잘 챙기셨어요',
+    sub: '내일은 좀 더 가벼울 거예요.',
+    stats: [
+      { k: '걸음', v: '8,724' },
+      { k: '단백질', v: '64g' },
+      { k: '수면 예상', v: '7h+' },
+    ],
+    recap: '점심을 가볍게 가셨고, 러닝도 잘 다녀오셨네요.',
+    tomorrow: '내일 비 예보. 우산 챙길 자리 미리 둘게요.',
+  },
+};
+
+// ─── Time-of-day background gradient (organic, soft) ───────────
+function timeGradient(time) {
+  const t = Lion[time];
+  return `radial-gradient(120% 90% at 20% 0%, ${t.tintA} 0%, transparent 55%),`
+       + `radial-gradient(110% 80% at 100% 100%, ${t.tintB} 0%, transparent 60%),`
+       + `linear-gradient(180deg, ${Lion.cream} 0%, ${Lion.cream2} 100%)`;
+}
+
+// ─── Photo placeholder — subtle stripes + mono caption ────────
+function PhotoSlot({ label = 'photo', height = 120, radius = 18, time = 'lunch' }) {
+  const t = Lion[time];
+  return (
+    <div style={{
+      height, borderRadius: radius, overflow: 'hidden', position: 'relative',
+      background:
+        `repeating-linear-gradient(135deg, ${t.tintA} 0 8px, ${t.tintB} 8px 16px)`,
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: `radial-gradient(60% 80% at 50% 60%, transparent 0%, ${t.tintA}88 100%)`,
+      }} />
+      <div style={{
+        position: 'absolute', left: 10, bottom: 8,
+        fontFamily: Lion.mono, fontSize: 10, color: t.glyph,
+        letterSpacing: 0.2, opacity: 0.65,
+      }}>{label}</div>
+    </div>
+  );
+}
+
+// ─── Lion mark — placeholder for hand-drawn illustration ──────
+function LionMark({ size = 56, time = 'lunch', label = true }) {
+  const t = Lion[time];
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: '50%',
+      position: 'relative', flexShrink: 0,
+      background:
+        `radial-gradient(60% 60% at 35% 30%, ${t.tintA} 0%, ${t.tintB} 60%, ${t.accent}44 100%)`,
+      border: `1px dashed ${t.accent}66`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      {label && (
+        <span style={{
+          fontFamily: Lion.mono, fontSize: Math.max(7, size * 0.13),
+          color: t.glyph, opacity: 0.65, textAlign: 'center', lineHeight: 1.1,
+        }}>라이언<br/>일러스트</span>
+      )}
+    </div>
+  );
+}
+
+// ─── Voice wave (bottom indicator + fullscreen modal) ─────────
+// Breathing scale animation via CSS keyframes injected once.
+if (typeof document !== 'undefined' && !document.getElementById('lion-anim')) {
+  const s = document.createElement('style');
+  s.id = 'lion-anim';
+  s.textContent = `
+    @keyframes lion-breath { 0%,100%{transform:scaleY(.4)} 50%{transform:scaleY(1)} }
+    @keyframes lion-pulse  { 0%,100%{opacity:.55} 50%{opacity:1} }
+    @keyframes lion-rise   { from{transform:translateY(8px);opacity:0} to{transform:translateY(0);opacity:1} }
+    @keyframes lion-fade   { from{opacity:0} to{opacity:1} }
+    @keyframes lion-orbit  { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .lion-rise{animation:lion-rise .26s cubic-bezier(.2,.7,.3,1) both}
+    .lion-fade{animation:lion-fade .18s both}
+    @font-face{font-family:"Pretendard Variable";font-weight:45 920;font-style:normal;
+      font-display:swap;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2) format("woff2-variations")}
+  `;
+  document.head.appendChild(s);
+}
+
+function VoiceBars({ time = 'lunch', count = 5, height = 22, w = 3, gap = 4 }) {
+  const t = Lion[time];
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap, height }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <span key={i} style={{
+          width: w, height: '100%', background: t.accent, borderRadius: w,
+          display: 'block', transformOrigin: 'center',
+          animation: `lion-breath 1.${4 + (i % 3)}s ease-in-out ${i * 0.12}s infinite`,
+        }} />
+      ))}
+    </div>
+  );
+}
+
+// Bottom-dock voice — present in every variation
+function VoiceDock({ time = 'lunch', onOpen, hint = '"라이언아" 하고 불러보세요' }) {
+  const t = Lion[time];
+  return (
+    <div onClick={onOpen} style={{
+      position: 'absolute', left: 16, right: 16, bottom: 24, zIndex: 30,
+      display: 'flex', alignItems: 'center', gap: 12,
+      padding: '12px 14px 12px 18px',
+      borderRadius: 999,
+      background: 'rgba(255,253,248,0.78)',
+      border: `0.5px solid ${Lion.hairline2}`,
+      boxShadow: '0 10px 28px rgba(80,55,30,0.10), 0 1px 0 rgba(255,255,255,0.6) inset',
+      backdropFilter: 'blur(20px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+      cursor: 'pointer',
+    }}>
+      <VoiceBars time={time} count={4} height={18} w={2.5} gap={3} />
+      <div style={{ flex: 1, fontSize: 13, color: Lion.ink2, letterSpacing: -0.2 }}>{hint}</div>
+      <div style={{
+        width: 36, height: 36, borderRadius: 18,
+        background: `radial-gradient(60% 60% at 35% 30%, ${t.tintA}, ${t.accent})`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: `0 4px 12px ${t.accent}55`,
+      }}>
+        <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+          <rect x="4" y="1" width="6" height="10" rx="3" fill="#fff"/>
+          <path d="M1 9c0 3.3 2.7 6 6 6s6-2.7 6-6M7 15v2" stroke="#fff" strokeWidth="1.4" strokeLinecap="round"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// Fullscreen voice — appears when user taps dock
+function VoiceFullscreen({ time = 'lunch', onClose }) {
+  const t = Lion[time];
+  const [phase, setPhase] = React.useState('listen'); // listen → think
+  React.useEffect(() => {
+    const id = setTimeout(() => setPhase('think'), 1800);
+    return () => clearTimeout(id);
+  }, []);
+  return (
+    <div className="lion-fade" style={{
+      position: 'absolute', inset: 0, zIndex: 100,
+      background: `radial-gradient(80% 60% at 50% 38%, ${t.tintA} 0%, ${t.tintB} 40%, ${Lion.ink} 100%)`,
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      paddingTop: 130, color: '#fff',
+    }}>
+      <div style={{ fontSize: 12, opacity: 0.7, letterSpacing: 2, marginBottom: 16 }}>
+        라이언이 {phase === 'listen' ? '듣고 있어요' : '생각하고 있어요'}
+      </div>
+      <div style={{
+        width: 220, height: 220, borderRadius: '50%', position: 'relative',
+        background: `radial-gradient(50% 50% at 50% 50%, ${t.tintA} 0%, ${t.accent} 70%)`,
+        boxShadow: `0 0 80px ${t.accent}88, inset 0 0 40px rgba(255,255,255,0.4)`,
+        animation: 'lion-pulse 2.4s ease-in-out infinite',
+      }}>
+        <div style={{
+          position: 'absolute', inset: -12, borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.4)',
+          animation: 'lion-orbit 8s linear infinite',
+        }} />
+      </div>
+      <div style={{ marginTop: 40, height: 40 }}>
+        <VoiceBars time={time} count={8} height={34} w={4} gap={6} />
+      </div>
+      <div style={{
+        position: 'absolute', bottom: 60, fontSize: 14, opacity: 0.85,
+        maxWidth: 280, textAlign: 'center', lineHeight: 1.5,
+      }}>
+        {phase === 'listen'
+          ? '"점심 다른 거 추천해줘"'
+          : '글루텐 없는 다른 옵션 찾는 중...'}
+      </div>
+      <button onClick={onClose} style={{
+        position: 'absolute', top: 64, right: 20, width: 36, height: 36,
+        borderRadius: 18, border: 'none', cursor: 'pointer',
+        background: 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 18,
+        backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+      }}>×</button>
+    </div>
+  );
+}
+
+// ─── Lunch reserve flow modal ─────────────────────────────────
+// pick → reserving → confirmed.  Wraps the iOS screen with a soft sheet.
+function LunchSheet({ open, onClose }) {
+  const t = Lion.lunch;
+  const [picked, setPicked] = React.useState(null);
+  const [phase, setPhase] = React.useState('list'); // list → reserving → confirmed
+  React.useEffect(() => {
+    if (!open) { setPicked(null); setPhase('list'); }
+  }, [open]);
+  React.useEffect(() => {
+    if (phase === 'reserving') {
+      const id = setTimeout(() => setPhase('confirmed'), 1600);
+      return () => clearTimeout(id);
+    }
+  }, [phase]);
+  if (!open) return null;
+
+  const picks = TimeData.lunch.picks;
+  return (
+    <div onClick={onClose} style={{
+      position: 'absolute', inset: 0, zIndex: 90,
+      background: 'rgba(40,30,20,0.32)', backdropFilter: 'blur(6px)',
+      WebkitBackdropFilter: 'blur(6px)',
+      display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+    }}>
+      <div onClick={(e) => e.stopPropagation()} className="lion-rise" style={{
+        width: '100%', maxHeight: '88%', overflowY: 'auto',
+        background: Lion.paper,
+        borderTopLeftRadius: 32, borderTopRightRadius: 32,
+        padding: '14px 0 30px',
+        boxShadow: '0 -20px 60px rgba(80,55,30,0.18)',
+      }}>
+        {/* grabber */}
+        <div style={{
+          width: 36, height: 4, background: Lion.hairline2,
+          borderRadius: 2, margin: '0 auto 18px',
+        }} />
+
+        {phase === 'list' && (
+          <div style={{ padding: '0 22px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+              <LionMark size={36} time="lunch" label={false} />
+              <div style={{ fontSize: 13, color: t.accent, letterSpacing: -0.2 }}>라이언</div>
+            </div>
+            <h2 style={{
+              margin: '8px 0 6px', fontSize: 22, fontWeight: 600,
+              color: Lion.ink, letterSpacing: -0.4, lineHeight: 1.3,
+            }}>가볍게, 글루텐 없는 쪽으로<br/>세 가지 골라뒀어요.</h2>
+            <div style={{ fontSize: 13, color: Lion.muted, marginBottom: 18 }}>
+              오후에 미팅이 있어서 부담 적은 순.
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {picks.map((p, i) => (
+                <button key={i} onClick={() => { setPicked(p); setPhase('reserving'); }}
+                  style={{
+                    display: 'flex', gap: 12, alignItems: 'center', textAlign: 'left',
+                    padding: 10, borderRadius: 20,
+                    background: Lion.cream, border: `0.5px solid ${Lion.hairline}`,
+                    cursor: 'pointer', font: 'inherit',
+                  }}>
+                  <div style={{ width: 64, height: 64, flexShrink: 0 }}>
+                    <PhotoSlot label={p.img} height={64} radius={16} time="lunch" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: Lion.ink, letterSpacing: -0.2 }}>{p.name}</div>
+                    <div style={{ fontSize: 11.5, color: Lion.muted, marginTop: 2 }}>{p.tag} · {p.dist}</div>
+                    <div style={{ fontSize: 11.5, color: t.accent, marginTop: 3, fontStyle: 'italic' }}>"{p.why}"</div>
+                  </div>
+                  <div style={{
+                    width: 26, height: 26, borderRadius: 13, flexShrink: 0,
+                    background: t.accent, color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14,
+                  }}>→</div>
+                </button>
+              ))}
+            </div>
+
+            <div style={{
+              marginTop: 18, padding: 14, borderRadius: 18,
+              background: `${t.tintA}55`, border: `0.5px dashed ${t.accent}55`,
+              display: 'flex', alignItems: 'center', gap: 10,
+            }}>
+              <VoiceBars time="lunch" count={3} height={14} w={2} gap={2} />
+              <div style={{ fontSize: 12.5, color: t.glyph, flex: 1 }}>
+                "다른 것도 보여줘" 라고 말하면 더 찾아드려요.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {phase === 'reserving' && picked && (
+          <div style={{ padding: '20px 22px 10px', textAlign: 'center' }}>
+            <div style={{
+              width: 88, height: 88, borderRadius: '50%', margin: '0 auto 22px',
+              background: `radial-gradient(50% 50% at 50% 50%, ${t.tintA}, ${t.accent})`,
+              boxShadow: `0 0 32px ${t.accent}55`,
+              position: 'relative',
+            }}>
+              <div style={{
+                position: 'absolute', inset: -6, borderRadius: '50%',
+                border: `1px dashed ${t.accent}`, animation: 'lion-orbit 4s linear infinite',
+              }} />
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 600, color: Lion.ink, letterSpacing: -0.3 }}>
+              {picked.name}에 자리 잡고 있어요
+            </div>
+            <div style={{ fontSize: 13, color: Lion.muted, marginTop: 6 }}>
+              예약 · 결제까지 한 번에 끝낼게요.
+            </div>
+            <div style={{ marginTop: 22, marginBottom: 6 }}>
+              <VoiceBars time="lunch" count={5} height={20} w={3} gap={4} />
+            </div>
+          </div>
+        )}
+
+        {phase === 'confirmed' && picked && (
+          <div style={{ padding: '4px 22px 0' }}>
+            <div className="lion-rise" style={{
+              borderRadius: 24, overflow: 'hidden',
+              background: Lion.cream, border: `0.5px solid ${Lion.hairline}`,
+            }}>
+              <PhotoSlot label={picked.img} height={150} radius={0} time="lunch" />
+              <div style={{ padding: 18 }}>
+                <div style={{ fontSize: 11, color: t.accent, letterSpacing: 1.6, fontWeight: 600 }}>예약 확정</div>
+                <div style={{ fontSize: 20, fontWeight: 600, color: Lion.ink, marginTop: 4, letterSpacing: -0.4 }}>
+                  {picked.name}
+                </div>
+                <div style={{
+                  marginTop: 14, paddingTop: 14, borderTop: `0.5px solid ${Lion.hairline}`,
+                  display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap: 10, columnGap: 8, fontSize: 13,
+                }}>
+                  <div style={{ color: Lion.muted }}>도착 시간</div>
+                  <div style={{ color: Lion.ink, textAlign: 'right', fontWeight: 500 }}>12:15</div>
+                  <div style={{ color: Lion.muted }}>결제</div>
+                  <div style={{ color: Lion.ink, textAlign: 'right', fontWeight: 500 }}>14,800원 · 라이언페이</div>
+                  <div style={{ color: Lion.muted }}>준비</div>
+                  <div style={{ color: Lion.ink, textAlign: 'right', fontWeight: 500 }}>가맹점 확인 중</div>
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+              <button onClick={onClose} style={{
+                flex: 1, padding: '14px 0', borderRadius: 999, fontSize: 14, fontWeight: 600,
+                background: Lion.cream2, color: Lion.ink, border: 'none', cursor: 'pointer',
+              }}>가는 길</button>
+              <button onClick={onClose} style={{
+                flex: 1, padding: '14px 0', borderRadius: 999, fontSize: 14, fontWeight: 600,
+                background: t.accent, color: '#fff', border: 'none', cursor: 'pointer',
+              }}>확인</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Standard frame wrapper — applies bg gradient + voice dock + lunch sheet.
+// iOS frame already renders its own status bar; we just leave room for it.
+function LionScreen({ time = 'lunch', children, hideDock = false }) {
+  const [sheetOpen, setSheetOpen] = React.useState(false);
+  const [voiceOpen, setVoiceOpen] = React.useState(false);
+
+  // Expose openers via context so any inner card can trigger them.
+  const api = React.useMemo(() => ({
+    openSheet: () => setSheetOpen(true),
+    openVoice: () => setVoiceOpen(true),
+  }), []);
+
+  // Listen for Tweaks demo events ("open sheet" / "open voice" buttons in
+  // the Tweaks panel) — toggle so the same button closes if open.
+  React.useEffect(() => {
+    const onSheet = () => setSheetOpen((o) => !o);
+    const onVoice = () => setVoiceOpen((o) => !o);
+    window.addEventListener('lion-demo-sheet', onSheet);
+    window.addEventListener('lion-demo-voice', onVoice);
+    return () => {
+      window.removeEventListener('lion-demo-sheet', onSheet);
+      window.removeEventListener('lion-demo-voice', onVoice);
+    };
+  }, []);
+
+  return (
+    <LionCtx.Provider value={api}>
+      <div style={{
+        width: '100%', height: '100%', position: 'relative', overflow: 'hidden',
+        background: timeGradient(time),
+        fontFamily: Lion.font,
+        color: Lion.ink,
+      }}>
+        <div style={{ position: 'relative', height: '100%', paddingTop: 50 }}>
+          {children}
+        </div>
+        {!hideDock && <VoiceDock time={time} onOpen={() => setVoiceOpen(true)} />}
+        <LunchSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+        {voiceOpen && <VoiceFullscreen time={time} onClose={() => setVoiceOpen(false)} />}
+      </div>
+    </LionCtx.Provider>
+  );
+}
+
+const LionCtx = React.createContext({ openSheet: () => {}, openVoice: () => {} });
+
+Object.assign(window, {
+  Lion, Persona, TimeData, timeGradient,
+  PhotoSlot, LionMark, VoiceBars, VoiceDock, VoiceFullscreen,
+  LunchSheet, LionScreen, LionCtx,
+});
+
+
+// variations.jsx — Five Lion home-screen designs.
+// Each takes { time } and renders inside <LionScreen time>.
+
+// ─────────────────────────────────────────────────────────────
+// V1 · SOFT STACK — familiar pattern. One hero card at top with the
+// active-moment content. Below: smaller secondary cards. Voice dock at
+// the bottom. The familiar baseline.
+// ─────────────────────────────────────────────────────────────
+function V1_SoftStack({ time }) {
+  const t = Lion[time];
+  const d = TimeData[time];
+  const { openSheet } = React.useContext(LionCtx);
+
+  return (
+    <div style={{ height: '100%', padding: '8px 18px 110px', overflowY: 'auto' }}>
+      {/* greeting row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '4px 4px 14px' }}>
+        <LionMark size={42} time={time} />
+        <div>
+          <div style={{ fontSize: 12, color: Lion.muted, letterSpacing: -0.2 }}>
+            {time === 'morning' ? '아침' : time === 'lunch' ? '점심' : '저녁'} · {d.time}
+          </div>
+          <div style={{ fontSize: 16, color: Lion.ink, fontWeight: 600, letterSpacing: -0.3 }}>
+            {Persona.greeting}, {d.headline}
+          </div>
+        </div>
+      </div>
+
+      {/* hero card — the moment */}
+      <div onClick={time === 'lunch' ? openSheet : undefined} style={{
+        borderRadius: 28, padding: 18, marginBottom: 12, cursor: time === 'lunch' ? 'pointer' : 'default',
+        background: Lion.paper,
+        border: `0.5px solid ${Lion.hairline}`,
+        boxShadow: '0 8px 24px rgba(80,55,30,0.06)',
+      }}>
+        {time === 'morning' && <MorningHero d={d} t={t} />}
+        {time === 'lunch' && <LunchHero d={d} t={t} />}
+        {time === 'evening' && <EveningHero d={d} t={t} />}
+      </div>
+
+      {/* secondary cards row — 2 up */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+        <SecondaryCard label="맛집 지도" value="2.3km 안" caption="라이언 추천 12곳" time={time} kind="map" />
+        <SecondaryCard label="알림" value="2" caption="가맹점 응답 대기" time={time} kind="bell" />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <SecondaryCard label="컨디션" value="보통" caption="수면 6h 12m" time={time} kind="heart" />
+        <SecondaryCard label="오늘 일정" value="2건" caption="11시 미팅" time={time} kind="cal" />
+      </div>
+    </div>
+  );
+}
+
+function SecondaryCard({ label, value, caption, time, kind }) {
+  const t = Lion[time];
+  const ico = {
+    map: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.4 3.5 5.8c0 3.4 4.5 8.7 4.5 8.7s4.5-5.3 4.5-8.7C12.5 3.4 10.5 1.5 8 1.5z" stroke={t.accent} strokeWidth="1.2"/><circle cx="8" cy="5.8" r="1.6" fill={t.accent}/></svg>,
+    bell: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v1M4 7v2l-1 2h10l-1-2V7a4 4 0 10-8 0zM6.5 13a1.5 1.5 0 003 0" stroke={t.accent} strokeWidth="1.2" strokeLinecap="round"/></svg>,
+    heart:<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 13.5s-5-3-5-7a3 3 0 015-2 3 3 0 015 2c0 4-5 7-5 7z" stroke={t.accent} strokeWidth="1.2" strokeLinejoin="round"/></svg>,
+    cal:  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="3.5" width="11" height="10" rx="2" stroke={t.accent} strokeWidth="1.2"/><path d="M2.5 6.5h11M6 2v3M10 2v3" stroke={t.accent} strokeWidth="1.2" strokeLinecap="round"/></svg>,
+  }[kind];
+  return (
+    <div style={{
+      padding: 14, borderRadius: 22, background: Lion.paper,
+      border: `0.5px solid ${Lion.hairline}`,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        {ico}
+        <span style={{ fontSize: 11.5, color: Lion.muted, letterSpacing: -0.2 }}>{label}</span>
+      </div>
+      <div style={{ fontSize: 22, fontWeight: 600, color: Lion.ink, marginTop: 8, letterSpacing: -0.5 }}>{value}</div>
+      <div style={{ fontSize: 11, color: Lion.muted, marginTop: 2 }}>{caption}</div>
+    </div>
+  );
+}
+
+function MorningHero({ d, t }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 4 }}>
+        <span style={{ fontSize: 38, fontWeight: 600, color: t.accent, letterSpacing: -1, lineHeight: 1 }}>{d.weather.temp}</span>
+        <span style={{ fontSize: 13, color: Lion.muted }}>{d.weather.state} · {d.weather.rain}</span>
+      </div>
+      <div style={{ fontSize: 14, color: Lion.ink2, lineHeight: 1.55, marginBottom: 12 }}>
+        오후에 비가 와요. <strong style={{ color: Lion.ink }}>접이식 우산</strong>이랑
+        얇은 카디건만 챙기면 충분해요.
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {d.outfit.map((o) => (
+          <span key={o} style={{
+            fontSize: 11.5, padding: '5px 10px', borderRadius: 999,
+            background: `${t.tintA}88`, color: t.glyph, letterSpacing: -0.2,
+            whiteSpace: 'nowrap',
+          }}>{o}</span>
+        ))}
+      </div>
+      <div style={{
+        marginTop: 14, paddingTop: 12, borderTop: `0.5px solid ${Lion.hairline}`,
+        fontSize: 12, color: Lion.muted, lineHeight: 1.5,
+      }}>{d.note}</div>
+    </div>
+  );
+}
+
+function LunchHero({ d, t }) {
+  const top = d.picks[0];
+  return (
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 600, color: t.accent, letterSpacing: 1.6, marginBottom: 6 }}>
+        오늘의 점심 · 라이언 추천
+      </div>
+      <PhotoSlot label={top.img} height={132} radius={20} time="lunch" />
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginTop: 14 }}>
+        <div style={{ fontSize: 19, fontWeight: 600, color: Lion.ink, letterSpacing: -0.4 }}>{top.name}</div>
+        <div style={{ fontSize: 11.5, color: Lion.muted }}>{top.dist}</div>
+      </div>
+      <div style={{ fontSize: 12.5, color: Lion.muted, marginTop: 3 }}>{top.tag}</div>
+      <div style={{
+        marginTop: 10, padding: '10px 12px', borderRadius: 14,
+        background: `${t.tintA}55`, fontSize: 12.5, color: t.glyph, lineHeight: 1.5,
+      }}>
+        "{top.why}" — {Persona.reasons.lunch}
+      </div>
+      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+        <span style={{ flex: 1, padding: '12px 0', borderRadius: 999, background: t.accent,
+          color: '#fff', fontSize: 13.5, fontWeight: 600, textAlign: 'center' }}>
+          예약 · 결제 →
+        </span>
+        <span style={{ padding: '12px 16px', borderRadius: 999, background: Lion.cream2,
+          color: Lion.ink, fontSize: 13.5, fontWeight: 500 }}>
+          다른 옵션
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function EveningHero({ d, t }) {
+  return (
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 600, color: t.accent, letterSpacing: 1.6, marginBottom: 8 }}>
+        하루 회고
+      </div>
+      <div style={{ fontSize: 16, color: Lion.ink, lineHeight: 1.55, marginBottom: 14 }}>
+        {d.recap}
+      </div>
+      <div style={{ display: 'flex', gap: 12, paddingBottom: 12, borderBottom: `0.5px solid ${Lion.hairline}` }}>
+        {d.stats.map((s) => (
+          <div key={s.k} style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: -0.2 }}>{s.k}</div>
+            <div style={{ fontSize: 18, fontWeight: 600, color: Lion.ink, marginTop: 2, letterSpacing: -0.3 }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 12, fontSize: 12.5, color: t.glyph, lineHeight: 1.5,
+        padding: '10px 12px', borderRadius: 14, background: `${t.tintA}55` }}>
+        내일 · {d.tomorrow}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// V2 · CONVERSATION TIMELINE — Lion has left notes through the day.
+// Past entries shrink upward, current moment expands as the active one.
+// ─────────────────────────────────────────────────────────────
+function V2_Conversation({ time }) {
+  const t = Lion[time];
+  const d = TimeData[time];
+  const { openSheet } = React.useContext(LionCtx);
+
+  // Build a small timeline relative to "now"
+  const past = {
+    morning: [],
+    lunch:   [{ time: '7:23', text: '오늘 비 예보. 우산 챙기시는 거 잊지 마세요.', tag: '아침 브리핑' }],
+    evening: [
+      { time: '7:23', text: '아침 브리핑 · 오후 비 70%', tag: '아침 브리핑' },
+      { time: '12:15', text: '평창동 그릭볼 예약 완료. 14,800원.', tag: '점심 확정' },
+      { time: '17:30', text: '러닝 컨디션 좋아요. 페이스 살짝 올려도 OK.', tag: '오후 체크' },
+    ],
+  }[time];
+
+  return (
+    <div style={{ height: '100%', padding: '8px 18px 110px', overflowY: 'auto' }}>
+      {/* header */}
+      <div style={{ padding: '4px 4px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <div style={{ fontSize: 11.5, color: Lion.muted, letterSpacing: -0.2 }}>5월 15일 · {d.time}</div>
+          <div style={{ fontSize: 22, fontWeight: 600, color: Lion.ink, letterSpacing: -0.5, marginTop: 2 }}>
+            {Persona.greeting} 하루
+          </div>
+        </div>
+        <LionMark size={40} time={time} />
+      </div>
+
+      {/* past entries — small */}
+      {past.map((p, i) => (
+        <div key={i} style={{ display: 'flex', gap: 12, padding: '8px 4px', opacity: 0.62 }}>
+          <div style={{
+            width: 8, height: 8, borderRadius: 4, background: Lion.hairline2,
+            marginTop: 7, flexShrink: 0,
+          }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: -0.2 }}>{p.time} · {p.tag}</div>
+            <div style={{ fontSize: 13, color: Lion.ink2, lineHeight: 1.5, marginTop: 1 }}>{p.text}</div>
+          </div>
+        </div>
+      ))}
+
+      {/* connector */}
+      {past.length > 0 && (
+        <div style={{ marginLeft: 8, height: 14, borderLeft: `1px dashed ${Lion.hairline2}`, marginBottom: 4 }} />
+      )}
+
+      {/* current entry — large, active card */}
+      <div style={{ display: 'flex', gap: 12, marginTop: 6 }}>
+        <div style={{
+          width: 10, height: 10, borderRadius: 5, background: t.accent,
+          marginTop: 14, flexShrink: 0, boxShadow: `0 0 0 4px ${t.accent}22`,
+        }} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 11, color: t.accent, letterSpacing: 1.4, fontWeight: 600, marginBottom: 4 }}>
+            지금 · {time === 'morning' ? '아침 브리핑' : time === 'lunch' ? '점심 추천' : '하루 마무리'}
+          </div>
+          <div onClick={time === 'lunch' ? openSheet : undefined} style={{
+            background: Lion.paper, borderRadius: 24, padding: 16,
+            border: `0.5px solid ${Lion.hairline}`,
+            boxShadow: '0 8px 24px rgba(80,55,30,0.06)',
+            cursor: time === 'lunch' ? 'pointer' : 'default',
+          }}>
+            {time === 'morning' && <ConvoMorning d={d} t={t} />}
+            {time === 'lunch' && <ConvoLunch d={d} t={t} />}
+            {time === 'evening' && <ConvoEvening d={d} t={t} />}
+          </div>
+
+          {/* reply chips */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
+            {(time === 'morning'
+              ? ['일정 더 보기', '우산 위치', '오늘 옷 다시']
+              : time === 'lunch'
+              ? ['다른 옵션', '예약 확정', '나중에']
+              : ['내일 일정', '메모 추가', '잠자기']
+            ).map((c) => (
+              <span key={c} style={{
+                fontSize: 11.5, padding: '7px 12px', borderRadius: 999,
+                background: 'rgba(255,253,248,0.7)', color: Lion.ink2,
+                border: `0.5px solid ${Lion.hairline2}`,
+                whiteSpace: 'nowrap',
+              }}>{c}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConvoMorning({ d, t }) {
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+        <span style={{ fontSize: 32, fontWeight: 600, color: t.accent, letterSpacing: -0.8 }}>{d.weather.temp}</span>
+        <span style={{ fontSize: 12.5, color: Lion.muted }}>{d.weather.state} · {d.weather.rain}</span>
+      </div>
+      <div style={{ fontSize: 14, color: Lion.ink2, lineHeight: 1.55, marginTop: 8 }}>
+        비 와요. 카디건이랑 우산 챙겨드릴게요. 11시 미팅까지 1시간 40분 남았어요.
+      </div>
+      <div style={{
+        marginTop: 12, padding: '10px 12px', borderRadius: 14,
+        background: `${t.tintA}55`, fontSize: 12, color: t.glyph,
+      }}>
+        {d.schedule[0].time} {d.schedule[0].what} · {d.schedule[0].where}
+      </div>
+    </div>
+  );
+}
+
+function ConvoLunch({ d, t }) {
+  return (
+    <div>
+      <div style={{ fontSize: 15, color: Lion.ink, fontWeight: 600, letterSpacing: -0.3, lineHeight: 1.4 }}>
+        가볍게 갈 만한 곳 세 군데 골랐어요.
+      </div>
+      <div style={{ fontSize: 12.5, color: Lion.muted, marginTop: 4 }}>
+        {Persona.reasons.lunch}
+      </div>
+      <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {d.picks.slice(0, 3).map((p, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '8px 10px', borderRadius: 14,
+            background: i === 0 ? `${t.tintA}66` : Lion.cream,
+            border: i === 0 ? `0.5px solid ${t.accent}55` : `0.5px solid ${Lion.hairline}`,
+          }}>
+            <div style={{
+              width: 22, height: 22, borderRadius: 11, flexShrink: 0,
+              background: i === 0 ? t.accent : Lion.cream2, color: i === 0 ? '#fff' : Lion.muted,
+              fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 600,
+            }}>{i + 1}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13.5, color: Lion.ink, fontWeight: 500 }}>{p.name}</div>
+              <div style={{ fontSize: 11, color: Lion.muted, marginTop: 1 }}>{p.tag}</div>
+            </div>
+            <div style={{ fontSize: 11, color: Lion.muted }}>{p.dist}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ConvoEvening({ d, t }) {
+  return (
+    <div>
+      <div style={{ fontSize: 15, color: Lion.ink, lineHeight: 1.55, fontWeight: 500 }}>
+        {d.recap}
+      </div>
+      <div style={{ display: 'flex', gap: 12, marginTop: 14, paddingTop: 12, borderTop: `0.5px solid ${Lion.hairline}` }}>
+        {d.stats.map((s) => (
+          <div key={s.k} style={{ flex: 1 }}>
+            <div style={{ fontSize: 10.5, color: Lion.muted }}>{s.k}</div>
+            <div style={{ fontSize: 17, fontWeight: 600, color: Lion.ink, marginTop: 2 }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// V3 · ORBIT FOCUS — one big circular hero with satellite chips.
+// Novel layout: the moment is literally the center of the screen.
+// ─────────────────────────────────────────────────────────────
+function V3_Orbit({ time }) {
+  const t = Lion[time];
+  const d = TimeData[time];
+  const { openSheet } = React.useContext(LionCtx);
+
+  const satellites = {
+    morning: [
+      { top: '20%', left: '6%',  label: '날씨', value: '18°' },
+      { top: '14%', right: '8%', label: '일정', value: '2건' },
+      { bottom: '32%', left: '4%', label: '수면', value: '6h12' },
+      { bottom: '28%', right: '6%', label: '컨디션', value: '보통' },
+    ],
+    lunch: [
+      { top: '20%', left: '6%',  label: '거리', value: '12분' },
+      { top: '14%', right: '8%', label: '예산', value: '14,800' },
+      { bottom: '32%', left: '4%', label: '단백질', value: '28g' },
+      { bottom: '28%', right: '6%', label: '미팅', value: '15시' },
+    ],
+    evening: [
+      { top: '20%', left: '6%',  label: '걸음', value: '8,724' },
+      { top: '14%', right: '8%', label: '단백질', value: '64g' },
+      { bottom: '32%', left: '4%', label: '내일', value: '비' },
+      { bottom: '28%', right: '6%', label: '취침', value: '22:30' },
+    ],
+  }[time];
+
+  return (
+    <div style={{ height: '100%', padding: '8px 18px 110px', position: 'relative' }}>
+      {/* header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 4px 0' }}>
+        <div>
+          <div style={{ fontSize: 11.5, color: Lion.muted, letterSpacing: -0.2 }}>
+            {time === 'morning' ? '아침' : time === 'lunch' ? '점심' : '저녁'} · {d.time}
+          </div>
+          <div style={{ fontSize: 14, color: Lion.ink, fontWeight: 600, marginTop: 2 }}>
+            {Persona.greeting}, 라이언이 챙겨뒀어요
+          </div>
+        </div>
+      </div>
+
+      {/* orbit area */}
+      <div style={{ position: 'relative', height: 460, marginTop: 12 }}>
+        {/* concentric orbit guides */}
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+          width: 320, height: 320, borderRadius: '50%',
+          border: `1px dashed ${t.accent}33`,
+        }} />
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+          width: 380, height: 380, borderRadius: '50%',
+          border: `1px dashed ${t.accent}22`,
+        }} />
+
+        {/* satellite chips */}
+        {satellites.map((s, i) => (
+          <div key={i} style={{
+            position: 'absolute', ...s,
+            padding: '10px 12px', borderRadius: 18,
+            background: 'rgba(255,253,248,0.75)',
+            border: `0.5px solid ${Lion.hairline2}`,
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 6px 16px rgba(80,55,30,0.06)',
+          }}>
+            <div style={{ fontSize: 10, color: Lion.muted, letterSpacing: -0.1 }}>{s.label}</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: Lion.ink, letterSpacing: -0.3, marginTop: 1 }}>{s.value}</div>
+          </div>
+        ))}
+
+        {/* hero — big circle */}
+        <div onClick={time === 'lunch' ? openSheet : undefined} style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+          width: 250, height: 250, borderRadius: '50%',
+          background: `radial-gradient(60% 60% at 35% 30%, ${t.tintA}, ${t.tintB} 80%)`,
+          border: `1px solid ${t.accent}44`,
+          boxShadow: `0 20px 40px ${t.accent}33, inset 0 0 30px rgba(255,255,255,0.5)`,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          textAlign: 'center', padding: 24,
+          cursor: time === 'lunch' ? 'pointer' : 'default',
+        }}>
+          {time === 'morning' && (
+            <>
+              <div style={{ fontSize: 11, color: t.glyph, letterSpacing: 2 }}>아침 브리핑</div>
+              <div style={{ fontSize: 54, fontWeight: 600, color: t.accent, letterSpacing: -2, lineHeight: 1, margin: '4px 0' }}>18°</div>
+              <div style={{ fontSize: 13, color: t.glyph, lineHeight: 1.4 }}>
+                흐림 · 오후 비<br/>우산 챙겨드릴게요
+              </div>
+            </>
+          )}
+          {time === 'lunch' && (
+            <>
+              <div style={{ fontSize: 11, color: t.glyph, letterSpacing: 2 }}>오늘의 점심</div>
+              <div style={{ fontSize: 22, fontWeight: 600, color: Lion.ink, letterSpacing: -0.4, marginTop: 6, lineHeight: 1.2 }}>
+                평창동<br/>그릭볼
+              </div>
+              <div style={{ fontSize: 12, color: t.glyph, lineHeight: 1.4, marginTop: 6 }}>
+                글루텐 free · 480kcal
+              </div>
+              <div style={{
+                marginTop: 12, padding: '8px 16px', borderRadius: 999,
+                background: t.accent, color: '#fff', fontSize: 12, fontWeight: 600,
+              }}>예약 → 결제</div>
+            </>
+          )}
+          {time === 'evening' && (
+            <>
+              <div style={{ fontSize: 11, color: t.glyph, letterSpacing: 2 }}>하루 마무리</div>
+              <div style={{ fontSize: 28, fontWeight: 600, color: t.accent, letterSpacing: -0.6, marginTop: 4 }}>잘 챙기셨어요</div>
+              <div style={{ fontSize: 12, color: t.glyph, lineHeight: 1.4, marginTop: 6, maxWidth: 180 }}>
+                점심 가볍게, 러닝까지<br/>완주
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* lion mark — floats top-center over orbit */}
+        <div style={{ position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)' }}>
+          <LionMark size={48} time={time} label={false} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// V4 · EDITORIAL LETTER — Lion as a magazine letter to you.
+// Serif headline, hero image, body type. Persona shows up in the salutation.
+// ─────────────────────────────────────────────────────────────
+function V4_Editorial({ time }) {
+  const t = Lion[time];
+  const d = TimeData[time];
+  const { openSheet } = React.useContext(LionCtx);
+
+  const headline = {
+    morning: '오늘 비가 와요.\n우산만 챙기면\n괜찮아요.',
+    lunch:   '점심은 가볍게,\n그릭볼\n어떠세요.',
+    evening: '오늘도 잘\n챙기셨어요.\n충분해요.',
+  }[time];
+
+  return (
+    <div style={{ height: '100%', padding: '8px 22px 110px', overflowY: 'auto' }}>
+      {/* masthead */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        paddingBottom: 8, borderBottom: `0.5px solid ${Lion.hairline2}`,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <LionMark size={26} time={time} label={false} />
+          <span style={{
+            fontFamily: Lion.serif, fontSize: 16, fontWeight: 600,
+            color: Lion.ink, letterSpacing: 0.4,
+          }}>라이언</span>
+        </div>
+        <div style={{ fontSize: 10.5, color: Lion.muted, letterSpacing: 1.5 }}>
+          NO.{time === 'morning' ? '0541' : time === 'lunch' ? '0542' : '0543'} · {d.time}
+        </div>
+      </div>
+
+      {/* dateline */}
+      <div style={{ fontSize: 11, color: t.accent, letterSpacing: 2, marginTop: 22, fontWeight: 600 }}>
+        {Persona.greeting}께
+      </div>
+
+      {/* serif headline */}
+      <h1 style={{
+        fontFamily: Lion.serif, fontSize: 36, fontWeight: 600,
+        color: Lion.ink, letterSpacing: -1, lineHeight: 1.18,
+        margin: '8px 0 16px', whiteSpace: 'pre-line', textWrap: 'pretty',
+      }}>{headline}</h1>
+
+      {/* hero image */}
+      <PhotoSlot
+        label={time === 'morning' ? 'cloud-soft' : time === 'lunch' ? 'photo-grain-bowl' : 'lamp-window'}
+        height={180} radius={4} time={time}
+      />
+
+      {/* body */}
+      <div style={{
+        fontSize: 14, color: Lion.ink2, lineHeight: 1.7,
+        marginTop: 18, letterSpacing: -0.1, textWrap: 'pretty',
+      }}>
+        {time === 'morning' && (
+          <>
+            오늘은 흐리고 <span style={{ color: t.accent, fontWeight: 600 }}>오후 비 70%</span>.
+            얇은 카디건과 접이식 우산이면 충분해요.
+            <br/><br/>
+            11시 성수 미팅, 19시 한강 러닝까지 두 건만 챙기시면 돼요.
+            저녁 운동은 비 그친 이후로 알람 옮겨둘게요.
+          </>
+        )}
+        {time === 'lunch' && (
+          <>
+            오후 미팅이 있어서 부담 적은 걸로 골랐어요.
+            <span style={{ color: t.accent, fontWeight: 600 }}> 글루텐 없는 그릭볼,</span>
+            12분 거리, 단백질 28g.
+            <br/><br/>
+            "예약 → 결제"까지 한 번에 끝내드릴게요.
+            다른 게 끌리면 음성으로 "다른 것도 보여줘" 라고만 해주세요.
+          </>
+        )}
+        {time === 'evening' && (
+          <>
+            <span style={{ color: t.accent, fontWeight: 600 }}>오늘 8,724걸음.</span>
+            점심 가볍게, 러닝까지 완주.
+            <br/><br/>
+            내일 9시 회의 전 비가 와요. 우산 자리 미리 둘게요.
+            오늘은 평소보다 30분 일찍 자는 쪽으로 알람 옮겨둘게요.
+          </>
+        )}
+      </div>
+
+      {/* CTA — only at lunch */}
+      {time === 'lunch' && (
+        <div onClick={openSheet} style={{
+          marginTop: 22, padding: '14px 18px', borderRadius: 999,
+          background: Lion.ink, color: Lion.cream,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          cursor: 'pointer',
+        }}>
+          <span style={{ fontSize: 13.5, fontWeight: 500, letterSpacing: -0.2 }}>이걸로 예약</span>
+          <span style={{
+            width: 28, height: 28, borderRadius: 14, background: t.accent,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 13,
+          }}>→</span>
+        </div>
+      )}
+
+      {/* signoff */}
+      <div style={{
+        marginTop: 24, paddingTop: 16, borderTop: `0.5px solid ${Lion.hairline2}`,
+        fontFamily: Lion.serif, fontSize: 13, color: Lion.muted, fontStyle: 'italic',
+      }}>
+        — 라이언 드림
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// V5 · CARD FAN — Lion shows you a fan of cards. Tap one to focus.
+// The center card is the active moment; outer cards are nearby moments.
+// ─────────────────────────────────────────────────────────────
+function V5_Fan({ time }) {
+  const t = Lion[time];
+  const d = TimeData[time];
+  const { openSheet } = React.useContext(LionCtx);
+  const [focusIdx, setFocusIdx] = React.useState(1); // 0 left, 1 center, 2 right
+
+  const fanCards = time === 'lunch'
+    ? d.picks.map((p) => ({ kind: 'pick', p }))
+    : [
+        { kind: 'note', title: time === 'morning' ? '날씨' : '오늘 요약', body: time === 'morning' ? '18° 흐림' : d.stats[0].v + ' 걸음' },
+        { kind: 'hero' },
+        { kind: 'note', title: '다음', body: time === 'morning' ? '11시 미팅' : '내일 9시 회의' },
+      ];
+
+  return (
+    <div style={{ height: '100%', padding: '8px 0 110px', overflow: 'hidden' }}>
+      {/* greeting */}
+      <div style={{ padding: '4px 22px 0', textAlign: 'center' }}>
+        <LionMark size={48} time={time} label={false} />
+        <div style={{ marginTop: 10, fontSize: 12, color: Lion.muted }}>{d.time} · {Persona.greeting}</div>
+        <div style={{ fontSize: 19, fontWeight: 600, color: Lion.ink, marginTop: 6, letterSpacing: -0.3 }}>
+          {time === 'lunch' ? '세 개 골라뒀어요' : d.headline}
+        </div>
+        <div style={{ fontSize: 12.5, color: Lion.muted, marginTop: 4 }}>
+          {time === 'lunch' ? '카드를 좌우로 넘겨보세요' : d.sub}
+        </div>
+      </div>
+
+      {/* fan stage */}
+      <div style={{ position: 'relative', height: 380, marginTop: 24 }}>
+        {fanCards.map((c, i) => {
+          const offset = i - focusIdx;
+          const isCenter = offset === 0;
+          const angle = offset * 8;
+          const x = offset * 22;
+          const y = Math.abs(offset) * 8;
+          const z = isCenter ? 3 : 2 - Math.abs(offset);
+          return (
+            <div
+              key={i}
+              onClick={() => isCenter && time === 'lunch' ? openSheet() : setFocusIdx(i)}
+              style={{
+                position: 'absolute', left: '50%', top: y,
+                transform: `translateX(calc(-50% + ${x}px)) rotate(${angle}deg) scale(${isCenter ? 1 : 0.94})`,
+                transformOrigin: 'bottom center',
+                width: 240, height: 340,
+                borderRadius: 28, padding: 18,
+                background: Lion.paper, border: `0.5px solid ${Lion.hairline}`,
+                boxShadow: isCenter
+                  ? `0 18px 40px rgba(80,55,30,0.18), 0 0 0 1px ${t.accent}22`
+                  : '0 6px 18px rgba(80,55,30,0.08)',
+                zIndex: z,
+                transition: 'all .3s cubic-bezier(.2,.7,.3,1)',
+                cursor: 'pointer', overflow: 'hidden',
+              }}>
+              {c.kind === 'pick' && <FanPick p={c.p} t={t} active={isCenter} />}
+              {c.kind === 'hero' && <FanHero d={d} t={t} time={time} />}
+              {c.kind === 'note' && (
+                <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: 11, color: Lion.muted, letterSpacing: 1.4 }}>{c.title}</div>
+                  <div style={{ fontSize: 28, fontWeight: 600, color: Lion.ink, letterSpacing: -0.5, lineHeight: 1.1 }}>
+                    {c.body}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* dots */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 12 }}>
+        {fanCards.map((_, i) => (
+          <span key={i} style={{
+            width: i === focusIdx ? 18 : 6, height: 6, borderRadius: 3,
+            background: i === focusIdx ? t.accent : Lion.hairline2,
+            transition: 'width .25s',
+          }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FanPick({ p, t, active }) {
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <PhotoSlot label={p.img} height={140} radius={18} time="lunch" />
+      <div style={{ flex: 1, paddingTop: 14, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ fontSize: 11, color: t.accent, letterSpacing: 1.6, fontWeight: 600 }}>{p.tag.split(' · ')[0]}</div>
+        <div style={{ fontSize: 19, fontWeight: 600, color: Lion.ink, marginTop: 4, letterSpacing: -0.3, lineHeight: 1.2 }}>{p.name}</div>
+        <div style={{ fontSize: 11.5, color: Lion.muted, marginTop: 4 }}>{p.dist} · {p.tag.split(' · ')[1] || ''}</div>
+        <div style={{ flex: 1 }} />
+        <div style={{ fontSize: 11.5, color: t.glyph, fontStyle: 'italic', lineHeight: 1.4, marginBottom: active ? 10 : 0 }}>
+          "{p.why}"
+        </div>
+        {active && (
+          <div style={{
+            padding: '10px 14px', borderRadius: 999, background: t.accent,
+            color: '#fff', fontSize: 12.5, fontWeight: 600, textAlign: 'center',
+          }}>예약 · 결제 →</div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FanHero({ d, t, time }) {
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ fontSize: 11, color: t.accent, letterSpacing: 1.6, fontWeight: 600 }}>
+        {time === 'morning' ? '오늘 아침' : '하루 회고'}
+      </div>
+      {time === 'morning' && (
+        <>
+          <div style={{ fontSize: 64, fontWeight: 600, color: t.accent, letterSpacing: -2, marginTop: 22, lineHeight: 1 }}>18°</div>
+          <div style={{ fontSize: 13, color: Lion.ink2, marginTop: 6 }}>{d.weather.state} · {d.weather.rain}</div>
+          <div style={{ flex: 1 }} />
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+            {d.outfit.map((o) => (
+              <span key={o} style={{ fontSize: 10.5, padding: '4px 8px', borderRadius: 999,
+                background: `${t.tintA}88`, color: t.glyph, whiteSpace: 'nowrap' }}>{o}</span>
+            ))}
+          </div>
+        </>
+      )}
+      {time === 'evening' && (
+        <>
+          <div style={{ fontSize: 14.5, fontWeight: 500, color: Lion.ink, lineHeight: 1.5, marginTop: 14 }}>{d.recap}</div>
+          <div style={{ flex: 1 }} />
+          <div style={{ display: 'flex', gap: 8 }}>
+            {d.stats.map((s) => (
+              <div key={s.k} style={{ flex: 1 }}>
+                <div style={{ fontSize: 9.5, color: Lion.muted }}>{s.k}</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: Lion.ink }}>{s.v}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+Object.assign(window, { V1_SoftStack, V2_Conversation, V3_Orbit, V4_Editorial, V5_Fan });
+
+
+function _Mounted() { return (<IOSDevice width={380} height={800}><LionScreen time="lunch"><V1_SoftStack time="lunch" /></LionScreen></IOSDevice>); }
+ReactDOM.createRoot(document.getElementById('root')).render(<_Mounted />);
+</script></body></html>

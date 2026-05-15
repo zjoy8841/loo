@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>라이언 메인 화면 — 11 시안 비교</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0e0e10;
+    --card: #18181b;
+    --border: #27272a;
+    --ink: #e4e4e7;
+    --sub: #a1a1aa;
+    --mute: #71717a;
+    --accent: #fb923c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 28px 32px 60px; }
+  .head {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 6px;
+  }
+  .head h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+  .head .sub { font-size: 13px; color: var(--sub); }
+  .lede { font-size: 13px; color: var(--mute); margin: 0 0 32px; line-height: 1.55; max-width: 820px; }
+
+  .group { margin-bottom: 36px; }
+  .group-head {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  .group-head .badge {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: var(--card); color: var(--accent);
+    border: 1px solid var(--border); font-weight: 600; letter-spacing: 0.04em;
+  }
+  .group-head h2 { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .group-head .meta { margin-left: auto; font-size: 12px; color: var(--mute); }
+
+  .grid { display: grid; gap: 16px; }
+  .grid-1 { grid-template-columns: 1fr; max-width: 520px; }
+  .grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .cell {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .cell-label {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 0 4px;
+  }
+  .cell-label .key { font-size: 12px; font-weight: 700; color: var(--ink); letter-spacing: 0.04em; }
+  .cell-label .name { font-size: 11.5px; color: var(--sub); }
+  .frame {
+    position: relative; width: 100%;
+    aspect-ratio: 408 / 900;
+    background: #fff;
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .grid-1 .frame { aspect-ratio: 410 / 880; }
+  iframe {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; border: 0;
+  }
+  .open-link {
+    text-align: right; padding: 0 4px;
+  }
+  .open-link a {
+    font-size: 11px; color: var(--mute); text-decoration: none;
+    font-family: ui-monospace, monospace;
+  }
+  .open-link a:hover { color: var(--accent); }
+
+  @media (max-width: 1400px) {
+    .grid-5 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .grid-5 { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>라이언 메인 화면 — 11 시안 비교</h1>
+  <span class="sub">2026-05-15</span>
+</div>
+<p class="lede">
+  단일 brief("라이언 = AI 비서 메인 화면")로 세 도구·세 방향에서 만들어진 11개 안.
+  카드를 클릭하면 인터랙션도 작동(점심 카드 → 시트, 음성 dock → 풀스크린 등).
+  자식 HTML은 같은 폴더의 <code>v6_10.html</code>, <code>v7_A~E.html</code>, <code>v8_A~E.html</code>.
+</p>
+
+<div class="group">
+  <div class="group-head">
+    <span class="badge">v6.10</span>
+    <h2>iOS HIG · Stitch 10회 critique</h2>
+    <span class="meta">light · 슬레이트 블루 액센트 · placeholder mascot</span>
+  </div>
+  <div class="grid grid-1">
+    <div class="cell">
+      <div class="cell-label"><span class="key">v6.10</span><span class="name">Editorial Blue · iOS HIG (Score 9.5/10)</span></div>
+      <div class="frame"><iframe src="v6_10.html" loading="lazy"></iframe></div>
+      <div class="open-link"><a href="v6_10.html" target="_blank">열기 →</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head">
+    <span class="badge">v7</span>
+    <h2>Claude Design · 따뜻 (Soft / Warm Cream)</h2>
+    <span class="meta">5 시안 · 시점=점심 · 페르소나 서연 · placeholder mascot</span>
+  </div>
+  <div class="grid grid-5">
+    <div class="cell"><div class="cell-label"><span class="key">A</span><span class="name">Soft Stack</span></div><div class="frame"><iframe src="v7_A.html" loading="lazy"></iframe></div><div class="open-link"><a href="v7_A.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">B</span><span class="name">Conversation</span></div><div class="frame"><iframe src="v7_B.html" loading="lazy"></iframe></div><div class="open-link"><a href="v7_B.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">C</span><span class="name">Orbit Focus</span></div><div class="frame"><iframe src="v7_C.html" loading="lazy"></iframe></div><div class="open-link"><a href="v7_C.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">D</span><span class="name">Editorial</span></div><div class="frame"><iframe src="v7_D.html" loading="lazy"></iframe></div><div class="open-link"><a href="v7_D.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">E</span><span class="name">Card Fan</span></div><div class="frame"><iframe src="v7_E.html" loading="lazy"></iframe></div><div class="open-link"><a href="v7_E.html" target="_blank">열기 →</a></div></div>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head">
+    <span class="badge">v8</span>
+    <h2>Claude Design · 정갈 (Crisp / Off-white) · "음성 메인" 강제</h2>
+    <span class="meta">5 시안 · 시점=아침 · 페르소나 지원 · 5종 마스코트</span>
+  </div>
+  <div class="grid grid-5">
+    <div class="cell"><div class="cell-label"><span class="key">A</span><span class="name">Quiet Brief</span></div><div class="frame"><iframe src="v8_A.html" loading="lazy"></iframe></div><div class="open-link"><a href="v8_A.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">B</span><span class="name">Companion · LionFace</span></div><div class="frame"><iframe src="v8_B.html" loading="lazy"></iframe></div><div class="open-link"><a href="v8_B.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">C</span><span class="name">Single Focus · Monogram</span></div><div class="frame"><iframe src="v8_C.html" loading="lazy"></iframe></div><div class="open-link"><a href="v8_C.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">D</span><span class="name">Editorial · Line</span></div><div class="frame"><iframe src="v8_D.html" loading="lazy"></iframe></div><div class="open-link"><a href="v8_D.html" target="_blank">열기 →</a></div></div>
+    <div class="cell"><div class="cell-label"><span class="key">E</span><span class="name">Presence (Dark) · Orb</span></div><div class="frame"><iframe src="v8_E.html" loading="lazy"></iframe></div><div class="open-link"><a href="v8_E.html" target="_blank">열기 →</a></div></div>
+  </div>
+</div>
+
+</body>
+</html>
