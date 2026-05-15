@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 Paywall · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}.lc-28{width:28px;height:28px}
+.lock-orb{width:80px;height:80px;border-radius:999px;background:#eff6ff;border:2px solid #bfdbfe;color:#2563eb;display:flex;align-items:center;justify-content:center}
+.lock-orb svg{width:36px;height:36px}
+.feat-mini{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:12.5px;color:#374151}
+.feat-mini .ic{width:20px;height:20px;border-radius:6px;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.preview-blur{position:relative;border:1px solid #e5e7eb;border-radius:14px;padding:13px;background:#f9fafb;overflow:hidden}
+.preview-blur::after{content:'';position:absolute;inset:0;backdrop-filter:blur(2.5px);background:rgba(255,255,255,.4)}
+.preview-blur.locked .lock-pill{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1;background:rgba(31,31,31,.92);color:#fff;border-radius:999px;padding:6px 13px;font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:5px}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:15px 0;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.cta-line{border:1px solid #d1d5db;border-radius:14px;padding:14px 0;font-size:13.5px;font-weight:600;color:#6b7280;background:#fff;text-align:center;width:100%}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-infinity" viewBox="0 0 24 24"><path d="M18.5 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/><path d="M5.5 7.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"/><path d="M9.5 12h5"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">07 Paywall (기능 잠금) · v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>약점 ② 보완.</b> SaaS conversion 핵심 — Pro-only 기능 시도 순간 잠금 → 가치 한 문장 + Trial → 01. 3 변형: AI 작업 한도·미션 플랜·고급 모델. 본 화면은 대표 1번(AI 작업 한도 초과).</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="font-bold text-[15px]">Pro 기능</span>
+      <span class="w-6"></span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <!-- 잠금 아이콘 -->
+      <div class="flex flex-col items-center text-center mt-3">
+        <div class="lock-orb"><svg><use href="#i-lock"/></svg></div>
+        <p class="text-[11px] font-bold tracking-widest text-blue-600 mt-5">PRO 전용</p>
+        <h2 class="text-[20px] font-bold mt-2 leading-tight">이번 달 AI 작업<br>30회를 다 쓰셨어요</h2>
+        <p class="text-[12.5px] text-gray-500 mt-2.5 leading-relaxed">Pro로 잠금 해제하면 <b class="text-gray-900">무제한</b>으로 사용할 수 있어요.<br>또는 6/1 충전까지 기다리세요.</p>
+      </div>
+
+      <!-- 잠긴 미리보기 (context preserve) -->
+      <p class="sec-label mt-7">시도한 작업</p>
+      <div class="preview-blur locked">
+        <div class="flex items-start gap-3">
+          <span class="w-10 h-10 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500 flex-shrink-0"><svg class="lc lc-18"><use href="#i-target"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-[13px]">점심 메뉴 추천</p>
+            <p class="text-[11px] text-gray-500 mt-0.5">오늘 12:00 · AI 작업 알림</p>
+            <p class="text-[11.5px] text-gray-600 mt-1.5 leading-relaxed">B카페 도보 4분 · 제육덮밥 추천...</p>
+          </div>
+        </div>
+        <div class="lock-pill"><svg class="lc lc-12"><use href="#i-lock"/></svg> Pro에서 사용 가능</div>
+      </div>
+
+      <!-- Pro 가치 -->
+      <p class="sec-label mt-6">Pro로 잠금 해제</p>
+      <div class="bg-white border border-gray-200 rounded-xl p-3.5">
+        <div class="feat-mini"><span class="ic"><svg class="lc lc-12"><use href="#i-infinity"/></svg></span><span>AI 작업 알림 <b>무제한</b></span></div>
+        <div class="feat-mini"><span class="ic"><svg class="lc lc-12"><use href="#i-target"/></svg></span><span>미션 플랜 (목표 기반 스케줄)</span></div>
+        <div class="feat-mini"><span class="ic"><svg class="lc lc-12"><use href="#i-zap"/></svg></span><span>우선 응답 · 고급 모델</span></div>
+      </div>
+
+      <!-- Trial 강조 -->
+      <div class="mt-3 flex items-center justify-center gap-2 text-[12px] text-blue-600 font-bold">
+        <svg class="lc lc-14"><use href="#i-sparkles"/></svg>
+        <span>7일 무료로 먼저 써보세요</span>
+      </div>
+
+    </div>
+
+    <!-- 하단 CTA -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white space-y-2.5">
+      <a href="01-plan.html" class="cta">Pro로 잠금 해제 <svg class="lc lc-16"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="cta-line">Free로 계속 (9회 남음)</a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 잠금 신호</h3>
+    <div class="row"><span class="num crit">1</span><div>🔒 아이콘 + "PRO 전용" 라벨 + 명확한 사유("30회를 다 쓰셨어요"). 차단이 아니라 <b>도움 제안</b>의 톤 — "어쩔 수 없이 막혔어"가 아니라 "이렇게 풀 수 있어".</div></div>
+
+    <h3>② 컨텍스트 보존 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>사용자가 <b>방금 시도한 작업</b>이 blur 상태로 보임. 화면이 무엇 때문에 떴는지 즉시 인지 + 사용자 행위 의도가 끊기지 않음. Notion·Linear 패턴.</div></div>
+
+    <h3>③ Pro 가치 — 3줄만</h3>
+    <div class="row"><span class="num">3</span><div>이번 사용자에게 가장 효력 있는 3개. AI 작업 한도 변형이면 <b>"무제한"이 첫 줄</b>. 미션 플랜 변형이면 "미션 플랜" 첫 줄. 변형별로 순서 다름.</div></div>
+
+    <h3>④ Trial 강조</h3>
+    <div class="row"><span class="num">4</span><div>"7일 무료" 한 줄. 진입장벽 ↓ 시그널. 첫 잠금 경험에서 결제 직접 강요 X — 무료 체험으로 부드럽게.</div></div>
+
+    <h3>⑤ 메인 CTA → 01 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">5</span><div>"Pro로 잠금 해제" — dark CTA. 01 plan picker로 진입(컨텍스트: 어디서 왔는지 query로 전달, 03 success 후 잠금 시도 작업으로 자동 복귀).</div></div>
+
+    <h3>⑥ Free 계속 (Escape hatch) <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>"Free로 계속" — 보조 CTA. <b>강제 결제 인상 회피</b> = 다크패턴 비난 회피. 남은 한도 표시("9회 남음")로 정확한 상태 안내. 한도 초과 변형에선 비활성 또는 "다음 충전일까지 대기" 표시.</div></div>
+
+    <h3>변형 — 3가지 컨텍스트</h3>
+    <div class="row"><span class="num">B</span><div><b>변형 1 — AI 작업 한도</b>: 본 화면 (월 30회 초과). "Free로 계속" = 다음 충전일까지 대기.<br><b>변형 2 — 미션 플랜</b>: "미션 플랜은 Pro 전용 기능이에요" + 플랜 sample blur + "Free로 계속" = 일반 미션으로 만들기.<br><b>변형 3 — 고급 모델</b>: "이 작업은 고급 모델이 필요해요" + 결과 quality 차이 미리보기 + "Free로 계속" = 기본 모델로 진행.</div></div>
+
+    <h3>회귀 처리 — 결제 완료 후</h3>
+    <div class="row"><span class="num">C</span><div>01 → 02 → 03 success 후, 사용자가 paywall에서 막혔던 <b>원래 작업으로 자동 복귀</b>. URL state 또는 last action queue. 결제만 하고 끝나면 paywall 효력 절반 — 진짜 가치는 즉시 사용으로 입증.</div></div>
+
+    <h3>접근성</h3>
+    <div class="row"><span class="num">A</span><div><code>role="alertdialog"</code>. 시각 정보(blur·🔒)에 의존하지 않게 라벨에 "Pro 전용" 명시. ✕ 닫기 = 이전 화면으로(작업 미실행 상태 유지).</div></div>
+  </div>
+
+</div>
+</body>
+</html>

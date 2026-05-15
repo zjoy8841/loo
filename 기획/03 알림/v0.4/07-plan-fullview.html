@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 플랜 풀뷰 · v0.4</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.hero{background:linear-gradient(135deg,#1f1f1f 0%,#2563eb 100%);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.hero .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.18);color:#fff;letter-spacing:.04em}
+.hero-stat{display:flex;gap:14px;margin-top:13px}
+.hero-stat .s{flex:1}
+.hero-stat .s .num{font-size:22px;font-weight:700;line-height:1}
+.hero-stat .s .lbl{font-size:10.5px;color:#bfdbfe;margin-top:3px}
+.hero-progress{margin-top:14px;height:5px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden}
+.hero-progress .bar{height:100%;background:#fff;border-radius:999px;width:11%}
+/* week section */
+.week-tab{display:inline-flex;gap:6px;overflow-x:auto;padding:1px}
+.week-tab .tab{flex-shrink:0;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;background:#fff;border:1px solid #e5e7eb;color:#6b7280}
+.week-tab .tab.on{background:#1f1f1f;color:#fff;border-color:#1f1f1f}
+.week-tab .tab.done{color:#9ca3af;text-decoration:line-through;text-decoration-color:#d1d5db}
+/* day card */
+.day-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:13px;margin-bottom:9px}
+.day-card.today{border-color:#2563eb;background:#eff6ff}
+.day-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.day-head .dt{font-size:13px;font-weight:700;color:#111827}
+.day-head .dt-today{color:#2563eb}
+.day-head .summary{font-size:11px;color:#9ca3af}
+.task-row{display:flex;align-items:center;gap:9px;padding:6px 0;font-size:12.5px}
+.task-row .time{width:50px;font-size:11.5px;color:#6b7280;font-weight:600}
+.task-row .subj-pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;border:1px solid #e5e7eb;color:#374151}
+.task-row .subj-math{border-color:#bfdbfe;color:#2563eb;background:#eff6ff}
+.task-row .subj-eng{border-color:#fde68a;color:#92400e;background:#fffbeb}
+.task-row .subj-sci{border-color:#bbf7d0;color:#166534;background:#f0fdf4}
+.task-row .subj-mock{border-color:#fecaca;color:#991b1b;background:#fef2f2}
+.task-row .subj-review{border-color:#e9d5ff;color:#6b21a8;background:#faf5ff}
+.task-row .label{flex:1;color:#374151}
+.task-row.done .label{color:#9ca3af;text-decoration:line-through}
+.task-row.done .time{color:#9ca3af}
+.task-row .check-mini{width:14px;height:14px;border-radius:4px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:9px}
+.task-row.done .check-mini{background:#2563eb;border-color:#2563eb}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.action-bar{display:flex;gap:8px}
+.action-bar .btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px;border-radius:11px;font-size:12px;font-weight:600;border:1px solid #e5e7eb;background:#fff;color:#374151}
+.action-bar .btn-danger{color:#dc2626;border-color:#fecaca}
+.action-bar .btn-blue{background:#2563eb;color:#fff;border-color:#2563eb}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 12a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.5 15a9 9 0 0 1-14.85 3.36L1 14"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.4 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">07 플랜 풀뷰 · v0.4</h1>
+  <p class="text-sm text-gray-600 mt-1">대화로 만든 플랜 또는 <b>"전체 스케줄 보여줘"</b> 명령의 도착지. 전체 진행률 + 주간 그리드 + 일자별 알림 카드. AI에게 다시 대화로 수정·재생성 가능.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="00-conversation.html" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">시험 대비 학습</span>
+      <a href="00-conversation.html" class="text-gray-400" aria-label="대화로 수정"><svg class="lc lc-22"><use href="#i-mic"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- Hero 진행 상황 -->
+      <div class="hero">
+        <div class="flex items-center justify-between">
+          <span class="badge"><svg class="lc lc-12"><use href="#i-sparkles"/></svg> AI 플랜 · 9주</span>
+          <span class="text-[11px] text-blue-200">5/15 ~ 7/17</span>
+        </div>
+        <p class="text-[17px] font-bold mt-2.5 leading-tight">7월 17일 시험까지<br>D-63일</p>
+        <div class="hero-stat">
+          <div class="s">
+            <p class="num">6 <span class="text-[12px] font-normal text-blue-200">/ 56</span></p>
+            <p class="lbl">완료</p>
+          </div>
+          <div class="s">
+            <p class="num">50</p>
+            <p class="lbl">남음</p>
+          </div>
+          <div class="s">
+            <p class="num">11%</p>
+            <p class="lbl">진행률</p>
+          </div>
+        </div>
+        <div class="hero-progress"><div class="bar"></div></div>
+      </div>
+
+      <!-- 주차 탭 -->
+      <p class="sec-label mt-6">주차</p>
+      <div class="week-tab">
+        <button class="tab done">1주</button>
+        <button class="tab on">2주 · 이번 주</button>
+        <button class="tab">3주</button>
+        <button class="tab">4주</button>
+        <button class="tab">5주</button>
+        <button class="tab">···</button>
+      </div>
+
+      <!-- 일자별 카드 -->
+      <p class="sec-label mt-5">5월 19일 ~ 5월 25일</p>
+
+      <!-- 월 (완료) -->
+      <div class="day-card">
+        <div class="day-head">
+          <span class="dt">월 5/19</span>
+          <span class="summary">3 / 3 완료</span>
+        </div>
+        <div class="task-row done">
+          <span class="time">07:00</span>
+          <span class="subj-pill subj-math">수학</span>
+          <span class="label">미적분 1단원</span>
+          <span class="check-mini"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+        </div>
+        <div class="task-row done">
+          <span class="time">14:00</span>
+          <span class="subj-pill subj-eng">영어</span>
+          <span class="label">단어 50개</span>
+          <span class="check-mini"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+        </div>
+        <div class="task-row done">
+          <span class="time">20:00</span>
+          <span class="subj-pill subj-sci">과학</span>
+          <span class="label">물리 운동학</span>
+          <span class="check-mini"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+        </div>
+      </div>
+
+      <!-- 화 (today) -->
+      <div class="day-card today">
+        <div class="day-head">
+          <span class="dt dt-today">화 5/20 · 오늘</span>
+          <span class="summary">3 / 3</span>
+        </div>
+        <div class="task-row">
+          <span class="time">07:00</span>
+          <span class="subj-pill subj-math">수학</span>
+          <span class="label">미적분 2단원</span>
+          <span class="check-mini"></span>
+        </div>
+        <div class="task-row">
+          <span class="time">14:00</span>
+          <span class="subj-pill subj-math">수학</span>
+          <span class="label">기출 30문제</span>
+          <span class="check-mini"></span>
+        </div>
+        <div class="task-row">
+          <span class="time">20:00</span>
+          <span class="subj-pill subj-eng">영어</span>
+          <span class="label">독해 지문 3개</span>
+          <span class="check-mini"></span>
+        </div>
+      </div>
+
+      <!-- 수 -->
+      <div class="day-card">
+        <div class="day-head">
+          <span class="dt">수 5/21</span>
+          <span class="summary">3건</span>
+        </div>
+        <div class="task-row">
+          <span class="time">07:00</span>
+          <span class="subj-pill subj-math">수학</span>
+          <span class="label">미적분 3단원</span>
+          <span class="check-mini"></span>
+        </div>
+        <div class="task-row">
+          <span class="time">14:00</span>
+          <span class="subj-pill subj-sci">과학</span>
+          <span class="label">화학 1단원</span>
+          <span class="check-mini"></span>
+        </div>
+        <div class="task-row">
+          <span class="time">20:00</span>
+          <span class="subj-pill subj-review">복습</span>
+          <span class="label">월·화 정리</span>
+          <span class="check-mini"></span>
+        </div>
+      </div>
+
+      <!-- 토 (모의고사) -->
+      <div class="day-card">
+        <div class="day-head">
+          <span class="dt">토 5/24</span>
+          <span class="summary text-amber-700 font-semibold">주말 · 모의고사</span>
+        </div>
+        <div class="task-row">
+          <span class="time">09:00</span>
+          <span class="subj-pill subj-mock">모의</span>
+          <span class="label">수학 모의고사 1회</span>
+          <span class="check-mini"></span>
+        </div>
+        <div class="task-row">
+          <span class="time">14:00</span>
+          <span class="subj-pill subj-review">복습</span>
+          <span class="label">오답 정리 + 약점 진단</span>
+          <span class="check-mini"></span>
+        </div>
+      </div>
+
+      <!-- ... -->
+      <p class="text-[11.5px] text-gray-400 text-center mt-4">목·금·일 ⌄</p>
+
+      <!-- 액션 바 -->
+      <p class="sec-label mt-6">플랜 관리</p>
+      <div class="action-bar">
+        <a href="00-conversation.html" class="btn btn-blue"><svg class="lc lc-14"><use href="#i-mic"/></svg> 대화로 수정</a>
+        <button class="btn"><svg class="lc lc-14"><use href="#i-refresh"/></svg> 재생성</button>
+        <button class="btn btn-danger"><svg class="lc lc-14"><use href="#i-trash"/></svg> 종료</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 진입 경로 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>도달 경로 3가지:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>대화 결과 미니 카드 "보기 →" (00 conversation)</li>
+      <li>"전체 스케줄 보여줘" 명령형 대화 응답</li>
+      <li>알림 센터(01)에서 플랜 태그 알림 탭</li>
+    </ul></div></div>
+
+    <h3>② Hero 진행 — D-day + 진행률 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>"7월 17일까지 D-63일" — 목표 일자 강조. 진행률·완료/남음 stat 3개로 한눈에 상태 파악. AI 플랜 배지로 "이건 AI가 만든 거"라는 출처 명시.</div></div>
+
+    <h3>③ 주차 탭</h3>
+    <div class="row"><span class="num">3</span><div>9주 플랜이면 9개 탭. 지나간 주는 done(취소선), 이번 주 = on, 미래 = idle. 가로 스크롤. 사용자 결정: <b>주 단위가 멘탈 모델</b>(64일 한 그리드는 너무 큼).</div></div>
+
+    <h3>④ 일자 카드 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>오늘 = 파란 강조. 각 카드 = 그날 알림 풀 리스트. 시간 · 과목 pill · 작업 라벨 · 체크박스. 과목별 색(수학·영어·과학·모의·복습)으로 균형 시각화 — AI가 짠 reasoning(취약 자주·주말 모의)이 한눈에 보임.</div></div>
+
+    <h3>⑤ 과목 pill 색 시스템</h3>
+    <div class="row"><span class="num">5</span><div>색은 정보용(미적 X). 사용자가 "수학 더 자주" 같은 요청을 했을 때 그리드 보면 즉시 검증. 색은 AI가 자동 배정(과목 추가 시 색상 풀에서 선택).</div></div>
+
+    <h3>⑥ 액션 바 — 대화로 수정 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>3개 액션:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li><b>대화로 수정</b> (파랑·primary) → 00 conversation, 플랜 컨텍스트 유지한 채로 추가 발화</li>
+      <li>재생성 → AI에게 같은 목표 다른 스케줄 요청 (현재 진행도 유지)</li>
+      <li>종료 (위험) → 플랜 종료, 남은 알림 모두 취소</li>
+    </ul>
+    "대화로 수정"이 primary = <b>v0.4 패러다임</b>. 폼 편집은 보조 경로(05 edit retrofit).</div></div>
+
+    <h3>⑦ 헤더 마이크 — 빠른 대화</h3>
+    <div class="row"><span class="num">7</span><div>우상단 마이크 = 풀뷰 보면서 즉시 대화 시작. "오늘 거 다 해" / "수학 빼" 같은 빠른 명령용.</div></div>
+
+    <h3>⑧ 명령형 대화 — "전체 스케줄 보여줘"</h3>
+    <div class="row"><span class="num">8</span><div>00 conversation에서 사용자가 "전체 스케줄 보여줘"라고 말하면 AI 응답: "<b>시험 대비 학습</b> 플랜이에요. 전체로 열까요? [열기 →]" — 탭 시 이 화면. 플랜 1개 = 인라인 카드 미리보기 + 풀뷰 진입, 여러 개 = 플랜 목록 sheet 후 선택.</div></div>
+
+    <h3>분기 — 여러 플랜 동시 진행</h3>
+    <div class="row"><span class="num">B</span><div>플랜 N개면 hero 위에 plan switcher(스와이프 또는 segmented control). 각 플랜이 같은 구조의 풀뷰. 알림 센터(01)에서도 플랜 태그로 필터.</div></div>
+
+    <h3>접근성</h3>
+    <div class="row"><span class="num">A</span><div>주차 탭 = <code>role="tablist"</code>. 일자 카드 = <code>role="region"</code> + aria-label="화요일 5월 20일 오늘 3건". 체크박스 토글로 알림 완료 처리(대화로 처리도 가능).</div></div>
+  </div>
+
+</div>
+</body>
+</html>

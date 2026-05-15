@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 구독 관리 · v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.cap .num.danger{background:#dc2626}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.hero{background:linear-gradient(135deg,#1f1f1f 0%,#374151 100%);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.hero .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:rgba(59,130,246,.25);color:#bfdbfe;letter-spacing:.04em}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 4px 8px}
+.list{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
+.list-row{display:flex;align-items:center;gap:12px;padding:14px 14px;background:#fff;border-bottom:1px solid #f3f4f6}
+.list-row:last-child{border-bottom:none}
+.list-ic{width:34px;height:34px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#6b7280;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.list-ic.danger{border-color:#fecaca;background:#fef2f2;color:#dc2626}
+.list-tit{font-size:13.5px;font-weight:600;color:#111827}
+.list-sub{font-size:11.5px;color:#9ca3af;margin-top:1px}
+.danger-row .list-tit{color:#dc2626}
+.bill-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;font-size:12.5px;border-bottom:1px dashed #e5e7eb}
+.bill-row:last-child{border-bottom:none}
+.bill-row .date{color:#6b7280}
+.bill-row .amt{font-weight:600;color:#111827}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+.danger-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#dc2626;color:#fff;margin-left:5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-up-down" viewBox="0 0 24 24"><polyline points="7 17 7 7 11 11"/><polyline points="17 7 17 17 13 13"/></symbol>
+<symbol id="i-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2V2"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/></symbol>
+<symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17.01"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.1 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">04 구독 관리 (Hub) · v0.1</h1>
+  <p class="text-sm text-gray-600 mt-1">구독자의 모든 행위가 모이는 허브. Stripe Customer Portal 패턴 — 현재 상태 + 다음 결제일 + Plan/수단 변경 + 청구 내역 + 해지. <b>해지 진입을 숨기지 않는다</b>(EU·신뢰).</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">구독</span>
+      <a href="#" class="text-gray-400" aria-label="도움말"><svg class="lc lc-22"><use href="#i-help"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 현재 plan 카드 (Hero) -->
+      <div class="hero">
+        <div class="flex items-center justify-between">
+          <span class="badge">✓ 활성 · 체험 중</span>
+          <span class="text-[11px] text-gray-300">2026-05-15 시작</span>
+        </div>
+        <p class="text-[20px] font-bold mt-3">Pro · 연 결제</p>
+        <div class="mt-4 pt-4 border-t border-white/15 flex items-end justify-between">
+          <div>
+            <p class="text-[11px] text-gray-300">첫 자동결제</p>
+            <p class="text-[15px] font-bold mt-0.5">2026-05-22 · ₩99,000</p>
+          </div>
+          <a href="#" class="text-[11.5px] font-semibold text-blue-300">상세</a>
+        </div>
+      </div>
+
+      <!-- 안내 (체험 중일 때만) -->
+      <div class="mt-3 flex items-start gap-2 px-2 text-[12px] text-gray-500 leading-relaxed">
+        <svg class="lc lc-14" style="margin-top:2px"><use href="#i-info"/></svg>
+        <span>체험 종료 전 해지하면 추가 청구 없이 Pro 기능이 5/22까지 유지됩니다.</span>
+      </div>
+
+      <!-- Plan 관리 -->
+      <p class="sec-label mt-6">PLAN</p>
+      <div class="list">
+        <a href="01-plan.html" class="list-row">
+          <span class="list-ic"><svg class="lc lc-18"><use href="#i-arrow-up-down"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="list-tit">요금제 변경</p>
+            <p class="list-sub">월/연 전환 · 다른 plan</p>
+          </div>
+          <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+        </a>
+      </div>
+
+      <!-- 결제수단 -->
+      <p class="sec-label mt-5">결제수단</p>
+      <div class="list">
+        <a href="02-checkout.html" class="list-row">
+          <span class="list-ic"><svg class="lc lc-18"><use href="#i-credit-card"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="list-tit">토스페이</p>
+            <p class="list-sub">기본 결제수단</p>
+          </div>
+          <span class="text-[12px] text-blue-600 font-semibold">변경</span>
+        </a>
+      </div>
+
+      <!-- 청구 내역 -->
+      <p class="sec-label mt-5">청구 내역</p>
+      <div class="list">
+        <div class="list-row" style="display:block;padding:14px">
+          <div class="bill-row">
+            <div>
+              <p class="font-semibold text-[12.5px] text-gray-900">2026-05-15</p>
+              <p class="text-[11px] text-gray-400">체험 시작 · ₩0</p>
+            </div>
+            <a href="#" class="text-[11.5px] text-blue-600 font-semibold">영수증 →</a>
+          </div>
+        </div>
+        <a href="#" class="list-row" style="background:#fafafa">
+          <span class="list-ic"><svg class="lc lc-18"><use href="#i-receipt"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="list-tit">모든 청구 보기</p>
+            <p class="list-sub">월별·연도별 필터 + 영수증 다운로드</p>
+          </div>
+          <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+        </a>
+      </div>
+
+      <!-- 위험 영역 -->
+      <p class="sec-label mt-5">구독 종료</p>
+      <div class="list">
+        <a href="05-cancel.html" class="list-row danger-row">
+          <span class="list-ic danger"><svg class="lc lc-18"><use href="#i-x-circle"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="list-tit">구독 해지</p>
+            <p class="list-sub">체험 종료 전 해지 가능 · 추가 청구 없음</p>
+          </div>
+          <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+        </a>
+      </div>
+
+      <p class="text-[11px] text-gray-400 mt-6 leading-relaxed text-center px-3">결제 문제 발생 시 알림으로 알려드립니다. 자세한 정책은 <a href="#" class="underline">자동결제 약관</a> · <a href="#" class="underline">환불 정책</a>.</p>
+
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 현재 plan 카드 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>화면 진입 직후 시각 점유. <b>활성·체험중</b> 상태 배지 + plan 이름 + <b>다음 결제일·금액</b>. 사용자의 "내가 지금 뭐 쓰고 있지·언제 얼마 나가지?" 두 질문 한 번에 해소.</div></div>
+
+    <h3>② 체험 중 안내</h3>
+    <div class="row"><span class="num">2</span><div>체험 기간에만 노출되는 줄. "체험 종료 전 해지 = 추가 청구 없음" — 사용자의 불안을 명시적으로 풀어준다. 정식 구독 후엔 이 줄 숨김.</div></div>
+
+    <h3>③ Plan 변경 → 01</h3>
+    <div class="row"><span class="num">3</span><div>탭 시 01 picker 변형(현재 plan 비교 강조). 업그레이드 = 즉시 + 일할 차액, 다운그레이드 = 다음 결제일부터 — 정책 텍스트는 변경 sheet 안에서.</div></div>
+
+    <h3>④ 결제수단 변경 → 02</h3>
+    <div class="row"><span class="num">4</span><div>현재 수단 표시(토스페이) + "변경" 링크. 탭 시 02 결제수단 섹션만 단독으로 열림(plan 변경 없음).</div></div>
+
+    <h3>⑤ 청구 내역</h3>
+    <div class="row"><span class="num">5</span><div>최근 1~3건 인라인 + "모든 청구 보기" 진입. 영수증 PDF 다운로드는 별 화면. <b>세금·회계 처리 사용자 필수</b> 기능.</div></div>
+
+    <h3>⑥ 해지 진입 <span class="danger-badge">DANGER</span></h3>
+    <div class="row"><span class="num danger">6</span><div>위험 색이지만 <b>숨기지 않는다</b>. iOS Settings·Stripe·Spotify 모두 "구독 종료" 섹션을 별도 라벨로 분리. EU "쉽게 해지" 표준 + 신뢰 시그널.</div></div>
+
+    <h3>⑦ 정책 미세약관</h3>
+    <div class="row"><span class="num">7</span><div>화면 끝에 자동결제·환불 약관 링크. CTA 옆이 아니라 화면 맥락에서 자연스럽게.</div></div>
+
+    <h3>분기 — 미가입자</h3>
+    <div class="row"><span class="num">B</span><div>Free 사용자는 마이페이지에서 04 대신 <b>"Pro로 업그레이드"</b> CTA 배너만 보여 01로 직진. 04 자체는 구독자 전용 화면.</div></div>
+
+    <h3>분기 — 결제 실패 중</h3>
+    <div class="row"><span class="num danger">C</span><div>06 결제 실패 상태가 활성인 동안 hero 카드가 빨강으로 변하고 "결제 실패 — 수단 변경 필요" 배너가 ① 위에 표시. 탭 = 06으로.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04 알림 · v0.4 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-20{width:20px;height:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;display:block;transition:.15s}
+.card:hover{border-color:#9ca3af}
+.scr-num{width:26px;height:26px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ph{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.ph-new{background:#eff6ff;color:#2563eb}
+.ph-keep{background:#f0fdf4;color:#166534}
+.ph-warn{background:#fffbeb;color:#92400e}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;font-size:12.5px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#f9fafb;font-weight:700;color:#374151}
+td b{color:#111827}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}
+.flow-step{background:#fff;border:1px solid #d1d5db;border-radius:9px;padding:7px 11px;font-weight:600;color:#374151}
+.flow-step.s{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+.flow-step.new{border-color:#2563eb;color:#2563eb;background:#eff6ff;font-weight:700}
+.diff-add{background:#eff6ff;color:#1e3a8a;padding:1px 6px;border-radius:4px;font-size:11.5px;font-weight:600}
+.diff-rm{background:#fef2f2;color:#7f1d1d;padding:1px 6px;border-radius:4px;font-size:11.5px;font-weight:600;text-decoration:line-through}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1100px] mx-auto">
+
+  <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
+  <h1 class="text-3xl font-bold mt-1">U-04 알림 · v0.4 초안 — 대화창 패러다임</h1>
+  <p class="text-gray-600 mt-2 leading-relaxed"><b>핵심 패러다임 전환.</b> v0.3 04(카테고리 우선 동적 폼)을 폐기하고 <b>대화창(음성+텍스트) primary</b>로 재설계. 사용자는 자연어로 의도를 말하면 AI가 알림·플랜을 조립하고 reasoning을 피드백. 단순 케이스는 한 줄 응답, 복잡 플랜은 다중 턴 조정. "전체 스케줄 보여줘" 같은 명령형 대화로 시각화도 호출. 폼은 보조 경로(편집·수동 작성)로 남김.</p>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="ph">그레이스케일 + 라인 아이콘</span>
+    <span class="ph">시멘틱 색: 정보 파랑</span>
+    <span class="ph ph-new">v0.4 = 대화 패러다임</span>
+  </div>
+
+  <!-- 왜 패러다임 전환했나 -->
+  <h2 class="text-lg font-bold mt-8 mb-1">왜 폼 → 대화로 갔나</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-2">
+    <p><b class="text-gray-900">v0.3의 04 카테고리 우선 폼은 시니어 검토에서 풀지 못한 약점 ③ "AI 작업 조립 부담"의 미봉책이었다.</b> 사용자가 카테고리를 고르고 폼을 채우고 AI 블록을 조립하는 모든 단계가 "쉽게 만든다"는 목표와 어긋남.</p>
+    <p>2026-05-15 세션에서 사용자가 직접 제안: <span class="diff-rm">설정 화면(폼)</span> → <span class="diff-add">대화창에서 음성으로 표현</span>. 예: "아침 7시 날씨+일정 브리핑 보내줘" / "7월 17일 시험에 맞춰 공부 스케줄" / "전체 스케줄 보여줘".</p>
+    <p>이 방향은 메모리의 <code>[[project_alarm_ai_assembly]]</code>(AI 조립 = 핵심 기능)와 정합되면서, 동시에 사용자에게 조립 부담을 0으로 줄이는 길. <b>AI가 조립을 대신하고 reasoning만 보여준다.</b></p>
+  </div>
+
+  <!-- v0.4 변경 매핑 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">v0.3 → v0.4 변경 매핑</h2>
+  <table>
+    <tr>
+      <th style="width:170px">v0.3 화면</th>
+      <th style="width:80px">v0.4 상태</th>
+      <th>변경 내용</th>
+    </tr>
+    <tr>
+      <td><b>01</b> 메인 알림 센터</td>
+      <td><span class="ph ph-keep">유지</span></td>
+      <td>v0.3 그대로 유지. <code>03 알림/v0.3/01-notification-center.html</code> 참조.</td>
+    </tr>
+    <tr>
+      <td><b>02</b> 알림 도착</td>
+      <td><span class="ph ph-keep">유지</span></td>
+      <td>v0.3 그대로 유지. 정시성 모델 + 실패 시트 그대로.</td>
+    </tr>
+    <tr>
+      <td><b>03</b> 일정 타임라인</td>
+      <td><span class="ph ph-keep">유지</span></td>
+      <td>v0.3 그대로 유지.</td>
+    </tr>
+    <tr>
+      <td><b>04</b> 생성·편집 (카테고리 폼)</td>
+      <td><span class="ph ph-warn">보조 경로</span></td>
+      <td><b>Primary 자리에서 내려옴.</b> v0.4에선 <span class="diff-add">00 대화창</span>이 primary 생성 경로. 04 폼은 ① AI 조립 결과 세부 편집 ② AI 안 쓰고 수동 작성 두 경로에서 진입. <span class="ph">v0.4 후속 라운드에 retrofit</span> 작성 예정.</td>
+    </tr>
+    <tr>
+      <td><b>05</b> 알림 설정</td>
+      <td><span class="ph ph-keep">유지</span></td>
+      <td>v0.3 그대로 유지.</td>
+    </tr>
+    <tr>
+      <td><b>06</b> 결과 상세</td>
+      <td><span class="ph ph-keep">유지</span></td>
+      <td>v0.3 그대로 유지. 결과 카드 탭의 풀뷰.</td>
+    </tr>
+    <tr>
+      <td><b>00</b> (없음)</td>
+      <td><span class="ph ph-new">v0.4 신규</span></td>
+      <td><b>대화창</b> — 음성·텍스트 입력 → AI 조립 → reasoning + 결과 미니 카드. 3 phone: entry · 단순 케이스 · 복잡 플랜 케이스.</td>
+    </tr>
+    <tr>
+      <td><b>07</b> (없음)</td>
+      <td><span class="ph ph-new">v0.4 신규</span></td>
+      <td><b>플랜 풀뷰</b> — 대화 결과 "보기" 탑 또는 "전체 스케줄 보여줘" 명령의 도착지. D-day + 진행률 + 주차 탭 + 일자 카드 + 액션 바("대화로 수정" primary).</td>
+    </tr>
+  </table>
+
+  <!-- 화면 흐름 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">화면 흐름 — 대화 중심</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">생성</span>
+      <span class="flow-step">메인 (컴포저)</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step new">00 대화창</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">결과 미니 카드</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">01 센터 또는</span>
+      <span class="flow-step new">07 플랜 풀뷰</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">조정</span>
+      <span class="flow-step new">07 플랜 풀뷰</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">대화로 수정 (primary)</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step new">00 대화창 (컨텍스트 유지)</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">보조</span>
+      <span class="flow-step new">07 또는 01</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">04 폼 편집</span>
+      <span class="text-[11px] text-gray-400">← 세부 속성 수정 또는 AI 안 쓰고 수동 작성</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">소비</span>
+      <span class="flow-step">v0.3 01 센터</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">v0.3 02 도착</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">v0.3 06 결과 상세</span>
+      <span class="text-[11px] text-gray-400">→ 변경 없음</span>
+    </div>
+  </div>
+
+  <!-- 화면 목록 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">v0.4 활성 화면</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <a href="00-conversation.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">00</span><span class="ph ph-new">v0.4 신규</span><span class="ph">primary</span></div>
+      <p class="font-bold text-[15px]">대화창 (entry · 단순 · 플랜)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">3 phone: entry(마이크 + 추천) · 단순(한 줄 응답 + 미니 카드) · 플랜(thinking + reasoning + 다중 턴).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="07-plan-fullview.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">07</span><span class="ph ph-new">v0.4 신규</span></div>
+      <p class="font-bold text-[15px]">플랜 풀뷰</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">D-day + 진행률 + 주차 탭 + 일자 카드(과목 색 시스템) + "대화로 수정" primary 액션.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a class="card" style="opacity:.6;cursor:not-allowed">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">04</span><span class="ph ph-warn">후속 라운드</span></div>
+      <p class="font-bold text-[15px]">생성·편집 (폼 retrofit)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">v0.3 04 카테고리 우선 폼을 retrofit — AI 조립 결과 세부 편집 + 수동 작성. 사용자 합의 후 작성.</p>
+      <span class="text-[12px] text-gray-400 mt-2">미작성</span>
+    </a>
+  </div>
+
+  <!-- 핵심 결정 -->
+  <h2 class="text-lg font-bold mt-10 mb-3">v0.4 핵심 결정</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
+    <p><b class="text-gray-900">대화창 = primary 생성 경로</b> — 카테고리·블록·시간 같은 추상 선택이 사라짐. 사용자는 의도를 자연어로 표현하면 AI가 모든 조립을 처리. "AI가 조립을 한다" 가 메모리에 박힌 핵심 기능 정의 <code>[[project_alarm_ai_assembly]]</code>의 진정한 구현.</p>
+    <p><b class="text-gray-900">Reasoning은 대화 흐름에 따라 다름</b> — 단순 알림("아침 7시 브리핑")은 reasoning 없이 한 줄. 복잡 플랜("시험 스케줄")은 reasoning 박스로 휴리스틱 명시(취약 자주·주말 모의·복습 전환). 사용자가 "왜 이렇게?" 물을 일을 선제적으로 답.</p>
+    <p><b class="text-gray-900">결과 = 단순 완료 + "보기" 탑</b> — 풀시트 미리보기 X (사용자 명시). 대화 흐름을 끊지 않고 한 줄 + 탑으로 처리. 사용자가 원하면 풀뷰로 진입(07).</p>
+    <p><b class="text-gray-900">"대화로 수정" = 07의 primary 액션</b> — 플랜 풀뷰에서 폼 편집보다 대화 수정을 우선 노출. <b>패러다임 일관성</b> — 만들 때 대화, 수정할 때도 대화.</p>
+    <p><b class="text-gray-900">04 폼은 보조 경로로 격하</b> — 폐기는 아님(편집·수동 작성 케이스). 단 진입 우선순위는 ① 대화 ② 폼(고급/엣지케이스). 신규 사용자는 폼 존재 자체를 모르고도 모든 일을 처리할 수 있어야 함.</p>
+    <p><b class="text-gray-900">메인 컴포저 = 대화창 진입점 (가정)</b> — 메인 v6.10 컴포저 가정만 — 메인 화면 자체는 현재 미완. <code>[[project_design_v6_ios_hig]]</code> 작업 완료 후 정합 작업 필요.</p>
+  </div>
+
+  <!-- 미결 / 다음 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">미결 · 후속 라운드</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li><b>04 폼 retrofit</b> — AI 조립 결과 세부 편집 경로 + AI 안 쓰고 수동 작성 경로. 화면 디자인 사용자 합의 후 작성.</li>
+      <li><b>음성 인식 정확도·취소</b> — 잘못 들렸을 때의 정정 UX, 침묵 감지, 중간 발화 표시. 표준 음성 UX(Siri·Whisper) 참조.</li>
+      <li><b>다국어 발화</b> — 한국어 + 영어 혼용(과목명 영어, 시간 한국어 등). AI는 처리 가능하나 UI는 별도 검토.</li>
+      <li><b>오프라인·전송 실패</b> — 음성 인식·AI 호출이 안 되는 케이스. 텍스트 입력으로 fallback + 로컬 임시 저장 후 재시도.</li>
+      <li><b>대화 히스토리</b> — 이전 대화 다시 보기 / 검색. 알림 센터(01) 안의 별 탭 또는 별 화면.</li>
+      <li><b>메인 화면 컴포저 정합</b> — 메인 v6.10이 완성된 후 진입점 UI 정렬.</li>
+      <li><b>Paywall 인라인</b> — Free 한도 초과·Pro 기능 시도 시 대화 안에 인라인 paywall. [[Paywall]] 결제 v0.2와 정합.</li>
+    </ul>
+  </div>
+
+  <!-- SSoT -->
+  <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>v0.4는 <b>패러다임 검증 라운드</b>. 핵심 2 화면(00·07)으로 컨셉 정합 확인 → 사용자 OK 시 04 retrofit + 노션 description 작성 + Figma 이식.</li>
+      <li>v0.3 폴더는 이력 보존. 변경 없는 화면(01·02·03·05·06)은 v0.3 그대로 참조.</li>
+      <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-04 알림 v0.4 (대화 패러다임) · 2026-05-15</p>
+
+</div>
+</body>
+</html>

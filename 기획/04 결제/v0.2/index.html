@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-?? 결제 · v0.2 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-20{width:20px;height:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;display:block;transition:.15s}
+.card:hover{border-color:#9ca3af}
+.scr-num{width:26px;height:26px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ph{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.ph-new{background:#eff6ff;color:#2563eb}
+.ph-warn{background:#fef2f2;color:#dc2626}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;font-size:12.5px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#f9fafb;font-weight:700;color:#374151}
+td b{color:#111827}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}
+.flow-step{background:#fff;border:1px solid #d1d5db;border-radius:9px;padding:7px 11px;font-weight:600;color:#374151}
+.flow-step.s{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+.flow-step.danger{border-color:#dc2626;color:#dc2626;background:#fef2f2}
+.flow-step.new{border-color:#2563eb;color:#2563eb;background:#eff6ff;font-weight:700}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1100px] mx-auto">
+
+  <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
+  <h1 class="text-3xl font-bold mt-1">U-?? 결제(구독) · v0.2 초안</h1>
+  <p class="text-gray-600 mt-2 leading-relaxed">v0.1에 대한 <b>시니어 SaaS 기획자 검토에서 나온 약점 4가지를 보완</b>한 버전. Free 사용자 진입 화면을 신규 작성하고, paywall(기능 잠금) 화면을 추가하고, PG 외부 핸드오프 중 상태를 정의하고, 환불 정책을 명문화했습니다.</p>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="ph">그레이스케일 + 라인 아이콘</span>
+    <span class="ph">시멘틱 색: 정보 파랑 · 위험 빨강</span>
+    <span class="ph ph-new">v0.2 = 약점 4종 보완</span>
+  </div>
+
+  <!-- v0.2 수정 이력 -->
+  <div class="mt-5 bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.2 수정 ① — Free 사용자 진입 화면 신규 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">v0.1의 04 Hub는 구독자 전용이라 Free 사용자가 마이페이지 진입 시 갈 곳이 없었음. → 신규 <b><code>00 마이페이지 구독 섹션</code></b>으로 상태 분기 표면화. Free = 파란 업그레이드 카드 + Free 사용량 미터 → 01. Pro = 04 hero 압축 카드 → 04. 사용량 미터가 자연스러운 paywall 진입 동기로도 기능.</p>
+    </div>
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.2 수정 ② — Paywall 신규 (Pro-only 잠금) · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">SaaS conversion 핵심 경로가 v0.1에 없었음. 진입점을 "마이페이지 단일"로 제한하면 사용자가 Pro 가치를 인지할 일이 거의 없음. → 신규 <b><code>07 Paywall</code></b> — Pro-only 기능 시도 순간 잠금 + 시도한 작업 컨텍스트 보존(blur) + Pro 가치 3줄 + Trial 강조 → 01. 3 변형 정의(AI 작업 한도·미션 플랜·고급 모델). "Free로 계속" escape hatch 항상 노출(다크패턴 회피).</p>
+    </div>
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.2 수정 ③ — PG 외부 핸드오프 중간 상태 정의 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">v0.1은 02 CTA → "PG 외부" → 03을 가정만 두고 그 사이를 비워뒀음. webview 로드 중·콜백 대기·사용자 백키 등 실제 케이스 미정의. → <b><code>02 결제 확인</code> phone 2</b>로 진행 중 오버레이 추가 — scrim + 토스페이 로고 + 펄스 dots + "취소하고 돌아가기" escape. 성공/실패/타임아웃/백키 4 케이스 동작 caption에 박음.</p>
+    </div>
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.2 수정 ④ — 환불 정책 확정 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">v0.1은 05 caption에 "노션 description에서 정의"라고 미뤘는데, 결제 도메인에서 환불 정책은 와이어프레임에 박혀야 화면이 그려짐. → 정책 1개 확정: <b>"남은 기간 사용 후 자동 종료, 환불 없음"</b>(월·연 동일). 05 폰2에 환불 정책 박스 추가 — Trial 케이스(₩0)와 정식 구독 케이스 두 분기 모두 명시. 법정 변심 환불(7일)은 03 success 직후만 적용되는 별 정책으로 분리.</p>
+    </div>
+  </div>
+
+  <!-- 약점 → 보완 매핑 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">시니어 검토 약점 → v0.2 보완</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">v0.1을 시니어 SaaS 기획자 시점에서 비판적으로 검토해 도출한 약점 7가지 중, 사용자가 v0.2에서 다룰 4가지를 확정. 나머지 3가지(Trial→정식 전환·다운그레이드 UX·안심 시그널)는 후속 라운드.</p>
+  <table>
+    <tr>
+      <th style="width:230px">약점 (v0.1 검토)</th>
+      <th>v0.2 보완</th>
+      <th style="width:160px">반영 화면</th>
+    </tr>
+    <tr>
+      <td><b>① Free 사용자 진입 화면 미설계</b><br><span class="text-gray-500">04는 구독자 전용. Free → 어디로? 정의 X.</span></td>
+      <td>신규 <b>00 마이페이지 구독 섹션</b> — Free/Pro 상태 분기 카드. 사용량 미터로 paywall 진입 동기까지.</td>
+      <td><b>00</b> 마이페이지 구독</td>
+    </tr>
+    <tr>
+      <td><b>② Paywall 미설계 ⚠</b><br><span class="text-gray-500">SaaS conversion 핵심 경로 부재. Pro 가치 인지 기회 X.</span></td>
+      <td>신규 <b>07 Paywall</b> — Pro-only 잠금 시 가치 + Trial + 01 진입. 3 변형. Escape hatch 항상 노출.</td>
+      <td><b>07</b> Paywall</td>
+    </tr>
+    <tr>
+      <td><b>③ PG 외부 핸드오프 중간 상태</b><br><span class="text-gray-500">webview·콜백·백키 미정의.</span></td>
+      <td><b>02 phone 2</b>로 진행 중 오버레이 추가. 4 케이스(성공/실패/타임아웃/백) 동작 정의.</td>
+      <td><b>02</b> 결제 확인</td>
+    </tr>
+    <tr>
+      <td><b>⑤ 환불 정책 미정의 ⚠</b><br><span class="text-gray-500">정책 미정 → 화면 미설계 → 노션 막힘.</span></td>
+      <td>"남은 기간 사용 후 자동 종료, 환불 없음" 단일 정책 확정. <b>05 폰2</b>에 환불 정책 박스(Trial + 정식 분기).</td>
+      <td><b>05</b> 해지 플로우</td>
+    </tr>
+    <tr>
+      <td style="color:#9ca3af">④ Trial→정식 전환 시점<br>⑥ 다운그레이드 UX<br>⑦ 안심 시그널</td>
+      <td style="color:#9ca3af">v0.2 비대상. 후속 라운드(아래 미결 참조).</td>
+      <td style="color:#9ca3af">—</td>
+    </tr>
+  </table>
+
+  <!-- 전제 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">전제 — v0.2 가정 (v0.1 유지)</h2>
+  <table>
+    <tr>
+      <th style="width:200px">항목</th>
+      <th>가정</th>
+    </tr>
+    <tr><td><b>도메인 범위</b></td><td>구독(SaaS) 중심. 단건 결제(점심 추천 등)는 별 도메인 분리.</td></tr>
+    <tr><td><b>Plan 구조</b></td><td>단일 plan + 월/연 토글. 멀티(Pro/Premium)는 v0.3/구현 시 재조정.</td></tr>
+    <tr><td><b>진입점</b></td><td><b>두 갈래로 확장</b>: ① 마이페이지 → 구독 (00 → 04/01) ② Paywall → 01 (v0.2 신규).</td></tr>
+    <tr><td><b>PG 위임</b></td><td>카드 raw 입력은 PG 외부. 우리는 선택+오버레이까지.</td></tr>
+    <tr><td><b>결제수단</b></td><td>간편결제 우선(토스·카카오·네이버·삼성) + 카드 fallback.</td></tr>
+    <tr><td><b>Trial</b></td><td>7일 무료 + 자동결제 명시. ₩9,900/월 또는 ₩99,000/년.</td></tr>
+    <tr><td><b>환불 정책</b></td><td><b>v0.2 확정</b>: 남은 기간 사용 후 자동 종료, 환불 없음. 변심 환불(7일)은 별 정책.</td></tr>
+  </table>
+
+  <!-- 화면 흐름 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">화면 흐름 — 4 분기</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">Free 진입</span>
+      <span class="flow-step new">00 마이페이지 (Free)</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">01 요금제</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 결제 확인</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 진행 중</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">03 완료</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">Paywall 진입</span>
+      <span class="flow-step new">07 Paywall</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">01 요금제</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 → PG → 03</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">원래 작업 자동 복귀</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">Pro 관리</span>
+      <span class="flow-step">00 마이페이지 (Pro)</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">04 구독 관리</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">Plan 변경 → 01</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">수단 변경 → 02</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step danger">해지 → 05</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">비동기</span>
+      <span class="flow-step">PG 콜백/갱신 실패</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step danger">06 결제 실패</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">자동 재시도 또는 02 변형</span>
+    </div>
+  </div>
+
+  <!-- 화면 목록 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">화면 목록 (8개)</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <a href="00-mypage-subscription.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">00</span><span class="ph ph-new">v0.2 신규</span></div>
+      <p class="font-bold text-[15px]">마이페이지 구독 섹션</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">Free/Pro 상태 분기. Free = 업그레이드 카드 + 사용량 미터. Pro = Hub 진입 카드.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="01-plan.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">01</span><span class="ph">진입</span></div>
+      <p class="font-bold text-[15px]">요금제 선택 (Plan picker)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">가치 헤드라인 + 월/연 토글 + Plan 가격 + Feature + 7일 trial 배지 + 자동결제 미세약관.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="02-checkout.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">02</span><span class="ph">핵심</span><span class="ph ph-new">v0.2 보강</span></div>
+      <p class="font-bold text-[15px]">결제 확인 + PG 진행 중</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">Plan 요약 + Trial + 간편결제 + 약관 + 합계 + CTA + <b>PG 핸드오프 오버레이</b>.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="03-success.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">03</span><span class="ph">완료</span></div>
+      <p class="font-bold text-[15px]">결제 완료</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">✓ 애니메이션 + 영수증(다음 결제일·금액·수단) + 사전 알림 약속 + CTA 2갈래.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="04-manage.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">04</span><span class="ph">허브</span></div>
+      <p class="font-bold text-[15px]">구독 관리 (Hub)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">현재 plan + 다음 결제 + Plan 변경·수단 변경·청구 내역·해지 진입.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="05-cancel.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">05</span><span class="ph ph-warn">해지</span><span class="ph ph-new">v0.2 보강</span></div>
+      <p class="font-bold text-[15px]">해지 플로우</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">이유 + retention + 종료일 + 잃는 기능 + <b>환불 정책 박스 추가</b> + 데이터 정책.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="06-failed.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">06</span><span class="ph ph-warn">실패</span></div>
+      <p class="font-bold text-[15px]">결제 실패</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">! 신호 + 사유 + 자동 재시도 + 수단 변경/직접 재시도 + Free 전환 경고.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="07-paywall.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">07</span><span class="ph ph-new">v0.2 신규</span></div>
+      <p class="font-bold text-[15px]">Paywall (기능 잠금)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">Pro-only 잠금 + 컨텍스트 보존 + 가치 3 + Trial + Free escape. 3 변형(한도·플랜·모델).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+  </div>
+
+  <!-- 핵심 결정 -->
+  <h2 class="text-lg font-bold mt-10 mb-3">v0.2 핵심 결정 (누적)</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
+    <p><b class="text-gray-900">진입은 4 갈래</b> — ① 마이페이지(Free 카드/Pro 카드) ② Paywall(Pro-only 시도) ③ Pro 관리(04 Hub) ④ 비동기(결제 실패 알림). v0.1의 단일 진입에서 conversion 핵심 경로 추가.</p>
+    <p><b class="text-gray-900">Paywall = "지금 이 작업을 하려면" 패턴</b> — 추상적 "Pro 사세요"가 아니라 사용자가 <b>방금 시도한 작업을 컨텍스트로 보존</b>(blur) + 결제 후 그 작업으로 자동 복귀. 결제만 하고 끝나면 paywall 효력 절반.</p>
+    <p><b class="text-gray-900">PG 핸드오프 = 우리 화면의 일부</b> — webview 띄우고 끝이 아니라, 우리 화면 위 scrim + escape hatch + 4 케이스 동작이 정의되어야. 사용자가 "결제 됐나 안 됐나" 모르는 순간이 절대 없게.</p>
+    <p><b class="text-gray-900">환불 = 단순한 한 줄</b> — "남은 기간 사용 후 종료, 환불 없음". 일할 환불 없음이 운영 단순화 + 사용자에게도 "체험 중 해지하면 안전, 정식 후엔 만료까지 사용" 이라는 명확한 멘탈 모델. Stripe·Spotify·Netflix 표준.</p>
+    <p class="text-gray-400"><b class="text-gray-700">(v0.1 유지)</b> PG 외부 핸드오프 / Trial = 진입장벽 ↓ + 자동결제 명시 / 관리 허브 = 신뢰의 표면 / 해지 retention 1단계만 / 결제 실패 = 알림 정합.</p>
+  </div>
+
+  <!-- 미결 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">미결 — v0.3 또는 후속 라운드</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li><b>약점 ④ Trial → 정식 전환 시점</b> — 5/22 자동결제 성공 직후 사용자 경험. 04 hero 상태 분기 추가 또는 별도 알림 후 04 도착.</li>
+      <li><b>약점 ⑥ 다운그레이드 UX</b> — 01 plan picker의 변형(현재 plan ✓ + 다운 선택 시 "다음 결제일부터 적용" 경고).</li>
+      <li><b>약점 ⑦ 안심 시그널</b> — 01 하단 미세 신뢰 라인(토스페이 안전 · 환불 보장 · 사용자 수). 수치 결정 필요.</li>
+      <li><b>회원가입 직후 진입</b> — 회원가입 마지막 단계에서 "Pro 7일 무료?" 옵션. Conversion 강한 시점.</li>
+      <li><b>영수증 PDF 화면</b> — 04에서 영수증 → 도착지(개별 청구 상세).</li>
+      <li>가격 확정(₩9,900/월 placeholder) · 인앱 vs 웹 결정 · 자동 재시도 정확한 스케줄(Stripe Smart Retries 차용).</li>
+    </ul>
+  </div>
+
+  <!-- SSoT -->
+  <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>v0.2 확정 후 사용자 검토 → 추가 라운드(v0.3) 또는 노션 description 작성 진행.</li>
+      <li>확정 후 노션 화면 Description 작성 → Figma 이식 → <code>FIGMA-MANIFEST.md</code> "04 결제 — TBD" 채움.</li>
+      <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>. 셋이 어긋나면 Figma 캐노니컬.</li>
+      <li>v0.1 폴더는 이력 보존(<code>04 결제/v0.1/</code>). 기존 mockup(<code>14-lunch-payment.html · 15-lunch-confirmed.html</code>)도 단건 결제 도메인으로 분리 보존.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-?? 결제(구독) v0.2 · 2026-05-15</p>
+
+</div>
+</body>
+</html>

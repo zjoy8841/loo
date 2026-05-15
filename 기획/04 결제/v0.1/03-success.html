@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 결제 완료 · v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.check-orb{width:96px;height:96px;border-radius:999px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;animation:pop .55s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.check-orb svg{width:48px;height:48px}
+.receipt{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.receipt-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0}
+.receipt-row .l{color:#6b7280}
+.receipt-row .r{font-weight:600;color:#111827}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:11px 12px;font-size:12.5px;color:#1e3a8a;display:flex;gap:9px}
+.btn-line{border:1px solid #d1d5db;border-radius:13px;padding:14px 0;font-size:14px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;flex:1}
+.btn-dark{background:#1f1f1f;color:#fff;border-radius:13px;padding:14px 0;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;flex:1}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2 6 12 13 22 6"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.1 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">03 결제 완료 · v0.1</h1>
+  <p class="text-sm text-gray-600 mt-1">PG 외부 콜백 → 03. ✓ 모션 후 영수증·다음 결제 약속·CTA 2갈래. <b>다음 결제일을 강조</b>해 사용자 불안 제거.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 (얇음) -->
+    <div class="px-5 pt-5 pb-3 text-right">
+      <a href="#" class="text-[12px] text-gray-400 font-semibold">건너뛰기</a>
+    </div>
+
+    <div class="flex-1 px-6 py-4 flex flex-col">
+
+      <!-- 성공 모션 -->
+      <div class="flex flex-col items-center text-center mt-5">
+        <div class="check-orb"><svg><use href="#i-check"/></svg></div>
+        <h2 class="text-[24px] font-bold mt-6">Pro 시작!</h2>
+        <p class="text-[13px] text-gray-500 mt-2 leading-relaxed">7일 동안 자유롭게 써보세요.<br>체험 후 자동결제로 이어집니다.</p>
+      </div>
+
+      <!-- 영수증 -->
+      <p class="sec-label mt-8">영수증</p>
+      <div class="receipt">
+        <div class="receipt-row"><span class="l">요금제</span><span class="r">Pro · 연 결제</span></div>
+        <div class="receipt-row border-t border-gray-200"><span class="l">체험 시작</span><span class="r">2026-05-15</span></div>
+        <div class="receipt-row border-t border-gray-200"><span class="l">첫 자동결제일</span><span class="r" style="color:#2563eb">2026-05-22</span></div>
+        <div class="receipt-row border-t border-gray-200"><span class="l">결제 금액</span><span class="r">₩99,000</span></div>
+        <div class="receipt-row border-t border-gray-200"><span class="l">결제수단</span><span class="r">토스페이</span></div>
+      </div>
+
+      <!-- 사전 알림 약속 -->
+      <div class="notice mt-3">
+        <svg class="lc lc-18" style="color:#2563eb;margin-top:1px"><use href="#i-bell"/></svg>
+        <div>
+          <p class="font-bold">청구 3일 전 · 1일 전에 알림</p>
+          <p class="mt-0.5 leading-relaxed">잊지 않게 알려드릴게요. 알림 끄기는 마이페이지 &gt; 알림 설정.</p>
+        </div>
+      </div>
+
+      <!-- 이메일 영수증 -->
+      <div class="flex items-center gap-2 mt-3 text-[12px] text-gray-500">
+        <svg class="lc lc-14"><use href="#i-mail"/></svg>
+        <span>영수증을 <b class="text-gray-900">o****@gmail.com</b>으로 보냈어요</span>
+      </div>
+
+    </div>
+
+    <!-- 하단 CTA (2갈래) -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white flex gap-3">
+      <a href="#" class="btn-line"><svg class="lc lc-16"><use href="#i-home"/></svg> 홈으로</a>
+      <a href="#" class="btn-dark"><svg class="lc lc-16"><use href="#i-sparkles"/></svg> Pro 둘러보기</a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 성공 모션 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>✓ 원형 + scale-in cubic-bezier(0.34, 1.56, 0.64, 1) · 550ms. 기존 15-confirmed의 모션 재사용. iOS HIG 친화 — 너무 길지 않고 한 번만.</div></div>
+
+    <h3>② 다음 결제일·금액 강조 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>영수증에서 <b>"첫 자동결제일"을 파란색</b>으로 강조 — 사용자가 "언제 얼마 나가지?"의 답을 즉시 본다. trial 결제의 신뢰 결정 포인트.</div></div>
+
+    <h3>③ 결제수단 (변경 가능 안내)</h3>
+    <div class="row"><span class="num">3</span><div>영수증 마지막 줄 = 결제수단. <b>변경은 04 구독 관리에서</b>. 여기선 readonly.</div></div>
+
+    <h3>④ 사전 알림 약속 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>"3일 전·1일 전 알림" — 자동결제 불안 해소의 핵심. 알림 v0.3 정시성 모델로 발화. 알림 끄기 경로(마이페이지 &gt; 알림 설정)도 명시.</div></div>
+
+    <h3>⑤ 이메일 영수증 발송 안내</h3>
+    <div class="row"><span class="num">5</span><div>로그인 이메일 마스킹 표시. 영수증 별도 발송 = 회계·세금 처리 사용자 배려. 한국 전자상거래법 요건.</div></div>
+
+    <h3>⑥ CTA 2갈래 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>"홈으로"(line, 안전한 복귀) + "Pro 둘러보기"(dark, 새 가치 즐기기). 후자가 강조색 — <b>결제 후 즉시 가치 체험</b>으로 유도해 첫 4시간 retention 확보.</div></div>
+
+    <h3>⑦ 건너뛰기</h3>
+    <div class="row"><span class="num">7</span><div>상단 우측 — 빠른 종료 옵션. 영수증·약속 내용을 모두 무시하고 홈으로. 사용자가 "이미 다 알아" 상태일 때 friction 제거.</div></div>
+
+    <h3>접근성</h3>
+    <div class="row"><span class="num">A</span><div>성공 발음: "결제 완료. Pro 시작. 첫 자동결제 5월 22일, 99000원, 토스페이로." 모션은 <code>prefers-reduced-motion</code> 시 fade only.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

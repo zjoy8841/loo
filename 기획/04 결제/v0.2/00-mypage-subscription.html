@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>00 마이페이지 구독 섹션 (Free / Pro 분기) · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 4px 8px}
+.list{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden}
+.list-row{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border-bottom:1px solid #f3f4f6}
+.list-row:last-child{border-bottom:none}
+.list-ic{width:34px;height:34px;border-radius:9px;border:1.5px solid #d1d5db;background:#fff;color:#6b7280;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.list-tit{font-size:13.5px;font-weight:600;color:#111827}
+.list-sub{font-size:11.5px;color:#9ca3af;margin-top:1px}
+.upgrade-card{background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.upgrade-card::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)}
+.upgrade-card .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.15);color:#fff;letter-spacing:.04em}
+.upgrade-cta{margin-top:13px;background:#fff;color:#1e3a8a;border-radius:11px;padding:11px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.hero{background:linear-gradient(135deg,#1f1f1f 0%,#374151 100%);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.hero .badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;background:rgba(59,130,246,.25);color:#bfdbfe;letter-spacing:.04em}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/><path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17.01"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">00 마이페이지 구독 섹션 — Free / Pro 분기 · v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>약점 ① 보완.</b> 마이페이지의 구독 섹션이 사용자 상태에 따라 두 형태로 분기. Free → 업그레이드 카드 → 01. Pro → Hub 진입 → 04.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — Free 상태 ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">마이페이지</span>
+      <a href="#" class="text-gray-400" aria-label="도움말"><svg class="lc lc-22"><use href="#i-help"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 프로필 (간략) -->
+      <div class="flex items-center gap-3">
+        <span class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500"><svg class="lc lc-22"><use href="#i-user"/></svg></span>
+        <div>
+          <p class="font-bold text-[15px]">오다환</p>
+          <p class="text-[11.5px] text-gray-500">Free 사용자</p>
+        </div>
+      </div>
+
+      <!-- 업그레이드 카드 (Free일 때) -->
+      <p class="sec-label mt-6">구독</p>
+      <div class="upgrade-card">
+        <span class="badge"><svg class="lc lc-12"><use href="#i-sparkles"/></svg> LIFE OS.ONE PRO</span>
+        <p class="font-bold text-[18px] mt-3 leading-tight">AI 어시스턴트가<br>24시간 곁에</p>
+        <p class="text-[12px] text-blue-100 mt-2 leading-relaxed">무제한 AI 작업·미션 플랜·우선 응답.<br><b class="text-white">7일 무료</b>로 시작.</p>
+        <a href="01-plan.html" class="upgrade-cta">7일 무료로 시작 <svg class="lc lc-14"><use href="#i-arrow-right"/></svg></a>
+      </div>
+
+      <!-- 사용량 표시 (Free 한도) -->
+      <div class="mt-3 p-3 rounded-xl border border-gray-200 bg-white">
+        <div class="flex items-baseline justify-between">
+          <span class="text-[12px] text-gray-500">이번 달 AI 작업</span>
+          <span class="text-[12.5px] font-bold text-gray-900">21 / 30</span>
+        </div>
+        <div class="mt-2 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+          <div class="h-full bg-gray-700" style="width:70%"></div>
+        </div>
+        <p class="text-[11px] text-gray-400 mt-2 leading-relaxed">9회 남음 · 6/1에 30회로 충전</p>
+      </div>
+
+      <!-- 다른 섹션 placeholder -->
+      <p class="sec-label mt-7">설정</p>
+      <div class="list">
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-bell"/></svg></span><div class="flex-1"><p class="list-tit">알림</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-shield"/></svg></span><div class="flex-1"><p class="list-tit">개인정보</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-help"/></svg></span><div class="flex-1"><p class="list-tit">도움말</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — Pro 상태 ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">마이페이지</span>
+      <a href="#" class="text-gray-400" aria-label="도움말"><svg class="lc lc-22"><use href="#i-help"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 프로필 (Pro 배지) -->
+      <div class="flex items-center gap-3">
+        <span class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 relative">
+          <svg class="lc lc-22"><use href="#i-user"/></svg>
+          <span class="absolute -bottom-1 -right-1 text-[9px] font-bold bg-blue-600 text-white rounded-full px-1.5 py-0.5 border-2 border-white">PRO</span>
+        </span>
+        <div>
+          <p class="font-bold text-[15px]">오다환</p>
+          <p class="text-[11.5px] text-gray-500">Pro · 체험 중 (5/22까지)</p>
+        </div>
+      </div>
+
+      <!-- Pro Hero (04의 hero를 마이페이지에 압축) -->
+      <p class="sec-label mt-6">구독</p>
+      <a href="04-manage.html" class="block hero">
+        <div class="flex items-center justify-between">
+          <span class="badge">✓ 활성 · 체험 중</span>
+          <svg class="lc lc-14 text-gray-400"><use href="#i-chevron-right"/></svg>
+        </div>
+        <p class="text-[17px] font-bold mt-2.5">Pro · 연 결제</p>
+        <div class="mt-3 pt-3 border-t border-white/15 flex items-end justify-between">
+          <div>
+            <p class="text-[11px] text-gray-300">첫 자동결제</p>
+            <p class="text-[13.5px] font-bold mt-0.5">2026-05-22 · ₩99,000</p>
+          </div>
+          <span class="text-[11.5px] font-semibold text-blue-300">관리 →</span>
+        </div>
+      </a>
+
+      <!-- 다른 섹션 placeholder -->
+      <p class="sec-label mt-7">설정</p>
+      <div class="list">
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-bell"/></svg></span><div class="flex-1"><p class="list-tit">알림</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-shield"/></svg></span><div class="flex-1"><p class="list-tit">개인정보</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+        <a href="#" class="list-row"><span class="list-ic"><svg class="lc lc-18"><use href="#i-help"/></svg></span><div class="flex-1"><p class="list-tit">도움말</p></div><svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg></a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① Free 상태 — 업그레이드 카드 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>화면 진입 시 가장 큰 시각 점유. 파란 그라데이션(Pro 색) + 가치 헤드라인 + Trial 강조 + 단일 CTA. 사용자 행위 1탭 → 01 plan picker.</div></div>
+
+    <h3>② Free 사용량 미터 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>이번 달 AI 작업 사용량(예: 21/30). Free 한도가 보이면 사용자는 자연스럽게 Pro 가치를 느낀다. <b>한도 임박 시(80%↑) Paywall 진입 동기</b> — 자연스러운 conversion 트리거.</div></div>
+
+    <h3>③ Pro 상태 — Hub 진입 카드</h3>
+    <div class="row"><span class="num">3</span><div>04 Hub의 hero를 압축 형태로 표시. 탭 시 04 manage로. <b>현재 plan + 다음 결제</b>만 핵심 정보로 추리고 나머지(plan 변경·수단·해지)는 04에서.</div></div>
+
+    <h3>④ Pro 배지 (아바타)</h3>
+    <div class="row"><span class="num">4</span><div>아바타에 작은 PRO 배지 — 사용자 정체성 차별화. Notion·Spotify·Linear 모두 사용하는 패턴.</div></div>
+
+    <h3>⑤ 상태 라벨 (체험 vs 정식)</h3>
+    <div class="row"><span class="num">5</span><div>"Pro · 체험 중 (5/22까지)" · 정식 후엔 "Pro · 활성". 해지 예정 시 "Pro · 5/22 종료". 6 결제 실패 중일 땐 빨강 "Pro · 결제 실패".</div></div>
+
+    <h3>분기 — 다른 상태들</h3>
+    <div class="row"><span class="num">B</span><div>① Free → 업그레이드 카드 (phone1)<br>② Pro 체험 → Hub 카드 + 배지 (phone2)<br>③ Pro 정식 → Hub 카드 (배지 라벨만 변경)<br>④ Pro 해지 예정 → Hub 카드(붉은 강조) + "재개" CTA<br>⑤ Pro 결제 실패 → Hub 카드 빨강 + "수단 변경 필요" → 06</div></div>
+
+    <h3>회원가입 직후 진입 (후속 라운드)</h3>
+    <div class="row"><span class="num">C</span><div>약점 검토 시 "회원가입 직후 진입" 후속으로 미룸. v0.3 또는 후속 라운드에 회원가입 마지막 단계 → "Pro 7일 무료 시작?" 옵션 화면 추가 검토.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

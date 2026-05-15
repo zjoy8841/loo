@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>00 대화창 (entry · 단순 · 플랜) · v0.4</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}.lc-28{width:28px;height:28px}
+/* 채팅 버블 */
+.bubble-user{background:#1f1f1f;color:#fff;border-radius:18px 18px 4px 18px;padding:11px 14px;font-size:13.5px;line-height:1.55;max-width:78%;align-self:flex-end}
+.bubble-ai{background:#f3f4f6;color:#111827;border-radius:18px 18px 18px 4px;padding:11px 14px;font-size:13.5px;line-height:1.55;max-width:82%;align-self:flex-start}
+.bubble-ai b{color:#111827}
+/* 결과 미니 카드 (대화 안에서) */
+.result-mini{align-self:flex-start;max-width:88%;background:#fff;border:1px solid #bfdbfe;border-radius:14px;padding:11px 12px;display:flex;align-items:center;gap:10px;margin-top:6px}
+.result-mini .check{width:24px;height:24px;border-radius:999px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.result-mini .txt{flex:1;font-size:12.5px;color:#111827}
+.result-mini .view{color:#2563eb;font-weight:700;font-size:12px;display:flex;align-items:center;gap:3px}
+/* 마이크 큰 버튼 */
+.mic-big{width:88px;height:88px;border-radius:999px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(37,99,235,.35);position:relative}
+.mic-big::before{content:'';position:absolute;inset:-8px;border-radius:999px;border:2px solid rgba(37,99,235,.25);animation:pulse 1.6s ease-out infinite}
+.mic-big::after{content:'';position:absolute;inset:-16px;border-radius:999px;border:2px solid rgba(37,99,235,.12);animation:pulse 1.6s ease-out infinite .5s}
+@keyframes pulse{0%{transform:scale(.95);opacity:.8}100%{transform:scale(1.2);opacity:0}}
+/* 음성 입력 중 파형 */
+.wave{display:flex;gap:3px;align-items:center;height:24px}
+.wave span{display:inline-block;width:3px;background:#2563eb;border-radius:99px;animation:w 1s ease-in-out infinite}
+.wave span:nth-child(1){height:8px;animation-delay:0s}
+.wave span:nth-child(2){height:14px;animation-delay:.1s}
+.wave span:nth-child(3){height:20px;animation-delay:.2s}
+.wave span:nth-child(4){height:16px;animation-delay:.3s}
+.wave span:nth-child(5){height:22px;animation-delay:.15s}
+.wave span:nth-child(6){height:10px;animation-delay:.25s}
+.wave span:nth-child(7){height:18px;animation-delay:.05s}
+@keyframes w{0%,100%{transform:scaleY(.6)}50%{transform:scaleY(1.4)}}
+/* 추천 칩 */
+.suggest{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:999px;font-size:12.5px;color:#374151;font-weight:500;cursor:pointer}
+.suggest:hover{border-color:#2563eb;color:#2563eb}
+/* 입력 바 */
+.input-bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:999px;background:#fff}
+.input-bar input{flex:1;font-size:13.5px;border:none;outline:none;background:transparent;color:#111827}
+.input-bar input::placeholder{color:#9ca3af}
+.send-btn{width:34px;height:34px;border-radius:999px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.send-btn-disabled{background:#e5e7eb;color:#9ca3af}
+/* AI thinking */
+.thinking{display:inline-flex;align-items:center;gap:4px;color:#6b7280;font-size:12.5px}
+.thinking .dot{display:inline-block;width:5px;height:5px;border-radius:999px;background:#9ca3af;animation:t 1.4s ease-in-out infinite}
+.thinking .dot:nth-child(2){animation-delay:.16s}
+.thinking .dot:nth-child(3){animation-delay:.32s}
+@keyframes t{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+/* Reasoning collapsible */
+.reasoning{margin-top:8px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.18);border-radius:11px;padding:9px 11px;font-size:12px;color:#1e3a8a;line-height:1.55}
+.reasoning .why{font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#2563eb;text-transform:uppercase}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+.flow-step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 12a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></symbol>
+<symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="18" y1="10" x2="18" y2="10.01"/><line x1="7" y1="14" x2="17" y2="14"/></symbol>
+<symbol id="i-arrow-up" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.4 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">00 대화창 — entry · 단순 · 플랜 · v0.4</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>v0.4 핵심 패러다임 전환.</b> 카테고리 우선 동적 폼(v0.3 04) 폐기 → 대화창 primary. 사용자가 음성·텍스트로 의도 표현 → AI가 알림·플랜 조립 → 단순 케이스는 reasoning 없이 한 줄 응답, 복잡 플랜은 reasoning + 다중 턴 조정. 메인 화면에서 진입(메인 v6.10 컴포저 가정).</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 대화창 진입 (Entry) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="font-bold text-[15px]">알림 만들기</span>
+      <span class="flow-step-pill">대화</span>
+    </div>
+
+    <div class="flex-1 flex flex-col px-5 py-6">
+
+      <!-- AI 첫 인사 -->
+      <div class="bubble-ai" style="align-self:flex-start;margin-bottom:6px">
+        안녕하세요. 어떤 알림을 만들어 드릴까요?<br>
+        <span class="text-gray-500 text-[12px]">시간·조건·작업 어떤 형태든 말씀해 주세요.</span>
+      </div>
+
+      <!-- 추천 발화 -->
+      <p class="text-[10px] font-bold tracking-widest text-gray-400 mt-7 mb-2">이렇게 말해보세요</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="suggest">🌤 아침 7시 날씨+일정 브리핑</span>
+        <span class="suggest">🍱 점심 30분 전 메뉴 추천</span>
+        <span class="suggest">📚 시험 대비 공부 스케줄</span>
+        <span class="suggest">💊 매일 9시 약 챙기기</span>
+      </div>
+
+      <!-- 큰 마이크 (primary) -->
+      <div class="flex-1 flex flex-col items-center justify-center mt-6 mb-6">
+        <div class="mic-big"><svg class="lc lc-28"><use href="#i-mic"/></svg></div>
+        <p class="text-[12.5px] text-gray-500 mt-5">탭하고 말씀하세요</p>
+      </div>
+
+    </div>
+
+    <!-- 하단 텍스트 입력 -->
+    <div class="px-4 py-3 border-t border-gray-100 bg-white">
+      <div class="input-bar">
+        <svg class="lc lc-18 text-gray-400"><use href="#i-keyboard"/></svg>
+        <input type="text" placeholder="텍스트로 입력하기" readonly>
+        <button class="send-btn send-btn-disabled" disabled><svg class="lc lc-16"><use href="#i-arrow-up"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 단순 케이스 (브리핑) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">알림 만들기</span>
+      <span class="flow-step-pill">단순</span>
+    </div>
+
+    <div class="flex-1 flex flex-col px-5 py-5 gap-3 overflow-y-auto">
+
+      <!-- AI 첫 인사 (압축) -->
+      <div class="bubble-ai">어떤 알림을 만들어 드릴까요?</div>
+
+      <!-- 사용자 음성 -->
+      <div class="bubble-user">"아침 일곱시마다 오늘 날씨랑 내가 저장해둔 일정들 정리해서 나한테 알림으로 보내줘"</div>
+
+      <!-- AI 응답 -->
+      <div class="bubble-ai">
+        <b>매일 아침 7시 브리핑</b>으로 만들었어요.<br>
+        날씨(현재 위치)와 그날 일정을 묶어서 한 알림으로 전달합니다.
+      </div>
+
+      <!-- 결과 미니 카드 -->
+      <a href="#" class="result-mini">
+        <span class="check"><svg class="lc lc-14"><use href="#i-check"/></svg></span>
+        <span class="txt"><b>알림 1개 등록</b><br><span class="text-gray-500 text-[11.5px]">매일 07:00 · 브리핑</span></span>
+        <span class="view">보기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+      </a>
+
+      <!-- 사용자 후속 -->
+      <div class="bubble-user" style="margin-top:6px">조금 일찍, 6시 50분으로</div>
+
+      <!-- AI 응답 -->
+      <div class="bubble-ai">
+        시간을 <b>06:50</b>으로 옮겼어요.
+      </div>
+
+      <a href="#" class="result-mini">
+        <span class="check"><svg class="lc lc-14"><use href="#i-check"/></svg></span>
+        <span class="txt"><b>알림 수정됨</b><br><span class="text-gray-500 text-[11.5px]">매일 06:50 · 브리핑</span></span>
+        <span class="view">보기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+      </a>
+
+    </div>
+
+    <!-- 하단 입력 (음성 활성 상태) -->
+    <div class="px-4 py-3 border-t border-gray-100 bg-white">
+      <div class="input-bar">
+        <button class="text-gray-400"><svg class="lc lc-18"><use href="#i-keyboard"/></svg></button>
+        <div class="flex-1 flex items-center gap-3">
+          <span class="wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+          <span class="text-[12px] text-gray-500">듣고 있어요</span>
+        </div>
+        <button class="send-btn" style="background:#dc2626"><svg class="lc lc-14"><use href="#i-stop"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 3 — 복잡 케이스 (플랜 + reasoning) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">알림 만들기</span>
+      <span class="flow-step-pill">플랜</span>
+    </div>
+
+    <div class="flex-1 flex flex-col px-5 py-5 gap-3 overflow-y-auto">
+
+      <!-- 사용자 -->
+      <div class="bubble-user">이번 7월 17일 시험에 맞춰서 공부 스케줄 만들어줘</div>
+
+      <!-- AI thinking -->
+      <div class="bubble-ai">
+        <span class="thinking">스케줄 짜고 있어요 <span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+      </div>
+
+      <!-- AI 응답 + reasoning -->
+      <div class="bubble-ai">
+        <b>7월 17일까지 64일</b>, 9주 학습 플랜을 만들었어요.
+        <div class="reasoning">
+          <p class="why">이렇게 짰어요</p>
+          <p class="mt-1">취약 과목(수학·영어)을 <b>주 4회</b>로 자주 배치하고, 주말에는 <b>모의고사 + 총정리</b>를 넣었어요. 시험이 다가올수록 신규 학습보다 <b>복습 위주</b>로 전환합니다.</p>
+        </div>
+      </div>
+
+      <!-- 사용자 -->
+      <div class="bubble-user">수학을 더 자주 해줘</div>
+
+      <!-- AI 응답 -->
+      <div class="bubble-ai">
+        수학을 <b>주 5회</b>로 늘리고, 대신 영어 1회를 빼서 균형을 맞췄어요.
+      </div>
+
+      <!-- 결과 미니 카드 -->
+      <a href="07-plan-fullview.html" class="result-mini" style="border-color:#2563eb">
+        <span class="check"><svg class="lc lc-14"><use href="#i-check"/></svg></span>
+        <span class="txt"><b>플랜 1개 + 알림 56개 등록</b><br><span class="text-gray-500 text-[11.5px]">시험 대비 학습 · 5/15 ~ 7/17</span></span>
+        <span class="view">보기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+      </a>
+
+    </div>
+
+    <!-- 하단 입력 (idle) -->
+    <div class="px-4 py-3 border-t border-gray-100 bg-white">
+      <div class="input-bar">
+        <button class="text-gray-400"><svg class="lc lc-18"><use href="#i-mic"/></svg></button>
+        <input type="text" placeholder="추가로 말씀해주세요">
+        <button class="send-btn"><svg class="lc lc-16"><use href="#i-arrow-up"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 대화창 진입 — 첫 인상 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>마이크 큰 버튼 + pulse 애니메이션 = <b>음성이 primary</b>임을 한눈에. 텍스트 입력은 하단 작은 바로 보조. AI 첫 인사 + 추천 발화 4종으로 "뭐라 말해야 하지" 진입장벽 해소.</div></div>
+
+    <h3>② 추천 발화 칩</h3>
+    <div class="row"><span class="num">2</span><div>4종 — 단순(브리핑/단발 미션) + 복잡(플랜) 골고루. 탭 시 그 발화가 즉시 입력되어 AI 응답 시작. 사용자별 사용 패턴 학습 후 개인화 가능(v0.4 비대상).</div></div>
+
+    <h3>③ 단순 케이스 (phone 2) <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">3</span><div>"아침 7시 브리핑" → AI 응답 한 줄 + <b>결과 미니 카드</b>. Reasoning 노출 X (단순하므로). 결과 카드 = 사용자 결정의 답: 만들어진 게 있고 보러갈 수 있음.</div></div>
+
+    <h3>④ 다중 턴 조정 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>"조금 일찍, 6시 50분" 같은 후속 발화 → AI가 <b>맥락 유지하며</b> 즉시 수정 + 새 결과 카드. 폼으로 들어가지 않고 대화 안에서 모든 조정 완결.</div></div>
+
+    <h3>⑤ 복잡 플랜 + thinking (phone 3) <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">5</span><div>"시험 대비 스케줄" → AI thinking dots(스케줄 계산 중) → 응답 + <b>reasoning 박스</b>(왜 이렇게 짰는지) + 결과 미니 카드. Thinking dots는 ChatGPT 패턴 — AI가 일하고 있음을 시각화.</div></div>
+
+    <h3>⑥ Reasoning 박스 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>플랜처럼 <b>여러 결정</b>이 있는 경우에만 노출. "취약 과목 자주·주말 모의고사·시험 임박 시 복습"처럼 사용자가 모르는 사이 들어간 휴리스틱을 명시. 신뢰 + 수정 진입 동기 둘 다 충족.</div></div>
+
+    <h3>⑦ 결과 미니 카드 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">7</span><div>"✓ N개 등록 [보기 →]" 단일 패턴. <b>플랜이면 07-plan-fullview로</b>, 단발이면 01 알림 센터로. 사용자 결정: 단순 완료 알림 + 보기 탑(사용자 명시).</div></div>
+
+    <h3>⑧ 입력 바 — 3 상태</h3>
+    <div class="row"><span class="num">8</span><div>① <b>Idle</b>: 마이크 아이콘 + "추가로 말씀해주세요" placeholder<br>② <b>Listening</b>: wave 파형 + "듣고 있어요" + 빨강 stop 버튼 (phone 2)<br>③ <b>Text mode</b>: 키보드 + 텍스트 필드 + send 버튼 (phone 1, 3)</div></div>
+
+    <h3>분기 — AI가 모호하다고 판단</h3>
+    <div class="row"><span class="num">B</span><div>"공부 알림 만들어줘"처럼 정보 부족 시 AI가 되묻기: "언제까지요? 어떤 과목요?" — 다중 턴으로 채워나감. 사용자가 "그냥 일반적으로"면 AI가 합리적 기본값으로 진행 + reasoning에 가정 명시.</div></div>
+
+    <h3>분기 — Pro paywall</h3>
+    <div class="row"><span class="num">C</span><div>Free 사용량 초과 또는 플랜 기능 시도 시 대화 안에 <b>"이 작업은 Pro 전용이에요" 카드</b> 인라인 + Pro CTA. 결제 v0.2 [[Paywall]] 패턴과 정합.</div></div>
+
+    <h3>접근성</h3>
+    <div class="row"><span class="num">A</span><div>음성 인식 결과는 항상 텍스트로도 표시(시각적 확인). 마이크 버튼 = <code>aria-pressed</code>로 활성 상태 발음. Thinking dots = <code>aria-busy="true"</code>. Reasoning 박스 = 펼침/접힘 가능(긴 reasoning 대비).</div></div>
+  </div>
+
+</div>
+</body>
+</html>

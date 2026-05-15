@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 해지 플로우 · v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.cap .num.danger{background:#dc2626}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.reason-row{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;background:#fff;cursor:pointer}
+.reason-row.sel{border:2px solid #2563eb;background:#eff6ff;padding:12px 13px}
+.dot{width:18px;height:18px;border-radius:999px;border:2px solid #d1d5db;flex-shrink:0}
+.dot.on{border-color:#2563eb;background:#2563eb;position:relative}
+.dot.on::after{content:'';position:absolute;inset:3px;border-radius:999px;background:#fff}
+.reason-tit{font-size:13.5px;font-weight:600;color:#111827;flex:1}
+.retention{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:14px}
+.retention-tag{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;background:#2563eb;color:#fff;margin-bottom:6px;letter-spacing:.04em}
+.btn-line{border:1px solid #d1d5db;border-radius:11px;padding:11px 0;font-size:13px;font-weight:600;color:#374151;background:#fff;text-align:center}
+.btn-blue{background:#2563eb;color:#fff;border-radius:11px;padding:11px 0;font-size:13px;font-weight:700;text-align:center}
+.cta-danger{background:#dc2626;color:#fff;border-radius:14px;padding:15px 0;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.cta-line{border:1px solid #d1d5db;border-radius:14px;padding:15px 0;font-size:14px;font-weight:600;color:#374151;background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.lose-list{border:1px solid #fecaca;background:#fef2f2;border-radius:12px;padding:12px 14px}
+.lose-list li{font-size:12.5px;color:#7f1d1d;padding:3px 0;display:flex;gap:8px;align-items:center}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.danger-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#dc2626;color:#fff;margin-left:5px}
+.trial-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+.policy{font-size:11.5px;color:#6b7280;line-height:1.6;padding:11px 13px;background:#f9fafb;border-radius:10px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.7 3.86a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17.01"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+<symbol id="i-bell-off" viewBox="0 0 24 24"><path d="M8.7 3A6 6 0 0 1 18 8c0 3 .7 4.7 1.4 6M17 17H3s3-2 3-9a6 6 0 0 1 .3-1.9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.1 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">05 해지 플로우 · v0.1</h1>
+  <p class="text-sm text-gray-600 mt-1">2단계: <b>이유 + retention</b> (폰1) → <b>최종 확인</b> (폰2). Retention은 이유별 1단계만, 강제 N-step 금지. "그래도 해지" 항상 노출.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 이유 + retention ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="04-manage.html" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">구독 해지</span>
+      <span class="step-pill">1 / 2</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <h2 class="text-[18px] font-bold">왜 해지하세요?</h2>
+      <p class="text-[12.5px] text-gray-500 mt-2 leading-relaxed">이유에 따라 도움 드릴 수 있는 게 있어요. 정직하게 골라주시면 더 나은 제품을 만드는 데도 큰 도움이 됩니다.</p>
+
+      <div class="mt-5">
+        <div class="reason-row sel">
+          <div class="reason-tit">가격이 부담돼요</div>
+          <span class="dot on"></span>
+        </div>
+        <div class="reason-row">
+          <div class="reason-tit">생각만큼 자주 안 써요</div>
+          <span class="dot"></span>
+        </div>
+        <div class="reason-row">
+          <div class="reason-tit">잠시 쉬고 싶어요</div>
+          <span class="dot"></span>
+        </div>
+        <div class="reason-row">
+          <div class="reason-tit">다른 서비스로 옮겨요</div>
+          <span class="dot"></span>
+        </div>
+        <div class="reason-row">
+          <div class="reason-tit">기능이 부족해요</div>
+          <span class="dot"></span>
+        </div>
+        <div class="reason-row">
+          <div class="reason-tit">기타</div>
+          <span class="dot"></span>
+        </div>
+      </div>
+
+      <!-- Retention 제안 (이유 = "가격") -->
+      <div class="retention mt-5">
+        <span class="retention-tag">제안</span>
+        <p class="text-[14px] font-bold text-gray-900">3개월 동안 50% 할인</p>
+        <p class="text-[12.5px] text-gray-600 mt-1 leading-relaxed">바로 적용. 다음 결제 ₩99,000 → <b>₩49,500</b>. 부담을 덜어드릴게요.</p>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+          <button class="btn-blue">할인 받기</button>
+          <button class="btn-line">괜찮아요</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 하단 "그래도 해지" -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="#confirm" class="text-[13px] text-gray-500 font-semibold w-full text-center block">그래도 해지하기 →</a>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 최종 확인 ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">해지 확인</span>
+      <span class="step-pill">2 / 2</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 종료일 강조 -->
+      <div class="rounded-2xl border border-gray-200 p-5 text-center">
+        <p class="text-[11px] font-bold tracking-widest text-gray-400">PRO 사용 가능</p>
+        <p class="text-[24px] font-bold mt-1.5">2026-05-22까지</p>
+        <p class="text-[12px] text-gray-500 mt-2 leading-relaxed">해지해도 체험 종료일까지<br>모든 기능을 그대로 사용하실 수 있어요.</p>
+      </div>
+
+      <!-- 잃는 기능 -->
+      <p class="sec-label mt-6">5/22 이후 사용 못 함</p>
+      <ul class="lose-list space-y-0">
+        <li><svg class="lc lc-12"><use href="#i-x"/></svg> AI 작업 알림 무제한 (Free는 월 30회)</li>
+        <li><svg class="lc lc-12"><use href="#i-x"/></svg> 미션 플랜 (다일 스케줄 생성)</li>
+        <li><svg class="lc lc-12"><use href="#i-x"/></svg> 우선 응답 · 고급 모델</li>
+        <li><svg class="lc lc-12"><use href="#i-x"/></svg> 광고 제거</li>
+      </ul>
+
+      <!-- 데이터 정책 -->
+      <p class="sec-label mt-5">데이터는 어떻게 되나요</p>
+      <div class="policy">
+        <b class="text-gray-900">데이터는 그대로 유지됩니다.</b> 만든 알림·플랜·기록은 그대로 남고, 다시 구독하시면 즉시 복원돼요. 단, 무료 한도를 넘는 항목은 readonly 상태로 표시됩니다.
+      </div>
+
+      <!-- 경고 -->
+      <div class="mt-4 flex items-start gap-2 px-1 text-[12px] text-amber-700">
+        <svg class="lc lc-14" style="margin-top:2px"><use href="#i-alert"/></svg>
+        <span>이 동작은 즉시 적용됩니다. 5/22 이후 자동결제는 발생하지 않아요.</span>
+      </div>
+
+    </div>
+
+    <!-- 하단 CTA -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white space-y-2.5">
+      <button class="cta-danger"><svg class="lc lc-16"><use href="#i-x"/></svg> 해지 확정</button>
+      <a href="04-manage.html" class="cta-line">유지하기</a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 이유 선택 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">1</span><div>6개 선택지(라디오). <b>"기타"</b> 항상 포함 — 우리가 못 잡은 이유 수집. 선택은 retention 분기의 기준이자 분석 데이터(churn reason). single-select.</div></div>
+
+    <h3>② Retention 제안 — 이유별 1개만 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>이유별 매핑:
+    <ul class="list-disc pl-4 mt-1.5 space-y-0.5">
+      <li><b>가격</b> → 3개월 50% 할인</li>
+      <li><b>자주 안 씀</b> → 비활성 알림(쓸 만한 순간에 알려드림)</li>
+      <li><b>잠시 쉬고 싶음</b> → 2개월 일시정지</li>
+      <li><b>다른 서비스</b> → 데이터 내보내기 + "돌아오시면 환영" (retention 약함, friction 안 줌)</li>
+      <li><b>기능 부족</b> → 피드백 폼 + "검토 후 회신" (제품팀 입력)</li>
+      <li><b>기타</b> → retention 박스 없음, 바로 ③ 진행</li>
+    </ul>
+    각 이유당 1개. <b>강제 N단계 금지</b>(dark pattern 비난 회피).</div></div>
+
+    <h3>③ "그래도 해지" 항상 노출 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">3</span><div>retention 박스 옆이 아니라 <b>하단 고정</b>. 사용자가 retention을 보지 않아도 종료까지 1탭. EU "쉽게 해지" 표준.</div></div>
+
+    <h3>④ 종료일 강조 (폰2) <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>"2026-05-22까지" — 가장 큰 글씨. <b>지금 손해 안 본다</b>는 신호. "지금 해지 = 즉시 차단" 같은 다른 앱의 punitive 패턴 회피.</div></div>
+
+    <h3>⑤ 잃는 기능 — 정직하게</h3>
+    <div class="row"><span class="num">5</span><div>Free와의 정확한 차이. <b>"무제한" → "월 30회"</b>처럼 구체 수치로 — 추상 표현으로 겁주지 않는다.</div></div>
+
+    <h3>⑥ 데이터 정책 <span class="trial-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>"데이터는 그대로" — 사용자 가장 큰 두려움. <b>다시 구독 시 즉시 복원</b> 약속이 retention 그 자체. readonly 처리만 명시.</div></div>
+
+    <h3>⑦ 해지 확정 <span class="danger-badge">DANGER</span></h3>
+    <div class="row"><span class="num danger">7</span><div>빨강 CTA. confirm dialog 추가 없음 — 2단계가 이미 confirm. "유지하기" 보조 CTA로 마지막 retention.</div></div>
+
+    <h3>⑧ 환불 안내 분기</h3>
+    <div class="row"><span class="num">8</span><div>이번 v0.1은 trial 케이스(₩0 결제 상태). 정식 구독 후 해지면 폰2에 "환불 정책에 따라 ₩X 환불" 또는 "남은 기간 사용 후 종료" 분기 — 노션 description에서 정의.</div></div>
+
+    <h3>해지 후 → 04 manage 상태</h3>
+    <div class="row"><span class="num">A</span><div>04 Hero 카드가 "해지 예정 · 5/22까지 사용 가능"으로 변함. <b>"구독 재개"</b> CTA로 변경. 5/22 지난 후 Free로 자동 전환.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

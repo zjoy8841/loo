@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 요금제 선택 · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{background:#2563eb}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.feat{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;color:#374151}
+.feat-ic{width:22px;height:22px;border-radius:6px;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.plan-card{border:2px solid #2563eb;border-radius:16px;padding:18px 16px;background:#eff6ff;position:relative}
+.toggle{display:inline-flex;background:#f3f4f6;border-radius:999px;padding:3px;font-size:12.5px;font-weight:600}
+.toggle .t{padding:7px 16px;border-radius:999px;color:#6b7280}
+.toggle .t.on{background:#fff;color:#111827;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.save-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#2563eb;color:#fff;margin-left:5px}
+.trial-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid #bfdbfe;color:#2563eb}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:15px 0;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.muted{font-size:11px;color:#9ca3af;line-height:1.55}
+.muted a{text-decoration:underline}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4"/><line x1="12" y1="17" x2="12" y2="17.01"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-infinity" viewBox="0 0 24 24"><path d="M18.5 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z"/><path d="M5.5 7.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"/><path d="M9.5 12h5"/></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">01 요금제 선택 (Plan picker) · v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1">마이페이지 진입 후 첫 화면. 단일 plan + 월/연 토글 가정. 7일 무료 체험 강조 + 자동결제 명시(다크패턴 회피).</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="font-bold text-[15px]">구독</span>
+      <a href="#" class="text-gray-400" aria-label="도움말"><svg class="lc lc-22"><use href="#i-help"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 히어로 -->
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-[11px] font-bold tracking-widest text-blue-600">LIFE OS.ONE · PRO</span>
+      </div>
+      <h2 class="text-[22px] font-bold leading-tight">AI 어시스턴트가<br>24시간 곁에</h2>
+      <p class="text-[13px] text-gray-500 mt-2 leading-relaxed">무제한 AI 작업·플랜·우선 응답으로<br>매일의 결정을 함께합니다.</p>
+
+      <!-- 월/연 토글 -->
+      <div class="mt-5 flex items-center justify-between">
+        <div class="toggle">
+          <span class="t">월</span>
+          <span class="t on">연 <span class="save-badge">17% 할인</span></span>
+        </div>
+      </div>
+
+      <!-- Plan 카드 -->
+      <div class="plan-card mt-4">
+        <div class="flex items-baseline gap-2">
+          <span class="text-[32px] font-bold leading-none">₩99,000</span>
+          <span class="text-[13px] text-gray-500">/ 년</span>
+        </div>
+        <p class="text-[12px] text-gray-500 mt-1">월 ₩8,250 (월간 결제 대비 17%↓)</p>
+        <div class="mt-3">
+          <span class="trial-badge"><svg class="lc lc-12"><use href="#i-sparkles"/></svg> 7일 무료 체험</span>
+        </div>
+      </div>
+
+      <!-- Feature -->
+      <div class="mt-5">
+        <p class="text-[11px] font-bold tracking-widest text-gray-400">PRO 혜택</p>
+        <div class="mt-2">
+          <div class="feat"><span class="feat-ic"><svg class="lc lc-14"><use href="#i-infinity"/></svg></span><span>AI 작업 알림 무제한</span></div>
+          <div class="feat"><span class="feat-ic"><svg class="lc lc-14"><use href="#i-target"/></svg></span><span>미션 플랜 (목표 기반 다일 스케줄)</span></div>
+          <div class="feat"><span class="feat-ic"><svg class="lc lc-14"><use href="#i-zap"/></svg></span><span>우선 응답 — 평균 2초 이내</span></div>
+          <div class="feat"><span class="feat-ic"><svg class="lc lc-14"><use href="#i-cpu"/></svg></span><span>고급 모델(긴 문맥·정밀 추론)</span></div>
+          <div class="feat"><span class="feat-ic"><svg class="lc lc-14"><use href="#i-check"/></svg></span><span>광고 제거 + 데이터 내보내기</span></div>
+        </div>
+      </div>
+
+      <p class="muted mt-5 leading-relaxed">7일 후 ₩99,000(연)이 자동으로 청구됩니다. 체험 기간 중 언제든 해지 가능하며, 해지 시 추가 청구 없음. <a href="#">자동결제 약관</a> · <a href="#">환불 정책</a></p>
+
+    </div>
+
+    <!-- 하단 CTA -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="02-checkout.html" class="cta">7일 무료로 시작 <svg class="lc lc-16"><use href="#i-arrow-right"/></svg></a>
+      <p class="text-[11px] text-center text-gray-400 mt-2">취소: 마이페이지 &gt; 구독 관리</p>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 진입 · 닫기</h3>
+    <div class="row"><span class="num">1</span><div>마이페이지 &gt; 구독 관리에서 진입. ✕ = 닫기, 백스택 없는 풀스크린 sheet. ?(도움말) = 자주 묻는 질문 시트.</div></div>
+
+    <h3>② 가치 헤드라인 <span class="trial-badge ml-1">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>"AI 어시스턴트가 24시간 곁에" — 기능 나열이 아니라 <b>사용자가 얻는 결과</b>로 시작. Pro의 단일 가치 명제(value prop).</div></div>
+
+    <h3>③ 월/연 토글</h3>
+    <div class="row"><span class="num crit">3</span><div>월 ₩9,900 / 연 ₩99,000 (월 ₩8,250). 기본은 <b>연</b>(LTV 우선, 17% 할인 배지로 정당화). 사용자가 월로 바꾸면 plan-card 가격이 in-place 갱신.</div></div>
+
+    <h3>④ Plan 가격 <span class="trial-badge ml-1">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>큰 가격 + 작은 단위. 월 환산도 함께 표시(연 선택 시 "월 ₩8,250"). 가격은 <b>시각적 닻</b>이라 가장 크게.</div></div>
+
+    <h3>⑤ Trial 배지 <span class="trial-badge ml-1">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">5</span><div>"7일 무료 체험" — Plan 카드 안에 두어 가격과 즉시 연결. 자동결제 다크패턴 비판 회피를 위해 미세약관(⑦)에서 종료일·금액 재명시.</div></div>
+
+    <h3>⑥ Feature 리스트</h3>
+    <div class="row"><span class="num">6</span><div>5개로 제한 — 인지 부하 관리. Pro의 <b>가장 큰 차별점</b>만 (무제한 작업·플랜·우선 응답·고급 모델·광고 제거). 알림 v0.3과 정합(미션 플랜 = Pro 핵심).</div></div>
+
+    <h3>⑦ 자동결제 미세약관 <span class="trial-badge ml-1">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">7</span><div>"7일 후 ₩99,000이 자동으로 청구" — 명시 의무. 약관·환불 정책 링크는 시트로 열림. EU·한국 전자상거래법 compliant.</div></div>
+
+    <h3>⑧ CTA → 02 결제 확인</h3>
+    <div class="row"><span class="num crit">8</span><div>"7일 무료로 시작" — 행동 → 02. CTA 아래 작은 안내 "취소: 마이페이지 &gt; 구독 관리"로 <b>해지 경로를 첫 화면에 노출</b>(신뢰 +).</div></div>
+
+    <h3>접근성</h3>
+    <div class="row"><span class="num">A</span><div>가격·trial·CTA는 스크린리더 순서대로 읽힘 ("연 결제, 99,000원, 7일 무료 체험, 7일 무료로 시작 버튼"). 토글은 <code>role="tablist"</code>.</div></div>
+  </div>
+
+</div>
+</body>
+</html>
