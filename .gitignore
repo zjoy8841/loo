@@ -8,8 +8,11 @@ Thumbs.db
 *.swp
 *~
 
-# Claude — local-only settings (settings.local.json은 머신마다 다름)
-.claude/settings.local.json
+# Claude — local-only settings (settings.local.json은 머신마다 다름, 하위 폴더 포함)
+**/.claude/settings.local.json
+
+# Playwright MCP 산출물 (도구 캐시 — 공유 가치 없음)
+.playwright-mcp/
 
 # Node / Next.js (web/.gitignore 와 중첩 적용)
 node_modules/
@@ -40,6 +43,7 @@ Life OS ONE.txt
 Life OS ONE_utf8.txt
 KakaoTalk_*.mp4
 
-# 로컬 작업 자료 (개인 메모·스크린샷 — 공유 가치 낮음)
+# 로컬 작업 자료 (개인 메모·스크린샷·다운로드 레퍼런스 — 공유 가치 낮음)
 \[스크린샷\] LIFEOSONE/
 회의록/
+자료/
