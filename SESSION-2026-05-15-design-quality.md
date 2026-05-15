@@ -7,9 +7,15 @@
 
 ## 🎯 다음 세션 첫 액션
 
-> **디자인을 원점부터 다시 시작한다 — 퀄리티 있는 산출물을 위해.** (사용자 명시)
-> 이번 세션의 v1.0~v5.0 시안은 전부 보존하되, 다음 세션은 그 위에 쌓는 게 아니라 접근 자체를 다시 잡는다.
-> 가장 유력한 출발점: **유료 구매한 PharmaEase 키트를 base로** 가는 v5.0 방향 (아래 "핵심 결론" 참조).
+> **Stitch MCP가 연결되어 있다 — Claude Code가 직접 Stitch를 운전해 메인 화면을 생성한다.**
+>
+> 1. 새 세션이면 Stitch MCP 도구(`generate_screen_from_text`, `get_screen_code`, `get_screen_image`, `extract_design_context` 등)가 로드돼 있어야 함. ToolSearch로 `stitch` 검색해 확인.
+> 2. `디자인/추가 시안/Stitch 프롬프트_메인 A·B.md`의 ①+②-A, ①+②-B를 각각 Stitch에 던져 생성.
+> 3. 결과 코드·이미지를 받아 스크린샷 검수 → 대화형 수정 → `web/` 통합.
+> 4. A/B 방향은 결과 보고 사용자와 결정.
+>
+> 도구가 안 보이면: `claude mcp list`로 stitch 연결 확인 → 그래도 도구 없으면 재시작 필요.
+> 그것도 안 되면 폴백 = Stitch 웹 UI(stitch.withgoogle.com)에 같은 프롬프트 수동 입력.
 
 ---
 
@@ -31,8 +37,22 @@
 
 - `디자인/디자인 가이드/design-guide-v8.0-부록 초안 (composition·exemplars).md` — **§composition(조합·위계·절제 규칙) + §exemplars(Apple HIG 기준 좋은/나쁜 예시)** 부록 초안. **v8.0 본문 미통합** — 검토 후 별도 오더 시 §10/§11로 통합 예정.
 - `디자인/추가 시안/Figma-Make 프롬프트_메인 A·B.md` — Figma Make에 붙여넣을 메인 A·B 생성 프롬프트 (§composition 제약 + 레퍼런스 + 실제 콘텐츠 포함).
+- `디자인/추가 시안/Stitch 프롬프트_메인 A·B.md` — Google Stitch용 메인 A·B 생성 프롬프트 (공통 컨텍스트 + ②-A/②-B + 반복 팁). **이게 다음 세션의 입력.**
 - `디자인/추가 시안/Main Screen A_B Design_v1.0/` — Figma Make가 생성한 Vite+React+shadcn 프로젝트 (다운로드본). 🦁 이모지로 마스코트 대체된 상태.
 - `디자인/추가 시안/_pharmaease-ref/` — PharmaEase 원본 스크린샷 4장 (home/welcome/news/account), 레퍼런스 보관용.
+
+---
+
+## 🔌 Stitch MCP 연결 완료 (2026-05-15 세션 말미)
+
+- AI 디자인 도구 리서치 결과 → **Google Stitch**(구 Galileo AI 혈통)가 "0→1 디자인 생성"에 최적. "가장 보기 좋은 프로토타입" 평가, 무료.
+- 도구 역할 분담 (리서치): **Stitch = 디자인 생성** / **v0 = 코드 품질** / Figma Make = Figma→코드 / Lovable·Bolt = 앱 통째.
+- **Stitch는 MCP로 Claude Code에 연결됨** — Figma Make는 외부 제어 불가지만 Stitch는 가능 (생성 `generate_screen_from_text` + 추출 `get_screen_code`·`get_screen_image`·`extract_design_context` 둘 다).
+- **무료 경로 확인** — Stitch Settings에서 API 키 발급 → billing 벽 없이 발급됨. 결제 불필요.
+- 등록 명령: `claude mcp add -s user stitch -e STITCH_API_KEY=<key> -- npx -y @_davideast/stitch-mcp proxy`
+  → user 설정(`~/.claude.json`)에 저장. **repo엔 안 들어감** (API 키도 거기).
+- ⚠️ **add한 세션에선 도구 미로드** — 재시작해야 Stitch 도구가 뜸. 그래서 다음 세션부터 사용 가능.
+- ⚠️ API 키가 채팅에 평문 노출됨 — 신경 쓰이면 Stitch Settings에서 재발급 후 `claude mcp remove stitch` → 다시 add.
 
 ---
 
