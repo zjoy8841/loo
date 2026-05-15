@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>U-04 알림 · v0.4 인덱스</title>
+<title>U-04 알림 · v0.31 인덱스</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
@@ -40,12 +40,12 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
 <div class="max-w-[1100px] mx-auto">
 
   <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
-  <h1 class="text-3xl font-bold mt-1">U-04 알림 · v0.4 초안 — 대화창 패러다임</h1>
+  <h1 class="text-3xl font-bold mt-1">U-04 알림 · v0.31 초안 — 대화창 패러다임</h1>
   <p class="text-gray-600 mt-2 leading-relaxed"><b>핵심 패러다임 전환.</b> v0.3 04(카테고리 우선 동적 폼)을 폐기하고 <b>대화창(음성+텍스트) primary</b>로 재설계. 사용자는 자연어로 의도를 말하면 AI가 알림·플랜을 조립하고 reasoning을 피드백. 단순 케이스는 한 줄 응답, 복잡 플랜은 다중 턴 조정. "전체 스케줄 보여줘" 같은 명령형 대화로 시각화도 호출. 폼은 보조 경로(편집·수동 작성)로 남김.</p>
   <div class="mt-3 text-xs text-gray-500">
     <span class="ph">그레이스케일 + 라인 아이콘</span>
     <span class="ph">시멘틱 색: 정보 파랑</span>
-    <span class="ph ph-new">v0.4 = 대화 패러다임</span>
+    <span class="ph ph-new">v0.31 = 대화 패러다임</span>
   </div>
 
   <!-- 왜 패러다임 전환했나 -->
@@ -56,12 +56,12 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
     <p>이 방향은 메모리의 <code>[[project_alarm_ai_assembly]]</code>(AI 조립 = 핵심 기능)와 정합되면서, 동시에 사용자에게 조립 부담을 0으로 줄이는 길. <b>AI가 조립을 대신하고 reasoning만 보여준다.</b></p>
   </div>
 
-  <!-- v0.4 변경 매핑 -->
-  <h2 class="text-lg font-bold mt-9 mb-1">v0.3 → v0.4 변경 매핑</h2>
+  <!-- v0.31 변경 매핑 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">v0.3 → v0.31 변경 매핑</h2>
   <table>
     <tr>
       <th style="width:170px">v0.3 화면</th>
-      <th style="width:80px">v0.4 상태</th>
+      <th style="width:80px">v0.31 상태</th>
       <th>변경 내용</th>
     </tr>
     <tr>
@@ -82,7 +82,7 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
     <tr>
       <td><b>04</b> 생성·편집 (카테고리 폼)</td>
       <td><span class="ph ph-warn">보조 경로</span></td>
-      <td><b>Primary 자리에서 내려옴.</b> v0.4에선 <span class="diff-add">00 대화창</span>이 primary 생성 경로. 04 폼은 ① AI 조립 결과 세부 편집 ② AI 안 쓰고 수동 작성 두 경로에서 진입. <span class="ph">v0.4 후속 라운드에 retrofit</span> 작성 예정.</td>
+      <td><b>Primary 자리에서 내려옴.</b> v0.31에선 <span class="diff-add">00 대화창</span>이 primary 생성 경로. 04 폼은 ① AI 조립 결과 세부 편집 ② AI 안 쓰고 수동 작성 두 경로에서 진입. <span class="ph">v0.31 후속 라운드에 retrofit</span> 작성 예정.</td>
     </tr>
     <tr>
       <td><b>05</b> 알림 설정</td>
@@ -96,12 +96,12 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
     </tr>
     <tr>
       <td><b>00</b> (없음)</td>
-      <td><span class="ph ph-new">v0.4 신규</span></td>
+      <td><span class="ph ph-new">v0.31 신규</span></td>
       <td><b>대화창</b> — 음성·텍스트 입력 → AI 조립 → reasoning + 결과 미니 카드. 3 phone: entry · 단순 케이스 · 복잡 플랜 케이스.</td>
     </tr>
     <tr>
       <td><b>07</b> (없음)</td>
-      <td><span class="ph ph-new">v0.4 신규</span></td>
+      <td><span class="ph ph-new">v0.31 신규</span></td>
       <td><b>플랜 풀뷰</b> — 대화 결과 "보기" 탑 또는 "전체 스케줄 보여줘" 명령의 도착지. D-day + 진행률 + 주차 탭 + 일자 카드 + 액션 바("대화로 수정" primary).</td>
     </tr>
   </table>
@@ -147,16 +147,16 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
   </div>
 
   <!-- 화면 목록 -->
-  <h2 class="text-lg font-bold mt-9 mb-3">v0.4 활성 화면</h2>
+  <h2 class="text-lg font-bold mt-9 mb-3">v0.31 활성 화면</h2>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
     <a href="00-conversation.html" class="card">
-      <div class="flex items-center gap-2 mb-2"><span class="scr-num">00</span><span class="ph ph-new">v0.4 신규</span><span class="ph">primary</span></div>
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">00</span><span class="ph ph-new">v0.31 신규</span><span class="ph">primary</span></div>
       <p class="font-bold text-[15px]">대화창 (entry · 단순 · 플랜)</p>
       <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">3 phone: entry(마이크 + 추천) · 단순(한 줄 응답 + 미니 카드) · 플랜(thinking + reasoning + 다중 턴).</p>
       <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
     </a>
     <a href="07-plan-fullview.html" class="card">
-      <div class="flex items-center gap-2 mb-2"><span class="scr-num">07</span><span class="ph ph-new">v0.4 신규</span></div>
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">07</span><span class="ph ph-new">v0.31 신규</span></div>
       <p class="font-bold text-[15px]">플랜 풀뷰</p>
       <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">D-day + 진행률 + 주차 탭 + 일자 카드(과목 색 시스템) + "대화로 수정" primary 액션.</p>
       <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
@@ -170,7 +170,7 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
   </div>
 
   <!-- 핵심 결정 -->
-  <h2 class="text-lg font-bold mt-10 mb-3">v0.4 핵심 결정</h2>
+  <h2 class="text-lg font-bold mt-10 mb-3">v0.31 핵심 결정</h2>
   <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
     <p><b class="text-gray-900">대화창 = primary 생성 경로</b> — 카테고리·블록·시간 같은 추상 선택이 사라짐. 사용자는 의도를 자연어로 표현하면 AI가 모든 조립을 처리. "AI가 조립을 한다" 가 메모리에 박힌 핵심 기능 정의 <code>[[project_alarm_ai_assembly]]</code>의 진정한 구현.</p>
     <p><b class="text-gray-900">Reasoning은 대화 흐름에 따라 다름</b> — 단순 알림("아침 7시 브리핑")은 reasoning 없이 한 줄. 복잡 플랜("시험 스케줄")은 reasoning 박스로 휴리스틱 명시(취약 자주·주말 모의·복습 전환). 사용자가 "왜 이렇게?" 물을 일을 선제적으로 답.</p>
@@ -198,13 +198,13 @@ code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
   <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
   <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
     <ul class="list-disc pl-5 space-y-1.5">
-      <li>v0.4는 <b>패러다임 검증 라운드</b>. 핵심 2 화면(00·07)으로 컨셉 정합 확인 → 사용자 OK 시 04 retrofit + 노션 description 작성 + Figma 이식.</li>
+      <li>v0.31는 <b>패러다임 검증 라운드</b>. 핵심 2 화면(00·07)으로 컨셉 정합 확인 → 사용자 OK 시 04 retrofit + 노션 description 작성 + Figma 이식.</li>
       <li>v0.3 폴더는 이력 보존. 변경 없는 화면(01·02·03·05·06)은 v0.3 그대로 참조.</li>
       <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>.</li>
     </ul>
   </div>
 
-  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-04 알림 v0.4 (대화 패러다임) · 2026-05-15</p>
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-04 알림 v0.31 (대화 패러다임) · 2026-05-15</p>
 
 </div>
 </body>
