@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-4 알림 생성·편집 (카테고리 우선) · v0.3</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.field-label{font-size:11px;font-weight:700;color:#6b7280;margin-bottom:6px;display:block}
+.input-box{border:1px solid #d1d5db;border-radius:11px;padding:11px 12px;font-size:13px;color:#111827}
+.chip{border:1px solid #d1d5db;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:#374151;background:#fff;display:inline-flex;align-items:center;gap:5px}
+.chip-on{background:#1f1f1f;border-color:#1f1f1f;color:#fff}
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:700;padding:14px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px}
+.btn-gen{background:#2563eb;color:#fff;font-weight:700;padding:14px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px}
+.icon-mini{color:#9ca3af}
+.cat-pick{border:1.5px solid #e5e7eb;border-radius:15px;padding:14px;display:flex;gap:12px;align-items:flex-start;background:#fff}
+.cat-pick-icon{flex-shrink:0;width:44px;height:44px;border-radius:11px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.cat-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280;margin-top:6px}
+.cat-bar{display:flex;align-items:center;justify-content:space-between;border:1px solid #d1d5db;border-radius:11px;padding:9px 12px;background:#f9fafb}
+.preset-row{display:flex;align-items:center;gap:11px;border:1px solid #e5e7eb;border-radius:12px;padding:11px 12px;background:#fff}
+.preset-row-on{border-color:#2563eb;background:#eff6ff}
+.preset-icon{flex-shrink:0;width:32px;height:32px;border-radius:8px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.preset-icon-on{border-color:#2563eb;color:#2563eb;background:#fff}
+.cbox{width:22px;height:22px;border-radius:7px;border:1.5px solid #d1d5db;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:transparent}
+.cbox-on{background:#2563eb;border-color:#2563eb;color:#fff}
+.pipe-block{border:1.5px solid #2563eb;border-radius:13px;background:#eff6ff;padding:11px}
+.pipe-head{display:flex;align-items:center;gap:8px}
+.pipe-num{flex-shrink:0;width:20px;height:20px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pipe-ic{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:#fff;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;color:#2563eb}
+.io{font-size:10.5px;display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:7px}
+.io-label{font-weight:800;color:#9ca3af;letter-spacing:.02em}
+.io-chip{background:#fff;border:1px solid #bfdbfe;border-radius:6px;padding:2px 7px;font-weight:600;color:#2563eb}
+.io-chip-profile{background:#fff;border:1px solid #d1d5db;color:#6b7280}
+.connector{display:flex;flex-direction:column;align-items:center;padding:3px 0}
+.connector-line{width:1.5px;height:9px;background:#93c5fd}
+.connector-chip{background:#dbeafe;color:#1d4ed8;font-size:10px;font-weight:700;border-radius:999px;padding:2px 9px;display:inline-flex;align-items:center;gap:4px}
+.pipe-add{border:1.5px dashed #93c5fd;border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:center;gap:6px;color:#2563eb;font-size:12px;font-weight:700;background:#fff;width:100%}
+.seg{border:1px solid #d1d5db;border-radius:11px;overflow:hidden;display:flex}
+.seg div{flex:1;text-align:center;font-size:12px;font-weight:600;padding:9px 0;color:#6b7280}
+.seg div.on{background:#1f1f1f;color:#fff}
+.seg-blue div.on{background:#2563eb;color:#fff}
+.cfg-link{font-size:11px;font-weight:700;color:#2563eb;display:inline-flex;align-items:center;gap:3px}
+/* 플랜 */
+.goal-box{border:1.5px solid #2563eb;border-radius:12px;padding:11px 12px;font-size:13px;color:#111827;background:#eff6ff;line-height:1.5}
+.range-row{display:flex;align-items:center;gap:9px;border:1px solid #e5e7eb;border-radius:11px;padding:9px 11px;background:#fff}
+.range-ic{flex-shrink:0;width:28px;height:28px;border-radius:8px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.unit-chip{background:#f3f4f6;border-radius:6px;padding:2px 7px;font-size:10px;color:#4b5563;font-weight:600}
+.opt-toggle{display:flex;align-items:center;justify-content:space-between;border:1px solid #e5e7eb;border-radius:10px;padding:9px 11px;font-size:12px;background:#fff}
+.tg-sm{width:36px;height:21px;border-radius:999px;background:#2563eb;position:relative;flex-shrink:0}
+.tg-sm::after{content:"";position:absolute;width:16px;height:16px;border-radius:999px;background:#fff;top:2.5px;right:2.5px}
+.tg-sm-off{background:#d1d5db}
+.tg-sm-off::after{right:auto;left:2.5px}
+.plan-bar{background:#1f1f1f;color:#fff;border-radius:13px;padding:12px 13px}
+.dday{background:#fff;color:#1f1f1f;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:800}
+.day-row{display:flex;gap:9px;align-items:flex-start;padding:9px 1px;border-bottom:1px solid #f3f4f6}
+.day-badge{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.day-badge-rest{background:#f3f4f6;color:#9ca3af}
+.subj-tag{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:999px;border:1px solid #bfdbfe;color:#2563eb}
+.sec-head{font-size:15px;font-weight:800;color:#111827}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9h4"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+<symbol id="i-grip" viewBox="0 0 24 24"><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+<symbol id="i-arrow-down" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></symbol>
+<symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+<symbol id="i-rotate" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1800px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.3 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-4 알림 생성·편집 — 카테고리 우선 동적 폼 · v0.3 초안</h1>
+  <p class="text-sm text-gray-600 mt-1">카테고리를 먼저 고르면 폼이 통째로 바뀌는 구조. <b>수정(2026-05-15):</b> 미션에 <b>단발 / 플랜</b> 두 유형을 추가 — 플랜은 "목표를 주면 AI가 여러 날에 걸친 알림 스케줄을 생성". 중간고사 공부 스케줄·요일별 학업 스케줄 같은 케이스를 담는다.</p>
+</div>
+
+<!-- ════════ 섹션 A — 카테고리별 폼 ════════ -->
+<div class="max-w-[1800px] mx-auto mb-3">
+  <p class="sec-head">A. 카테고리 선택 → 카테고리별 폼</p>
+  <p class="text-[12px] text-gray-500 mt-0.5">폰1 = 카테고리 선택 · 폰2 = 브리핑 폼(고정 블록) · 폰3 = 미션 폼 · 단발(AI 작업 조립)</p>
+</div>
+<div class="max-w-[1800px] mx-auto flex flex-wrap gap-8 items-start mb-12">
+
+  <!-- ===== PHONE 1 — 카테고리 선택 ===== -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="03-schedule-timeline.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="font-bold text-[15px]">새 알림</span>
+      <span class="w-5"></span>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-5 space-y-3">
+      <p class="text-[15px] font-bold">어떤 알림을 만들까요?</p>
+      <p class="text-[12px] text-gray-500 -mt-1.5 mb-1">고른 카테고리에 따라 다음 입력 화면이 달라져요.</p>
+
+      <div class="cat-pick">
+        <span class="cat-pick-icon"><svg class="lc lc-20"><use href="#i-calendar"/></svg></span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px]">일정 알림</p>
+          <p class="text-[12px] text-gray-500 mt-0.5 leading-relaxed">정해진 시각에 알려주는 기본 알림. 미리 알림·반복·지속 알림.</p>
+          <span class="cat-tag">폼: 시간 중심 · AI 작업 선택적</span>
+        </div>
+        <svg class="lc lc-16 text-gray-300 mt-1"><use href="#i-chevron-right"/></svg>
+      </div>
+
+      <div class="cat-pick">
+        <span class="cat-pick-icon"><svg class="lc lc-20"><use href="#i-sun"/></svg></span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px]">브리핑 <span class="text-[11px] font-bold text-gray-400">→ 폰2</span></p>
+          <p class="text-[12px] text-gray-500 mt-0.5 leading-relaxed">정보를 모아 한 카드로. 날씨·뉴스·논문 요약 같은 <b>고정 블록을 골라 담기</b>.</p>
+          <span class="cat-tag">폼: 고정 블록 라이브러리</span>
+        </div>
+        <svg class="lc lc-16 text-gray-300 mt-1"><use href="#i-chevron-right"/></svg>
+      </div>
+
+      <a href="#mission" class="cat-pick" style="border-color:#2563eb;background:#eff6ff">
+        <span class="cat-pick-icon" style="border-color:#2563eb;color:#2563eb;background:#fff"><svg class="lc lc-20"><use href="#i-target"/></svg></span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px]">미션 <span class="text-[11px] font-bold" style="color:#2563eb">→ 폰3·4·5</span></p>
+          <p class="text-[12px] text-gray-500 mt-0.5 leading-relaxed">목표가 있는 AI 작업. <b>단발</b>(점심 메뉴 추천처럼 한 번) 또는 <b>플랜</b>(목표로 여러 날 스케줄 생성).</p>
+          <span class="cat-tag" style="background:#fff;color:#2563eb">폼: 단발 = AI 작업 조립 · 플랜 = 스케줄 생성</span>
+        </div>
+        <svg class="lc lc-16 mt-1" style="color:#2563eb"><use href="#i-chevron-right"/></svg>
+      </a>
+
+      <div class="cat-pick">
+        <span class="cat-pick-icon"><svg class="lc lc-20"><use href="#i-newspaper"/></svg></span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-[14px]">관심사</p>
+          <p class="text-[12px] text-gray-500 mt-0.5 leading-relaxed">관심 분야 새 소식. 키워드 기반으로 AI가 자동 수집.</p>
+          <span class="cat-tag">폼: 키워드 · 수집 주기</span>
+        </div>
+        <svg class="lc lc-16 text-gray-300 mt-1"><use href="#i-chevron-right"/></svg>
+      </div>
+
+      <p class="text-[11px] text-gray-400 leading-relaxed pt-1">카테고리는 알림의 종류이자 05 알림 설정의 on/off 단위. 03 타임라인의 "새 일정 알림"으로 들어오면 "일정 알림"이 미리 선택된 상태로 폼이 열려요.</p>
+    </div>
+  </div>
+
+  <!-- ===== PHONE 2 — 브리핑 폼 ===== -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">브리핑 만들기</span>
+      <span class="text-[13px] font-bold" style="color:#2563eb">저장</span>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+      <div class="cat-bar">
+        <span class="flex items-center gap-2 text-[12px] font-bold"><svg class="lc lc-16" style="color:#2563eb"><use href="#i-sun"/></svg> 카테고리 · 브리핑</span>
+        <span class="cfg-link">바꾸기</span>
+      </div>
+      <div>
+        <span class="field-label">제목</span>
+        <div class="input-box">아침 브리핑</div>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div><span class="field-label">시간</span><div class="input-box flex items-center justify-between"><span>오전 7:30</span><svg class="lc lc-16 icon-mini"><use href="#i-clock"/></svg></div></div>
+        <div><span class="field-label">반복</span><div class="input-box flex items-center justify-between"><span>매일</span><svg class="lc lc-16 icon-mini"><use href="#i-repeat"/></svg></div></div>
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="field-label mb-0 flex items-center gap-1.5" style="color:#2563eb"><svg class="lc lc-14"><use href="#i-sparkles"/></svg> 담을 블록</span>
+          <span class="text-[10px] text-gray-400">3개 담음 · 골라서 체크</span>
+        </div>
+        <div class="space-y-2">
+          <div class="preset-row preset-row-on"><span class="preset-icon preset-icon-on"><svg class="lc lc-16"><use href="#i-sun"/></svg></span><div class="flex-1 min-w-0"><p class="text-[13px] font-bold">날씨</p><p class="text-[11px] text-gray-500">오늘 날씨 · 미세먼지 · 우산 여부</p></div><span class="cbox cbox-on"><svg class="lc lc-14"><use href="#i-check"/></svg></span></div>
+          <div class="preset-row preset-row-on"><span class="preset-icon preset-icon-on"><svg class="lc lc-16"><use href="#i-calendar"/></svg></span><div class="flex-1 min-w-0"><p class="text-[13px] font-bold">오늘 일정</p><p class="text-[11px] text-gray-500">캘린더·일정 알림 요약</p></div><span class="cbox cbox-on"><svg class="lc lc-14"><use href="#i-check"/></svg></span></div>
+          <div class="preset-row preset-row-on"><span class="preset-icon preset-icon-on"><svg class="lc lc-16"><use href="#i-newspaper"/></svg></span><div class="flex-1 min-w-0"><p class="text-[13px] font-bold">뉴스</p><p class="text-[11px] text-gray-500">관심 분야 헤드라인 3건</p></div><span class="cbox cbox-on"><svg class="lc lc-14"><use href="#i-check"/></svg></span></div>
+          <div class="preset-row"><span class="preset-icon"><svg class="lc lc-16"><use href="#i-file-text"/></svg></span><div class="flex-1 min-w-0"><p class="text-[13px] font-bold">논문 요약</p><p class="text-[11px] text-gray-500">관심 키워드 신규 논문 한 줄 요약</p></div><span class="cbox"><svg class="lc lc-14"><use href="#i-check"/></svg></span></div>
+        </div>
+        <p class="text-[10px] text-gray-400 mt-2">담은 블록은 길게 눌러 순서 변경. 각 블록은 안에서 AI가 알아서 채움 — 조립 불필요.</p>
+      </div>
+      <div><span class="field-label">알림 방식</span><div class="seg"><div class="on">한 번만</div><div>지속 알림</div></div></div>
+    </div>
+    <div class="px-5 py-4 border-t border-gray-100"><div class="btn-primary"><svg class="lc lc-16"><use href="#i-check"/></svg> 저장</div></div>
+  </div>
+
+  <!-- ===== PHONE 3 — 미션 폼 · 단발 ===== -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">미션 만들기</span>
+      <span class="text-[13px] font-bold" style="color:#2563eb">저장</span>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+      <div class="cat-bar">
+        <span class="flex items-center gap-2 text-[12px] font-bold"><svg class="lc lc-16" style="color:#2563eb"><use href="#i-target"/></svg> 카테고리 · 미션</span>
+        <span class="cfg-link">바꾸기</span>
+      </div>
+      <!-- 유형 토글 -->
+      <div>
+        <span class="field-label">미션 유형</span>
+        <div class="seg seg-blue"><div class="on">단발</div><div>플랜</div></div>
+        <p class="text-[10px] text-gray-400 mt-1.5">단발 = 한 번(또는 반복) 실행하는 AI 작업. 플랜 = 목표로 여러 날 스케줄을 생성 → 폰4·5.</p>
+      </div>
+      <div><span class="field-label">제목</span><div class="input-box">점심 메뉴 추천</div></div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div><span class="field-label">시간</span><div class="input-box flex items-center justify-between"><span>오후 12:00</span><svg class="lc lc-16 icon-mini"><use href="#i-clock"/></svg></div></div>
+        <div><span class="field-label">반복</span><div class="input-box flex items-center justify-between"><span>평일</span><svg class="lc lc-16 icon-mini"><use href="#i-repeat"/></svg></div></div>
+      </div>
+      <!-- AI 작업 조립 -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="field-label mb-0 flex items-center gap-1.5" style="color:#2563eb"><svg class="lc lc-14"><use href="#i-sparkles"/></svg> AI 작업 조립</span>
+          <span class="text-[10px] text-gray-400">위 → 아래 순서로 실행</span>
+        </div>
+        <div class="pipe-block">
+          <div class="pipe-head">
+            <span class="pipe-num">1</span><span class="pipe-ic"><svg class="lc lc-16"><use href="#i-map-pin"/></svg></span>
+            <p class="text-[13px] font-bold flex-1">주변 식당 검색</p>
+            <svg class="lc lc-16 text-gray-300"><use href="#i-grip"/></svg><svg class="lc lc-16 text-gray-300"><use href="#i-x-circle"/></svg>
+          </div>
+          <div class="io"><span class="io-label">입력</span><span class="io-chip-profile">현재 위치</span></div>
+          <div class="io"><span class="io-label">출력</span><span class="io-chip">식당 목록</span><span class="cfg-link ml-auto"><svg class="lc lc-12"><use href="#i-sliders"/></svg> 설정</span></div>
+        </div>
+        <div class="connector"><span class="connector-line"></span><span class="connector-chip"><svg class="lc lc-12"><use href="#i-arrow-down"/></svg> 식당 목록 전달</span><span class="connector-line"></span></div>
+        <div class="pipe-block">
+          <div class="pipe-head">
+            <span class="pipe-num">2</span><span class="pipe-ic"><svg class="lc lc-16"><use href="#i-sparkles"/></svg></span>
+            <p class="text-[13px] font-bold flex-1">메뉴 추천</p>
+            <svg class="lc lc-16 text-gray-300"><use href="#i-grip"/></svg><svg class="lc lc-16 text-gray-300"><use href="#i-x-circle"/></svg>
+          </div>
+          <div class="io"><span class="io-label">입력</span><span class="io-chip">①의 식당 목록</span><span class="io-chip-profile">내 건강·식단</span></div>
+          <div class="io"><span class="io-label">출력</span><span class="io-chip">추천 카드</span><span class="cfg-link ml-auto"><svg class="lc lc-12"><use href="#i-sliders"/></svg> 설정</span></div>
+        </div>
+        <div class="mt-2"><button class="pipe-add"><svg class="lc lc-16"><use href="#i-plus"/></svg> AI 작업 추가</button></div>
+      </div>
+      <div><span class="field-label">알림 방식</span><div class="seg"><div class="on">한 번만</div><div>지속 알림</div></div></div>
+    </div>
+    <div class="px-5 py-4 border-t border-gray-100"><div class="btn-primary"><svg class="lc lc-16"><use href="#i-check"/></svg> 저장</div></div>
+  </div>
+
+  <!-- ===== CAPTION A ===== -->
+  <div class="cap pt-7">
+    <h3>섹션 A — 카테고리 우선 동적 폼</h3>
+    <div class="row"><span class="num">1</span><div><b>카테고리 선택</b> — 일정 알림 / 브리핑 / 미션 / 관심사. 미션 카드는 v0.3 수정으로 "단발 또는 플랜" 두 유형을 안내.</div></div>
+    <div class="row"><span class="num">2</span><div><b>브리핑 폼</b> — 고정 블록 라이브러리에서 체크로 골라 담기. 조립 불필요한 쉬운 경로(약점 3 대비책).</div></div>
+    <div class="row"><span class="num">3</span><div><b>미션 폼 · 단발</b> — 상단 <b>유형 토글(단발/플랜)</b>. 단발은 한 시점에 실행되는 AI 작업을 조립. 예시를 v0.2의 "세계 정세"에서 <b>"점심 메뉴 추천"</b>으로 교체 — 사용자가 든 예시이자, 미션=목표 작업이라는 성격에 더 맞음.</div></div>
+    <div class="row"><span class="num">·</span><div><b>AI 작업 조립</b> — 블록별 입력/출력 명시 + 커넥터로 데이터 흐름 가시화(약점 3 보완). ① 주변 식당 검색 → ② 메뉴 추천.</div></div>
+    <div class="row"><span class="num">·</span><div>"브리핑 vs 미션"이 v0.3에서 모호했던 문제 — 미션 예시를 정보 수집형("세계 정세")에서 목표 작업형("점심 추천")으로 바꿔 경계를 분명히. 정보를 모아 보는 건 브리핑, 목표를 향해 AI가 일하는 건 미션.</div></div>
+  </div>
+
+</div>
+
+<!-- ════════ 섹션 B — 미션 · 플랜 ════════ -->
+<div class="max-w-[1800px] mx-auto mb-3">
+  <p class="sec-head">B. 미션 · 플랜 — 목표 기반 스케줄 생성 <span class="text-[12px] font-bold" style="color:#2563eb">v0.3 수정 신규</span></p>
+  <p class="text-[12px] text-gray-500 mt-0.5">목표를 주면 AI가 여러 날에 걸친 알림 스케줄을 생성. 폰4 = 플랜 입력 · 폰5 = 생성된 스케줄 미리보기·편집</p>
+</div>
+<div class="max-w-[1800px] mx-auto flex flex-wrap gap-8 items-start" id="mission">
+
+  <!-- ===== PHONE 4 — 미션 폼 · 플랜 입력 ===== -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">미션 만들기</span>
+      <span class="text-[13px] font-bold text-gray-300">생성 후 저장</span>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+      <div class="cat-bar">
+        <span class="flex items-center gap-2 text-[12px] font-bold"><svg class="lc lc-16" style="color:#2563eb"><use href="#i-target"/></svg> 카테고리 · 미션</span>
+        <span class="cfg-link">바꾸기</span>
+      </div>
+      <div>
+        <span class="field-label">미션 유형</span>
+        <div class="seg seg-blue"><div>단발</div><div class="on">플랜</div></div>
+      </div>
+
+      <!-- 목표 -->
+      <div>
+        <span class="field-label flex items-center gap-1.5" style="color:#2563eb"><svg class="lc lc-14"><use href="#i-flag"/></svg> 목표</span>
+        <div class="goal-box">중간고사 대비 — 수학·영어·과학 시험 준비. 취약한 수학에 더 집중하고 싶어요.</div>
+      </div>
+
+      <!-- 범위·기준 -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="field-label mb-0">공부할 범위 · 성취 기준</span>
+          <span class="cfg-link">성취 기준 불러오기</span>
+        </div>
+        <div class="space-y-2">
+          <div class="range-row">
+            <span class="range-ic"><svg class="lc lc-16"><use href="#i-book"/></svg></span>
+            <div class="flex-1 min-w-0"><p class="text-[12.5px] font-bold">수학</p><div class="flex flex-wrap gap-1 mt-1"><span class="unit-chip">미적분 I</span><span class="unit-chip">미적분 II</span></div></div>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-x-circle"/></svg>
+          </div>
+          <div class="range-row">
+            <span class="range-ic"><svg class="lc lc-16"><use href="#i-book"/></svg></span>
+            <div class="flex-1 min-w-0"><p class="text-[12.5px] font-bold">영어</p><div class="flex flex-wrap gap-1 mt-1"><span class="unit-chip">독해</span><span class="unit-chip">문법</span></div></div>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-x-circle"/></svg>
+          </div>
+          <div class="range-row">
+            <span class="range-ic"><svg class="lc lc-16"><use href="#i-book"/></svg></span>
+            <div class="flex-1 min-w-0"><p class="text-[12.5px] font-bold">과학</p><div class="flex flex-wrap gap-1 mt-1"><span class="unit-chip">역학</span><span class="unit-chip">전자기</span></div></div>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-x-circle"/></svg>
+          </div>
+          <button class="range-row w-full justify-center text-gray-500" style="border-style:dashed"><svg class="lc lc-14"><use href="#i-plus"/></svg><span class="text-[12px] font-semibold">과목·범위 추가</span></button>
+        </div>
+      </div>
+
+      <!-- 기간 -->
+      <div>
+        <span class="field-label">기간</span>
+        <div class="seg seg-blue mb-2"><div class="on">마감형</div><div>반복형</div></div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="input-box flex items-center justify-between"><span class="text-gray-400 text-[11px]">시작</span><span>오늘</span></div>
+          <div class="input-box flex items-center justify-between"><span class="text-gray-400 text-[11px]">시험일</span><span>6/10</span></div>
+        </div>
+        <p class="text-[10px] text-gray-400 mt-1.5">마감형 = 시험일까지 D-day로. 반복형 = 마감 없이 요일별로 계속(요일별 학업 스케줄).</p>
+      </div>
+
+      <!-- AI 스케줄 옵션 -->
+      <div>
+        <span class="field-label">AI가 스케줄 짜는 방식</span>
+        <div class="space-y-1.5">
+          <div class="opt-toggle"><span>취약 과목(수학) 더 자주 배치</span><span class="tg-sm"></span></div>
+          <div class="opt-toggle"><span>주말에 모의고사·총정리 배치</span><span class="tg-sm"></span></div>
+          <div class="opt-toggle"><span>시험 임박 시 복습 위주로 전환</span><span class="tg-sm"></span></div>
+        </div>
+      </div>
+
+      <!-- 알림 시간대 -->
+      <div>
+        <span class="field-label">주로 언제 알림 받을지</span>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip chip-on"><svg class="lc lc-12"><use href="#i-clock"/></svg> 평일 19:00</span>
+          <span class="chip chip-on"><svg class="lc lc-12"><use href="#i-clock"/></svg> 주말 10:00</span>
+          <span class="chip"><svg class="lc lc-12"><use href="#i-plus"/></svg> 시간대 추가</span>
+        </div>
+      </div>
+    </div>
+    <div class="px-5 py-4 border-t border-gray-100">
+      <div class="btn-gen"><svg class="lc lc-16"><use href="#i-sparkles"/></svg> AI 스케줄 생성</div>
+    </div>
+  </div>
+
+  <!-- ===== PHONE 5 — 플랜 생성 결과 미리보기 ===== -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">스케줄 미리보기</span>
+      <span class="text-[13px] font-bold" style="color:#2563eb">저장</span>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <!-- 플랜 요약 -->
+      <div class="plan-bar">
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="text-[10px] font-bold tracking-wider opacity-70">미션 · 플랜</span>
+          <span class="dday ml-auto">D-22</span>
+        </div>
+        <p class="font-bold text-[15px]">중간고사 공부 스케줄</p>
+        <p class="text-[11.5px] opacity-80 mt-0.5">5/15 ~ 6/10 · 알림 24개 · 수학 10 · 영어 7 · 과학 7</p>
+      </div>
+
+      <p class="text-[11px] text-gray-500 leading-relaxed">AI가 목표·범위·기간을 바탕으로 짠 스케줄이에요. 항목을 눌러 시간·내용을 고치거나 지울 수 있어요.</p>
+
+      <!-- 이번 주 -->
+      <div>
+        <p class="text-[10px] font-bold tracking-wider text-gray-400 mb-1">이번 주 · 5/15(목) ~ 5/21(수)</p>
+        <div>
+          <div class="day-row">
+            <span class="day-badge">목</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="subj-tag">수학</span><span class="text-[11px] text-gray-400">19:00</span></div>
+              <p class="text-[12.5px] font-semibold mt-0.5">미적분 I — 1단원 개념·기본 문제</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-edit"/></svg>
+          </div>
+          <div class="day-row">
+            <span class="day-badge">금</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="subj-tag">영어</span><span class="text-[11px] text-gray-400">19:00</span></div>
+              <p class="text-[12.5px] font-semibold mt-0.5">독해 — Unit 3·4 지문 분석</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-edit"/></svg>
+          </div>
+          <div class="day-row">
+            <span class="day-badge">토</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="subj-tag" style="border-color:#1f1f1f;color:#1f1f1f">모의고사</span><span class="text-[11px] text-gray-400">10:00</span></div>
+              <p class="text-[12.5px] font-semibold mt-0.5">주간 점검 — 이번 주 범위 모의고사</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-edit"/></svg>
+          </div>
+          <div class="day-row">
+            <span class="day-badge day-badge-rest">일</span>
+            <div class="flex-1 min-w-0"><p class="text-[12.5px] text-gray-400 mt-1">휴식 — 알림 없음</p></div>
+          </div>
+          <div class="day-row">
+            <span class="day-badge">월</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="subj-tag">수학</span><span class="text-[11px] text-gray-400">19:00</span></div>
+              <p class="text-[12.5px] font-semibold mt-0.5">미적분 I — 2단원 + 토요일 오답 복습</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-edit"/></svg>
+          </div>
+          <div class="day-row">
+            <span class="day-badge">화</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="subj-tag">과학</span><span class="text-[11px] text-gray-400">19:00</span></div>
+              <p class="text-[12.5px] font-semibold mt-0.5">역학 — 개념 정리·기출</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-edit"/></svg>
+          </div>
+        </div>
+        <button class="w-full flex items-center justify-center gap-1.5 py-2.5 mt-1 border border-gray-200 rounded-xl text-gray-500 text-[12px] font-semibold">
+          다음 주 (5/22~) 보기 <svg class="lc lc-14"><use href="#i-chevron-down"/></svg>
+        </button>
+      </div>
+
+      <!-- 재생성 -->
+      <button class="w-full flex items-center justify-center gap-1.5 py-3 rounded-xl text-[12.5px] font-bold" style="border:1.5px dashed #93c5fd;color:#2563eb;background:#fff">
+        <svg class="lc lc-14"><use href="#i-rotate"/></svg> 마음에 안 들면 — AI에게 다시 짜달라기
+      </button>
+    </div>
+    <div class="px-5 py-4 border-t border-gray-100">
+      <div class="btn-primary"><svg class="lc lc-16"><use href="#i-check"/></svg> 이 스케줄로 저장 · 알림 24개 등록</div>
+    </div>
+  </div>
+
+  <!-- ===== CAPTION B ===== -->
+  <div class="cap pt-7">
+    <h3>섹션 B — 미션 플랜 (목표 기반 스케줄 생성)</h3>
+    <div class="text-[12px] text-gray-600 leading-relaxed mb-3 bg-white border border-gray-200 rounded-xl p-3.5">
+      "점심 메뉴 추천"은 한 시점의 작업(=단발). 하지만 <b>"중간고사 공부 스케줄"·"요일별 학업 스케줄"</b>은 여러 날에 걸친 <b>알림 묶음</b>이라 단발 폼으로 안 됨. 그래서 미션에 <b>플랜</b> 유형을 추가 — 목표를 주면 AI가 스케줄을 생성한다.
+    </div>
+    <div class="row"><span class="num">4</span><div><b>플랜 입력 (폰4)</b> — 목표 + 공부할 범위·성취 기준 + 기간 + AI 스케줄 방식 + 알림 시간대. 마지막에 "AI 스케줄 생성".</div></div>
+    <div class="row"><span class="num">·</span><div><b>목표</b> — 자연어로. "취약한 수학에 더 집중" 같은 의도까지 적으면 스케줄 배분에 반영.</div></div>
+    <div class="row"><span class="num">·</span><div><b>범위·성취 기준</b> — 과목별 단원. "성취 기준 불러오기"로 교육과정 성취기준을 끌어와 범위·난이도 배분의 근거로 사용(요일별 학업 스케줄 케이스).</div></div>
+    <div class="row"><span class="num">·</span><div><b>기간 — 마감형 / 반복형</b> — 마감형 = 시험일까지 D-day 카운트다운(중간고사). 반복형 = 마감 없이 요일별로 계속(요일별 학업 스케줄). 한 폼으로 두 케이스를 다 담음.</div></div>
+    <div class="row"><span class="num">·</span><div><b>AI 스케줄 방식</b> — 취약 과목 가중·주말 모의고사·임박 시 복습 전환 등. AI가 스케줄을 짤 때의 규칙.</div></div>
+    <div class="row"><span class="num">5</span><div><b>생성 결과 미리보기 (폰5)</b> — AI가 짠 요일별 스케줄. 상단에 플랜 요약(기간·알림 개수·과목 배분·D-day). 각 항목은 눌러서 시간·내용 편집·삭제. "다음 주 보기"로 전체 확인.</div></div>
+    <div class="row"><span class="num">·</span><div><b>다시 짜달라기</b> — 결과가 마음에 안 들면 AI에게 재생성 요청(피드백 한 줄 첨부 가능).</div></div>
+    <div class="row"><span class="num">·</span><div><b>저장 = 알림 묶음 등록</b> — 플랜 1개 = 미션 1개가 N개 알림을 소유. 저장하면 각 알림이 01 센터·03 타임라인에 개별 인스턴스로 뜨고, 플랜 단위로 묶여 보임.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div>플랜의 개별 알림도 AI 작업·정시성 모델 적용 — 예: 공부 알림이 울릴 때 그날 범위의 핵심 요약·문제를 함께 전달 가능.</div></div>
+    <div class="row"><span class="num">·</span><div>반복형 플랜은 성취 기준 진척에 따라 AI가 다음 주 스케줄을 조정 제안(미달 범위 보강). 자동 적용이 아니라 "제안 → 확인".</div></div>
+    <div class="row"><span class="num">·</span><div>플랜 편집: 개별 알림 수정은 그 알림만, 플랜 목표·범위 변경은 "전체 다시 생성"으로. 이미 지난 알림은 보존.</div></div>
+    <div class="row"><span class="num">·</span><div>플랜 삭제: "이후 알림만 삭제 / 전체 삭제" 선택. 지난 기록은 남길 수 있음.</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 생성 결과는 요일·날짜 순서가 있는 리스트. 각 항목 "요일·시각·과목·내용"을 한 묶음으로 발성. "AI 스케줄 생성"·"다시 짜달라기" 후 결과는 <code class="bg-gray-100 px-1 rounded">aria-live</code>로 안내. 플랜 요약의 D-day는 텍스트로도 제공.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

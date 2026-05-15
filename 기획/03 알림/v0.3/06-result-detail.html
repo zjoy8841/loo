@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-6 알림 결과 상세 · v0.3</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #d1d5db;color:#6b7280}
+.tag-ai{border-color:#2563eb;color:#fff;background:#2563eb;display:inline-flex;align-items:center;gap:3px}
+.btn-line{border:1px solid #d1d5db;border-radius:9px;padding:8px 0;font-size:12px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:5px;background:#fff}
+.btn-dark{background:#1f1f1f;color:#fff;border-radius:9px;padding:8px 0;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:700;padding:13px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px}
+.icon-mini{color:#9ca3af}
+/* hero */
+.hero-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.summary-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:13px;padding:13px}
+/* 헤드라인 */
+.hl-row{display:flex;gap:10px;align-items:flex-start;border:1px solid #e5e7eb;border-radius:12px;padding:11px;background:#fff}
+.hl-num{flex-shrink:0;width:22px;height:22px;border-radius:7px;background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.src{font-size:10px;font-weight:700;color:#6b7280;background:#f3f4f6;padding:1px 6px;border-radius:4px}
+/* AI 작업 단계 펼침 */
+.collapsed{border:1px solid #e5e7eb;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:8px;background:#fff}
+/* 추천 — hero */
+.rec-hero{border:1.5px solid #2563eb;border-radius:14px;background:#eff6ff;padding:13px}
+.thumb{flex-shrink:0;width:64px;height:64px;border-radius:11px;background:#dbeafe;display:flex;align-items:center;justify-content:center;color:#2563eb}
+.action-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.action-btn{display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid #d1d5db;border-radius:10px;padding:8px 0;font-size:10.5px;font-weight:600;color:#374151;background:#fff}
+/* 지도 미리보기 */
+.map-prev{height:140px;border:1px solid #e5e7eb;border-radius:13px;background:repeating-linear-gradient(45deg,#f3f4f6,#f3f4f6 8px,#fafafa 8px,#fafafa 16px);position:relative;overflow:hidden}
+.map-pin{position:absolute;width:22px;height:22px;border-radius:999px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.map-pin-other{background:#9ca3af}
+.map-tag{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;background:rgba(255,255,255,.9);padding:3px 8px;border-radius:6px;color:#374151}
+.map-open{position:absolute;bottom:8px;right:8px;font-size:10.5px;font-weight:700;background:#1f1f1f;color:#fff;padding:5px 10px;border-radius:8px}
+/* 후보 카드 */
+.cand-row{display:flex;gap:10px;align-items:center;border:1px solid #e5e7eb;border-radius:12px;padding:10px 11px;background:#fff}
+.cand-thumb{flex-shrink:0;width:40px;height:40px;border-radius:9px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.score{font-size:10px;font-weight:800;color:#2563eb;background:#eff6ff;padding:1px 6px;border-radius:5px;border:1px solid #bfdbfe}
+/* 메타 */
+.meta-row{display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280}
+.crumb{font-size:11px;color:#6b7280;background:#f3f4f6;border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 9px;background:#f3f4f6;border-radius:999px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+<symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></symbol>
+<symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-rotate" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+<symbol id="i-navigate" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9h4"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-utensils" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h0a2 2 0 0 0 2-2V2"/><path d="M5 11v11"/><path d="M18 2c-1.7 0-3 1.6-3 5v6h3v9h2V2h-2z"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.3 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-6 알림 결과 상세 · v0.3 초안</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>2026-05-15 추가.</b> AI 작업 알림이 정상 도착한 후 사용자가 카드를 탭하면 여는 풀뷰. <b>잠금화면 카드 / 배너 / 01 센터 카드 탭의 공통 도착지</b>. 결과 종류에 따라 콘텐츠 구성이 달라지지만 같은 화면 패밀리 — 폰1=브리핑(긴 콘텐츠형), 폰2=추천(리스트+지도형).</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend">진입: 잠금화면 → 배너 → 01 센터 → 모두 여기로</span>
+    <span class="legend">결과 종류별 콘텐츠 분기</span>
+    <span class="legend">결과 액션: 다시 받기 · 공유 · 저장</span>
+  </div>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 브리핑 결과 (긴 콘텐츠형) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="01-notification-center.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">결과 상세</span>
+      <button class="text-gray-400" aria-label="더보기"><svg class="lc lc-22"><use href="#i-more"/></svg></button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <!-- 메타·제목 -->
+      <div>
+        <div class="hero-meta">
+          <span class="tag tag-ai"><svg class="lc" style="width:10px;height:10px"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+          <span class="text-[11px] text-gray-400">오전 9:00 도착</span>
+        </div>
+        <h2 class="text-[19px] font-bold mt-2 leading-tight">세계 정세 브리핑</h2>
+        <p class="text-[11.5px] text-gray-500 mt-1">기사 12건을 분석해 내 관심 분야 중심으로 정리했어요.</p>
+      </div>
+
+      <!-- AI 종합 요약 -->
+      <div class="summary-box">
+        <p class="text-[10px] font-bold tracking-wider mb-1.5" style="color:#2563eb">AI 요약</p>
+        <p class="text-[12.5px] text-gray-800 leading-relaxed">미국·중국 무역 협상 재개 기미와 중동 휴전 합의가 오늘의 두 축입니다. 한국 관련 주요 이슈는 반도체 수출 규제 완화 논의이며, 기술주에 단기 영향이 예상됩니다.</p>
+      </div>
+
+      <!-- 헤드라인 -->
+      <div>
+        <p class="text-[10px] font-bold tracking-wider text-gray-400 mb-2">주요 헤드라인 · 5건</p>
+        <div class="space-y-2">
+          <a class="hl-row">
+            <span class="hl-num">1</span>
+            <div class="flex-1 min-w-0">
+              <span class="src">로이터</span>
+              <p class="text-[13px] font-bold mt-1 leading-snug">美中, 무역 협상 재개 시그널 — 다음 달 워싱턴 회동</p>
+              <p class="text-[11.5px] text-gray-500 mt-0.5">반도체·전기차 관세가 핵심 의제. 합의 시 글로벌 공급망 완화 기대.</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-external"/></svg>
+          </a>
+          <a class="hl-row">
+            <span class="hl-num">2</span>
+            <div class="flex-1 min-w-0">
+              <span class="src">AP</span>
+              <p class="text-[13px] font-bold mt-1 leading-snug">중동 휴전 1단계 합의 — 7일간 발효</p>
+              <p class="text-[11.5px] text-gray-500 mt-0.5">인도적 통로 개방. 2단계 협상은 다음 주 카이로에서.</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-external"/></svg>
+          </a>
+          <a class="hl-row">
+            <span class="hl-num">3</span>
+            <div class="flex-1 min-w-0">
+              <span class="src">FT</span>
+              <p class="text-[13px] font-bold mt-1 leading-snug">EU, AI 규제 2단계 발효 — 빅테크 의무 강화</p>
+              <p class="text-[11.5px] text-gray-500 mt-0.5">파운데이션 모델 투명성 요건이 6월부터 적용.</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300 mt-1"><use href="#i-external"/></svg>
+          </a>
+        </div>
+        <button class="w-full flex items-center justify-center gap-1.5 py-2.5 mt-2 border border-gray-200 rounded-xl text-gray-500 text-[12px] font-semibold">
+          나머지 2건 보기 <svg class="lc lc-14"><use href="#i-chevron-down"/></svg>
+        </button>
+      </div>
+
+      <!-- 어떻게 만들어졌나요 (펼침) -->
+      <button class="collapsed w-full">
+        <svg class="lc lc-14" style="color:#2563eb"><use href="#i-sparkles"/></svg>
+        <span class="text-[12px] font-bold flex-1 text-left">AI가 어떻게 만들었나요</span>
+        <span class="text-[11px] text-gray-400">단계 2개 · 기사 12건</span>
+        <svg class="lc lc-14 text-gray-400"><use href="#i-chevron-down"/></svg>
+      </button>
+
+      <!-- 다음 도착 -->
+      <div class="meta-row">
+        <svg class="lc lc-12"><use href="#i-bell"/></svg>
+        <span>매일 오전 9:00 자동 생성 · 다음 도착 <b class="text-gray-700">내일 오전 9:00</b></span>
+      </div>
+    </div>
+
+    <!-- 하단 액션 -->
+    <div class="px-5 py-3 border-t border-gray-100">
+      <div class="action-row">
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-rotate"/></svg> 다시 받기</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-bookmark"/></svg> 저장</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-share"/></svg> 공유</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-sparkles"/></svg> 더 묻기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 추천 결과 (리스트+지도형) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="01-notification-center.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">결과 상세</span>
+      <button class="text-gray-400" aria-label="더보기"><svg class="lc lc-22"><use href="#i-more"/></svg></button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <!-- 메타·제목 -->
+      <div>
+        <div class="hero-meta">
+          <span class="tag tag-ai"><svg class="lc" style="width:10px;height:10px"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+          <span class="text-[11px] text-gray-400">오후 12:00 도착</span>
+        </div>
+        <h2 class="text-[19px] font-bold mt-2 leading-tight">점심 메뉴 추천</h2>
+        <p class="text-[11.5px] text-gray-500 mt-1">현재 위치·내 건강 상태·식단을 반영해 골랐어요.</p>
+      </div>
+
+      <!-- 1순위 추천 -->
+      <div class="rec-hero">
+        <div class="flex items-start gap-3">
+          <span class="thumb"><svg class="lc lc-22"><use href="#i-utensils"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="score">1순위</span>
+              <span class="text-[10.5px] text-gray-500">한식 · 도보 4분</span>
+            </div>
+            <p class="font-bold text-[15px] mt-1">솥앤솥</p>
+            <p class="text-[12px] mt-1.5"><b style="color:#2563eb">추천 메뉴</b> · 제육덮밥 9,500원</p>
+            <p class="text-[11.5px] text-gray-600 mt-1 leading-relaxed">단백질이 충분하고, 어제 야식을 고려해 국물이 적은 메뉴로 골랐어요.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mt-3">
+          <button class="btn-line"><svg class="lc lc-14"><use href="#i-navigate"/></svg> 길찾기</button>
+          <button class="btn-line"><svg class="lc lc-14"><use href="#i-phone"/></svg> 전화</button>
+          <button class="btn-line"><svg class="lc lc-14"><use href="#i-newspaper"/></svg> 메뉴</button>
+        </div>
+      </div>
+
+      <!-- 지도 미리보기 -->
+      <div class="map-prev">
+        <span class="map-tag">📍 회사 기준 도보 10분</span>
+        <span class="map-pin" style="top:48%;left:42%">1</span>
+        <span class="map-pin map-pin-other" style="top:32%;left:62%">2</span>
+        <span class="map-pin map-pin-other" style="top:64%;left:30%">3</span>
+        <button class="map-open"><svg class="lc" style="width:11px;height:11px;display:inline-block;margin-right:3px"><use href="#i-map"/></svg> 지도에서 보기</button>
+      </div>
+
+      <!-- 다른 후보 -->
+      <div>
+        <p class="text-[10px] font-bold tracking-wider text-gray-400 mb-2">다른 후보 · 5곳</p>
+        <div class="space-y-2">
+          <button class="cand-row w-full text-left">
+            <span class="cand-thumb"><svg class="lc lc-16"><use href="#i-utensils"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="score">2순위</span><span class="text-[10.5px] text-gray-500">샐러드 · 도보 6분</span></div>
+              <p class="text-[12.5px] font-bold mt-0.5">그린볼</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">치킨 시저 — 어제 운동량 보충</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+          </button>
+          <button class="cand-row w-full text-left">
+            <span class="cand-thumb"><svg class="lc lc-16"><use href="#i-utensils"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5"><span class="score">3순위</span><span class="text-[10.5px] text-gray-500">일식 · 도보 8분</span></div>
+              <p class="text-[12.5px] font-bold mt-0.5">하나스시</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">연어 정식 — 오메가3·저염</p>
+            </div>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+          </button>
+        </div>
+        <button class="w-full flex items-center justify-center gap-1.5 py-2.5 mt-2 border border-gray-200 rounded-xl text-gray-500 text-[12px] font-semibold">
+          나머지 3곳 보기 <svg class="lc lc-14"><use href="#i-chevron-down"/></svg>
+        </button>
+      </div>
+
+      <!-- 어떻게 골랐나요 (펼침) -->
+      <button class="collapsed w-full">
+        <svg class="lc lc-14" style="color:#2563eb"><use href="#i-sparkles"/></svg>
+        <span class="text-[12px] font-bold flex-1 text-left">AI가 어떻게 골랐나요</span>
+        <span class="text-[11px] text-gray-400">위치 · 건강 · 식단 반영</span>
+        <svg class="lc lc-14 text-gray-400"><use href="#i-chevron-down"/></svg>
+      </button>
+
+      <!-- 다음 도착 -->
+      <div class="meta-row">
+        <svg class="lc lc-12"><use href="#i-bell"/></svg>
+        <span>평일 오후 12:00 자동 추천 · 다음 도착 <b class="text-gray-700">월요일 오후 12:00</b></span>
+      </div>
+    </div>
+
+    <div class="px-5 py-3 border-t border-gray-100">
+      <div class="action-row">
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-rotate"/></svg> 다시 추천</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-bookmark"/></svg> 저장</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-share"/></svg> 공유</button>
+        <button class="action-btn"><svg class="lc lc-16"><use href="#i-sparkles"/></svg> 더 묻기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>역할 — 빠진 자리 채움</h3>
+    <div class="text-[12px] text-gray-600 leading-relaxed mb-3 bg-white border border-gray-200 rounded-xl p-3.5">
+      v0.3까지 <b>알림 도착(02)·진행 중·실패</b>는 다뤘지만, <b>"정상 도착한 결과를 풀뷰로 보는 화면"이 비어 있었음.</b> 06이 그 자리. 잠금화면 카드 / 배너 / 01 센터 카드 탭의 공통 도착지 — 다른 앱들이 뉴스·메일·일정에서 "알림 = 미리보기, 탭 = 앱 안 풀뷰"로 두는 패턴을 그대로 채택.
+    </div>
+
+    <h3 class="mt-5">진입 경로</h3>
+    <div class="row"><span class="num">·</span><div><b>잠금화면 결과 카드 탭</b> (02 폰1) → 06. iOS rich notification 식의 in-place 확장도 보조로(짧은 미리보기 더 보기).</div></div>
+    <div class="row"><span class="num">·</span><div><b>배너 탭</b> (02 폰2) → 06.</div></div>
+    <div class="row"><span class="num">·</span><div><b>01 센터의 결과 카드 탭</b> → 06. 카드의 "다른 추천"·"지도" 같은 inline 액션은 06으로 안 가고 그 자리에서 처리.</div></div>
+    <div class="row"><span class="num">·</span><div><b>플랜 알림</b> 탭 → 06(그날 알림 결과) + 상단에 "이 알림은 [중간고사 공부 스케줄]의 일부 → 플랜 전체 보기" 링크 노출.</div></div>
+
+    <h3 class="mt-5">인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>메타·제목 헤더</b> — AI · 카테고리 태그 + 도착 시각 + 제목 + 한 줄 설명. 어떤 알림이 어떤 결과를 가져왔는지 즉시 파악.</div></div>
+    <div class="row"><span class="num">2</span><div><b>브리핑 폰1 — 긴 콘텐츠형</b> — AI 종합 요약(파란 박스) + 헤드라인 리스트(소스·제목·한 줄). 헤드라인 탭 → 원본 기사(외부 링크). "나머지 N건 보기"로 펼침.</div></div>
+    <div class="row"><span class="num">3</span><div><b>추천 폰2 — 리스트+지도형</b> — 1순위 추천(hero) + 지도 미리보기(핀들) + 다른 후보 리스트. 후보 탭 → 그 후보를 1순위 자리에 교체 + 지도 핀 갱신. 지도는 "지도에서 보기"로 풀 지도 진입.</div></div>
+    <div class="row"><span class="num">4</span><div><b>액션 행위(공통 footer)</b> — <b>다시 받기/추천</b>(같은 알림을 즉시 재실행) · <b>저장</b>(나중에 다시 볼 결과 보관) · <b>공유</b>(외부 앱) · <b>더 묻기</b>(이 결과를 컨텍스트로 AI에게 추가 질문).</div></div>
+    <div class="row"><span class="num">5</span><div><b>"AI가 어떻게 만들었나요" 펼침</b> — 04에서 조립한 AI 작업 단계가 여기서 결과 근거로 노출(투명성). 어떤 데이터를 썼는지 — 위치·건강·식단·관심 분야 등 — 도 명시.</div></div>
+    <div class="row"><span class="num">6</span><div><b>다음 도착</b> — 같은 알림이 언제 다시 오는지 한 줄로. 끄거나 시간 바꾸려면 우상단 "더보기 (⋯)" → 알림 설정 / 일시중지 / 끄기.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div>결과 종류별 콘텐츠 분기는 <b>같은 화면 패밀리</b> 안에서 처리 — 헤더·footer·메타는 공통, 본문 컴포넌트만 다름. (브리핑 = 요약+헤드라인 / 추천 = hero+지도+후보 / 플랜 인스턴스 = 학습 내용+자료+플랜 컨텍스트)</div></div>
+    <div class="row"><span class="num">·</span><div>짧은 결과(예: 점심 1순위만 카드에 다 들어가는 경우)는 01 센터 카드의 inline 액션만으로 충분. 06 진입은 "더 보기"가 의미 있을 때(다른 후보·지도·근거를 보고 싶을 때)만.</div></div>
+    <div class="row"><span class="num">·</span><div>"다시 받기"는 새 알림을 만들지 않고 같은 알림 객체의 결과만 재생성(02의 정시성 모델 재사용 — 준비 중 → 결과 갱신).</div></div>
+    <div class="row"><span class="num">·</span><div>"저장"한 결과는 별도 보관함에 쌓임(보관함 화면은 다음 라운드 미결).</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 헤드라인·후보 리스트는 <code class="bg-gray-100 px-1 rounded">role="list"</code> + 각 항목 외부 링크 여부를 visually-hidden 발성. 지도 미리보기는 장식이 아니므로 <code class="bg-gray-100 px-1 rounded">aria-label</code>로 "추천 식당 위치 지도, 핀 3개" 발성. "AI 어떻게 만들었나요"는 <code class="bg-gray-100 px-1 rounded">aria-expanded</code>. footer 4개 액션은 라벨이 아이콘 아래 텍스트로 노출되어 스크린리더 네이티브.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

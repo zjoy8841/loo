@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04 알림 · v0.2 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-20{width:20px;height:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;display:block;transition:.15s}
+.card:hover{border-color:#9ca3af}
+.scr-num{width:26px;height:26px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ph{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.ph-new{background:#eff6ff;color:#2563eb}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;font-size:12.5px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#f9fafb;font-weight:700;color:#374151}
+td b{color:#111827}
+.tagk{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #d1d5db;color:#6b7280;margin:1px 2px 1px 0}
+.chg{display:flex;gap:9px;margin-bottom:10px}
+.chg .dot{flex-shrink:0;width:20px;height:20px;border-radius:6px;background:#eff6ff;color:#2563eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin-top:1px}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1100px] mx-auto">
+
+  <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
+  <h1 class="text-3xl font-bold mt-1">U-04 알림 · v0.2 초안</h1>
+  <p class="text-gray-600 mt-2 leading-relaxed">v0.1(일정 알림 타임라인·생성·설정 3화면)을 이어, <b>AI 작업 알림</b> 개념을 도입하고 화면 전반의 용어를 라이프스타일 앱 통용 표현으로 정리했습니다. 그레이스케일 + 라인 아이콘, 시멘틱 색은 정보(파랑)만.</p>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="ph">그레이스케일 + 라인 아이콘</span>
+    <span class="ph">시멘틱 색: 정보 파랑만</span>
+    <span class="ph ph-new">v0.2 신규 = AI 작업 알림</span>
+  </div>
+
+  <!-- v0.1 대비 변경점 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">v0.1 → v0.2 변경점</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5">
+    <div class="chg">
+      <span class="dot">1</span>
+      <div class="text-[13px] text-gray-600 leading-relaxed"><b class="text-gray-900">AI 작업 알림 도입</b> — 알림에 "AI에게 맡길 일"(주변 검색·맞춤 추천 등)을 순서대로 붙이는 기능. 알림 시각에 AI가 백그라운드로 실행해 <b>결과를 알림 카드로 전달</b>. 02 폼에 "AI 작업" 섹션 + 추가 시트, 01 타임라인에 결과 카드, 03 설정에 통제 항목 추가.</div>
+    </div>
+    <div class="chg">
+      <span class="dot">2</span>
+      <div class="text-[13px] text-gray-600 leading-relaxed"><b class="text-gray-900">"달성" 카테고리 제외</b> — 달성 판정에는 사용자 피드백이나 웨어러블 기기의 지속 트래킹이 필요. 현 단계에서 어려워 보류(트래킹 수단 확보 시 재검토). 카테고리 5종 → 4종.</div>
+    </div>
+    <div class="chg">
+      <span class="dot">3</span>
+      <div class="text-[13px] text-gray-600 leading-relaxed"><b class="text-gray-900">용어 정리</b> — v0.1 라벨이 실제 앱에서 통용되는지 검증해 교체. 아래 "용어 검증" 표 참조.</div>
+    </div>
+  </div>
+
+  <!-- 화면 목록 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">화면 목록</h2>
+  <div class="grid sm:grid-cols-3 gap-3">
+    <a href="01-schedule-timeline.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">01</span><span class="ph">타임라인</span></div>
+      <p class="font-bold text-[15px]">일정 알림 타임라인 + 생성 진입</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">방금 울린 알림 최상단 + 오늘 일정 알림 시간순. v0.2: AI 작업 알림은 결과 카드로 표시.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="02-schedule-create.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">02</span><span class="ph ph-new">AI 작업 추가</span></div>
+      <p class="font-bold text-[15px]">일정 알림 생성·편집 폼</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">자연어 입력·미리 알림·반복·알림 방식. v0.2: <b>AI 작업</b> 섹션 + 추가 시트.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="03-notification-settings.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">03</span><span class="ph">설정</span></div>
+      <p class="font-bold text-[15px]">알림 설정</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">카테고리 토글·기본 알림·방해 금지·보관. v0.2: AI 작업 통제 섹션 추가, 달성 제외.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+  </div>
+
+  <!-- AI 작업 알림 -->
+  <h2 class="text-lg font-bold mt-10 mb-1">AI 작업 알림 — 설계 개념</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">v0.1의 알림은 "정해진 시각에 제목을 알려주는" 단순 리마인더였습니다. v0.2는 알림이 <b>일을 대신 처리</b>할 수 있게 확장합니다.</p>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
+    <p><b class="text-gray-900">두 종류의 알림</b> — AI 작업이 없으면 <b>단순 알림</b>(제목만, v0.1과 동일). AI 작업이 1개 이상이면 <b>AI 작업 알림</b>(알림 시각에 AI 실행 → 결과를 카드로 전달).</p>
+    <p><b class="text-gray-900">순차 실행 파이프라인</b> — AI 작업 블록은 위→아래 순서로 실행되고, 뒤 작업은 앞 작업의 결과를 입력으로 받습니다. 예: "점심 메뉴 추천" 알림 = ① 주변 식당 검색(위치 기반) → ② 그 식당 메뉴 중 내 건강 상태·라이프스타일을 고려한 추천.</p>
+    <p><b class="text-gray-900">능력 카탈로그</b> — AI 작업 추가 시트에서 선택: <span class="tagk">위치 기반 · 주변 검색</span><span class="tagk">내 프로필 반영 · 맞춤 추천</span><span class="tagk">정보 정리 · 요약 브리핑</span><span class="tagk">작성 도움 · 메시지 초안</span> 각 작업은 옵션(찾을 곳·범위 등)을 갖습니다.</p>
+    <p><b class="text-gray-900">통제·동의·복구</b> (agentic UX 패턴) — 자동 실행 on/off와 위치 사용은 03 설정에서 통제. 별도 승인 게이트 없이 결과를 바로 전달(승인형보다 채택률 높음). 작업 실패 시 부분 결과 + 사유 + "다시 시도"를 카드에 노출. 사용하는 데이터(위치·프로필)는 각 블록에 명시.</p>
+    <p class="text-gray-500 pt-1 border-t border-gray-100">근거: 2026 agentic AI UX 패턴 — 계획 가시성 / 도구 사용 공개 / 사용자 오버라이드 / 우아한 복구. 자동 실행 + 알림 전달 모델이 전면 자율보다 채택률이 높다는 관찰 반영.</p>
+  </div>
+
+  <!-- 용어 검증 -->
+  <h2 class="text-lg font-bold mt-10 mb-1">용어 검증 — v0.1 → v0.2</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">v0.1 라벨이 실제 라이프스타일·리마인더 앱에서 통용되는 표현인지 확인하고 교체했습니다.</p>
+  <table>
+    <tr>
+      <th style="width:150px">v0.1 표현</th>
+      <th style="width:150px">v0.2 표현</th>
+      <th>근거</th>
+    </tr>
+    <tr>
+      <td>기본 리마인더</td>
+      <td><b>기본 알림</b></td>
+      <td>"리마인더"는 앱마다 제각각. Google Calendar 한국어가 일정 전 사전 알림을 <code>알림</code>·<code>기본 알림</code>으로 표기 — 가장 보편적.</td>
+    </tr>
+    <tr>
+      <td>(02 폼) 리마인더</td>
+      <td><b>미리 알림</b></td>
+      <td>정시·30분 전 등 "이벤트 전 알림"은 Apple <code>미리 알림</code>이 표준 한국어. 화면 도메인 "일정 알림"과도 층위가 구분됨.</td>
+    </tr>
+    <tr>
+      <td>알림 강도 / 기본 알림 강도</td>
+      <td><b>알림 방식 / 기본 알림 방식</b></td>
+      <td>"강도"를 쓰는 앱 없음. 실제 개념은 1회성 vs 반복 발화 → "방식"이 정확.</td>
+    </tr>
+    <tr>
+      <td>끈질긴 알림</td>
+      <td><b>지속 알림</b></td>
+      <td>TickTick 한국어 공식 용어가 <code>지속 알림</code>(Persistent Notification). "끈질긴"은 비공식·부정 뉘앙스.</td>
+    </tr>
+    <tr>
+      <td>스누즈</td>
+      <td><b>다시 알림</b></td>
+      <td>Apple 미리 알림 한국어 표준. "스누즈"도 통하지만 한국어 표준 표기 우선.</td>
+    </tr>
+    <tr>
+      <td>시점 알림</td>
+      <td><b>브리핑</b></td>
+      <td>"시점"은 프로젝트 내부 용어(6 시점). 엔드유저 카테고리 라벨은 "아침·점심·저녁 브리핑" = <code>브리핑</code>이 직관적.</td>
+    </tr>
+  </table>
+
+  <!-- 앱 5종 분석 (v0.1 유지) -->
+  <h2 class="text-lg font-bold mt-10 mb-1">일정 알림 앱 5종 분석 (v0.1 유지)</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">아래 5개 앱 분석은 v0.1에서 정리한 것으로 v0.2에도 그대로 유효합니다. AI 작업 알림은 이 5종에 없는 Life OS.ONE 고유 확장입니다.</p>
+  <table>
+    <tr>
+      <th style="width:120px">앱</th>
+      <th>핵심 장점</th>
+      <th style="width:230px">초안에 반영한 곳</th>
+    </tr>
+    <tr>
+      <td><b>Structured</b><br><span class="text-[11px] text-gray-400">비주얼 데이플래너</span></td>
+      <td>하루를 <b>시간 레일 타임라인</b>으로 시각화 — 지난·지금·예정이 한눈에. 알림이 "할 일 목록"이 아니라 "오늘의 흐름"으로 보이게.</td>
+      <td>01 타임라인의 시간 레일 + 지난/지금/예정 3상태 구조.</td>
+    </tr>
+    <tr>
+      <td><b>TickTick</b><br><span class="text-[11px] text-gray-400">올인원 태스크</span></td>
+      <td><b>다중 알림</b> + <b>지속 알림</b>(완료까지 재발화, 방해 금지에도 발화). 알림 바에서 바로 다시 알림·완료.</td>
+      <td>02의 다중 미리 알림 + 지속 알림. 03의 "중요 알림 예외". 01 카드의 즉시 다시 알림/완료.</td>
+    </tr>
+    <tr>
+      <td><b>Todoist</b><br><span class="text-[11px] text-gray-400">자연어 입력</span></td>
+      <td>업계 최고 수준의 <b>자연어 파서</b> — 한 줄 입력으로 날짜·시간·반복까지 인식. 입력 마찰 거의 0.</td>
+      <td>02 상단 빠른 입력 박스 + 파싱 칩. v0.2는 <b>AI 작업까지 파싱</b>하도록 확장.</td>
+    </tr>
+    <tr>
+      <td><b>Due</b><br><span class="text-[11px] text-gray-400">끈질긴 리마인더</span></td>
+      <td>완료할 때까지 짧은 간격으로 재알림(Auto-Snooze). 자주 쓰는 시간을 프리셋 버튼으로.</td>
+      <td>02의 지속 알림 재알림 간격 + 01 카드 다시 알림 프리셋 시트. 03의 기본 알림 방식 기본값.</td>
+    </tr>
+    <tr>
+      <td><b>Google Calendar</b><br><span class="text-[11px] text-gray-400">일정 알림 표준</span></td>
+      <td>이벤트별 <b>다중 알림</b>, <b>카테고리별 기본 알림</b> 설정. 한 번 정해두면 일관 적용.</td>
+      <td>03의 카테고리별 on/off + 기본 알림. 02의 정시 + 리드타임 모델. ("기본 알림" 용어도 차용)</td>
+    </tr>
+  </table>
+
+  <!-- SSoT / 다음 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>본 v0.2는 <b>와이어프레임 초안</b>. 확정 후 노션 화면 Description(U-04 계열) 작성 → Figma 이식 → <code>FIGMA-MANIFEST.md</code>에 node-id 등재.</li>
+      <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>. git에는 와이어프레임 산출물 보존 + 포인터만.</li>
+      <li>v0.1 폴더는 보존(이력). 5/13 최초 화면 <code>03 알림/10-notifications.html</code>도 보존(컬러+이모지 시안).</li>
+      <li>미결: AI 작업 능력별 옵션 상세 / 결과 카드 종류별 레이아웃(추천·검색·요약·초안) / 메인 알림 센터(전 유형 통합) / AI 작업 실패·권한 거부 플로우 → 다음 라운드.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-04 알림 v0.2 · 2026-05-15</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-3 알림 설정 · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.list{border:1px solid #e5e7eb;border-radius:13px;overflow:hidden;background:#fff}
+.li{display:flex;align-items:center;gap:11px;padding:13px 13px;border-bottom:1px solid #f3f4f6}
+.li:last-child{border-bottom:none}
+.icon-box{width:34px;height:34px;border-radius:9px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280;flex-shrink:0}
+.tg{width:40px;height:23px;border-radius:999px;background:#1f1f1f;position:relative;flex-shrink:0}
+.tg::after{content:"";position:absolute;width:18px;height:18px;border-radius:999px;background:#fff;top:2.5px;right:2.5px}
+.tg-off{background:#d1d5db}
+.tg-off::after{right:auto;left:2.5px}
+.val{font-size:12px;color:#9ca3af;display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9h4"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="5" rx="1"/><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><line x1="10" y1="13" x2="14" y2="13"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1500px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-3 알림 설정 · v0.2 초안</h1>
+  <p class="text-sm text-gray-600 mt-1">카테고리별 on/off, AI 작업, 기본 알림·방식, 방해 금지, 보관 기간. v0.2 변경: "달성" 카테고리 제외 · <b>AI 작업</b> 통제 섹션 추가 · 용어 정리(기본 알림·알림 방식·지속 알림).</p>
+</div>
+
+<div class="max-w-[1500px] mx-auto flex flex-wrap gap-10 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center gap-3 border-b border-gray-100">
+      <a href="01-schedule-timeline.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">알림 설정</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-6">
+
+      <!-- 카테고리 -->
+      <div>
+        <p class="sec-label">알림 카테고리</p>
+        <div class="list">
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-sun"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">브리핑</p><p class="text-[11px] text-gray-400">아침·점심·저녁 브리핑</p></div>
+            <span class="tg"></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-calendar"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">일정 알림</p><p class="text-[11px] text-gray-400">내가 만든 일정 기반 알림</p></div>
+            <span class="tg"></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-target"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">미션</p><p class="text-[11px] text-gray-400">하루 미션 진행·완료</p></div>
+            <span class="tg"></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-newspaper"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">관심사</p><p class="text-[11px] text-gray-400">관심 분야 소식</p></div>
+            <span class="tg tg-off"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 일정 알림 관리 진입 -->
+      <div>
+        <p class="sec-label">일정 알림 관리</p>
+        <div class="list">
+          <a href="01-schedule-timeline.html" class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-list"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">내 일정 알림 전체</p><p class="text-[11px] text-gray-400">만들기·편집·삭제</p></div>
+            <span class="val">8개<svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- AI 작업 (v0.2 신규) -->
+      <div>
+        <p class="sec-label">AI 작업</p>
+        <div class="list">
+          <div class="li">
+            <span class="icon-box" style="border-color:#bfdbfe;color:#2563eb"><svg class="lc lc-16"><use href="#i-sparkles"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">AI 작업 자동 실행</p><p class="text-[11px] text-gray-400">알림 시각에 AI가 검색·추천을 대신 처리</p></div>
+            <span class="tg"></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-map-pin"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">위치 기반 작업 허용</p><p class="text-[11px] text-gray-400">"주변 검색" 등 위치가 필요한 작업에 사용</p></div>
+            <span class="tg"></span>
+          </div>
+        </div>
+        <p class="text-[10px] text-gray-400 mt-1.5 px-1">자동 실행을 끄면 AI 작업 알림은 결과 없이 제목만 알리고, 탭하면 직접 실행돼요.</p>
+      </div>
+
+      <!-- 기본값 -->
+      <div>
+        <p class="sec-label">기본값</p>
+        <div class="list">
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-bell"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">기본 알림</p><p class="text-[11px] text-gray-400">새 일정 알림 만들 때 기본 적용</p></div>
+            <span class="val">정시 · 10분 전<svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-zap"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">기본 알림 방식</p><p class="text-[11px] text-gray-400">한 번만 / 지속 알림 + 재알림 간격</p></div>
+            <span class="val">한 번만<svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 방해 금지 -->
+      <div>
+        <p class="sec-label">방해 금지</p>
+        <div class="list">
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-moon"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">방해 금지 시간</p><p class="text-[11px] text-gray-400">이 시간엔 소리·진동 없이 쌓임</p></div>
+            <span class="val">22:00 – 07:00<svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+          </div>
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-alert"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">중요 알림은 방해 금지에도 알림</p><p class="text-[11px] text-gray-400">지속 알림은 방해 금지 시간에도 발화</p></div>
+            <span class="tg"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 보관 -->
+      <div>
+        <p class="sec-label">보관</p>
+        <div class="list">
+          <div class="li">
+            <span class="icon-box"><svg class="lc lc-16"><use href="#i-archive"/></svg></span>
+            <div class="flex-1"><p class="text-[13px] font-semibold">알림 보관 기간</p><p class="text-[11px] text-gray-400">지난 알림 자동 삭제</p></div>
+            <span class="val">30일<svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>카테고리 토글</b> — 4종 on/off(브리핑·일정 알림·미션·관심사). 끄면 해당 유형 알림은 발화·수신 안 됨(02 생성 폼의 카테고리와 연동). <i>v0.1 "시점 알림" → 엔드유저 표현 "브리핑". "달성"은 제외.</i></div></div>
+    <div class="row"><span class="num">2</span><div><b>일정 알림 관리 진입</b> — "내 일정 알림 전체" 탭 → 01 타임라인(= CRUD 허브). 개수 뱃지로 현황 표시.</div></div>
+    <div class="row"><span class="num">3</span><div><b>AI 작업 자동 실행</b> — 켜면 AI 작업 알림이 알림 시각에 자동 실행돼 결과 카드로 발화. 끄면 제목만 알리고 탭 시 수동 실행. <i>(agentic UX — 사용자 통제·동의 표면)</i></div></div>
+    <div class="row"><span class="num">4</span><div><b>위치 기반 작업 허용</b> — "주변 검색"처럼 위치가 필요한 AI 작업의 데이터 사용 동의. 끄면 위치 작업은 건너뛰고 부분 결과만 전달.</div></div>
+    <div class="row"><span class="num">5</span><div><b>기본 알림</b> — 새 일정 알림 생성 시 02 폼에 자동 적용될 미리 알림 세트. 탭 → 다중 선택 시트. <i>(Google Calendar "기본 알림" 용어 · v0.1 "기본 리마인더"에서 변경)</i></div></div>
+    <div class="row"><span class="num">6</span><div><b>기본 알림 방식</b> — 한 번만 / 지속 알림 + 재알림 간격(1·5·10분). 신규 생성 기본값. <i>(v0.1 "기본 알림 강도"에서 변경 — "강도"는 통용 표현 아님)</i></div></div>
+    <div class="row"><span class="num">7</span><div><b>방해 금지 시간</b> — 시작·종료 시각. 이 시간대 알림은 소리·진동 없이 센터에 적립.</div></div>
+    <div class="row"><span class="num">8</span><div><b>중요 알림 예외</b> — 켜면 "지속 알림"은 방해 금지 시간에도 발화(시스템 알람처럼). <i>(TickTick 지속 알림 동작)</i></div></div>
+    <div class="row"><span class="num">9</span><div><b>보관 기간</b> — 7·30·90일. 지난 알림 자동 정리. 기본 30일.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div>이 화면 진입점: 01 타임라인 우상단 톱니 / 메인 알림 센터 우상단.</div></div>
+    <div class="row"><span class="num">·</span><div>모든 토글은 즉시 저장(별도 저장 버튼 없음). 변경 시 <code class="bg-gray-100 px-1 rounded">aria-live</code>로 "켜짐/꺼짐" 발성.</div></div>
+    <div class="row"><span class="num">·</span><div>각 상세 행(기본 알림·방식·시간·보관)은 바텀시트로 값 선택. 시트 사양은 별도 화면으로 분리 가능.</div></div>
+    <div class="row"><span class="num">·</span><div>AI 작업 자동 실행·위치 허용은 첫 사용 시 시스템 권한 동의와 연동. "위치 기반 작업 허용"이 꺼진 상태에서 02 폼에 위치 작업을 추가하면 안내 배너 노출.</div></div>
+    <div class="row"><span class="num">·</span><div><b>"달성" 카테고리 보류 사유</b> — 달성 판정에는 사용자 피드백 또는 웨어러블 기기의 지속 트래킹이 필요. 현 단계에서 어려워 v0.2에서 제외. 트래킹 수단 확보 시 재도입 검토.</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 리스트 행은 <code class="bg-gray-100 px-1 rounded">role="switch"</code>(토글) 또는 <code class="bg-gray-100 px-1 rounded">button</code>(상세 진입). 카테고리·AI 작업 토글 라벨에 설명 텍스트 <code class="bg-gray-100 px-1 rounded">aria-describedby</code> 연결.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-2 알림 도착 순간 · v0.3</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+/* 잠금화면 */
+.lock{background:linear-gradient(160deg,#1e293b,#334155 60%,#475569);flex:1;display:flex;flex-direction:column;padding:0 14px 18px}
+.lock-clock{text-align:center;color:#fff;padding:34px 0 26px}
+.noti{background:rgba(255,255,255,.93);border-radius:16px;padding:11px 12px;margin-bottom:9px;backdrop-filter:blur(8px)}
+.noti-app{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#6b7280;margin-bottom:5px}
+.app-dot{width:16px;height:16px;border-radius:5px;background:#1f1f1f;color:#fff;display:flex;align-items:center;justify-content:center}
+.lc-icn{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;width:9px;height:9px}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:1px 6px;border-radius:999px;border:1px solid #d1d5db;color:#6b7280}
+.tag-ai{border-color:#2563eb;color:#fff;background:#2563eb;display:inline-flex;align-items:center;gap:2px}
+.mini-pin{width:24px;height:24px;border-radius:6px;background:#eff6ff;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;color:#2563eb;flex-shrink:0}
+.ai-result{background:#fff;border:1px solid #bfdbfe;border-radius:10px;padding:8px 9px;margin-top:7px}
+/* shimmer 준비중 */
+.shimmer{background:linear-gradient(90deg,#eef2f7 25%,#e2e8f0 50%,#eef2f7 75%);background-size:200% 100%;border-radius:6px}
+.prep-bar{height:7px;border-radius:999px;background:#dbeafe;overflow:hidden;margin-top:7px}
+.prep-fill{height:100%;width:62%;background:#2563eb;border-radius:999px}
+/* 배너 */
+.banner{background:rgba(255,255,255,.97);border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.14);padding:11px 13px;margin:10px 12px 0}
+/* 진행 시트 */
+.sheet{border-top-left-radius:22px;border-top-right-radius:22px;background:#fff;box-shadow:0 -8px 24px rgba(0,0,0,.12);padding:0 0 16px}
+.grab{width:38px;height:4px;border-radius:999px;background:#d1d5db;margin:9px auto 4px}
+.step{display:flex;gap:10px;align-items:flex-start}
+.step-dot{flex-shrink:0;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.step-done{background:#2563eb;color:#fff}
+.step-now{background:#eff6ff;border:1.5px solid #2563eb;color:#2563eb}
+.step-wait{background:#f3f4f6;color:#9ca3af}
+.step-fail{background:#fee2e2;border:1.5px solid #dc2626;color:#dc2626;font-weight:800}
+.partial{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 11px;font-size:11.5px;color:#475569;line-height:1.55}
+.step-line{width:1.5px;flex:1;background:#e5e7eb;margin:2px 0}
+.btn-line{border:1px solid #d1d5db;border-radius:10px;padding:10px 0;font-size:12.5px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:5px;background:#fff}
+.btn-danger-line{border:1px solid #fca5a5;border-radius:10px;padding:10px 0;font-size:12.5px;font-weight:600;color:#dc2626;display:flex;align-items:center;justify-content:center;gap:5px;background:#fff}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 9px;background:#f3f4f6;border-radius:999px}
+.tl{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px}
+.tl-t{flex-shrink:0;width:54px;font-size:11px;font-weight:700;color:#2563eb;padding-top:1px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-newspaper" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9h4"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><rect x="9" y="9" width="6" height="6"/></symbol>
+<symbol id="i-rotate" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+</defs></svg>
+
+<div class="max-w-[2200px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.3 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-2 알림 도착 순간 · v0.3 초안</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>v0.2까지 미설계였던 화면.</b> 알림이 실제로 "뜨는 순간" — 잠금화면·배너. 동시에 <b>약점 2(AI 작업 알림 정시성)</b>의 답: 알림의 정시성과 AI 결과를 분리해, 알림은 항상 정각에 뜨고 결과는 준비되는 대로 채운다.</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#16a34a"></span>선실행 성공 — 정각에 결과까지</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#2563eb"></span>준비 중 — 정각에 알림, 결과는 따라잡음</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#dc2626"></span>실패 — 다시 시도 / 직접 보기</span>
+  </div>
+</div>
+
+<div class="max-w-[2200px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 잠금화면 ============ -->
+  <div class="phone">
+    <div class="lock">
+      <div class="lock-clock">
+        <p class="text-[13px] opacity-80">5월 16일 금요일</p>
+        <p class="text-[58px] font-bold leading-none mt-1">12:00</p>
+      </div>
+
+      <!-- 1. 선실행 성공 — 결과 포함 -->
+      <div class="noti">
+        <div class="noti-app"><span class="app-dot"><svg class="lc-icn"><use href="#i-sparkles"/></svg></span> LIFE OS.ONE · 지금</div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+        </div>
+        <p class="font-bold text-[13.5px]">점심 메뉴 추천</p>
+        <div class="ai-result">
+          <div class="flex items-start gap-2">
+            <span class="mini-pin"><svg class="lc lc-12"><use href="#i-map-pin"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[12.5px] font-bold">솥앤솥 <span class="text-[10.5px] font-normal text-gray-400">· 도보 4분</span></p>
+              <p class="text-[11.5px] text-gray-600 mt-0.5">추천 · 제육덮밥 — 단백질 충분, 국물 적게</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 준비 중 — 정각 발화, 결과 지연 -->
+      <div class="noti">
+        <div class="noti-app"><span class="app-dot"><svg class="lc-icn"><use href="#i-sparkles"/></svg></span> LIFE OS.ONE · 지금</div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+        </div>
+        <p class="font-bold text-[13.5px]">세계 정세 브리핑</p>
+        <p class="text-[11.5px] text-gray-500 mt-1 flex items-center gap-1.5"><svg class="lc lc-12" style="color:#2563eb"><use href="#i-search"/></svg> 뉴스 정리 중… 곧 도착해요</p>
+        <div class="prep-bar"><div class="prep-fill"></div></div>
+        <div class="flex gap-1.5 mt-2">
+          <div class="shimmer" style="height:9px;width:70%"></div>
+        </div>
+      </div>
+
+      <!-- 2b. 실패 — 부분 결과 + 다시 시도 -->
+      <div class="noti" style="border:1px solid #fecaca">
+        <div class="noti-app"><span class="app-dot"><svg class="lc-icn"><use href="#i-sparkles"/></svg></span> LIFE OS.ONE · 2분 전</div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+          <span class="tag" style="border-color:#fca5a5;color:#dc2626;background:#fef2f2">실패</span>
+        </div>
+        <p class="font-bold text-[13.5px]">맞춤 운동 추천</p>
+        <p class="text-[11.5px] mt-1 flex items-start gap-1.5" style="color:#b91c1c"><svg class="lc lc-12 mt-0.5" style="flex-shrink:0"><use href="#i-alert"/></svg> <span>결과를 못 가져왔어요 — <b>부분 결과</b>는 있어요. 탭해서 보기.</span></p>
+        <div class="grid grid-cols-2 gap-1.5 mt-2">
+          <div style="border:1px solid #d1d5db;border-radius:8px;padding:6px 0;font-size:11px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:4px;background:#fff"><svg class="lc lc-12"><use href="#i-rotate"/></svg> 다시 시도</div>
+          <div style="border:1px solid #d1d5db;border-radius:8px;padding:6px 0;font-size:11px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:4px;background:#fff"><svg class="lc lc-12"><use href="#i-chevron-right"/></svg> 부분 결과</div>
+        </div>
+      </div>
+
+      <!-- 3. 일반(단순) 알림 -->
+      <div class="noti">
+        <div class="noti-app"><span class="app-dot"><svg class="lc-icn"><use href="#i-calendar"/></svg></span> LIFE OS.ONE · 지금</div>
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="tag">일정 알림</span>
+        </div>
+        <p class="font-bold text-[13.5px]">주간 보고서 제출</p>
+        <p class="text-[11.5px] text-gray-500 mt-0.5">오후 5:00 마감 · 30분 전 미리 알림</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 배너 (앱 사용 중) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <span class="text-[13px] text-gray-400">앱 사용 중</span>
+      <span class="font-bold text-[15px] text-gray-300">홈</span>
+      <span class="w-5"></span>
+    </div>
+    <!-- 상단 배너 -->
+    <div class="banner">
+      <div class="noti-app"><span class="app-dot"><svg class="lc-icn"><use href="#i-sparkles"/></svg></span> 지금</div>
+      <div class="flex items-start gap-2.5 mt-1">
+        <span class="mini-pin" style="width:30px;height:30px"><svg class="lc lc-16"><use href="#i-target"/></svg></span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+            <span class="tag">미션</span>
+          </div>
+          <p class="font-bold text-[13.5px] mt-1">점심 메뉴 추천</p>
+          <p class="text-[12px] text-gray-600 mt-0.5">솥앤솥 · 제육덮밥 추천 — 탭하면 자세히</p>
+        </div>
+        <svg class="lc lc-16 text-gray-300"><use href="#i-chevron-right"/></svg>
+      </div>
+    </div>
+    <div class="px-5 pt-4 text-[11px] text-gray-400 leading-relaxed">
+      배너는 잠깐 떴다가 사라지고, 알림은 <code class="bg-gray-100 px-1 rounded">01 알림 센터</code>에 계속 남습니다. 탭 → 결과 카드 펼침 또는 관련 화면(지도·일정)으로 이동.
+    </div>
+    <div class="flex-1 bg-gray-50 m-4 rounded-2xl border border-dashed border-gray-200 flex items-center justify-center text-gray-300 text-[12px]">
+      (홈 화면 — 배너가 그 위에 잠시 표시)
+    </div>
+  </div>
+
+  <!-- ============ PHONE 3 — 준비중 알림 탭 → 진행 시트 ============ -->
+  <div class="phone" style="background:#f3f4f6;justify-content:flex-end">
+    <div class="px-5 pt-6 pb-4 text-center text-gray-400 text-[12px]">"세계 정세 브리핑 · 준비 중" 알림 탭</div>
+    <div class="flex-1"></div>
+    <div class="sheet">
+      <div class="grab"></div>
+      <div class="px-5 pt-1 pb-3">
+        <div class="flex items-center gap-1.5">
+          <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+        </div>
+        <p class="font-bold text-[16px] mt-1.5">세계 정세 브리핑</p>
+        <p class="text-[12px] text-gray-500 mt-0.5">AI 작업 진행 상황 · 약 20초 남음</p>
+      </div>
+
+      <!-- 진행 단계 -->
+      <div class="px-5 pb-3">
+        <div class="step">
+          <div class="flex flex-col items-center self-stretch">
+            <span class="step-dot step-done"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+            <span class="step-line"></span>
+          </div>
+          <div class="pb-3">
+            <p class="text-[13px] font-bold">뉴스 검색</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">세계 정세 관련 기사 12건 수집 완료</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="flex flex-col items-center self-stretch">
+            <span class="step-dot step-now"><svg class="lc lc-12"><use href="#i-search"/></svg></span>
+            <span class="step-line"></span>
+          </div>
+          <div class="pb-3">
+            <p class="text-[13px] font-bold" style="color:#2563eb">요약·정리 중</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">내 관심 분야 반영해 핵심만 정리하고 있어요</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="flex flex-col items-center">
+            <span class="step-dot step-wait">3</span>
+          </div>
+          <div>
+            <p class="text-[13px] font-bold text-gray-400">브리핑 카드 생성</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">대기 중</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 실패 시 (대체 상태 안내) -->
+      <div class="mx-5 mb-3 rounded-xl border border-red-200 bg-red-50 p-3">
+        <div class="flex items-start gap-2">
+          <svg class="lc lc-14 mt-0.5" style="color:#dc2626"><use href="#i-alert"/></svg>
+          <p class="text-[11.5px] text-gray-600 flex-1"><b class="text-red-600">실패했을 땐</b> — 여기까지의 부분 결과 + 사유를 보여주고, 아래 버튼이 "다시 시도 / 직접 보기"로 바뀜.</p>
+        </div>
+      </div>
+
+      <div class="px-5 grid grid-cols-2 gap-2">
+        <div class="btn-danger-line"><svg class="lc lc-14"><use href="#i-stop"/></svg> 작업 멈춤</div>
+        <div class="btn-line"><svg class="lc lc-14"><use href="#i-clock"/></svg> 나중에 보기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 4 — 실패 시트 ============ -->
+  <div class="phone" style="background:#f3f4f6;justify-content:flex-end">
+    <div class="px-5 pt-6 pb-4 text-center text-gray-400 text-[12px]">"맞춤 운동 추천 · 실패" 알림 탭</div>
+    <div class="flex-1"></div>
+    <div class="sheet">
+      <div class="grab"></div>
+      <div class="px-5 pt-1 pb-3">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="tag tag-ai"><svg class="lc-icn"><use href="#i-sparkles"/></svg>AI</span>
+          <span class="tag">미션</span>
+          <span class="tag" style="border-color:#fca5a5;color:#dc2626;background:#fef2f2">실패</span>
+        </div>
+        <p class="font-bold text-[16px] mt-1.5">맞춤 운동 추천</p>
+        <p class="text-[12px] text-gray-500 mt-0.5">AI 작업이 끝까지 못 갔어요 · 부분 결과만 도착</p>
+      </div>
+
+      <!-- 진행 단계 -->
+      <div class="px-5 pb-3">
+        <div class="step">
+          <div class="flex flex-col items-center self-stretch">
+            <span class="step-dot step-done"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+            <span class="step-line"></span>
+          </div>
+          <div class="pb-3">
+            <p class="text-[13px] font-bold">컨디션 확인</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">어제 수면 7시간 30분 · HRV 정상</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="flex flex-col items-center self-stretch">
+            <span class="step-dot step-done"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+            <span class="step-line"></span>
+          </div>
+          <div class="pb-3">
+            <p class="text-[13px] font-bold">어제 운동 분석</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">상체 30분 · 강도 중</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="flex flex-col items-center">
+            <span class="step-dot step-fail">!</span>
+          </div>
+          <div>
+            <p class="text-[13px] font-bold" style="color:#dc2626">추천 생성 — 실패</p>
+            <p class="text-[11.5px] text-gray-400 mt-0.5">추천 모델이 응답하지 않아요. 잠시 뒤 다시 시도하면 풀릴 수 있어요.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 부분 결과 -->
+      <div class="mx-5 mb-3 partial">
+        <p><b class="text-gray-700">여기까지 받은 결과</b> · 컨디션·운동 데이터 확인 완료. 추천만 못 받았어요.</p>
+        <span class="inline-flex items-center gap-1 mt-1.5 font-bold" style="color:#2563eb;font-size:11.5px">부분 결과만 보기 <svg class="lc lc-12"><use href="#i-chevron-right"/></svg></span>
+      </div>
+
+      <!-- 사유 -->
+      <div class="mx-5 mb-3 rounded-xl border border-red-200 bg-red-50 p-3">
+        <div class="flex items-start gap-2">
+          <svg class="lc lc-14 mt-0.5" style="color:#dc2626"><use href="#i-alert"/></svg>
+          <p class="text-[11.5px] text-gray-700 flex-1"><b class="text-red-600">사유</b> — 추천 모델 응답 시간 초과(timeout). 네트워크 또는 서버 일시 지연으로 추정.</p>
+        </div>
+      </div>
+
+      <!-- 액션 — 진행 시트와 다른 버튼 세트 -->
+      <div class="px-5 grid grid-cols-2 gap-2">
+        <div class="btn-line" style="background:#1f1f1f;color:#fff;border-color:#1f1f1f"><svg class="lc lc-14"><use href="#i-rotate"/></svg> 다시 시도</div>
+        <div class="btn-line"><svg class="lc lc-14"><use href="#i-chevron-right"/></svg> 직접 보기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>정시성 모델 — 약점 2 보완</h3>
+    <div class="text-[12px] text-gray-600 leading-relaxed mb-3 bg-white border border-gray-200 rounded-xl p-3.5">
+      <b class="text-gray-900">원칙: 알림의 정시성과 AI 결과를 분리한다.</b><br>알림은 <b>항상 정각에</b> 뜨고, AI 결과는 <b>준비되는 대로</b> 채운다. 결과 때문에 알림이 늦어지지 않는다.
+    </div>
+    <div class="tl"><span class="tl-t">11:50~</span><div class="text-[12px]"><b>선실행</b> — 알림 10분 전부터 백그라운드에서 AI 작업 시작.</div></div>
+    <div class="tl"><span class="tl-t">12:00 ⓐ</span><div class="text-[12px]"><b>선실행 성공</b> → 정각에 <b>결과 포함</b> 알림 발화(폰1 첫 카드 / 폰2 배너).</div></div>
+    <div class="tl"><span class="tl-t">12:00 ⓑ</span><div class="text-[12px]"><b>지연</b> → 선실행이 정각까지 못 끝나면, 정각에 <b>"준비 중"</b> 상태로 일단 발화(폰1 둘째 카드). 알림 자체는 늦지 않음.</div></div>
+    <div class="tl"><span class="tl-t">12:00+</span><div class="text-[12px]"><b>결과 갱신</b> — 작업이 끝나면 <b>같은 알림이 결과로 바뀜</b>(in-place 갱신, Live Activity식). 새 알림으로 또 울리지 않음.</div></div>
+    <div class="tl"><span class="tl-t">실패 시</span><div class="text-[12px]"><b>부분 결과 + 사유 + "다시 시도/직접 보기"</b>. 위치 권한 없음 등은 설정 바로가기.</div></div>
+
+    <h3 class="mt-5">인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>잠금화면 스택</b> — 도착한 알림이 잠금화면에 쌓임. <b>네 가지 상태</b>가 한눈에: 결과 포함 / 준비 중(진행 바 + shimmer) / <b>실패</b>(빨간 강조 + 다시 시도/부분 결과 미니 버튼) / 단순 알림.</div></div>
+    <div class="row"><span class="num">2</span><div><b>준비 중 카드</b> — "뉴스 정리 중… 곧 도착" + 진행 바. 결과 자리는 shimmer 플레이스홀더. 완료되면 그 자리에 결과가 채워짐.</div></div>
+    <div class="row"><span class="num">3</span><div><b>배너 (앱 사용 중)</b> — 상단에 잠깐 표시 후 사라짐. 알림 본체는 01 센터에 남음. 탭 → 결과 펼침 / 관련 화면 이동.</div></div>
+    <div class="row"><span class="num">4</span><div><b>진행 시트</b> — 준비 중 알림 탭 → AI 작업 단계별 진행(검색→요약→생성). 02 생성 폼에서 조립한 AI 작업 블록이 그대로 진행 단계가 됨.</div></div>
+    <div class="row"><span class="num">5</span><div><b>작업 멈춤</b> — 진행 시트·롱프레스 메뉴에서 실행 중인 AI 작업을 즉시 취소(약점 5와 연결). "나중에 보기" → 준비 중 상태로 센터에 남김.</div></div>
+    <div class="row"><span class="num">6</span><div><b>실패 시트 (폰4)</b> — 단계별 진행에서 어디까지 됐고 어디서 막혔는지 노출. <b>완료 단계 ✓ · 실패 단계 ! · 대기 단계는 사라짐</b>(실패 시 후속 단계는 의미 없음). <b>부분 결과 박스</b> + <b>사유 박스</b> + <b>액션 변경</b>: 진행 중일 땐 "작업 멈춤/나중에 보기"였던 자리가 실패 시엔 <b>"다시 시도/직접 보기"</b>로 바뀜. 권한 문제(위치·알림 권한 없음)면 "다시 시도" 자리가 "설정 열기"로 추가 분기. 잠금화면 실패 카드(2b)도 같은 액션을 미니 버튼으로 노출 — 사용자가 시트까지 안 들어와도 즉시 처리 가능.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div><b>결과 카드 탭 → <code class="bg-gray-100 px-1 rounded">06 결과 상세</code></b>. 잠금화면 결과 카드(폰1 첫째)·배너(폰2)·01 센터 결과 카드 모두 같은 도착지. iOS rich notification 식 in-place 확장은 보조로 — 짧은 미리보기 더 보기까지만.</div></div>
+    <div class="row"><span class="num">·</span><div>단순 알림(AI 작업 없음)은 선실행 과정 없이 정각에 바로 발화 — 정시성 이슈 없음.</div></div>
+    <div class="row"><span class="num">·</span><div>선실행은 디바이스·네트워크 상황에 따라 보장되지 않음 → "준비 중" 상태가 정상 경로이지 예외가 아님. 기획·개발 모두 ⓑ를 기본 가정으로 설계.</div></div>
+    <div class="row"><span class="num">·</span><div>방해 금지·요약 시간대에 도착한 AI 작업 알림: 선실행은 그대로, 발화만 요약 시각으로 미뤄짐(결과는 이미 준비된 상태로 전달).</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 준비 중 상태는 <code class="bg-gray-100 px-1 rounded">aria-live="polite"</code>로 "결과 준비 중 → 결과 도착" 전환을 발성. 진행 단계는 순서 있는 리스트. shimmer는 장식이므로 <code class="bg-gray-100 px-1 rounded">aria-hidden</code>.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

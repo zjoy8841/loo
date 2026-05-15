@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-2 일정 알림 생성·편집 · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.field-label{font-size:11px;font-weight:700;color:#6b7280;margin-bottom:6px;display:block}
+.input-box{border:1px solid #d1d5db;border-radius:11px;padding:11px 12px;font-size:13px;color:#111827}
+.nlp-box{border:1.5px solid #2563eb;border-radius:13px;padding:12px;background:#eff6ff}
+.chip{border:1px solid #d1d5db;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:#374151;background:#fff;display:inline-flex;align-items:center;gap:5px}
+.chip-on{background:#1f1f1f;border-color:#1f1f1f;color:#fff}
+.chip-parsed{background:#fff;border-color:#2563eb;color:#2563eb;font-size:11px;padding:4px 9px}
+.reminder-row{display:flex;align-items:center;gap:8px;border:1px solid #e5e7eb;border-radius:10px;padding:9px 11px;background:#fff}
+.seg{border:1px solid #d1d5db;border-radius:11px;overflow:hidden;display:flex}
+.seg div{flex:1;text-align:center;font-size:12px;font-weight:600;padding:9px 0;color:#6b7280}
+.seg div.on{background:#1f1f1f;color:#fff}
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:700;padding:14px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px}
+.btn-danger-line{border:1px solid #fca5a5;color:#dc2626;border-radius:13px;padding:12px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;width:100%}
+.icon-mini{color:#9ca3af}
+/* AI 작업 */
+.ai-block{border:1.5px solid #2563eb;border-radius:12px;padding:10px 11px;background:#eff6ff;display:flex;align-items:flex-start;gap:9px}
+.ai-num{flex-shrink:0;width:19px;height:19px;border-radius:999px;background:#2563eb;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.ai-icon{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:#fff;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;color:#2563eb}
+.ai-add{border:1.5px dashed #93c5fd;border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:center;gap:6px;color:#2563eb;font-size:12px;font-weight:700;background:#fff;width:100%}
+.ai-preview{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:9px 11px;font-size:11px;color:#475569;display:flex;align-items:center;gap:7px}
+.sheet{border-top-left-radius:22px;border-top-right-radius:22px;background:#fff;box-shadow:0 -8px 24px rgba(0,0,0,.12);padding:0 0 16px}
+.grab{width:38px;height:4px;border-radius:999px;background:#d1d5db;margin:9px auto 4px}
+.cat-row{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+.cat-row-on{border-color:#2563eb;background:#eff6ff}
+.cat-icon{flex-shrink:0;width:36px;height:36px;border-radius:9px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.cat-icon-on{border-color:#2563eb;color:#2563eb;background:#fff}
+.opt-pill{border:1px solid #d1d5db;border-radius:9px;padding:7px 9px;font-size:11px;color:#374151;display:flex;align-items:center;justify-content:space-between;gap:6px;background:#fff}
+.sec-cap{font-size:10px;font-weight:800;letter-spacing:.04em;color:#9ca3af;margin-bottom:7px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-grip" viewBox="0 0 24 24"><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-2 일정 알림 생성·편집 폼 · v0.2 초안</h1>
+  <p class="text-sm text-gray-600 mt-1">"언제 어떤 알림을 보낼지" 입력·관리(CRUD)하는 화면. v0.2 추가: <b>AI 작업</b> — 알림이 울릴 때 AI가 대신 처리할 일(주변 검색·맞춤 추천 등)을 순서대로 붙여, 알림이 결과까지 전달하게 함.</p>
+  <p class="text-xs text-gray-400 mt-1">왼쪽 = 생성 폼(AI 작업 2개 추가된 상태) · 가운데 = "AI 작업 추가" 시트 · 오른쪽 = 인터랙션 매핑</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 생성 폼 ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="01-schedule-timeline.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="font-bold text-[15px]">새 일정 알림</span>
+      <span class="text-[13px] font-bold" style="color:#2563eb">저장</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+
+      <!-- 빠른 입력 -->
+      <div>
+        <span class="field-label">빠른 입력</span>
+        <div class="nlp-box">
+          <div class="flex items-start gap-2">
+            <svg class="lc lc-16 mt-0.5" style="color:#2563eb"><use href="#i-sparkles"/></svg>
+            <p class="text-[13px] text-gray-900 flex-1">내일 점심 12시, 회사 주변 맛집 찾아서 메뉴 추천해줘</p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mt-2.5">
+            <span class="chip chip-parsed"><svg class="lc lc-12"><use href="#i-calendar"/></svg> 내일</span>
+            <span class="chip chip-parsed"><svg class="lc lc-12"><use href="#i-clock"/></svg> 12:00</span>
+            <span class="chip chip-parsed"><svg class="lc lc-12"><use href="#i-map-pin"/></svg> AI · 주변 검색</span>
+            <span class="chip chip-parsed"><svg class="lc lc-12"><use href="#i-sparkles"/></svg> AI · 메뉴 추천</span>
+          </div>
+          <p class="text-[10px] text-gray-400 mt-2">시간·반복뿐 아니라 <b>AI 작업</b>도 인식해 아래를 자동으로 채워요. 직접 수정 가능.</p>
+        </div>
+      </div>
+
+      <!-- 제목 -->
+      <div>
+        <span class="field-label">제목</span>
+        <div class="input-box">점심 메뉴 추천</div>
+      </div>
+
+      <!-- 날짜·시간 -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <span class="field-label">날짜</span>
+          <div class="input-box flex items-center justify-between">
+            <span>5월 16일 (금)</span><svg class="lc lc-16 icon-mini"><use href="#i-calendar"/></svg>
+          </div>
+        </div>
+        <div>
+          <span class="field-label">시간</span>
+          <div class="input-box flex items-center justify-between">
+            <span>오후 12:00</span><svg class="lc lc-16 icon-mini"><use href="#i-clock"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- 반복 -->
+      <div>
+        <span class="field-label">반복</span>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="chip">안 함</span>
+          <span class="chip">매일</span>
+          <span class="chip chip-on"><svg class="lc lc-12"><use href="#i-repeat"/></svg> 평일</span>
+          <span class="chip">매주</span>
+          <span class="chip">맞춤</span>
+        </div>
+      </div>
+
+      <!-- ===== AI 작업 (v0.2 신규) ===== -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="field-label mb-0 flex items-center gap-1.5" style="color:#2563eb"><svg class="lc lc-14"><use href="#i-sparkles"/></svg> AI 작업</span>
+          <span class="text-[10px] text-gray-400">울릴 때 AI가 대신 처리</span>
+        </div>
+        <div class="space-y-2">
+          <!-- 작업 1 -->
+          <div class="ai-block">
+            <span class="ai-num">1</span>
+            <span class="ai-icon"><svg class="lc lc-16"><use href="#i-map-pin"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-bold text-gray-900">주변 식당 검색</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">현재 위치 기준 · 도보 10분 이내</p>
+            </div>
+            <div class="flex flex-col items-center gap-2 pt-0.5">
+              <svg class="lc lc-16 text-gray-300"><use href="#i-grip"/></svg>
+              <svg class="lc lc-14 text-gray-300"><use href="#i-x"/></svg>
+            </div>
+          </div>
+          <!-- 작업 2 -->
+          <div class="ai-block">
+            <span class="ai-num">2</span>
+            <span class="ai-icon"><svg class="lc lc-16"><use href="#i-sparkles"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-bold text-gray-900">메뉴 추천</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">①의 검색 결과 + 내 건강 상태·식단·라이프스타일 반영</p>
+            </div>
+            <div class="flex flex-col items-center gap-2 pt-0.5">
+              <svg class="lc lc-16 text-gray-300"><use href="#i-grip"/></svg>
+              <svg class="lc lc-14 text-gray-300"><use href="#i-x"/></svg>
+            </div>
+          </div>
+          <!-- 추가 -->
+          <button class="ai-add">
+            <svg class="lc lc-16"><use href="#i-plus"/></svg> AI 작업 추가
+          </button>
+          <!-- 결과 미리보기 안내 -->
+          <div class="ai-preview">
+            <svg class="lc lc-14" style="color:#2563eb"><use href="#i-info"/></svg>
+            <span class="flex-1">울릴 때 검색·추천 <b>결과를 알림 카드</b>로 받아요.</span>
+            <span class="font-bold" style="color:#2563eb">미리보기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 미리 알림 (v0.1 "리마인더") -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="field-label mb-0">미리 알림</span>
+          <span class="text-[10px] text-gray-400">여러 개 추가 가능</span>
+        </div>
+        <div class="space-y-2">
+          <div class="reminder-row">
+            <svg class="lc lc-16 icon-mini"><use href="#i-bell"/></svg>
+            <span class="text-[12px] flex-1">정시 (오후 12:00)</span>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-x"/></svg>
+          </div>
+          <div class="reminder-row">
+            <svg class="lc lc-16 icon-mini"><use href="#i-bell"/></svg>
+            <span class="text-[12px] flex-1">30분 전 (오전 11:30)</span>
+            <svg class="lc lc-14 text-gray-300"><use href="#i-x"/></svg>
+          </div>
+          <button class="reminder-row w-full text-gray-500" style="border-style:dashed">
+            <svg class="lc lc-16"><use href="#i-plus"/></svg>
+            <span class="text-[12px] font-semibold">미리 알림 추가</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 알림 방식 (v0.1 "알림 강도") -->
+      <div>
+        <span class="field-label">알림 방식</span>
+        <div class="seg">
+          <div class="on">한 번만</div>
+          <div>지속 알림</div>
+        </div>
+        <div class="mt-2 flex items-start gap-2 text-[11px] text-gray-500">
+          <svg class="lc lc-14 mt-0.5" style="color:#ca8a04"><use href="#i-zap"/></svg>
+          <span><b class="text-gray-700">지속 알림</b>은 처리할 때까지 5분 간격으로 다시 알려요. 방해 금지 시간엔 소리 없이 센터에 쌓여요.</span>
+        </div>
+      </div>
+
+      <!-- 카테고리 -->
+      <div>
+        <span class="field-label">카테고리</span>
+        <div class="input-box flex items-center justify-between">
+          <span class="flex items-center gap-2"><svg class="lc lc-14 icon-mini"><use href="#i-target"/></svg> 미션</span>
+          <svg class="lc lc-16 icon-mini"><use href="#i-chevron-right"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 space-y-2">
+      <div class="btn-primary"><svg class="lc lc-16"><use href="#i-check"/></svg> 저장</div>
+      <div class="btn-danger-line"><svg class="lc lc-14"><use href="#i-trash"/></svg> 이 알림 삭제</div>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — AI 작업 추가 시트 ============ -->
+  <div class="phone" style="background:#f3f4f6;justify-content:flex-end">
+    <div class="px-5 pt-6 pb-4 text-center text-gray-400 text-[12px]">↑ 생성 폼 위에 시트로 열림</div>
+    <div class="flex-1"></div>
+    <div class="sheet">
+      <div class="grab"></div>
+      <div class="px-5 pt-1 pb-3 flex items-center justify-between">
+        <span class="font-bold text-[15px] flex items-center gap-1.5"><svg class="lc lc-18" style="color:#2563eb"><use href="#i-sparkles"/></svg> AI 작업 추가</span>
+        <svg class="lc lc-20 text-gray-400"><use href="#i-x"/></svg>
+      </div>
+
+      <div class="px-5 pb-2">
+        <div class="input-box flex items-center gap-2 text-gray-400">
+          <svg class="lc lc-16"><use href="#i-search"/></svg>
+          <span class="text-[12px]">어떤 일을 맡길까요?</span>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 space-y-3 overflow-y-auto" style="max-height:430px">
+
+        <!-- 위치 기반 -->
+        <div>
+          <p class="sec-cap">위치 기반</p>
+          <!-- 선택+옵션 펼침 상태 -->
+          <div class="cat-row cat-row-on flex-col !items-stretch gap-2.5">
+            <div class="flex items-start gap-3">
+              <span class="cat-icon cat-icon-on"><svg class="lc lc-18"><use href="#i-map-pin"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[13px] font-bold">주변 검색</p>
+                <p class="text-[11px] text-gray-500 mt-0.5">식당·카페·약국·편의시설을 위치 기준으로 찾기</p>
+              </div>
+              <svg class="lc lc-16" style="color:#2563eb"><use href="#i-check"/></svg>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="opt-pill"><span class="text-gray-400">찾을 곳</span><span class="font-semibold flex items-center gap-1">식당 <svg class="lc lc-12"><use href="#i-chevron-down"/></svg></span></div>
+              <div class="opt-pill"><span class="text-gray-400">범위</span><span class="font-semibold flex items-center gap-1">도보 10분 <svg class="lc lc-12"><use href="#i-chevron-down"/></svg></span></div>
+            </div>
+            <button class="btn-primary" style="padding:11px;font-size:13px"><svg class="lc lc-14"><use href="#i-plus"/></svg> 이 작업 추가</button>
+          </div>
+        </div>
+
+        <!-- 내 프로필 반영 -->
+        <div>
+          <p class="sec-cap">내 프로필 반영</p>
+          <div class="cat-row">
+            <span class="cat-icon"><svg class="lc lc-18"><use href="#i-sparkles"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-bold">맞춤 추천</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">메뉴·운동·콘텐츠·할 일을 내 건강 상태·라이프스타일에 맞춰 추천</p>
+            </div>
+            <svg class="lc lc-18 text-gray-300"><use href="#i-plus"/></svg>
+          </div>
+        </div>
+
+        <!-- 정보 정리 -->
+        <div>
+          <p class="sec-cap">정보 정리</p>
+          <div class="cat-row">
+            <span class="cat-icon"><svg class="lc lc-18"><use href="#i-file-text"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-bold">요약 브리핑</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">날씨·뉴스·교통·오늘 일정을 한 카드로 정리</p>
+            </div>
+            <svg class="lc lc-18 text-gray-300"><use href="#i-plus"/></svg>
+          </div>
+        </div>
+
+        <!-- 작성 도움 -->
+        <div>
+          <p class="sec-cap">작성 도움</p>
+          <div class="cat-row">
+            <span class="cat-icon"><svg class="lc lc-18"><use href="#i-message"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[13px] font-bold">메시지 초안</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">연락·답장·메모 초안을 미리 작성해 알림에 첨부</p>
+            </div>
+            <svg class="lc lc-18 text-gray-300"><use href="#i-plus"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>빠른 입력 (자연어)</b> — 한 줄 입력 → 날짜·시간·반복 + <b>AI 작업</b>까지 파싱해 폼 자동 채움. 파싱 칩으로 인식 결과 확인. <i>(Todoist 자연어 파서 강점 + AI 작업 확장)</i></div></div>
+    <div class="row"><span class="num">2</span><div><b>AI 작업 블록</b> — 알림이 울릴 때 AI가 대신 처리할 일. <b>위에서 아래로 순서대로 실행</b>되고, 뒤 작업은 앞 작업 결과를 입력으로 받음(②는 ①의 검색 결과 사용). 각 블록: 순번 · 능력 아이콘 · 옵션 요약. 핸들로 재정렬, X로 제거.</div></div>
+    <div class="row"><span class="num">3</span><div><b>AI 작업 추가</b> — 점선 버튼 → "AI 작업 추가" 시트. 능력 카탈로그(위치 기반 / 내 프로필 반영 / 정보 정리 / 작성 도움)에서 선택 → 옵션 설정(찾을 곳·범위 등) → "이 작업 추가".</div></div>
+    <div class="row"><span class="num">4</span><div><b>결과 미리보기</b> — "미리보기" 탭 → 울릴 때 받게 될 알림 카드를 시뮬레이션. AI 작업이 1개 이상일 때만 노출.</div></div>
+    <div class="row"><span class="num">5</span><div><b>미리 알림 (다중)</b> — 정시 외 N개 추가(10분·30분·1일 전 등). 각 행 X로 제거. <i>(Google Calendar·TickTick 다중 알림)</i> · v0.1 "리마인더" → 통용 표현 "미리 알림"으로 변경.</div></div>
+    <div class="row"><span class="num">6</span><div><b>알림 방식</b> — "한 번만" vs "지속 알림". 지속 알림 = 처리할 때까지 5분 간격 재발화. <i>(TickTick "지속 알림" 공식 용어)</i> · v0.1 "알림 강도/끈질긴 알림" → "알림 방식/지속 알림"으로 변경.</div></div>
+    <div class="row"><span class="num">7</span><div><b>카테고리</b> — 브리핑/일정 알림/미션/관심사. 03 알림 설정의 카테고리 토글과 연동(꺼진 카테고리는 발화 안 됨). v0.1의 "달성"은 제외(달성 판정엔 피드백·웨어러블 트래킹 필요 — 현 단계 보류).</div></div>
+    <div class="row"><span class="num">8</span><div><b>저장 / 삭제</b> — 저장 활성: 제목 1자+ AND 날짜·시간 유효(AI 작업은 선택). 편집 모드에서만 삭제 버튼 노출. 삭제 → 확인 다이얼로그.</div></div>
+
+    <h3 class="mt-5">AI 작업 — 동작 규칙</h3>
+    <div class="row"><span class="num">·</span><div><b>두 종류의 알림</b> — AI 작업이 없으면 <b>단순 알림</b>(제목만 알려줌, v0.1과 동일). AI 작업이 있으면 <b>AI 작업 알림</b>(알림 시각에 AI 실행 → 결과를 카드로 전달).</div></div>
+    <div class="row"><span class="num">·</span><div><b>자동 실행</b> — 알림 시각 직전 백그라운드로 실행. 별도 승인 게이트 없이 결과를 바로 카드로 전달(승인형보다 채택률 높음). 자동 실행 on/off·위치 사용은 <code class="bg-gray-100 px-1 rounded">03 알림 설정 → AI 작업</code>에서 통제. 첫 사용 시 권한 동의 1회.</div></div>
+    <div class="row"><span class="num">·</span><div><b>실패·부분 결과</b> — 한 작업이 실패하면 거기까지의 부분 결과 + 실패 사유 + "다시 시도"를 카드에 노출. 위치 권한 없음 등은 설정 바로가기 안내.</div></div>
+    <div class="row"><span class="num">·</span><div><b>데이터 사용 공개</b> — 각 블록 옵션 요약에 무엇을 쓰는지 명시(현재 위치 / 건강 상태·식단·라이프스타일). 회원가입에서 모은 프로필을 입력으로 사용.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div>신규/편집 공용 화면. 신규 = 헤더 "새 일정 알림", 편집 = "일정 알림 편집" + 삭제 버튼 + 기존 값 프리필.</div></div>
+    <div class="row"><span class="num">·</span><div>저장 → 01 타임라인으로 복귀, 해당 시각에 카드 삽입(반복이면 다음 회차 기준). AI 작업 알림은 카드에 <code class="bg-gray-100 px-1 rounded">AI</code> 마커 표시.</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 각 필드 <code class="bg-gray-100 px-1 rounded">label htmlFor</code> 연결. AI 작업 리스트는 재정렬 가능 리스트(<code class="bg-gray-100 px-1 rounded">role="listitem"</code> + 순서 키보드 이동), 각 블록의 작업 내용·옵션을 visually-hidden으로 발성. 자연어 파싱 결과·미리보기는 <code class="bg-gray-100 px-1 rounded">aria-live="polite"</code>. 알림 방식 토글은 라디오 그룹.</div></div>
+    <div class="row"><span class="num">·</span><div>"지속 알림"이 방해 금지 시간과 겹칠 때 동작은 03 설정의 "중요 알림은 방해 금지에도 알림" 값에 따름.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

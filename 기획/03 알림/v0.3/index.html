@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04 알림 · v0.3 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-20{width:20px;height:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;display:block;transition:.15s}
+.card:hover{border-color:#9ca3af}
+.scr-num{width:26px;height:26px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ph{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.ph-new{background:#eff6ff;color:#2563eb}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;font-size:12.5px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#f9fafb;font-weight:700;color:#374151}
+td b{color:#111827}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+.wk{display:flex;gap:10px;margin-bottom:11px}
+.wk-n{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:#1f1f1f;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin-top:1px}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}
+.flow-step{background:#fff;border:1px solid #d1d5db;border-radius:9px;padding:7px 11px;font-weight:600;color:#374151}
+.flow-step.s{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1100px] mx-auto">
+
+  <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
+  <h1 class="text-3xl font-bold mt-1">U-04 알림 · v0.3 초안</h1>
+  <p class="text-gray-600 mt-2 leading-relaxed">v0.2에 대한 <b>시니어 기획자 검토에서 나온 약점 5가지를 보완</b>한 버전. 빠져 있던 소비 표면(알림 센터·알림 도착)을 새로 그리고, 생성 폼을 카테고리 우선 구조로 재설계하고, AI 작업의 정시성·조립·제어를 정식 설계로 끌어올렸습니다.</p>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="ph">그레이스케일 + 라인 아이콘</span>
+    <span class="ph">시멘틱 색: 정보 파랑만</span>
+    <span class="ph ph-new">v0.3 = 약점 5종 보완</span>
+  </div>
+
+  <!-- v0.3 수정 이력 -->
+  <div class="mt-5 bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.3 수정 ① — 목표 기반 스케줄(플랜) 추가 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">"점심 메뉴 추천"은 한 시점 작업(단발 미션)으로 이미 가능하지만, <b>"중간고사 공부 스케줄"·"학업 성취기준 기반 요일별 학업 스케줄"</b>처럼 여러 날에 걸친 알림 묶음은 단발 폼으로 담을 수 없었음. → 미션 카테고리에 <b>단발 / 플랜</b> 두 유형을 도입. 플랜 = 목표·범위·기간을 주면 AI가 요일별 알림 스케줄을 생성(<code>04</code>), 묶음으로 등록되어 <code>01 센터</code>에 플랜 태그로 표시.</p>
+    </div>
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.3 수정 ② — 실패 시트 명시 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed"><code>02 알림 도착</code>의 잠금화면에 <b>실패 알림 카드</b>(빨간 강조 + 다시 시도/부분 결과 미니 버튼) + 새 <b>실패 시트(폰4)</b> 추가. 진행 시트와 같은 골격에서 단계 표시·부분 결과·사유·액션을 실패 변형으로 정의(완료 ✓ → 실패 ! / 액션은 "작업 멈춤·나중에 보기" → "다시 시도·직접 보기").</p>
+    </div>
+    <div>
+      <p class="font-bold text-[14px] text-gray-900">v0.3 수정 ③ — <code>06 결과 상세</code> 신규 · 2026-05-15</p>
+      <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">정상 도착한 AI 작업 알림을 탭했을 때의 풀뷰 화면이 비어 있었음. <b><code>06 결과 상세</code></b>를 신규 작성 — 잠금화면 카드·배너·01 센터 카드 탭의 공통 도착지. 결과 종류별 콘텐츠 분기(폰1 = 브리핑 긴 콘텐츠형 / 폰2 = 추천 리스트+지도형), 공통 footer 액션(다시 받기·저장·공유·더 묻기). 다른 앱들의 "알림 = 미리보기, 탭 = 앱 안 풀뷰" 패턴을 채택.</p>
+    </div>
+  </div>
+
+  <!-- 약점 → 보완 매핑 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">시니어 검토 약점 → v0.3 보완</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">v0.2를 시니어 기획자 시점에서 비판적으로 검토해 도출한 약점 5가지와, 각각을 v0.3에서 어떻게 보완했는지.</p>
+  <table>
+    <tr>
+      <th style="width:230px">약점 (v0.2 검토)</th>
+      <th>v0.3 보완</th>
+      <th style="width:150px">반영 화면</th>
+    </tr>
+    <tr>
+      <td><b>1. 소비 표면 미설계</b><br><span class="text-gray-500">생성(CRUD) 폼은 과설계, 정작 매일 보는 알림 센터·"알림이 뜨는 순간"은 미설계.</span></td>
+      <td>핵심 소비 표면을 신규 작성하고 화면 번호 1·2번으로 승격. 전 유형 통합 <b>알림 센터</b> + 잠금화면·배너 <b>알림 도착</b>.</td>
+      <td><b>01</b> 알림 센터<br><b>02</b> 알림 도착</td>
+    </tr>
+    <tr>
+      <td><b>2. AI 정시성·실현성 미검증</b><br><span class="text-gray-500">AI 호출 지연·실패가 알림의 정시성을 깨는데 "백그라운드 실행" 한 줄로 단정.</span></td>
+      <td><b>정시성 모델</b> 도입 — 알림 10분 전 <b>선실행</b> → 정각엔 결과 포함(성공) 또는 <b>"준비 중"</b>으로 발화(지연) → 결과는 같은 알림을 in-place 갱신. 실패 시 부분 결과 + 다시 시도.</td>
+      <td><b>02</b> 알림 도착</td>
+    </tr>
+    <tr>
+      <td><b>3. AI 작업 조립이 부담</b><br><span class="text-gray-500">사용자가 블록을 직접 조립 — 일반 사용자에겐 진입장벽.</span></td>
+      <td>조립을 <b>없애지 않고 보완</b>(피드백 반영). 블록마다 <b>입력/출력 명시 + 데이터 흐름 커넥터</b>로 파이프라인을 가시화. 동시에 브리핑은 <b>고정 블록 골라담기</b>라는 쉬운 길을 병행.</td>
+      <td><b>04</b> 생성·편집</td>
+    </tr>
+    <tr>
+      <td><b>4. 사용자/시스템 카테고리 혼재</b><br><span class="text-gray-500">한 폼에 카테고리 드롭다운 — 출처 다른 알림이 한 모델에 섞임.</span></td>
+      <td><b>카테고리 우선 동적 폼</b> — 카테고리를 폼의 종류로 승격. 먼저 카테고리(일정/브리핑/미션/관심사)를 고르면 그에 맞는 CRUD 화면이 통째로 열림.</td>
+      <td><b>04</b> 생성·편집</td>
+    </tr>
+    <tr>
+      <td><b>5. 멈추는 설계 부재</b><br><span class="text-gray-500">취소·멈춤·피로 조절 설계가 없음.</span></td>
+      <td><b>롱프레스 제어 메뉴</b>(작업 멈춤·일시중지·조용히 전달·끄기) + <b>알림 전달 설정</b>(요약·조용히 전달·긴급 즉시). Apple iOS 알림 관리 패턴 차용.</td>
+      <td><b>01</b> 알림 센터<br><b>05</b> 알림 설정</td>
+    </tr>
+  </table>
+
+  <!-- 화면 구조 -->
+  <h2 class="text-lg font-bold mt-10 mb-1">화면 구조 — 소비 → 관리 → 생성 → 설정</h2>
+  <p class="text-[13px] text-gray-500 mb-3 leading-relaxed">v0.2는 타임라인(관리)이 1번이었으나, v0.3은 사용자가 가장 자주 보는 <b>소비 표면</b>을 앞에 둡니다.</p>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5">
+    <div class="flow">
+      <span class="flow-step s">01 알림 센터</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 알림 도착</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">03 일정 타임라인</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">04 생성·편집</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">05 알림 설정</span>
+    </div>
+    <div class="flow mt-2">
+      <span class="text-[11px] text-gray-400 font-semibold pl-1">위성 화면:</span>
+      <span class="flow-step s">06 결과 상세</span>
+      <span class="text-[11px] text-gray-500">— 01·02의 결과 카드 탭 시 도착지(공통)</span>
+    </div>
+    <p class="text-[12px] text-gray-500 mt-3 leading-relaxed">파란 칸(01·02)이 v0.3 신규 소비 표면. 03은 v0.2의 1번 타임라인을 "센터의 일정 카테고리 필터 뷰"로 재배치. 04는 v0.2의 2번 생성 폼을 카테고리 우선으로 재설계. 05는 v0.2의 3번 설정에 알림 전달 섹션 추가. <b>06</b>은 흐름의 한 단계가 아니라 결과 카드 탭의 공통 도착지(위성 화면).</p>
+  </div>
+
+  <!-- 화면 목록 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">화면 목록</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <a href="01-notification-center.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">01</span><span class="ph ph-new">신규 · 소비 1차</span></div>
+      <p class="font-bold text-[15px]">메인 알림 센터</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">전 유형 알림 통합. 요약 그룹 + 롱프레스 제어 메뉴(약점 1·5).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="02-arrival.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">02</span><span class="ph ph-new">신규 · 정시성</span></div>
+      <p class="font-bold text-[15px]">알림 도착 순간</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">잠금화면·배너 + AI 선실행/준비중/실패 정시성 모델(약점 1·2).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="03-schedule-timeline.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">03</span><span class="ph">재배치</span></div>
+      <p class="font-bold text-[15px]">일정 알림 타임라인</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">센터의 "일정 알림" 필터 뷰. 시간 레일 + 새 일정 알림 진입.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="04-create.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">04</span><span class="ph ph-new">재설계 + 플랜</span></div>
+      <p class="font-bold text-[15px]">생성·편집 (카테고리 우선)</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">카테고리 먼저 → 동적 폼. 브리핑=고정 블록, 미션=AI 작업 조립(단발) + 목표 기반 스케줄 생성(플랜).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="05-settings.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">05</span><span class="ph">보강</span></div>
+      <p class="font-bold text-[15px]">알림 설정</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">알림 전달 섹션 신설 — 요약·조용히 전달·긴급 즉시(약점 5).</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="06-result-detail.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">06</span><span class="ph ph-new">신규 · 위성</span></div>
+      <p class="font-bold text-[15px]">알림 결과 상세</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">정상 도착한 AI 알림 카드 탭 → 풀뷰. 브리핑(긴 콘텐츠) / 추천(리스트+지도) 두 변형. 공통 footer: 다시 받기·저장·공유·더 묻기.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+  </div>
+
+  <!-- 핵심 개념 -->
+  <h2 class="text-lg font-bold mt-10 mb-3">v0.3 핵심 개념</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
+    <p><b class="text-gray-900">정시성 모델</b> — 알림의 정시성과 AI 결과를 분리한다. 알림은 항상 정각에 뜨고(필요하면 "준비 중" 상태로), 결과는 준비되는 대로 같은 알림을 갱신한다. 결과 때문에 알림이 늦지 않는다.</p>
+    <p><b class="text-gray-900">카테고리 = 폼의 종류</b> — 카테고리는 알림의 종류이자, 04 생성 폼의 분기이자, 05 설정의 on/off 단위. "사용자가 만든 것"과 "시스템이 주는 것"을 카테고리 축으로 정리.</p>
+    <p><b class="text-gray-900">AI 작업 = 보이는 파이프라인</b> — 조립을 유지하되, 블록의 입력/출력과 블록 간 데이터 흐름을 명시해 "무엇이 무엇으로 이어지는지" 보이게. 조립한 블록은 그대로 02 알림 도착의 진행 단계가 된다.</p>
+    <p><b class="text-gray-900">제어 위계</b> — 전역 기본값은 05 설정, 개별 알림·카테고리의 즉시 제어(멈춤·일시중지·끄기·작업 취소)는 01 센터 롱프레스. "어디서 끄지?"를 없앤다.</p>
+    <p><b class="text-gray-900">미션 = 단발 + 플랜</b> — 미션은 목표 기반 카테고리. 한 시점의 AI 작업은 <b>단발</b>(점심 메뉴 추천), 목표를 주면 AI가 여러 날 알림을 생성하는 건 <b>플랜</b>(중간고사 공부·요일별 학업 스케줄). 플랜 1개 = 미션 1개가 N개 알림을 소유한다.</p>
+  </div>
+
+  <!-- 용어 (v0.2 유지) -->
+  <h2 class="text-lg font-bold mt-9 mb-1">용어 (v0.2 검증 결과 유지)</h2>
+  <p class="text-[13px] text-gray-500 mb-2 leading-relaxed">기본 알림 · 미리 알림 · 알림 방식 · 지속 알림 · 다시 알림 · 브리핑 — v0.2에서 라이프스타일 앱 통용 표현으로 검증·교체한 용어를 v0.3에서도 그대로 사용. v0.3 신규 용어(알림 요약·조용히 전달·긴급 즉시 전달)는 Apple iOS 한국어 표기를 차용.</p>
+
+  <!-- SSoT / 다음 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>본 v0.3은 <b>와이어프레임 초안</b>. 확정 후 노션 화면 Description(U-04 계열) 작성 → Figma 이식 → <code>FIGMA-MANIFEST.md</code>에 node-id 등재.</li>
+      <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>. git에는 와이어프레임 산출물 보존 + 포인터만.</li>
+      <li>v0.1·v0.2 폴더는 이력 보존. 5/13 최초 화면 <code>03 알림/10-notifications.html</code>도 보존.</li>
+      <li>미결: 카테고리별 폼 나머지 2종(일정 알림·관심사) 상세 / AI 작업 카탈로그·블록별 옵션 상세 / 결과 카드 종류별 레이아웃 / 요약 그룹 펼침·설정 시트 / 선실행 기술 검증(개발 협의) → 다음 라운드.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-04 알림 v0.3 · 2026-05-15</p>
+
+</div>
+</body>
+</html>

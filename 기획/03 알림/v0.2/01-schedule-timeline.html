@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-04-1 일정 알림 타임라인 · v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px 13px}
+.card-now{border:1.5px solid #2563eb;background:#eff6ff}
+.icon-box{width:38px;height:38px;border-radius:10px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;color:#6b7280;flex-shrink:0}
+.icon-box-now{border-color:#2563eb;color:#2563eb;background:#fff}
+.icon-box-done{border-color:#e5e7eb;color:#9ca3af}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #d1d5db;color:#6b7280}
+.tag-now{border-color:#2563eb;color:#2563eb;background:#fff}
+.tag-ai{border-color:#2563eb;color:#fff;background:#2563eb;display:inline-flex;align-items:center;gap:3px}
+.btn-line{border:1px solid #d1d5db;border-radius:9px;padding:7px 0;font-size:12px;font-weight:600;color:#374151;display:flex;align-items:center;justify-content:center;gap:5px;background:#fff}
+.btn-dark{background:#1f1f1f;color:#fff;border-radius:9px;padding:7px 0;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:700;padding:14px;border-radius:13px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px}
+.rail-line{width:1.5px;background:#e5e7eb;flex:1}
+.rail-dot{width:9px;height:9px;border-radius:999px;border:2px solid #d1d5db;background:#fff;flex-shrink:0}
+.rail-dot-done{background:#9ca3af;border-color:#9ca3af}
+.rail-dot-now{background:#2563eb;border-color:#2563eb;width:11px;height:11px}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 9px;background:#f3f4f6;border-radius:999px}
+.ai-result{background:#fff;border:1px solid #bfdbfe;border-radius:11px;padding:10px 11px;margin-top:9px}
+.mini-pin{width:26px;height:26px;border-radius:7px;background:#eff6ff;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;color:#2563eb;flex-shrink:0}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-snooze" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M9 10h5l-5 5h5"/><path d="M5 3 2 6"/><path d="m22 6-3-3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 15l.7 1.9L21.5 17.5l-1.8.6L19 20l-.6-1.9-1.9-.6 1.9-.7L19 15z"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1500px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-04-1 일정 알림 타임라인 + 생성 진입 · v0.2 초안</h1>
+  <p class="text-sm text-gray-600 mt-1">방금 울린 알림을 최상단에, 오늘 일정 알림을 시간순 타임라인으로. v0.2 변경: <b>AI 작업 알림</b>은 결과 카드로 표시, 용어 정리(다시 알림·지속 알림 등).</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#2563eb"></span>지금/방금 — 정보 파랑</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#9ca3af"></span>지난·완료 — 회색 dim</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full border border-gray-400 bg-white"></span>예정 — 중립</span>
+    <span class="legend"><svg class="lc lc-12" style="color:#2563eb"><use href="#i-sparkles"/></svg>AI 작업 알림 — 결과 카드 동반</span>
+  </div>
+</div>
+
+<div class="max-w-[1500px] mx-auto flex flex-wrap gap-10 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- header -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">일정 알림</span>
+      <a href="03-notification-settings.html" class="text-gray-400" aria-label="알림 설정"><svg class="lc lc-22"><use href="#i-settings"/></svg></a>
+    </div>
+
+    <div class="flex-1 overflow-y-auto">
+      <div class="px-5 pt-4 pb-2 flex items-center gap-2">
+        <span class="text-[13px] font-bold text-gray-900">오늘</span>
+        <span class="text-[12px] text-gray-400">5월 16일 금요일</span>
+      </div>
+
+      <!-- 방금 울림 — AI 작업 알림 결과 카드 -->
+      <div class="px-5 pt-1 pb-3">
+        <div class="flex items-center gap-1.5 mb-2">
+          <span class="w-1.5 h-1.5 rounded-full" style="background:#2563eb"></span>
+          <span class="text-[10px] font-bold tracking-wider" style="color:#2563eb">방금 울림</span>
+        </div>
+        <div class="card card-now">
+          <div class="flex items-start gap-3">
+            <span class="icon-box icon-box-now"><svg class="lc lc-18"><use href="#i-target"/></svg></span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="tag tag-ai"><svg class="lc lc-12" style="width:10px;height:10px"><use href="#i-sparkles"/></svg>AI</span>
+                <span class="tag tag-now">미션</span>
+                <span class="text-[11px] text-gray-400">오후 12:00 · 방금</span>
+              </div>
+              <p class="font-bold text-[14px] mt-1.5">점심 메뉴 추천</p>
+              <p class="text-[12px] text-gray-500 mt-0.5">AI가 위치·내 상태를 반영해 찾았어요</p>
+            </div>
+          </div>
+          <!-- AI 결과 -->
+          <div class="ai-result">
+            <div class="flex items-start gap-2.5">
+              <span class="mini-pin"><svg class="lc lc-14"><use href="#i-map-pin"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-[13px] font-bold">솥앤솥 <span class="text-[11px] font-normal text-gray-400">· 한식 · 도보 4분</span></p>
+                <p class="text-[12px] mt-1"><b style="color:#2563eb">추천 메뉴</b> · 제육덮밥</p>
+                <p class="text-[11px] text-gray-500 mt-0.5 leading-relaxed">단백질이 충분하고, 어제 야식을 고려해 국물이 적은 메뉴로 골랐어요.</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-2.5">
+              <div class="btn-line"><svg class="lc lc-14"><use href="#i-sparkles"/></svg> 다른 추천</div>
+              <div class="btn-line"><svg class="lc lc-14"><use href="#i-map"/></svg> 지도에서 보기</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-2.5">
+            <div class="btn-line"><svg class="lc lc-14"><use href="#i-snooze"/></svg> 다시 알림</div>
+            <div class="btn-dark"><svg class="lc lc-14"><use href="#i-check"/></svg> 완료</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 오늘 타임라인 -->
+      <div class="px-5 pb-2">
+        <span class="text-[10px] font-bold tracking-wider text-gray-400">오늘 일정 알림 · 5건</span>
+      </div>
+      <div class="px-5 pb-3">
+        <!-- 6:42 done — AI 작업 알림(요약 브리핑) -->
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center w-11 flex-shrink-0">
+            <span class="text-[11px] text-gray-400 mb-1">6:42</span>
+            <span class="rail-dot rail-dot-done"></span>
+            <span class="rail-line"></span>
+          </div>
+          <div class="card flex-1 mb-2.5 opacity-60">
+            <div class="flex items-center gap-2.5">
+              <span class="icon-box icon-box-done"><svg class="lc lc-16"><use href="#i-sun"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="tag" style="font-size:9px;padding:1px 5px">AI</span>
+                  <p class="font-semibold text-[13px]">아침 브리핑</p>
+                </div>
+                <p class="text-[11px] text-gray-400 mt-0.5">날씨 맑음 17°C · 오늘 일정 3건 요약</p>
+              </div>
+              <svg class="lc lc-16 text-gray-400"><use href="#i-check"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- 10:00 done -->
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center w-11 flex-shrink-0">
+            <span class="text-[11px] text-gray-400 mb-1">10:00</span>
+            <span class="rail-dot rail-dot-done"></span>
+            <span class="rail-line"></span>
+          </div>
+          <div class="card flex-1 mb-2.5 opacity-60">
+            <div class="flex items-center gap-2.5">
+              <span class="icon-box icon-box-done"><svg class="lc lc-16"><use href="#i-briefcase"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-[13px]">강남 클라이언트 미팅</p>
+                <p class="text-[11px] text-gray-400">30분 전 알림 받음</p>
+              </div>
+              <svg class="lc lc-16 text-gray-400"><use href="#i-check"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- 12:00 now -->
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center w-11 flex-shrink-0">
+            <span class="text-[11px] font-bold mb-1" style="color:#2563eb">12:00</span>
+            <span class="rail-dot rail-dot-now"></span>
+            <span class="rail-line"></span>
+          </div>
+          <div class="card flex-1 mb-2.5" style="border-color:#bfdbfe">
+            <div class="flex items-center gap-2.5">
+              <span class="icon-box icon-box-now"><svg class="lc lc-16"><use href="#i-target"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="tag" style="font-size:9px;padding:1px 5px;border-color:#bfdbfe;color:#2563eb">AI</span>
+                  <p class="font-semibold text-[13px]">점심 메뉴 추천</p>
+                </div>
+                <p class="text-[11px] mt-0.5" style="color:#2563eb">방금 울림 · 위 카드에서 결과 확인</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 19:00 upcoming -->
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center w-11 flex-shrink-0">
+            <span class="text-[11px] text-gray-500 mb-1">19:00</span>
+            <span class="rail-dot"></span>
+            <span class="rail-line"></span>
+          </div>
+          <div class="card flex-1 mb-2.5">
+            <div class="flex items-center gap-2.5">
+              <span class="icon-box"><svg class="lc lc-16"><use href="#i-dumbbell"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-[13px]">저녁 운동 미리 알림</p>
+                <p class="text-[11px] text-gray-400 flex items-center gap-1"><svg class="lc lc-12"><use href="#i-repeat"/></svg> 매일 · 정시 + 10분 전</p>
+              </div>
+              <svg class="lc lc-16 text-gray-300"><use href="#i-chevron-right"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- 22:00 upcoming -->
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center w-11 flex-shrink-0">
+            <span class="text-[11px] text-gray-500 mb-1">22:00</span>
+            <span class="rail-dot"></span>
+          </div>
+          <div class="card flex-1 mb-1">
+            <div class="flex items-center gap-2.5">
+              <span class="icon-box"><svg class="lc lc-16"><use href="#i-moon"/></svg></span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-[13px]">취침 준비</p>
+                <p class="text-[11px] text-gray-400 flex items-center gap-1"><svg class="lc lc-12"><use href="#i-repeat"/></svg> 매일 · 지속 알림</p>
+              </div>
+              <svg class="lc lc-16 text-gray-300"><use href="#i-chevron-right"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 내일 미리보기 -->
+      <div class="px-5 pb-4">
+        <button class="w-full flex items-center justify-between py-2.5 px-3 border border-gray-200 rounded-xl text-gray-500">
+          <span class="text-[12px] font-semibold">내일 미리보기 · 3건</span>
+          <svg class="lc lc-16"><use href="#i-chevron-down"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- bottom create -->
+    <div class="px-5 py-4 border-t border-gray-100">
+      <a href="02-schedule-create.html" class="btn-primary"><svg class="lc lc-16"><use href="#i-plus"/></svg> 새 일정 알림</a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>설정 진입 링크</b> — 우상단 톱니. 탭 → <code class="bg-gray-100 px-1 rounded">03 알림 설정</code>.</div></div>
+    <div class="row"><span class="num">2</span><div><b>방금 울림 슬롯</b> — 최근 발화된(아직 미처리) 알림을 최상단에 정보색 카드로 고정. 처리 전까지 타임라인 위에 머무름.</div></div>
+    <div class="row"><span class="num">3</span><div><b>AI 작업 알림 = 결과 카드</b> — AI 작업이 붙은 알림은 제목만 알리는 게 아니라, AI가 실행한 <b>결과(추천 식당·메뉴 + 근거)</b>를 카드 안에 담아 전달. <code class="bg-gray-100 px-1 rounded">AI</code> 마커로 단순 알림과 구분.</div></div>
+    <div class="row"><span class="num">4</span><div><b>결과 내 액션</b> — "다른 추천"(다음 후보 호출) · "지도에서 보기"(위치 결과 연동). AI 작업 종류에 따라 결과 액션이 달라짐.</div></div>
+    <div class="row"><span class="num">5</span><div><b>다시 알림 / 완료</b> — 카드에서 바로 처리. 다시 알림 탭 → 간격 선택 시트(5·10·30분·1시간). 완료 탭 → 카드가 타임라인 해당 시각으로 합류 + 체크 표시. <i>(v0.1 "스누즈" → Apple 한국어 표준 "다시 알림")</i></div></div>
+    <div class="row"><span class="num">6</span><div><b>오늘 타임라인</b> — 시간 레일 기준 시간순. 지난·완료 = 60% dim + 체크. 지금 = 정보색 dot 확대. 예정 = 중립 카드. AI 작업 알림은 작은 <code class="bg-gray-100 px-1 rounded">AI</code> 태그.</div></div>
+    <div class="row"><span class="num">7</span><div><b>반복 표시</b> — 반복 알림은 repeat 아이콘 + 규칙 요약("매일 · 정시 + 10분 전"). 다중 미리 알림·지속 알림 여부도 함께 노출.</div></div>
+    <div class="row"><span class="num">8</span><div><b>알림 카드 탭</b> — 예정 카드 탭 → <code class="bg-gray-100 px-1 rounded">02 생성·편집 폼</code>(편집 모드). 지난 카드는 읽기 전용.</div></div>
+    <div class="row"><span class="num">9</span><div><b>새 일정 알림</b> — 하단 고정 버튼. 탭 → <code class="bg-gray-100 px-1 rounded">02 생성·편집 폼</code>(신규 모드).</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div><b>AI 작업 알림 처리 흐름</b> — 알림 시각 직전 AI가 백그라운드 실행 → 완료되면 결과 카드로 발화. 실행 중 발화 시각이 되면 "결과 준비 중" 상태로 먼저 뜨고, 완료 시 카드가 결과로 갱신(<code class="bg-gray-100 px-1 rounded">aria-live</code>).</div></div>
+    <div class="row"><span class="num">·</span><div>"방금 울림"은 지속 알림(처리까지 반복)이면 처리 전까지 계속 상단 유지 + 재발화. 한 번만 알림은 일정 시간 뒤 자동으로 타임라인에 합류.</div></div>
+    <div class="row"><span class="num">·</span><div>완료/다시 알림/지난 처리 상태는 <code class="bg-gray-100 px-1 rounded">메인 알림 센터</code>와 동기화 — 두 화면이 같은 알림 데이터를 본다.</div></div>
+    <div class="row"><span class="num">·</span><div>접근성: 타임라인은 시간순 리스트, 각 카드 <code class="bg-gray-100 px-1 rounded">role="listitem"</code> + 상태를 visually-hidden으로 발성("완료됨 / 예정 / 방금 울림 / AI 결과 도착"). 다시 알림·완료는 버튼. AI 결과 블록은 제목·근거를 순서대로 읽도록 구조화.</div></div>
+    <div class="row"><span class="num">·</span><div>이 화면은 <b>일정(schedule) 유형 알림 전용 뷰</b>. 브리핑·미션·관심사 등 전체 알림은 메인 알림 센터에서.</div></div>
+  </div>
+
+</div>
+
+<div class="max-w-[1500px] mx-auto mt-10 p-5 bg-white rounded-2xl border border-gray-200 text-xs text-gray-600 leading-relaxed">
+  <p class="font-bold text-gray-900 mb-2">v0.2 변경 메모</p>
+  <ul class="space-y-1.5 list-disc pl-5">
+    <li><b>AI 작업 알림</b> 개념 도입 — "방금 울림" 슬롯과 6:42 카드를 AI 작업 알림(결과 카드 동반) 예시로 교체. <code class="bg-gray-100 px-1 rounded">AI</code> 마커 추가.</li>
+    <li>용어 정리 — "스누즈" → <b>다시 알림</b>, "끈질긴 알림" → <b>지속 알림</b>, "저녁 운동 리마인더" → "저녁 운동 미리 알림".</li>
+    <li>예시 날짜를 02 생성 폼 시나리오(점심 메뉴 추천 · 5/16 금)와 정합되게 맞춤.</li>
+    <li>다음: 노션 description은 와이어프레임 확정 후 작성 → Figma 이식 → <code class="bg-gray-100 px-1 rounded">FIGMA-MANIFEST.md</code> 등재.</li>
+  </ul>
+</div>
+
+</body>
+</html>
