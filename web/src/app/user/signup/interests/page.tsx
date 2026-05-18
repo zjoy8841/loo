@@ -2,24 +2,37 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { INTERESTS } from "@/lib/enums";
 
-const INTERESTS = [
-  { emoji: "📈", label: "경제·시사" },
-  { emoji: "🎬", label: "엔터·연예" },
-  { emoji: "⚽", label: "스포츠" },
-  { emoji: "💻", label: "IT·테크" },
-  { emoji: "🩺", label: "의료·헬스" },
-  { emoji: "👗", label: "패션·라이프" },
-  { emoji: "📚", label: "자기계발" },
-  { emoji: "👶", label: "육아·교육" },
-  { emoji: "🍜", label: "음식·요리" },
-  { emoji: "✈️", label: "여행" },
-];
+// Mock 초기 선택: economy, it, self-dev
+const DEFAULT_INDICES = [0, 3, 6];
 
 export default function SignupInterests() {
-  const [selected, setSelected] = useState<number[]>([0, 3, 6]);
+  const router = useRouter();
+  const [selected, setSelected] = useState<number[]>(DEFAULT_INDICES);
+  const [submitting, setSubmitting] = useState(false);
+
   const toggle = (i: number) =>
     setSelected((s) => (s.includes(i) ? s.filter((x) => x !== i) : [...s, i]));
+
+  async function handleFinish(skip = false) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      if (!skip) {
+        const interests = selected.map((i) => INTERESTS[i].key);
+        await fetch("/api/me/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ interests }),
+        });
+      }
+      router.push("/user/home");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -45,7 +58,7 @@ export default function SignupInterests() {
         <div className="grid grid-cols-2 gap-2.5">
           {INTERESTS.map((it, i) => (
             <button
-              key={i}
+              key={it.key}
               type="button"
               onClick={() => toggle(i)}
               className={`rounded-xl px-3 py-3 text-left border-2 transition ${
@@ -63,24 +76,28 @@ export default function SignupInterests() {
         <div className="bg-emerald-50 rounded-2xl px-4 py-3 flex gap-3 items-start mt-6">
           <span className="text-xl">🎉</span>
           <p className="text-sm text-emerald-700 leading-relaxed">
-            완료! 이제 다환님만의 라이프 OS가 시작돼요.
+            완료! 이제 나만의 라이프 OS가 시작돼요.
           </p>
         </div>
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <Link
-          href="/user/home"
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center"
+        <button
+          type="button"
+          onClick={() => handleFinish(true)}
+          disabled={submitting}
+          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
         >
           건너뛰기
-        </Link>
-        <Link
-          href="/user/home"
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        </button>
+        <button
+          type="button"
+          onClick={() => handleFinish(false)}
+          disabled={submitting}
+          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          완료
-        </Link>
+          {submitting ? "저장 중…" : "완료"}
+        </button>
       </div>
     </main>
   );

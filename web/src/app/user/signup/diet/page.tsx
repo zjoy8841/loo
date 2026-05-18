@@ -2,29 +2,42 @@
 
 import Link from "next/link";
 import { useState, type Dispatch, type SetStateAction } from "react";
+import { useRouter } from "next/navigation";
+import { DIET_TAGS, ALLERGY_TAGS } from "@/lib/enums";
 
-const DIET = [
-  { emoji: "🥗", label: "채식" },
-  { emoji: "🌱", label: "비건" },
-  { emoji: "🐟", label: "페스코" },
-  { emoji: "☪️", label: "할랄" },
-  { emoji: "🍖", label: "다 먹어요", wide: true },
-];
-
-const ALLERGY = [
-  { emoji: "🥜", label: "견과류\n알레르기" },
-  { emoji: "🦐", label: "갑각류\n알레르기" },
-  { emoji: "🥛", label: "유당 못 견딤", wide: true },
-];
+// Mock 초기값: diet[4]='omnivore' 선택
+const DEFAULT_DIET = [4];
+const DEFAULT_ALLERGY: number[] = [];
 
 export default function SignupDiet() {
-  const [diet, setDiet] = useState<number[]>([4]);
-  const [allergy, setAllergy] = useState<number[]>([]);
+  const router = useRouter();
+  const [diet, setDiet] = useState<number[]>(DEFAULT_DIET);
+  const [allergy, setAllergy] = useState<number[]>(DEFAULT_ALLERGY);
+  const [submitting, setSubmitting] = useState(false);
 
   const toggle = (
     setter: Dispatch<SetStateAction<number[]>>,
     i: number,
   ) => setter((s) => (s.includes(i) ? s.filter((x) => x !== i) : [...s, i]));
+
+  async function handleNext(skip = false) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      if (!skip) {
+        const dietTags = diet.map((i) => DIET_TAGS[i].key);
+        const allergyTags = allergy.map((i) => ALLERGY_TAGS[i].key);
+        await fetch("/api/me/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ dietTags, allergyTags }),
+        });
+      }
+      router.push("/user/signup/lifestyle");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -49,66 +62,76 @@ export default function SignupDiet() {
           식이 성향
         </p>
         <div className="grid grid-cols-2 gap-3 mb-6">
-          {DIET.map((t, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => toggle(setDiet, i)}
-              className={`rounded-2xl p-3 text-left border-2 transition ${
-                t.wide ? "col-span-2" : ""
-              } ${
-                diet.includes(i)
-                  ? "bg-emerald-500 text-white border-emerald-500"
-                  : "bg-white border-gray-200"
-              }`}
-            >
-              <div className="text-xl mb-1">{t.emoji}</div>
-              <div className="text-sm font-semibold whitespace-pre-line">
-                {t.label}
-              </div>
-            </button>
-          ))}
+          {DIET_TAGS.map((t, i) => {
+            const wide = t.key === "omnivore";
+            return (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => toggle(setDiet, i)}
+                className={`rounded-2xl p-3 text-left border-2 transition ${
+                  wide ? "col-span-2" : ""
+                } ${
+                  diet.includes(i)
+                    ? "bg-emerald-500 text-white border-emerald-500"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <div className="text-xl mb-1">{t.emoji}</div>
+                <div className="text-sm font-semibold whitespace-pre-line">
+                  {t.label}
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
           알레르기 / 못 먹는 것
         </p>
         <div className="grid grid-cols-2 gap-3">
-          {ALLERGY.map((t, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => toggle(setAllergy, i)}
-              className={`rounded-2xl p-3 text-left border-2 transition ${
-                t.wide ? "col-span-2" : ""
-              } ${
-                allergy.includes(i)
-                  ? "bg-emerald-500 text-white border-emerald-500"
-                  : "bg-white border-gray-200"
-              }`}
-            >
-              <div className="text-xl mb-1">{t.emoji}</div>
-              <div className="text-sm font-semibold leading-tight whitespace-pre-line">
-                {t.label}
-              </div>
-            </button>
-          ))}
+          {ALLERGY_TAGS.map((t, i) => {
+            const wide = t.key === "lactose";
+            return (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => toggle(setAllergy, i)}
+                className={`rounded-2xl p-3 text-left border-2 transition ${
+                  wide ? "col-span-2" : ""
+                } ${
+                  allergy.includes(i)
+                    ? "bg-emerald-500 text-white border-emerald-500"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <div className="text-xl mb-1">{t.emoji}</div>
+                <div className="text-sm font-semibold leading-tight whitespace-pre-line">
+                  {t.label}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <Link
-          href="/user/signup/lifestyle"
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center"
+        <button
+          type="button"
+          onClick={() => handleNext(true)}
+          disabled={submitting}
+          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
         >
           건너뛰기
-        </Link>
-        <Link
-          href="/user/signup/lifestyle"
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        </button>
+        <button
+          type="button"
+          onClick={() => handleNext(false)}
+          disabled={submitting}
+          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          다음
-        </Link>
+          {submitting ? "저장 중…" : "다음"}
+        </button>
       </div>
     </main>
   );

@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma — 로컬 SQLite DB는 머신마다 다르므로 제외 (migrations/ 폴더는 커밋)
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.db-journal

@@ -2,18 +2,37 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { JOBS } from "@/lib/enums";
 
-const JOBS = [
-  { emoji: "🎓", label: "학생", desc: "전공·시험·공모전" },
-  { emoji: "💼", label: "직장인", desc: "경제·산업·시사" },
-  { emoji: "👨‍⚕️", label: "의료인", desc: "논문·학회·가이드" },
-  { emoji: "💻", label: "프리랜서", desc: "스타트업·기술·세션" },
-  { emoji: "👶", label: "부모", desc: "육아·교육·학교" },
-  { emoji: "👴", label: "시니어", desc: "건강·복지·동네" },
-];
+// Mock 초기값: index 1 = employee
+const DEFAULT_INDEX = 1;
+const ETC_INDEX = JOBS.findIndex((j) => j.key === "etc");
 
 export default function SignupJob() {
-  const [selected, setSelected] = useState<number>(1);
+  const router = useRouter();
+  const [selected, setSelected] = useState<number>(DEFAULT_INDEX);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleNext(skip = false) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      if (!skip) {
+        await fetch("/api/me/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jobKey: JOBS[selected].key }),
+        });
+      }
+      router.push("/user/signup/interests");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // 메인 6개 카드 + 마지막 etc 카드 (col-span-2)는 별도 렌더
+  const mainJobs = JOBS.filter((j) => j.key !== "etc");
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -37,9 +56,9 @@ export default function SignupJob() {
         </p>
 
         <div className="grid grid-cols-2 gap-3">
-          {JOBS.map((j, i) => (
+          {mainJobs.map((j, i) => (
             <button
-              key={i}
+              key={j.key}
               type="button"
               onClick={() => setSelected(i)}
               className={`rounded-2xl p-4 text-left border-2 transition ${
@@ -55,38 +74,42 @@ export default function SignupJob() {
                   selected === i ? "opacity-80" : "text-gray-400"
                 }`}
               >
-                {j.desc}
+                {j.description}
               </div>
             </button>
           ))}
           <button
             type="button"
-            onClick={() => setSelected(6)}
+            onClick={() => setSelected(ETC_INDEX)}
             className={`col-span-2 rounded-2xl p-4 text-left border-2 transition ${
-              selected === 6
+              selected === ETC_INDEX
                 ? "bg-emerald-500 text-white border-emerald-500"
                 : "bg-white border-gray-200"
             }`}
           >
-            <div className="text-2xl mb-1.5">✨</div>
-            <div className="text-sm font-semibold">기타 / 직접 선택할게요</div>
+            <div className="text-2xl mb-1.5">{JOBS[ETC_INDEX].emoji}</div>
+            <div className="text-sm font-semibold">{JOBS[ETC_INDEX].label}</div>
           </button>
         </div>
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <Link
-          href="/user/signup/interests"
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center"
+        <button
+          type="button"
+          onClick={() => handleNext(true)}
+          disabled={submitting}
+          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
         >
           건너뛰기
-        </Link>
-        <Link
-          href="/user/signup/interests"
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        </button>
+        <button
+          type="button"
+          onClick={() => handleNext(false)}
+          disabled={submitting}
+          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          다음
-        </Link>
+          {submitting ? "저장 중…" : "다음"}
+        </button>
       </div>
     </main>
   );

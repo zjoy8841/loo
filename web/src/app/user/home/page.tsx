@@ -1,4 +1,17 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import {
+  getPersonaChips,
+  getMetaChips,
+  getGreetingForHour,
+  getAvatarInitial,
+  parseJsonArray,
+} from "@/lib/persona";
+
+// 뉴스·미션·추천 등은 아직 mock — DB·LLM 연동은 후속 작업.
+// 이번 단계에서는 헤더 인사·메타·아바타·"나의 페르소나" 칩만 실제 DB 바인딩.
 
 const HEADLINES = [
   { emoji: "📉", tag: "증시", tagBg: "bg-red-50", tagText: "text-red-700", gradient: "from-red-100 to-orange-200", title: "코스피 2,890 (-1.2%) · 호르무즈 긴장에 유가 5%↑", meta: "매일경제 · 28분 전" },
@@ -25,7 +38,41 @@ const QUICK_ACTIONS = [
   { emoji: "📊", label: "기록 입력", href: "#" },
 ];
 
-export default function UserHome() {
+export default async function UserHome() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect("/user/signup/account");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: { profile: true },
+  });
+  if (!user) {
+    redirect("/user/signup/account");
+  }
+
+  const profile = {
+    shapeKey: user.profile?.shapeKey ?? null,
+    jobKey: user.profile?.jobKey ?? null,
+    healthTags: parseJsonArray(user.profile?.healthTags),
+    dietTags: parseJsonArray(user.profile?.dietTags),
+    allergyTags: parseJsonArray(user.profile?.allergyTags),
+    lifestyleTags: parseJsonArray(user.profile?.lifestyleTags),
+    interests: parseJsonArray(user.profile?.interests),
+  };
+
+  const personaChips = getPersonaChips(profile);
+  const metaChips = getMetaChips(profile);
+  const greeting = getGreetingForHour(new Date().getHours());
+  const avatarInitial = getAvatarInitial(user.name);
+  const dateStr = new Date().toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  });
+
   return (
     <div className="min-h-screen flex flex-col pb-24">
       <header className="px-5 pt-6 pb-3 flex items-center gap-3">
@@ -36,15 +83,19 @@ export default function UserHome() {
             <span className="text-base">🔔</span>
             <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
           </Link>
-          <button className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-sm">다</button>
+          <button className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-700 text-sm">{avatarInitial}</button>
         </div>
       </header>
 
       <main className="flex-1 px-5">
         <section className="pt-4 pb-2">
-          <p className="text-xs text-gray-500 mb-1">2026년 5월 10일 · 토요일</p>
-          <h1 className="text-2xl font-bold leading-snug">좋은 아침이에요,<br />다환님 ☀️</h1>
-          <p className="text-xs text-gray-400 mt-1">💼 직장인 · 📈 경제·시사 · 💻 IT · 📚 자기계발</p>
+          <p className="text-xs text-gray-500 mb-1">{dateStr}</p>
+          <h1 className="text-2xl font-bold leading-snug">{greeting.phrase},<br />{user.name}님 {greeting.emoji}</h1>
+          {metaChips.length > 0 && (
+            <p className="text-xs text-gray-400 mt-1">
+              {metaChips.map((c) => `${c.emoji} ${c.label}`).join(" · ")}
+            </p>
+          )}
         </section>
 
         <section className="mt-4">
@@ -100,7 +151,7 @@ export default function UserHome() {
               <div className="flex-1">
                 <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">BC카드 데이터 인사이트</p>
                 <p className="font-semibold text-sm mt-1 leading-snug">강남 직장인 점심 트렌드: 단백질 메뉴 32% 증가, 한식 -8%</p>
-                <p className="text-xs text-gray-500 mt-2 leading-relaxed">최근 6개월 강남역 상권 결제 데이터 분석. 다환님과 비슷한 페르소나가 가장 많이 결제한 곳: <strong>B카페·SUBWAY·샐러디</strong></p>
+                <p className="text-xs text-gray-500 mt-2 leading-relaxed">최근 6개월 강남역 상권 결제 데이터 분석. {user.name}님과 비슷한 페르소나가 가장 많이 결제한 곳: <strong>B카페·SUBWAY·샐러디</strong></p>
               </div>
             </div>
           </div>
@@ -156,12 +207,27 @@ export default function UserHome() {
             <button className="text-xs text-emerald-600 font-semibold">편집</button>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-sm">
-            <p className="text-xs text-gray-500 mb-3">선택하신 4개의 태그로 추천이 만들어져요</p>
-            <div className="flex flex-wrap gap-1.5">
-              {["🥚 콜레스테롤 걱정중", "♾️ 네버엔딩 다이어터", "🍖 다 먹어요", "☕ 카페인 의존"].map((t) => (
-                <span key={t} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">{t}</span>
-              ))}
-            </div>
+            {personaChips.length > 0 ? (
+              <>
+                <p className="text-xs text-gray-500 mb-3">
+                  선택하신 {personaChips.length}개의 태그로 추천이 만들어져요
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {personaChips.map((t) => (
+                    <span key={t.label} className="px-3 py-1.5 bg-emerald-50 text-emerald-700 text-xs rounded-full font-semibold">
+                      {t.emoji} {t.label}
+                    </span>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-2">
+                <p className="text-sm text-gray-500 mb-3">아직 태그가 비어 있어요</p>
+                <Link href="/user/signup/health" className="inline-block text-xs font-semibold text-emerald-600 hover:underline">
+                  3분 만에 페르소나 채우기 →
+                </Link>
+              </div>
+            )}
           </div>
         </section>
 

@@ -2,17 +2,33 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { SHAPE_GOALS } from "@/lib/enums";
 
-const TAGS = [
-  { emoji: "🚩", label: "살찌고\n싶어요" },
-  { emoji: "🏃‍♀️", label: "다이어트\n중" },
-  { emoji: "💪", label: "벌크업\n중" },
-  { emoji: "♾️", label: "네버엔딩\n다이어터" },
-  { emoji: "🧘", label: "그냥 유지만 할래요", wide: true },
-];
+// Mock 초기값 (index 3 = never-ending-dieter)
+const DEFAULT_INDEX = 3;
 
 export default function SignupShape() {
-  const [selected, setSelected] = useState<number>(3);
+  const router = useRouter();
+  const [selected, setSelected] = useState<number>(DEFAULT_INDEX);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleNext(skip = false) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      if (!skip) {
+        await fetch("/api/me/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ shapeKey: SHAPE_GOALS[selected].key }),
+        });
+      }
+      router.push("/user/signup/diet");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -36,41 +52,48 @@ export default function SignupShape() {
         </p>
 
         <div className="grid grid-cols-2 gap-3">
-          {TAGS.map((t, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setSelected(i)}
-              className={`rounded-2xl p-4 text-left border-2 transition ${
-                t.wide ? "col-span-2" : ""
-              } ${
-                selected === i
-                  ? "bg-emerald-500 text-white border-emerald-500"
-                  : "bg-white border-gray-200"
-              }`}
-            >
-              <div className="text-2xl mb-1.5">{t.emoji}</div>
-              <div className="text-sm font-semibold leading-tight whitespace-pre-line">
-                {t.label}
-              </div>
-            </button>
-          ))}
+          {SHAPE_GOALS.map((t, i) => {
+            const wide = t.key === "maintain";
+            return (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setSelected(i)}
+                className={`rounded-2xl p-4 text-left border-2 transition ${
+                  wide ? "col-span-2" : ""
+                } ${
+                  selected === i
+                    ? "bg-emerald-500 text-white border-emerald-500"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <div className="text-2xl mb-1.5">{t.emoji}</div>
+                <div className="text-sm font-semibold leading-tight whitespace-pre-line">
+                  {t.label}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <Link
-          href="/user/signup/diet"
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center"
+        <button
+          type="button"
+          onClick={() => handleNext(true)}
+          disabled={submitting}
+          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
         >
           건너뛰기
-        </Link>
-        <Link
-          href="/user/signup/diet"
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        </button>
+        <button
+          type="button"
+          onClick={() => handleNext(false)}
+          disabled={submitting}
+          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          다음
-        </Link>
+          {submitting ? "저장 중…" : "다음"}
+        </button>
       </div>
     </main>
   );

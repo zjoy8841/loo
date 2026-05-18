@@ -2,20 +2,34 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-const TAGS = [
-  { emoji: "🥚", label: "콜레스테롤\n걱정중" },
-  { emoji: "💧", label: "고혈압\n투약중" },
-  { emoji: "🍬", label: "혈당\n관리중" },
-  { emoji: "😮‍💨", label: "만성\n피곤러" },
-  { emoji: "🦴", label: "관절이\n좀…" },
-  { emoji: "💚", label: "일단은\n멀쩡" },
-];
+import { useRouter } from "next/navigation";
+import { HEALTH_TAGS } from "@/lib/enums";
 
 export default function SignupHealth() {
+  const router = useRouter();
   const [selected, setSelected] = useState<number[]>([0]);
+  const [submitting, setSubmitting] = useState(false);
+
   const toggle = (i: number) =>
     setSelected((s) => (s.includes(i) ? s.filter((x) => x !== i) : [...s, i]));
+
+  async function handleNext(skip = false) {
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      if (!skip) {
+        const healthTags = selected.map((i) => HEALTH_TAGS[i].key);
+        await fetch("/api/me/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ healthTags }),
+        });
+      }
+      router.push("/user/signup/shape");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -39,9 +53,9 @@ export default function SignupHealth() {
         </p>
 
         <div className="grid grid-cols-2 gap-3">
-          {TAGS.map((t, i) => (
+          {HEALTH_TAGS.map((t, i) => (
             <button
-              key={i}
+              key={t.key}
               type="button"
               onClick={() => toggle(i)}
               className={`rounded-2xl p-4 text-left border-2 transition ${
@@ -60,18 +74,22 @@ export default function SignupHealth() {
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <Link
-          href="/user/signup/shape"
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center"
+        <button
+          type="button"
+          onClick={() => handleNext(true)}
+          disabled={submitting}
+          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
         >
           건너뛰기
-        </Link>
-        <Link
-          href="/user/signup/shape"
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        </button>
+        <button
+          type="button"
+          onClick={() => handleNext(false)}
+          disabled={submitting}
+          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          다음
-        </Link>
+          {submitting ? "저장 중…" : "다음"}
+        </button>
       </div>
     </main>
   );
