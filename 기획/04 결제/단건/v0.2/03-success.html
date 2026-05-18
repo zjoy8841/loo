@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 결제 완료 → 식당 수락 → 확정/거절 · 단건 v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap h3.phase{margin-top:14px;padding-top:10px;border-top:1px dashed #d1d5db}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{outline:2px solid #1f1f1f;outline-offset:1.5px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.summary{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:16px}
+.hero-circle{width:88px;height:88px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;animation:pop .55s cubic-bezier(0.34, 1.56, 0.64, 1) both;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.hero-circle.success{background:#1f1f1f}
+.hero-circle.wait{background:#6b7280}
+.hero-circle.fail{background:#fff;color:#1f1f1f;border:3px solid #1f1f1f;box-shadow:none}
+@keyframes pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+.pulse-ring{position:absolute;width:88px;height:88px;border-radius:999px;border:2px solid #6b7280;animation:pulse 1.8s infinite ease-out;opacity:0}
+@keyframes pulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.6);opacity:0}}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px}
+.kv-row + .kv-row{border-top:1px solid #f3f4f6}
+.kv-key{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:12.5px}
+.kv-val{font-weight:600;color:#111827}
+.ryan-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:13px;display:flex;gap:11px;align-items:flex-start}
+.ryan-ic{flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#e5e7eb;border:1px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#4b5563;letter-spacing:.02em}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:14px 0;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.cta-secondary{background:#fff;color:#111827;border:1px solid #e5e7eb;border-radius:14px;padding:14px 0;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#1f1f1f;color:#fff}
+.step-pill.wait{background:#fff;color:#1f1f1f;border:1px solid #1f1f1f}
+.step-pill.fail{background:#fff;color:#1f1f1f;border:1px dashed #1f1f1f}
+.crit-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#1f1f1f;color:#fff;margin-left:5px}
+.phase-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:999px;margin-bottom:10px;display:inline-block}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-check" viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 22l3-8 2 3 3-4 4 7"/><path d="M9 14l-3-3 3-3"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 3v18l3-2 3 2 3-2 3 2 3-2 1 2V3z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9z"/><path d="M10 21a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14" style="transform:rotate(180deg)"><use href="#i-arrow-right"/></svg> 단건 v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">03 결제 완료 → 수락 대기 → 확정/거절 · 단건 v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1">결제 완료 후 식당 측 수락이 끝나기까지의 <b>상태 분기</b> 화면. <b>v0.2 보강(약점 ②)</b>: v0.1은 phone 1개로 "예약 확정됐어요" 즉시 단언했음 — 식당 거절 시 거짓이 됨. v0.2는 <b>phone 3개</b>로 3 상태 분기 — ⑴ <b>수락 대기</b>(결제 직후) ⑵ <b>예약 확정</b>(수락 성공) ⑶ <b>예약 거절·환불</b>(식당 거절 또는 5분 미응답). 진입 시 phone 1, 1~2분 내 phone 2 또는 phone 3으로 자동 전환. 라이언이 상태 안내·대안 제안.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 수락 대기 (결제 직후) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="step-pill wait"><svg class="lc lc-12"><use href="#i-clock"/></svg> 수락 대기</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <div class="flex flex-col items-center text-center pt-4 pb-2 relative">
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <div class="hero-circle wait">
+          <svg class="lc" style="width:42px;height:42px"><use href="#i-clock"/></svg>
+        </div>
+        <span class="phase-label mt-5">1단계 / 3</span>
+        <h2 class="text-[20px] font-bold leading-tight">식당이 수락하면 알려드릴게요</h2>
+        <p class="text-[13px] text-gray-500 mt-1.5 leading-relaxed">결제는 완료됐어요.<br>B카페가 1~2분 내 자리·메뉴를 확인합니다.</p>
+      </div>
+
+      <p class="sec-label mt-7">결제 내역</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-receipt"/></svg> 메뉴</span>
+          <span class="kv-val">닭가슴살 샐러드 세트</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 식당</span>
+          <span class="kv-val">B카페 · 강남점</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-clock"/></svg> 요청 시간</span>
+          <span class="kv-val">오늘 12:30</span>
+        </div>
+        <div class="kv-row" style="padding-top:11px">
+          <span class="text-[13px] text-gray-500">결제 금액</span>
+          <span class="text-[18px] font-bold">₩8,500</span>
+        </div>
+      </div>
+
+      <div class="ryan-box mt-5">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">제가 진행 상황을 알려드릴게요</p>
+          <p class="mt-1 text-gray-700"><b>수락</b>되면 알림으로 바로 알려요. 점심 피크에 5분 내 응답 없으면 자동 취소 + 전액 환불해드리고, 대안 메뉴를 제안할게요.</p>
+        </div>
+      </div>
+
+      <p class="text-[11.5px] text-gray-500 mt-5 text-center leading-relaxed">
+        이 화면은 닫아도 돼요. 알림이 도착하면 다시 열려요.
+      </p>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="05-reservation-detail.html" class="cta-secondary">예약 상세로</a>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 예약 확정 (수락 성공) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="step-pill"><svg class="lc lc-12"><use href="#i-check"/></svg> 예약 확정</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <div class="flex flex-col items-center text-center pt-4 pb-2">
+        <div class="hero-circle success">
+          <svg class="lc" style="width:42px;height:42px"><use href="#i-check"/></svg>
+        </div>
+        <span class="phase-label mt-5">2단계 / 3 · 1~2분 후</span>
+        <h2 class="text-[22px] font-bold">예약이 확정됐어요</h2>
+        <p class="text-[13px] text-gray-500 mt-1.5">B카페에서 12:30에 만나요</p>
+      </div>
+
+      <p class="sec-label mt-7">예약 영수증</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-receipt"/></svg> 메뉴</span>
+          <span class="kv-val">닭가슴살 샐러드 세트</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 식당</span>
+          <span class="kv-val">B카페 · 강남점</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-clock"/></svg> 예약 시간</span>
+          <span class="kv-val">오늘 12:30</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-walk"/></svg> 도보</span>
+          <span class="kv-val">약 5분</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">예약 번호</span>
+          <span class="kv-val font-mono text-[12.5px]">LO-26051813-742</span>
+        </div>
+        <div class="kv-row" style="padding-top:11px">
+          <span class="text-[13px] text-gray-500">결제 금액</span>
+          <span class="text-[18px] font-bold">₩8,500</span>
+        </div>
+      </div>
+
+      <div class="ryan-box mt-5">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">5분 전에 한 번 더 알려드릴게요</p>
+          <p class="mt-1 text-gray-700">12:25에 알림이 와요. 그때 길찾기를 띄워드릴게요. 늦으실 것 같으면 식당에 미리 알려드릴 수 있어요.</p>
+        </div>
+      </div>
+
+      <p class="text-[11.5px] text-gray-500 mt-5 text-center leading-relaxed">
+        12:00까지 취소하면 전액 환불돼요.<br>
+        <a href="05-reservation-detail.html" class="text-gray-700 underline underline-offset-2 font-semibold">예약 상세에서 취소</a>
+      </p>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white grid grid-cols-5 gap-2.5">
+      <a href="#" class="cta-secondary col-span-2">홈으로</a>
+      <a href="#" class="cta col-span-3">
+        <svg class="lc lc-16"><use href="#i-map-pin"/></svg>
+        길찾기 시작
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 3 — 예약 거절·환불 (수락 실패) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="닫기"><svg class="lc lc-22"><use href="#i-x"/></svg></a>
+      <span class="step-pill fail">예약 어려움</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <div class="flex flex-col items-center text-center pt-4 pb-2">
+        <div class="hero-circle fail">
+          <svg class="lc" style="width:42px;height:42px"><use href="#i-x"/></svg>
+        </div>
+        <span class="phase-label mt-5">2단계 / 3 · 거절 분기</span>
+        <h2 class="text-[20px] font-bold leading-tight">예약을 잡지 못했어요</h2>
+        <p class="text-[13px] text-gray-500 mt-1.5 leading-relaxed">B카페가 12:30 자리를<br>준비할 수 없다고 회신했어요.</p>
+      </div>
+
+      <p class="sec-label mt-7">환불 안내</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key">결제 금액</span>
+          <span class="kv-val">₩8,500</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">환불 금액</span>
+          <span class="kv-val">₩8,500 <span class="text-[11px] text-gray-500 font-normal">(전액)</span></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">환불 방법</span>
+          <span class="kv-val">결제수단으로 자동 환불</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">예상 시점</span>
+          <span class="kv-val">즉시 ~ 영업일 1~3일</span>
+        </div>
+      </div>
+
+      <div class="ryan-box mt-5">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">근처에 비슷한 단백질 메뉴 2곳 찾았어요</p>
+          <p class="mt-1 text-gray-700">A샐러드(도보 7분, 12:30 자리 있음) · C볼(도보 4분, 13:00 자리 있음). 결정은 천천히 하셔도 돼요.</p>
+        </div>
+      </div>
+
+      <p class="text-[11.5px] text-gray-500 mt-5 text-center leading-relaxed">
+        예약 번호 <span class="font-mono text-[11px] text-gray-700">LO-26051813-742</span> · 문의는 예약 상세에서
+      </p>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white grid grid-cols-5 gap-2.5">
+      <a href="#" class="cta-secondary col-span-2">홈으로</a>
+      <a href="01-menu-detail.html" class="cta col-span-3">
+        <svg class="lc lc-16"><use href="#i-refresh"/></svg>
+        대안 메뉴 보기
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>흐름 — 상태 전이 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">★</span><div>02 CTA → PG 성공 → <b>phone 1 (수락 대기)</b> 진입. 식당 측 응답에 따라 <b>1~2분 내</b>:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>식당 <b>수락</b> → <b>phone 2 (예약 확정)</b> 자동 전환 + 푸시 알림 "예약 확정"</li>
+      <li>식당 <b>거절</b> → <b>phone 3 (예약 거절·환불)</b> 자동 전환 + 푸시 "예약 어려움 + 환불"</li>
+      <li>식당 <b>5분 미응답</b> → phone 3 자동 전환 (거절과 동일 처리)</li>
+    </ul>
+    사용자가 phone 1을 닫고 앱을 나가도 알림이 도착하면 자동으로 phone 2 또는 phone 3을 열어줌. <b>사용자가 "결제만 하고 결과 모름" 상황 절대 없게.</b></div></div>
+
+    <h3 class="phase">PHONE 1 · 수락 대기 (결제 직후)</h3>
+
+    <h3>① 헤더 — "수락 대기" pill</h3>
+    <div class="row"><span class="num">1</span><div>X 닫기(왼쪽) + 수락 대기 pill(흰 배경 + 검은 보더 + 시계 아이콘). 흰 보더 pill로 "성공 완료"가 아닌 "진행 중" 시각화. 닫아도 결제는 유효 — 알림 도착 시 다시 열림.</div></div>
+
+    <h3>② 시계 + 펄스 + 헤드라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>시계 원형(회색 #6b7280) + 외곽 <b>펄스 링 애니메이션</b>(1.8s loop) — 진행 중 시각화. 헤드라인 "<b>식당이 수락하면 알려드릴게요</b>" + 부제 "결제는 완료됐어요 / B카페가 1~2분 내 확인" — 결제는 끝났음을 명확히 하면서 다음 단계가 식당 측임을 분리.</div></div>
+
+    <h3>③ 결제 내역 (영수증 prelim)</h3>
+    <div class="row"><span class="num">3</span><div>아직 "예약 영수증"이 아닌 "<b>결제 내역</b>" — 예약은 미확정. 메뉴·식당·<b>"요청 시간"</b>(예약 시간 X)·금액 4 필드. 예약 번호는 phone 2에서 처음 부여(이 단계는 임시 ID).</div></div>
+
+    <h3>④ 라이언 — 진행 상황 안내 약속 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>라이언 박스에서 <b>다음 상태(수락/거절)별 알림 약속</b>. 거절 시 자동 환불 + 대안 제안 미리 안내 — phone 3로 전환되어도 사용자가 놀라지 않음.</div></div>
+
+    <h3>⑤ "닫아도 돼요" 안내 + 예약 상세 CTA</h3>
+    <div class="row"><span class="num">5</span><div>사용자가 화면 앞에서 기다릴 필요 없음을 명시. CTA는 보조 톤(흰 배경)으로 "<b>예약 상세로</b>" — 05 예약 상세(약점 ③ 신규)로 진입. 거기서도 동일 상태 표시 + 취소 가능.</div></div>
+
+    <h3 class="phase">PHONE 2 · 예약 확정 (수락 성공)</h3>
+
+    <h3>⑥ ✓ + 헤드라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>검정 원형 ✓ + scale-in. 헤드라인 "<b>예약이 확정됐어요</b>" + "B카페에서 12:30에 만나요" — v0.1 톤 계승. 이 단계에서 처음 "확정"이라는 단어 사용.</div></div>
+
+    <h3>⑦ 영수증 — 9 필드</h3>
+    <div class="row"><span class="num">7</span><div>이제 "<b>예약 영수증</b>" — 예약 번호 부여, 도보 거리 추가, "예약 시간" 명시. v0.1과 동일 구조.</div></div>
+
+    <h3>⑧ 5분 전 알림 약속 + 취소 안내</h3>
+    <div class="row"><span class="num">8</span><div>라이언 박스에 5분 전 알림 약속(v0.1 톤). 취소 cutoff 시각(12:00) 환산 + <b>예약 상세에서 취소</b> 링크 — 05로 도착.</div></div>
+
+    <h3>⑨ CTA 2갈래 — 홈/길찾기</h3>
+    <div class="row"><span class="num">9</span><div>v0.1과 동일. 홈(2/5) + 길찾기(3/5, 주).</div></div>
+
+    <h3 class="phase">PHONE 3 · 예약 거절·환불</h3>
+
+    <h3>⑩ X 원형 + 헤드라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">10</span><div>검정 보더 + 흰 배경 X 원형(검은 ✓ 원과 정반대 톤) + scale-in. 헤드라인 "<b>예약을 잡지 못했어요</b>" + "B카페가 12:30 자리를 준비할 수 없다고 회신" — <b>비난 톤 X</b>(식당 탓 X, 사용자 탓 X), 사실만. 거절 사유는 식당이 제공한 경우만 표시(없으면 일반 멘트).</div></div>
+
+    <h3>⑪ 환불 안내 — 4 필드 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">11</span><div>결제 금액·환불 금액·환불 방법·예상 시점 4 필드. <b>"전액"</b> 표기로 사용자 안심. 영업일 1~3일은 PG 정책 일반값 — 토스페이는 즉시, 카드는 1~3일. <b>사용자 행동 X</b>(자동 환불, 추가 조작 불필요).</div></div>
+
+    <h3>⑫ 라이언 — 대안 메뉴 제안 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">12</span><div>거절 후 "끝"이 아니라 <b>대안 2개 즉시 제안</b>. 비슷한 영양 카테고리(단백질) + 도보 거리 + 자리 상황. 결정 압박 X("천천히 하셔도 돼요"). CTA "<b>대안 메뉴 보기</b>" → 01 메뉴 상세 재진입(라이언 컨텍스트 새로 잡힘).
+    <br><br><b>미결</b>: 대안이 0개일 때 폴백(라이언 박스에 "오늘은 가까운 옵션이 없어요" + 직접 검색 진입). v0.3 라운드.</div></div>
+
+    <h3>⑬ 예약 번호 + 문의 안내</h3>
+    <div class="row"><span class="num">13</span><div>거절된 예약도 번호 보존 — 환불 처리 추적·고객지원 문의 시 사용. 작은 글로 표기.</div></div>
+
+    <h3 class="phase">접근성 · 시스템 (3 phones 공통)</h3>
+    <div class="row"><span class="num">A</span><div>각 phone hero 영역 = <code>role="status" aria-live="polite"</code>로 상태 자동 발음("식당이 수락하면 알려드릴게요" / "예약이 확정됐어요" / "예약을 잡지 못했어요"). 영수증 = <code>role="region"</code>. 예약 번호 = 자릿수 분리 발음. <b>색만으로 상태 신호 X</b> — 아이콘(시계/✓/X) + 헤드라인 + pill 라벨 3중 표현. 펄스 애니메이션은 prefers-reduced-motion 시 정적 표시.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 결제 확인 · 단건 v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{outline:2px solid #1f1f1f;outline-offset:1.5px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.summary{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.menu-row{display:flex;gap:11px;align-items:center}
+.menu-thumb{width:48px;height:48px;border-radius:10px;background:#f3f4f6;border:1px dashed #d1d5db;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:9px;font-weight:600}
+.refund-box{background:#f9fafb;border:1px solid #1f1f1f;border-radius:12px;padding:12px;font-size:12px;color:#111827;line-height:1.55}
+.refund-box b{color:#111827}
+.pay-row{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:8px;background:#fff;cursor:pointer}
+.pay-row.sel{border:2px solid #1f1f1f;background:#fff;padding:12px 13px}
+.pay-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#111827;flex-shrink:0;background:#f3f4f6;border:1px solid #d1d5db;letter-spacing:.02em}
+.pay-name{font-size:13.5px;font-weight:600;color:#111827;flex:1}
+.dot{width:18px;height:18px;border-radius:999px;border:2px solid #d1d5db;flex-shrink:0}
+.dot.on{border-color:#1f1f1f;background:#1f1f1f;position:relative}
+.dot.on::after{content:'';position:absolute;inset:3px;border-radius:999px;background:#fff}
+.add-card{display:flex;align-items:center;gap:11px;padding:12px 14px;border:1px dashed #d1d5db;border-radius:12px;color:#6b7280;font-size:13px;background:#fff}
+.tos-row{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:12.5px;color:#374151}
+.tos-row .check{width:18px;height:18px;border-radius:5px;border:1.5px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.tos-row .check.on{background:#1f1f1f;border-color:#1f1f1f}
+.tos-req{color:#111827;font-size:11px;font-weight:800;text-decoration:underline;text-underline-offset:2px}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:15px 0;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.crit-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#1f1f1f;color:#fff;margin-left:5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> 단건 v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">02 결제 확인 · 단건 v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1">단건 결제 도메인의 <b>핵심 페이지</b>. 메뉴+시간 요약 + 환불 정책 + 결제수단 + 약관 + CTA + PG 오버레이. <b>v0.2 보강(약점 ② 일부)</b>: 합계 위에 "식당 수락 안내" 박스 추가 — 결제 즉시 자동 예약이 아니라 <b>식당이 5분 내 수락</b>해야 확정. 사용자가 03에서 헤드라인이 "수락 대기"임에 놀라지 않게 결제 전에 미리 인지.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="01-menu-detail.html" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">결제 확인</span>
+      <span class="step-pill">2 / 3</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 메뉴+시간 요약 -->
+      <p class="sec-label">예약 내용</p>
+      <div class="summary">
+        <div class="menu-row">
+          <div class="menu-thumb">사진</div>
+          <div class="flex-1">
+            <p class="font-bold text-[14px] leading-tight">닭가슴살 샐러드 세트</p>
+            <p class="text-[12px] text-gray-500 mt-0.5">B카페 · 강남점</p>
+          </div>
+          <a href="01-menu-detail.html" class="text-[12px] text-gray-900 font-semibold underline underline-offset-2">변경</a>
+        </div>
+        <div class="border-t border-gray-200 mt-3 pt-3 space-y-2">
+          <div class="flex items-center justify-between text-[12.5px]">
+            <span class="inline-flex items-center gap-1.5 text-gray-500"><svg class="lc lc-14"><use href="#i-clock"/></svg> 예약 시간</span>
+            <span class="font-semibold text-gray-900">오늘 12:30</span>
+          </div>
+          <div class="flex items-center justify-between text-[12.5px]">
+            <span class="inline-flex items-center gap-1.5 text-gray-500"><svg class="lc lc-14"><use href="#i-map-pin"/></svg> 위치</span>
+            <span class="font-semibold text-gray-900">도보 5분</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 환불 정책 -->
+      <p class="sec-label mt-6">환불 정책</p>
+      <div class="refund-box">
+        <p class="font-bold text-[12.5px] mb-1.5">예약 시간 기준으로 환불액이 달라져요</p>
+        <ul class="space-y-0.5">
+          <li>· 30분 전까지 취소 → <b>전액 환불</b></li>
+          <li>· 30분 ~ 5분 전 → <b>50% 환불</b></li>
+          <li>· 5분 전 이후·노쇼 → <b>환불 없음</b></li>
+        </ul>
+        <p class="mt-2 text-[11.5px] text-gray-900">식당이 예약을 거절하거나 메뉴를 준비할 수 없는 경우 전액 자동 환불.</p>
+      </div>
+
+      <!-- 결제수단 -->
+      <p class="sec-label mt-6">결제수단</p>
+
+      <div class="pay-row sel">
+        <span class="pay-logo lg-toss">toss</span>
+        <div class="pay-name">토스페이</div>
+        <span class="dot on" aria-checked="true" role="radio"></span>
+      </div>
+      <div class="pay-row">
+        <span class="pay-logo lg-kakao">pay</span>
+        <div class="pay-name">카카오페이</div>
+        <span class="dot" aria-checked="false" role="radio"></span>
+      </div>
+      <div class="pay-row">
+        <span class="pay-logo lg-naver">N pay</span>
+        <div class="pay-name">네이버페이</div>
+        <span class="dot" aria-checked="false" role="radio"></span>
+      </div>
+      <div class="pay-row">
+        <span class="pay-logo lg-samsung">Pay</span>
+        <div class="pay-name">삼성페이</div>
+        <span class="dot" aria-checked="false" role="radio"></span>
+      </div>
+      <div class="add-card">
+        <span class="w-8 h-8 rounded-lg border border-gray-300 flex items-center justify-center text-gray-500"><svg class="lc lc-16"><use href="#i-credit-card"/></svg></span>
+        <div class="flex-1">새 카드 직접 등록</div>
+        <svg class="lc lc-16 text-gray-300"><use href="#i-chevron-right"/></svg>
+      </div>
+
+      <!-- 약관 -->
+      <p class="sec-label mt-6">약관 동의</p>
+      <div class="card">
+        <div class="tos-row">
+          <span class="check on"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+          <span class="flex-1">결제·환불 약관 <span class="tos-req">필수</span></span>
+          <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+        </div>
+        <div class="tos-row border-t border-gray-100">
+          <span class="check on"><svg class="lc lc-12"><use href="#i-check"/></svg></span>
+          <span class="flex-1">식당에 예약 정보 제공 <span class="tos-req">필수</span></span>
+          <svg class="lc lc-14 text-gray-300"><use href="#i-chevron-right"/></svg>
+        </div>
+        <div class="tos-row border-t border-gray-100">
+          <span class="check"></span>
+          <span class="flex-1">이 식당의 다음 추천 받기 <span class="text-[10.5px] text-gray-400 font-semibold">선택</span></span>
+        </div>
+      </div>
+
+      <!-- 식당 수락 안내 (v0.2 신규) -->
+      <p class="sec-label mt-6">식당 수락 안내</p>
+      <div class="card" style="border:1px solid #1f1f1f">
+        <p class="text-[12.5px] text-gray-900 font-bold leading-snug">결제 후 식당이 5분 내 수락하면 예약이 확정돼요</p>
+        <ul class="text-[12px] text-gray-700 leading-relaxed mt-2 space-y-0.5">
+          <li>· <b>수락</b> → 예약 확정 + 5분 전 알림</li>
+          <li>· <b>거절·미응답</b> → 전액 자동 환불 (라이언이 대안 메뉴 제안)</li>
+        </ul>
+        <p class="text-[11px] text-gray-500 mt-2 leading-relaxed">식당 수락은 보통 1~2분 내 완료. 결제 직후 라이언이 진행 상황을 알려드려요.</p>
+      </div>
+
+      <!-- 합계 -->
+      <div class="mt-5 summary">
+        <div class="flex items-baseline justify-between">
+          <span class="text-[12.5px] text-gray-500">메뉴 1개</span>
+          <span class="text-[13px] font-semibold">₩8,500</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-1.5">
+          <span class="text-[12.5px] text-gray-500">예약 수수료</span>
+          <span class="text-[13px] font-semibold text-gray-900">무료</span>
+        </div>
+        <div class="border-t border-gray-200 mt-3 pt-3 flex items-baseline justify-between">
+          <span class="text-[13px] text-gray-500">지금 결제 금액</span>
+          <span class="text-[22px] font-bold">₩8,500</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 하단 CTA -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="03-success.html" class="cta">
+        <svg class="lc lc-16"><use href="#i-lock"/></svg>
+        ₩8,500 결제하기
+      </a>
+      <p class="text-[11px] text-center text-gray-400 mt-2">결제는 토스페이로 안전하게 처리됩니다</p>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — PG 진행 중 오버레이 ============ -->
+  <div class="phone" style="position:relative">
+    <!-- 베이스 화면(02 동일, dimmed) -->
+    <div style="position:absolute;inset:0;filter:blur(1.5px) saturate(0.4);opacity:0.35;pointer-events:none">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+        <span class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></span>
+        <span class="font-bold text-[15px]">결제 확인</span>
+        <span class="step-pill">2 / 3</span>
+      </div>
+      <div class="px-5 py-5">
+        <p class="sec-label">예약 내용</p>
+        <div class="summary">
+          <div class="menu-row">
+            <div class="menu-thumb">사진</div>
+            <div class="flex-1">
+              <p class="font-bold text-[14px]">닭가슴살 샐러드 세트</p>
+              <p class="text-[12px] text-gray-500 mt-0.5">B카페 · 오늘 12:30</p>
+            </div>
+          </div>
+        </div>
+        <p class="sec-label mt-6">결제수단</p>
+        <div class="pay-row sel">
+          <span class="pay-logo lg-toss">toss</span>
+          <div class="pay-name">토스페이</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 진행 중 오버레이 -->
+    <div style="position:absolute;inset:0;background:rgba(17,24,39,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 36px;z-index:10">
+      <div style="width:280px;background:#fff;border-radius:18px;padding:24px;text-align:center;box-shadow:0 16px 40px rgba(0,0,0,.2)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+          <span class="pay-logo" style="width:48px;height:48px;font-size:13px;border-radius:12px">간편결제</span>
+          <div style="display:flex;gap:6px">
+            <span style="width:8px;height:8px;border-radius:999px;background:#1f1f1f;animation:b 1.2s -0.32s infinite ease-in-out"></span>
+            <span style="width:8px;height:8px;border-radius:999px;background:#1f1f1f;animation:b 1.2s -0.16s infinite ease-in-out"></span>
+            <span style="width:8px;height:8px;border-radius:999px;background:#1f1f1f;animation:b 1.2s 0s infinite ease-in-out"></span>
+          </div>
+        </div>
+        <style>@keyframes b{0%,80%,100%{opacity:.3;transform:scale(.85)}40%{opacity:1;transform:scale(1)}}</style>
+
+        <p style="font-size:14.5px;font-weight:700;color:#111827;margin-top:18px">결제 진행 중</p>
+        <p style="font-size:12px;color:#6b7280;margin-top:6px;line-height:1.55">결제가 끝나면 자동으로<br>돌아옵니다. 잠시만요.</p>
+
+        <button style="margin-top:18px;background:#fff;border:1px solid #e5e7eb;color:#6b7280;border-radius:11px;padding:10px 16px;font-size:12.5px;font-weight:600;width:100%">취소하고 돌아가기</button>
+      </div>
+
+      <p style="margin-top:14px;font-size:11px;color:#e5e7eb;text-align:center;line-height:1.55">결제는 선택한 간편결제사가 처리합니다.<br>카드 정보는 우리 앱에 저장되지 않아요.</p>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 헤더 · 2/3 단계</h3>
+    <div class="row"><span class="num">1</span><div>← / "결제 확인" / <b>2/3</b>. ← 탭 = 01 메뉴 상세로 복귀(시간 슬롯 선택 유지). 사용자가 결제 직전에 메뉴를 다시 검토할 수 있는 명확한 경로.</div></div>
+
+    <h3>② 메뉴+시간 요약 — 변경 가능 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>01에서 선택한 <b>메뉴·식당·시간·거리</b>를 readonly로 표시. "변경" 링크 = 01 복귀. 결제 직전 재확인 — <b>"내가 뭘 결제하는지" 한 박스에 다 보임</b>. 시간이 화면에 박혀 있어야 환불 정책 박스가 직관적으로 읽힘(③ 박스와 호응).</div></div>
+
+    <h3>③ 환불 정책 — 시간 기반 3단계 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">3</span><div>예약 시간 기준 <b>30분 전 / 5분 전 / 노쇼</b> 3단계. 위 ②에 예약 시간이 박혀 있어 "내 케이스가 어디 해당하는지" 즉시 계산 가능. <b>마지막 줄 = 식당 측 거절 시 전액 환불</b>(사용자 보호 신호). 빨강 박스 — 시멘틱 색 = 위험·주의.
+    <br><br><b>미결</b>: 30분/5분 cutoff는 식당과 협의 후 확정. 일부 메뉴(조리 시작 후 환불 불가)는 별 정책 필요할 수 있음. v0.2 라운드.</div></div>
+
+    <h3>④ 결제수단 — 구독 v0.2 02와 동일 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>토스·카카오·네이버·삼성 + 카드 fallback. <b>구독 도메인과 동일 SDK·동일 결제수단 row</b> 사용 — 사용자가 두 결제 도메인을 같은 결제 표면으로 인지(학습 비용 ↓). 토스페이 default.</div></div>
+
+    <h3>⑤ 약관 동의 — 식당 정보제공 추가</h3>
+    <div class="row"><span class="num crit">5</span><div>필수 2 + 선택 1.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li><b>결제·환불 약관</b>(필수) — ③ 환불 박스 본문 포함</li>
+      <li><b>식당에 예약 정보 제공</b>(필수) — 구독에 없는 단건 전용. 이름·메뉴·시간·인원 식당에 전달. <b>전화번호는 기본 미전달</b>(노쇼 위험 시 식당 요청으로만)</li>
+      <li>이 식당의 다음 추천 받기(선택) — 사용자의 식당 선호 데이터로 사용</li>
+    </ul>
+    "전체 동의" 없음 — 다크패턴 회피, 구독 v0.2와 같은 정책.</div></div>
+
+    <h3>⑥ 합계 — 단건 가격</h3>
+    <div class="row"><span class="num">6</span><div>메뉴 + 예약 수수료(무료) + 지금 결제 금액. <b>01에서 보여준 합계와 정확히 일치</b>. 예약 수수료를 줄로 박는 이유 = 사용자가 "예약 = 부가 비용 없음"을 한 번 더 확인.</div></div>
+
+    <h3>⑦ CTA → PG 외부 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">7</span><div>"₩8,500 결제하기" — 금액을 CTA에 박음(사용자가 무엇을 결제하는지 마지막 확인). 필수 약관 미동의 시 disabled. 탭 = 선택 PG SDK 외부 진입.</div></div>
+
+    <h3>⑧ PG 진행 중 오버레이 (phone 2) <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">8</span><div>구독 v0.2 02-checkout의 오버레이 패턴 그대로 재사용 — scrim + 중앙 카드(토스 로고 + 펄스 dots + "취소하고 돌아가기" + 안전 안내).
+    <br><br><b>해결 상태별 동작</b>:<br>
+    · PG 성공 콜백 → <b>03 예약 확정</b>으로 이동<br>
+    · PG 실패 콜백 → 오버레이 해제 + 02에서 토스트 "결제 실패: [사유]" + 사용자 재시도. <b>예약 슬롯은 해제 X</b>(15분 임시 홀드)<br>
+    · webview 백 키 → 02 그대로 복귀<br>
+    · 30초 timeout → "확인 중..." 안내 추가 + 60초 후 강제 해제
+    <br><br><b>미결</b>: 단건 결제 실패 화면(v0.2 06 패턴 단건 변형) 필요 — 카드 잔액 부족·예약 슬롯 마감 같은 단건 고유 사유 분기. v0.2 라운드.</div></div>
+
+    <h3>⑨ 식당 수락 안내 박스 <span class="crit-badge">v0.2 신규</span></h3>
+    <div class="row"><span class="num crit">9</span><div>v0.1은 "결제 = 즉시 예약 확정"을 단언했음(약점 ②). 현실은 식당이 점심 피크에 5~10분 내 <b>수락 또는 거절</b>. v0.2는 결제 전 단계에서 이 상태 전이를 미리 안내.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>"결제 후 식당이 5분 내 수락" — 즉시 확정 환상 제거</li>
+      <li>수락/거절·미응답 2 케이스 동작 명시 + <b>거절 시 자동 환불</b> + <b>라이언이 대안 제안</b></li>
+      <li>"보통 1~2분 내" 현실 안내 — 불안 완화</li>
+    </ul>
+    이 박스 덕분에 03이 phone 3개(수락 대기 / 확정 / 거절·환불)로 분기되어도 사용자가 놀라지 않음. 02 ↔ 03 일관성 유지.
+    <br><br><b>미결</b>: 식당 측 수락 UI(식당 사장 앱) — 운영 도메인이라 v0.3 범위 외.</div></div>
+
+    <h3>접근성 · 시스템</h3>
+    <div class="row"><span class="num">A</span><div>결제수단 = <code>role="radiogroup"</code>. 필수 약관 미동의 시 CTA disabled + 라벨 시각 신호(보더·굵기). 오버레이 = <code>role="dialog" aria-modal="true"</code> + <code>aria-live="polite"</code>로 "결제 진행 중" 발음. 환불 정책 박스 = <code>role="region" aria-label="환불 정책"</code>. 식당 수락 안내 박스 = <code>role="region" aria-label="식당 수락 절차"</code>.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

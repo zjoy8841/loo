@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 메뉴 상세 · 단건 v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{outline:2px solid #1f1f1f;outline-offset:1.5px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.summary{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.ryan-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:13px;display:flex;gap:11px;align-items:flex-start}
+.ryan-ic{flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#e5e7eb;border:1px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#4b5563;letter-spacing:.02em}
+.menu-hero{background:#f3f4f6;border:1px dashed #d1d5db;border-radius:14px;width:100%;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:11px;font-weight:600;letter-spacing:.05em}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#4b5563;margin-right:4px}
+.tag-good{background:#fff;color:#1f1f1f;border:1px solid #1f1f1f}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px;color:#374151}
+.kv-row + .kv-row{border-top:1px solid #f3f4f6}
+.kv-key{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:12.5px}
+.kv-val{font-weight:600;color:#111827}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.time-pill{padding:11px 0;border:1px solid #e5e7eb;border-radius:11px;font-size:13px;font-weight:600;color:#374151;text-align:center;background:#fff;cursor:pointer}
+.time-pill.sel{border:2px solid #1f1f1f;color:#111827;background:#fff;padding:10px 0;font-weight:800}
+.time-pill.soon{color:#9ca3af;border-color:#f3f4f6;background:#fafafa}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:15px 0;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.crit-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#1f1f1f;color:#fff;margin-left:5px}
+.loc-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#f3f4f6;border-bottom:1px solid #e5e7eb;font-size:12px;color:#374151}
+.loc-bar .loc-key{color:#6b7280;font-weight:600}
+.loc-bar .loc-val{font-weight:700;color:#111827;flex:1}
+.loc-bar .loc-chg{font-size:11px;font-weight:700;color:#111827;text-decoration:underline;text-underline-offset:2px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 22l3-8 2 3 3-4 4 7"/><path d="M9 14l-3-3 3-3"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> 단건 v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">01 메뉴 상세 · 단건 v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1">라이언이 추천한 식당·메뉴를 사용자가 검토하고 시간 슬롯을 골라 결제 흐름으로 진입하는 화면. <b>진입 == 라이언 추천 컨텍스트 보존</b>이 핵심. <b>v0.2 보강(약점 ④)</b>: 헤더 아래 <b>위치 컨텍스트 바</b> 추가 — 사용자의 현재 출발지(직장·집·현 위치)를 명시하고 변경 가능. 외근·재택·주말 시 "회사 기준" 단언이 깨지는 빈 곳을 메움.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone">
+    <!-- 헤더 -->
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">메뉴</span>
+      <span class="step-pill">1 / 3</span>
+    </div>
+
+    <!-- 위치 컨텍스트 바 (v0.2 신규) -->
+    <div class="loc-bar" role="button" tabindex="0" aria-label="출발지 변경">
+      <svg class="lc lc-14" aria-hidden="true"><use href="#i-map-pin"/></svg>
+      <span class="loc-key">출발지</span>
+      <span class="loc-val">회사 · 강남구 테헤란로</span>
+      <span class="loc-chg">변경</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 라이언 추천 컨텍스트 -->
+      <div class="ryan-box">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">라이언이 추천한 메뉴예요</p>
+          <p class="mt-1 text-gray-700">어제 저녁 떡볶이라 오늘은 가벼운 단백질로 잡았어요. <b>B카페</b>는 현 출발지에서 도보 5분, 점심 시간 평일 회전이 빠른 편이라 12:30 슬롯이 안정적이에요.</p>
+        </div>
+      </div>
+
+      <!-- 메뉴 비주얼 -->
+      <div class="menu-hero mt-4">메뉴 사진 (식당 제공)</div>
+
+      <!-- 메뉴 정보 -->
+      <div class="mt-4 flex items-start justify-between gap-3">
+        <div class="flex-1">
+          <h2 class="text-[18px] font-bold leading-tight">닭가슴살 샐러드 세트</h2>
+          <p class="text-[13px] text-gray-500 mt-1">B카페 · 강남점</p>
+          <div class="mt-2">
+            <span class="tag tag-good">단백질 32g</span>
+            <span class="tag">샐러드</span>
+            <span class="tag">540kcal</span>
+          </div>
+        </div>
+        <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400" aria-label="찜">
+          <svg class="lc lc-18"><use href="#i-heart"/></svg>
+        </button>
+      </div>
+
+      <p class="text-[20px] font-bold mt-3">₩8,500</p>
+
+      <!-- 메뉴 설명 -->
+      <p class="sec-label mt-6">메뉴 구성</p>
+      <div class="card text-[13px] text-gray-700 leading-relaxed">
+        구운 닭가슴살 120g · 로메인·루꼴라·방울토마토 · 곡물 토핑 · 발사믹 드레싱(따로 제공). 견과류 알레르기는 미리 알려주세요.
+      </div>
+
+      <!-- 식당 정보 -->
+      <p class="sec-label mt-6">식당 정보</p>
+      <div class="card">
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-map-pin"/></svg> 위치</span>
+          <span class="kv-val">강남구 테헤란로 ○○</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-walk"/></svg> 도보</span>
+          <span class="kv-val">약 5분 <span class="text-[11px] text-gray-500 font-normal">(출발지 기준)</span></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 영업</span>
+          <span class="kv-val">평일 11:00 – 21:00</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-clock"/></svg> 현재 혼잡도</span>
+          <span class="kv-val">여유</span>
+        </div>
+      </div>
+
+      <!-- 시간 슬롯 -->
+      <p class="sec-label mt-6">예약 시간 · 오늘</p>
+      <div class="time-grid">
+        <button class="time-pill soon" disabled>11:30<br><span class="text-[10px] font-normal">마감</span></button>
+        <button class="time-pill">12:00</button>
+        <button class="time-pill sel">12:30</button>
+        <button class="time-pill">13:00</button>
+      </div>
+      <p class="text-[11.5px] text-gray-500 mt-2 leading-relaxed">선택한 시간에 맞춰 식당이 자리·메뉴를 준비해둡니다. 슬롯은 15분 단위.</p>
+
+      <!-- 합계 미리보기 -->
+      <div class="mt-6 summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key">메뉴 1개</span>
+          <span class="kv-val">₩8,500</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">예약 수수료</span>
+          <span class="kv-val">무료</span>
+        </div>
+        <div class="kv-row" style="padding-top:11px">
+          <span class="text-[13px] text-gray-500">결제 예정</span>
+          <span class="text-[20px] font-bold">₩8,500</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 하단 CTA -->
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="02-checkout.html" class="cta">
+        예약하고 결제하기
+        <svg class="lc lc-16"><use href="#i-arrow-right"/></svg>
+      </a>
+      <p class="text-[11px] text-center text-gray-400 mt-2">다음 단계에서 결제수단을 선택할 수 있어요</p>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>① 헤더 · 진행 표시</h3>
+    <div class="row"><span class="num">1</span><div>← / "메뉴" / <b>1/3</b> step pill. 사용자에게 "총 3단계 결제 흐름" 인지. ← 탭 = 진입 화면(채팅·홈·알림 중 하나)으로 복귀. <b>라이언 컨텍스트 보존</b> — 복귀 시 라이언 카드가 dismissed 상태가 아닌 그대로 살아있어야 함.</div></div>
+
+    <h3>② 라이언 추천 컨텍스트 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>화면 최상단에 라이언 마스코트 + 추천 사유. <b>"왜 이 메뉴인가"</b> 한 문단 — 식습관 컨텍스트(어제 떡볶이) + 식당 컨텍스트(도보 5분·회전 빠름·12:30 안정) 결합. 이게 단건 결제 진입의 정체성. 추상적 "추천 메뉴" 아니라 <b>"내 컨텍스트에 맞춘 이유"</b>. [[project_alarm_ai_assembly]] AI 작업 조립의 가시화와 같은 결.</div></div>
+
+    <h3>③ 메뉴 비주얼</h3>
+    <div class="row"><span class="num">3</span><div>식당 제공 사진 자리(16:10 비율). 사진 없으면 메뉴명 큰 그래픽 fallback. 사진은 식당 측 입력 — 우리 앱 책임 X. <b>탭 X</b> — 줌·갤러리 X(스크롤 우선).</div></div>
+
+    <h3>④ 메뉴 정보 · 영양 태그</h3>
+    <div class="row"><span class="num">4</span><div>메뉴명 + 식당·지점 + 영양 태그(단백질·칼로리) + 카테고리. <b>단백질 태그는 라이언 추천 컨텍스트와 호응</b> — 사용자가 "왜 이걸 추천했는지" 영양 측면에서 자기 검증. ♡ 버튼은 "다음에 또" 저장 — 결제 영향 X.</div></div>
+
+    <h3>⑤ 식당 정보 — 의사결정 4종</h3>
+    <div class="row"><span class="num crit">5</span><div>위치·도보·영업·<b>현재 혼잡도</b> 4종. 단건 결제는 "지금 갈 만한가" 결정이 핵심 — 도보 거리와 혼잡도가 conversion 결정 요인. 혼잡도는 식당 측 실시간 신호(여유/보통/혼잡) — 식당 측 미입력 시 표시 안 함.</div></div>
+
+    <h3>⑥ 시간 슬롯 — 15분 단위 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>오늘 점심 슬롯 4개(11:30~13:00 15분 단위). <b>마감 슬롯은 disabled + "마감" 라벨</b>(사용자 좌절 방지). 기본 선택 = 라이언이 추천한 슬롯(12:30) — 캡션 ②와 일관. 사용자 변경 가능. 슬롯 변경 시 합계 영향 X (가격은 메뉴 가격).
+    <br><br><b>미결</b>: 내일·모레 슬롯 노출 방식(탭? 캘린더?), 슬롯별 잔여 자리 수 노출 여부. v0.2 라운드.</div></div>
+
+    <h3>⑦ 합계 미리보기 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">7</span><div>메뉴 가격 + 예약 수수료(무료) + 결제 예정. <b>예약 수수료 "무료"를 명시</b> — 사용자가 "예약 = 추가 비용"을 의심하지 않게. 02 결제 확인의 합계와 정확히 일치해야 함 — 어긋나면 신뢰 즉시 붕괴.
+    <br><br><b>미결</b>: 보증금 모델로 갈 경우 여기 표시 변경.</div></div>
+
+    <h3>⑧ CTA → 02 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">8</span><div>"예약하고 결제하기" — 시간 슬롯 미선택 시 disabled. 탭 = 02 결제 확인. 작은 안내 "다음 단계에서 결제수단" — 사용자가 "지금 결제되나" 불안 해소(아직 한 단계 남음).</div></div>
+
+    <h3>⑨ 위치 컨텍스트 바 <span class="crit-badge">v0.2 신규</span></h3>
+    <div class="row"><span class="num crit">9</span><div>v0.1은 "회사에서 도보 5분"을 라이언 박스에 단언했음 — <b>외근·재택·주말</b> 시 거짓이 됨(약점 ④). v0.2는 헤더 아래에 <b>출발지 컨텍스트 바</b>를 박아 명시화.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>기본값 = 사용자가 마이페이지에 등록한 <b>직장 주소</b> (점심 도메인 default)</li>
+      <li>탭 = 출발지 시트 — <b>직장 / 집 / 현 위치(GPS) / 직접 입력</b> 4 옵션</li>
+      <li>변경 시 라이언 박스 본문·도보 거리·합계 위 안내가 모두 갱신 (라이언이 재계산)</li>
+      <li>GPS 권한 거부 시 = 직장 주소 fallback + 한 줄 안내 "위치 권한이 있으면 더 정확해요"</li>
+    </ul>
+    라이언 박스 본문도 "<b>현 출발지에서</b> 도보 5분"으로 출발지를 직접 지칭 — 라이언 추천의 신뢰성을 출발지 컨텍스트와 묶음. 도보 거리 줄에도 "(출발지 기준)" 작은 글로 표기.
+    <br><br><b>미결</b>: 출발지 시트 화면 자체는 사용자 설정 hub 도메인(약점 ⑦)과 묶어 v0.3에서 작성. v0.2는 진입점만.</div></div>
+
+    <h3>접근성 · 시스템</h3>
+    <div class="row"><span class="num">A</span><div>시간 슬롯 = <code>role="radiogroup"</code> + 각 슬롯 <code>role="radio" aria-checked</code>. 마감 슬롯 <code>aria-disabled="true"</code>. 라이언 컨텍스트 박스는 <code>role="region" aria-label="추천 사유"</code>. 영양 태그는 <code>role="list"</code>. 사진은 식당 제공이라 alt 비어 있을 수 있음 — 그 때는 메뉴명 alt fallback. <b>위치 바</b> = <code>role="button" aria-label="출발지 변경"</code> + Enter/Space 키 활성화.</div></div>
+  </div>
+
+</div>
+</body>
+</html>

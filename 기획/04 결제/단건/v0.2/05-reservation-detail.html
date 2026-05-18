@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 예약 상세 · 단건 v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{outline:2px solid #1f1f1f;outline-offset:1.5px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.summary{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.state-hero{background:#1f1f1f;color:#fff;border-radius:16px;padding:18px;display:flex;gap:12px;align-items:center}
+.state-ic{flex-shrink:0;width:42px;height:42px;border-radius:999px;background:#fff;color:#1f1f1f;display:flex;align-items:center;justify-content:center}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px}
+.kv-row + .kv-row{border-top:1px solid #f3f4f6}
+.kv-key{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:12.5px}
+.kv-val{font-weight:600;color:#111827}
+.map-stub{background:#f3f4f6;border:1px dashed #d1d5db;border-radius:14px;width:100%;aspect-ratio:5/3;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#6b7280;font-size:11px;font-weight:600;letter-spacing:.05em;gap:6px}
+.map-stub .map-route{font-size:10px;color:#9ca3af}
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.action-btn{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:13px 10px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:#111827;text-align:left}
+.action-btn .ab-ic{flex-shrink:0;width:28px;height:28px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#374151}
+.action-btn.danger{border:1px solid #1f1f1f}
+.action-btn.danger .ab-ic{background:#1f1f1f;color:#fff}
+.refund-box{background:#f9fafb;border:1px solid #1f1f1f;border-radius:12px;padding:12px;font-size:12px;color:#111827;line-height:1.55}
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:#e5e7eb;border-radius:1px}
+.tl-row{position:relative;padding-bottom:13px;font-size:12.5px;color:#374151}
+.tl-row:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-22px;top:3px;width:14px;height:14px;border-radius:999px;background:#fff;border:2px solid #1f1f1f}
+.tl-dot.done{background:#1f1f1f}
+.tl-dot.pending{border-style:dashed;border-color:#9ca3af}
+.tl-time{font-size:11px;color:#6b7280;font-weight:600}
+.tl-text{font-weight:600;color:#111827;margin-top:1px}
+.tl-sub{font-size:11.5px;color:#6b7280;margin-top:1px}
+.ryan-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:13px;display:flex;gap:11px;align-items:flex-start}
+.ryan-ic{flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#e5e7eb;border:1px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#4b5563;letter-spacing:.02em}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:14px 0;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#1f1f1f;color:#fff}
+.crit-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#1f1f1f;color:#fff;margin-left:5px}
+.kv-stat{font-size:11px;font-weight:700;color:#111827;background:#f3f4f6;padding:3px 8px;border-radius:999px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24" stroke-width="3"><polyline points="20 6 9 17 4 12"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 3v18l3-2 3 2 3-2 3 2 3-2 1 2V3z"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/></symbol>
+<symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M7 22l3-8 2 3 3-4 4 7"/><path d="M9 14l-3-3 3-3"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9z"/><path d="M10 21a2 2 0 0 0 4 0"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> 단건 v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">05 예약 상세 · 단건 v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1"><b>v0.2 신규(약점 ③)</b>. 단건 결제 도메인의 <b>사용자 관리 진입점</b> — 구독 04 hub와 같은 위상. 활성·과거 예약을 사용자가 들여다보고 행동(길찾기·식당 연락·일정 변경·취소) 가능. 도착 경로 = 03 phone 1·2의 "예약 상세로" CTA / 5분 전 알림 탭 / 알림 센터 / 마이페이지 "내 예약". 화면은 <b>예약 확정(active)</b> 상태를 중심으로 잡고, 다른 상태(수락 대기·완료·거절·취소)는 hero·액션·타임라인 분기로 표현 — caption에 매핑.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE — 예약 확정 (활성 상태) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="#" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="font-bold text-[15px]">예약 상세</span>
+      <span class="step-pill"><svg class="lc lc-12"><use href="#i-check"/></svg> 확정</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+
+      <!-- 상태 hero -->
+      <div class="state-hero">
+        <div class="state-ic" aria-hidden="true">
+          <svg class="lc" style="width:22px;height:22px"><use href="#i-check"/></svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-[11px] font-bold tracking-wider opacity-70">예약 확정</p>
+          <p class="text-[16px] font-bold mt-0.5 leading-tight">오늘 12:30 · B카페</p>
+          <p class="text-[11.5px] opacity-80 mt-1">12:25에 5분 전 알림을 보내드려요</p>
+        </div>
+      </div>
+
+      <!-- 영수증 -->
+      <p class="sec-label mt-6">예약 정보</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-receipt"/></svg> 메뉴</span>
+          <span class="kv-val">닭가슴살 샐러드 세트</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 식당</span>
+          <span class="kv-val">B카페 · 강남점 <span class="kv-stat">여유</span></span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-clock"/></svg> 예약 시간</span>
+          <span class="kv-val">오늘 12:30</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-walk"/></svg> 도보</span>
+          <span class="kv-val">약 5분</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">예약 번호</span>
+          <span class="kv-val font-mono text-[12.5px]">LO-26051813-742</span>
+        </div>
+        <div class="kv-row" style="padding-top:11px">
+          <span class="text-[13px] text-gray-500">결제 금액</span>
+          <span class="text-[16px] font-bold">₩8,500</span>
+        </div>
+        <div class="kv-row" style="padding-top:4px;border-top:none">
+          <span class="text-[11.5px] text-gray-400">결제수단</span>
+          <span class="text-[11.5px] text-gray-600 font-semibold">토스페이</span>
+        </div>
+      </div>
+
+      <!-- 지도 stub -->
+      <p class="sec-label mt-6">가는 길</p>
+      <div class="map-stub">
+        <svg class="lc lc-20" aria-hidden="true"><use href="#i-map-pin"/></svg>
+        <span>지도 영역</span>
+        <span class="map-route">출발지 → B카페 · 도보 약 5분</span>
+      </div>
+
+      <!-- 액션 -->
+      <p class="sec-label mt-6">예약 관리</p>
+      <div class="action-grid">
+        <button class="action-btn">
+          <span class="ab-ic"><svg class="lc lc-14"><use href="#i-map-pin"/></svg></span>
+          길찾기
+        </button>
+        <button class="action-btn">
+          <span class="ab-ic"><svg class="lc lc-14"><use href="#i-phone"/></svg></span>
+          식당 연락
+        </button>
+        <button class="action-btn">
+          <span class="ab-ic"><svg class="lc lc-14"><use href="#i-calendar"/></svg></span>
+          일정 변경
+        </button>
+        <button class="action-btn danger">
+          <span class="ab-ic"><svg class="lc lc-14"><use href="#i-x"/></svg></span>
+          예약 취소
+        </button>
+      </div>
+
+      <!-- 환불 정책 -->
+      <p class="sec-label mt-6">취소 시 환불</p>
+      <div class="refund-box">
+        <p class="font-bold mb-1.5">현재 시각 기준 환불액</p>
+        <ul class="space-y-0.5 text-gray-700">
+          <li>· <b>지금 ~ 12:00</b> (30분 전까지) → <b>₩8,500 전액</b></li>
+          <li>· <b>12:00 ~ 12:25</b> (30~5분 전) → <b>₩4,250 (50%)</b></li>
+          <li>· <b>12:25 이후·노쇼</b> → <b>₩0</b></li>
+        </ul>
+      </div>
+
+      <!-- 라이언 안내 -->
+      <div class="ryan-box mt-5">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">12:25에 알림을 보낼 거예요</p>
+          <p class="mt-1 text-gray-700">길찾기를 띄워드릴게요. 늦으실 것 같으면 "식당 연락"으로 미리 알려드릴 수 있어요.</p>
+        </div>
+      </div>
+
+      <!-- 활동 타임라인 -->
+      <p class="sec-label mt-6">활동</p>
+      <div class="timeline">
+        <div class="tl-row">
+          <span class="tl-dot done" aria-hidden="true"></span>
+          <p class="tl-time">11:42</p>
+          <p class="tl-text">결제 완료 · 토스페이</p>
+          <p class="tl-sub">₩8,500</p>
+        </div>
+        <div class="tl-row">
+          <span class="tl-dot done" aria-hidden="true"></span>
+          <p class="tl-time">11:43</p>
+          <p class="tl-text">B카페 수락</p>
+          <p class="tl-sub">예약 번호 LO-26051813-742 부여</p>
+        </div>
+        <div class="tl-row">
+          <span class="tl-dot pending" aria-hidden="true"></span>
+          <p class="tl-time">12:25 예정</p>
+          <p class="tl-text">5분 전 알림</p>
+          <p class="tl-sub">길찾기 자동 노출</p>
+        </div>
+        <div class="tl-row">
+          <span class="tl-dot pending" aria-hidden="true"></span>
+          <p class="tl-time">12:30 예정</p>
+          <p class="tl-text">매장 도착·식사</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white">
+      <a href="#" class="cta">
+        <svg class="lc lc-16"><use href="#i-map-pin"/></svg>
+        길찾기 시작
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>위상 — 단건 결제의 hub <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">★</span><div>구독 04 hub와 같은 위상의 <b>사용자 관리 진입점</b>. 결제 후 사용자가 예약을 들여다보고 행동하는 모든 경로의 도착지.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>03 phone 1 "예약 상세로" → 여기 (수락 대기 상태)</li>
+      <li>03 phone 2 "예약 상세에서 취소" → 여기 (확정 상태)</li>
+      <li>5분 전 푸시 알림 탭 → 여기 (확정 + 5분 전)</li>
+      <li>마이페이지 "내 예약" → 여기 (현재 활성 예약)</li>
+      <li>알림 센터 [[project_alarm_user_process]] = 최근 결과 도착지</li>
+    </ul></div></div>
+
+    <h3>① 헤더 — 뒤로 + 상태 pill</h3>
+    <div class="row"><span class="num">1</span><div>← 뒤로(이전 화면 복귀). 우측 pill은 현재 상태(확정/대기/완료/거절/취소). 확정 = 검정 채움, 대기 = 흰 보더, 거절·취소 = 점선 보더 — 모두 그레이스케일 안에서 강도 분리.</div></div>
+
+    <h3>② 상태 hero — 검정 배너 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>검정 배경 배너로 핵심 상태 + 핵심 정보 + 다음 약속 3줄. <b>"오늘 12:30 · B카페"</b>가 사용자에게 가장 중요한 정보 — hero에서 먼저 인지. 다음 약속(5분 전 알림)을 명시해 사용자가 다음에 무엇을 기대해야 하는지 알게 함.
+    <br><br><b>상태별 변형</b>:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li><b>수락 대기</b> — 시계 아이콘 + "B카페가 수락하면 알려드릴게요" + "보통 1~2분"</li>
+      <li><b>확정</b>(현재 화면) — ✓ + "오늘 12:30 · B카페" + "5분 전 알림 약속"</li>
+      <li><b>완료</b> — ✓ + "12:30 · B카페에서 식사 완료" + "또 가기 / 다른 메뉴" 안내</li>
+      <li><b>거절</b> — X + "B카페가 예약을 잡지 못했어요" + 환불 정보</li>
+      <li><b>취소</b> — X + "사용자가 취소" + 환불 정보</li>
+    </ul></div></div>
+
+    <h3>③ 예약 정보 — 8 필드 영수증</h3>
+    <div class="row"><span class="num">3</span><div>03 phone 2 영수증 + <b>식당 혼잡도 pill</b>(여유/보통/혼잡). 사용자가 가기 전에 한 번 더 확인. 출발지 컨텍스트(약점 ④) 반영 — "도보 5분"이 출발지 기반.</div></div>
+
+    <h3>④ 지도 stub <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>식당 위치 + 도보 경로 미니 지도. <b>in-app vs 외부 지도 앱 분기 미결(약점 ⑫)</b>. v0.2는 stub만 박고 v0.3에서 결정.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>옵션 A — in-app 미니 지도 (Naver Maps API): 일관성 ↑, 비용 ↑</li>
+      <li>옵션 B — 정적 이미지 + "지도 앱에서 열기": 비용 ↓, 외부 의존</li>
+    </ul></div></div>
+
+    <h3>⑤ 예약 관리 — 4 액션 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">5</span><div>2×2 그리드:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li><b>길찾기</b> — 외부 지도 앱 인텐트 (식당 좌표)</li>
+      <li><b>식당 연락</b> — 전화 인텐트 (예약 정보 제공 약관에 따라 식당 전화번호 표시)</li>
+      <li><b>일정 변경</b> — 시간 변경 시트 (같은 식당의 다른 슬롯). <b>30분 전까지만 가능</b>(cutoff)</li>
+      <li><b>예약 취소</b> — 환불 정책에 따라 환불 + 취소. 검정 보더로 위험 신호</li>
+    </ul>
+    <b>상태별 활성/비활성</b>:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>수락 대기 — 취소만 가능 (수락 안 됐으므로 변경 의미 없음)</li>
+      <li>확정 — 4 액션 모두 가능, 단 시간 변경·취소는 cutoff 적용</li>
+      <li>완료 — 길찾기·식당 연락 X / 일정 변경 X / "또 가기"·"리뷰" 등 v0.3 변형</li>
+      <li>거절·취소 — 모두 X (액션 그리드 숨김), "대안 보기" CTA만</li>
+    </ul></div></div>
+
+    <h3>⑥ 환불 정책 — 시간 기반 + 현재 시각 환산 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">6</span><div>02 환불 정책 박스의 cutoff(30분/5분)를 <b>구체 시각</b>으로 환산("지금 ~ 12:00 전액"). 사용자가 "30분 전이 언제더라" 계산 X. 현재 시각이 cutoff에 가까워지면 박스 강조 (예: 12:00 5분 전부터 "곧 부분 환불로 전환" 안내). 박스 자체는 환불 가능한 활성 예약에만 표시(완료·거절·취소 후 미표시).</div></div>
+
+    <h3>⑦ 라이언 — 컨텍스트 안내</h3>
+    <div class="row"><span class="num">7</span><div>현 상태에 맞는 라이언 안내. 확정 상태 = "12:25 알림" 약속. 다른 상태별 분기:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>수락 대기 — "수락 진행 상황" 약속</li>
+      <li>완료 — "오늘 점심 어땠어요? 기록할까요?" — 데이터 쌓기 유도</li>
+      <li>거절·취소 — 대안 제안(02 식당 수락 안내·03 phone 3 톤)</li>
+    </ul></div></div>
+
+    <h3>⑧ 활동 타임라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">8</span><div>예약의 <b>전 생애 주기</b>를 사용자가 한눈에. 결제 → 수락 → 5분 전 알림(예정) → 매장 도착(예정) — 검정 점 = 완료, 점선 점 = 예정. 시각·짧은 텍스트·부가 정보 3줄.
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li>사용자가 "지금 어디까지 진행됐는지" 즉시 인지</li>
+      <li>고객지원 문의 시 사용자가 시각 기반으로 설명 가능</li>
+      <li>거절·취소 시 해당 이벤트 추가, 이후 점 제거</li>
+    </ul></div></div>
+
+    <h3>⑨ CTA — 주 액션 1개</h3>
+    <div class="row"><span class="num">9</span><div>하단 고정 = 현재 상태의 <b>가장 자연스러운 다음 행동 1개</b>. 확정 = "길찾기 시작". 수락 대기 = (없음, 닫기만). 완료 = "또 가기"(같은 메뉴 빠른 결제). 거절·취소 = "대안 메뉴 보기"(01로). 4 액션 그리드와 중복되지만, 하단 fixed CTA는 thumb zone 우선.
+    <br><br><b>미결</b>: "또 가기" 빠른 결제는 [[project_solo]] 시연 시 강력한 conversion. 약점 ⑧ 재방문 진입점과 묶어 v0.3.</div></div>
+
+    <h3>접근성 · 시스템</h3>
+    <div class="row"><span class="num">A</span><div>상태 hero = <code>role="region" aria-label="예약 상태"</code>. 액션 4 = <code>role="group" aria-label="예약 관리"</code> + 각 버튼 명확한 label. 환불 정책 박스 = <code>role="region"</code> + <code>aria-live="polite"</code>(시각 환산이 시간 흐름에 따라 갱신될 때 발음). 타임라인 = <code>role="list"</code> + 각 줄 <code>role="listitem"</code>. 검정 hero 배너는 충분한 명도 대비 (검정 #1f1f1f vs 흰 #fff = WCAG AAA).</div></div>
+  </div>
+
+</div>
+</body>
+</html>

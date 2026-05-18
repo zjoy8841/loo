@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>단건 결제 · v0.1 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-20{width:20px;height:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px;display:block;transition:.15s}
+.card:hover{border-color:#9ca3af}
+.scr-num{width:26px;height:26px;border-radius:8px;background:#1f1f1f;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ph{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280}
+.ph-new{background:#1f1f1f;color:#fff}
+.ph-warn{background:#fff;color:#1f1f1f;border:1px solid #1f1f1f;padding:2px 7px}
+.ph-good{background:#e5e7eb;color:#1f1f1f}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #e5e7eb;padding:10px 12px;font-size:12.5px;text-align:left;vertical-align:top;line-height:1.55}
+th{background:#f9fafb;font-weight:700;color:#374151}
+td b{color:#111827}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+.flow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px}
+.flow-step{background:#fff;border:1px solid #d1d5db;border-radius:9px;padding:7px 11px;font-weight:600;color:#374151}
+.flow-step.s{border-color:#1f1f1f;color:#111827;background:#fff;border-width:1.5px}
+.flow-step.danger{border:1px dashed #6b7280;color:#4b5563;background:#fff}
+.flow-step.ryan{border:1.5px solid #1f1f1f;color:#111827;background:#f9fafb;font-weight:700}
+.flow-step.success{border:1.5px solid #1f1f1f;color:#111827;background:#1f1f1f;color:#fff}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1100px] mx-auto">
+
+  <p class="text-sm text-gray-500">Life OS.ONE · 사용자 앱</p>
+  <a href="../../구독/v0.2/index.html" class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> 구독 결제 v0.2로</a>
+  <h1 class="text-3xl font-bold mt-1">U-?? 단건 결제 · v0.1 초안</h1>
+  <p class="text-gray-600 mt-2 leading-relaxed">라이언이 추천한 <b>특정 식당의 특정 메뉴</b>를 사용자가 결제하는 도메인. 구독 결제(<a href="../../구독/v0.2/index.html" class="text-gray-900 font-semibold underline underline-offset-2">v0.2</a>)와 별 도메인으로 분리. 단건 = 일회성, 메뉴·식당·시간 컨텍스트가 핵심, 환불 정책이 시간 기반. 결제수단·PG SDK·UX 패턴은 구독 도메인과 공유해 사용자 학습 비용 ↓.</p>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="ph">그레이스케일 (와이어프레임)</span>
+    <span class="ph">라인 아이콘</span>
+    <span class="ph">강조는 굵기·보더·outline로</span>
+    <span class="ph ph-new">v0.1 = 핵심 3 화면 + index</span>
+  </div>
+
+  <!-- 도메인 분리 -->
+  <div class="mt-5 bg-white border border-gray-200 rounded-2xl p-5">
+    <p class="font-bold text-[14px] text-gray-900">도메인 분리 — 단건 vs 구독</p>
+    <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">
+      구독 결제(<code>04 결제/구독/v0.2/</code>) = Pro 구독, 자동결제, plan picker, paywall, Trial.<br>
+      단건 결제(<code>04 결제/단건/v0.1/</code>) = 식당 메뉴 1회성 결제, 라이언 추천 컨텍스트, 시간 슬롯, 시간 기반 환불.<br>
+      <b>공유</b>: 결제수단 4종(토스·카카오·네이버·삼성) + 카드 fallback, PG 핸드오프 오버레이 패턴, 약관 동의 UI 토큰.<br>
+      <b>비공유</b>: plan / trial / 다운그레이드 / 환불 정책 / 영수증 구조 / 결제 후 흐름(예약 확정).
+    </p>
+  </div>
+
+  <!-- 전제 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">전제 — v0.1 가정</h2>
+  <table>
+    <tr>
+      <th style="width:200px">항목</th>
+      <th>가정</th>
+    </tr>
+    <tr><td><b>결제 모델</b></td><td><b>선결제 + 예약 확정</b>. 결제 즉시 식당에 예약 정보 전달, 식당 자리·메뉴 준비.</td></tr>
+    <tr><td><b>식당 측 수락</b></td><td>v0.1은 <b>즉시 자동 수락</b> 가정. 비동기 수락(요청 → 수락/거절) 모델은 v0.2 라운드.</td></tr>
+    <tr><td><b>진입점</b></td><td>라이언 추천 모먼트 — 채팅 메시지·홈 카드·알림 도착 셋 중 하나. 어디서 들어와도 01 메뉴 상세는 동일, <b>라이언 추천 사유는 컨텍스트로 보존</b>.</td></tr>
+    <tr><td><b>인원 / 수량</b></td><td>v0.1은 <b>1명 1메뉴 고정</b>. 다인·복수 메뉴는 v0.2 라운드.</td></tr>
+    <tr><td><b>결제수단</b></td><td>구독과 동일 — 간편결제 4종 우선 + 카드 fallback. 토스페이 default.</td></tr>
+    <tr><td><b>PG 위임</b></td><td>카드 raw 입력은 PG 외부. PG 핸드오프 오버레이는 구독 v0.2 02 패턴 그대로 재사용.</td></tr>
+    <tr><td><b>환불 정책</b></td><td><b>시간 기반 3단계</b> (v0.1 잠정): 30분 전까지 전액 / 30분~5분 전 50% / 5분 전·노쇼 0%. 식당 측 거절 시 전액. <b>cutoff 시간은 식당 협의 후 v0.2 확정</b>.</td></tr>
+    <tr><td><b>예약 시간 슬롯</b></td><td>오늘 점심 4 슬롯, 15분 단위(11:30~13:00). 마감 슬롯은 disabled. 내일·모레 노출은 v0.2.</td></tr>
+    <tr><td><b>예약 수수료</b></td><td>v0.1 <b>무료</b>. 가격에 부가 비용 추가 X.</td></tr>
+  </table>
+
+  <!-- 화면 흐름 -->
+  <h2 class="text-lg font-bold mt-9 mb-1">화면 흐름</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 space-y-3">
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">기본 흐름</span>
+      <span class="flow-step ryan">라이언 추천</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">01 메뉴 상세</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 결제 확인</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step s">02 PG 진행 중</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step success">03 예약 확정</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">진입점</span>
+      <span class="flow-step">채팅 메시지</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">홈 카드 (오늘 점심)</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">알림 도착</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step ryan">라이언 추천 (컨텍스트 보존)</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">5분 전</span>
+      <span class="flow-step">12:25 알림</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">길찾기</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step">식당 도착·식사</span>
+    </div>
+    <div class="flow">
+      <span class="text-[11px] text-gray-400 font-semibold pr-2">예외 (v0.2 미결)</span>
+      <span class="flow-step danger">결제 실패</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step danger">식당 거절</span>
+      <span class="text-gray-300">|</span>
+      <span class="flow-step">사용자 취소</span>
+      <svg class="lc lc-14 text-gray-400"><use href="#i-arrow-right"/></svg>
+      <span class="flow-step" style="color:#9ca3af">환불 / 재시도 — v0.2 라운드</span>
+    </div>
+  </div>
+
+  <!-- 화면 목록 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">화면 목록 (3개)</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <a href="01-menu-detail.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">01</span><span class="ph">진입</span></div>
+      <p class="font-bold text-[15px]">메뉴 상세</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">라이언 추천 사유 + 메뉴 비주얼 + 영양 태그 + 식당 정보(위치·도보·혼잡) + 시간 슬롯 4개 + 합계 미리보기.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="02-checkout.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">02</span><span class="ph">핵심</span></div>
+      <p class="font-bold text-[15px]">결제 확인 + PG 진행 중</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">예약 내용(메뉴+시간) + 환불 정책 3단계 + 간편결제 + 약관(환불·식당 정보제공) + 합계 + PG 핸드오프 오버레이.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+    <a href="03-success.html" class="card">
+      <div class="flex items-center gap-2 mb-2"><span class="scr-num">03</span><span class="ph ph-good">완료</span></div>
+      <p class="font-bold text-[15px]">예약 확정</p>
+      <p class="text-[12.5px] text-gray-500 mt-1.5 leading-relaxed">✓ + 영수증(메뉴·시간·번호·금액·수단) + 라이언 인사 + 5분 전 알림 약속 + 취소 안내 + 홈/길찾기 2 CTA.</p>
+      <span class="text-[12px] text-gray-400 inline-flex items-center gap-1 mt-2">열기 <svg class="lc lc-14"><use href="#i-chevron-right"/></svg></span>
+    </a>
+  </div>
+
+  <!-- 핵심 결정 -->
+  <h2 class="text-lg font-bold mt-10 mb-3">v0.1 핵심 결정</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed space-y-3">
+    <p><b class="text-gray-900">라이언 추천 컨텍스트 보존이 정체성</b> — 진입 화면(01) 최상단에 노란 라이언 박스로 "왜 이 메뉴인가" 한 문단. 추상적 추천이 아니라 사용자 식습관·식당 컨텍스트 결합. 03 완료 화면에서도 같은 노란 박스로 닫음. <b>"라이언 도메인의 따뜻함"이 결제 양 끝에 박힘</b>.</p>
+    <p><b class="text-gray-900">결제는 "예약 확정"으로 잡음</b> — 사용자 관심은 결제 자체가 아니라 점심. 03 헤드라인이 "결제 완료"가 아닌 "예약이 확정됐어요" + "B카페에서 12:30에 만나요". 의인화 표현으로 트랜잭션 인상 줄임.</p>
+    <p><b class="text-gray-900">환불 정책 = 시간 기반 3단계</b> — 구독의 "기간 사용 후 종료, 환불 없음" 단일 정책과 다름. 단건은 예약 시간 기준 30분 전 / 5분 전 / 노쇼 3단. <b>02 결제 확인 단계에서 박스로 명시</b>, 03 완료 단계에서 cutoff 시각(12:00)을 구체 시각으로 환산해 안내.</p>
+    <p><b class="text-gray-900">구독과 공유 — UI 토큰·PG·결제수단</b> — 사용자가 두 결제 도메인을 같은 결제 표면으로 인지하도록. 결제수단 row·약관 UI·CTA·PG 오버레이를 토큰 수준에서 일치. 학습 비용 ↓.</p>
+    <p><b class="text-gray-900">5분 전 알림은 도메인 약속</b> — 03에서 라이언이 "12:25에 알려드릴게요" 약속. 일정 알림(반복) 도메인이 아닌 <b>단건 결제 자체에서 발화하는 일회성 이벤트 알림</b>. 약속을 화면에 박는 이유 = 사용자가 결제 후 "이제 뭐 해?" 불안 해소.</p>
+  </div>
+
+  <!-- 미결 -->
+  <h2 class="text-lg font-bold mt-9 mb-3">미결 — v0.2 라운드 또는 후속</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <p class="text-[12px] text-gray-500 mb-2.5 leading-relaxed">v0.1은 핵심 흐름 3 화면. 시니어 검토 라운드(구독 v0.1 → v0.2 패턴) 돌면 아래 항목들이 보강 대상.</p>
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li><b>결제 실패 화면 (단건 변형)</b> — 구독 v0.2 06과 같은 위상. 카드 잔액 부족·예약 슬롯 마감·식당 영업 종료 같은 단건 고유 사유 분기. 슬롯 임시 홀드 정책.</li>
+      <li><b>식당 측 비동기 수락 모델</b> — 결제 즉시 자동 수락 vs 요청 → 식당 5분 내 수락/거절. 거절 시 자동 전액 환불 흐름. 헤드라인 분기.</li>
+      <li><b>예약 상세 화면 (사용자 관리 진입점)</b> — 구독의 04 hub와 같은 위상. 예약 후 사용자가 취소·변경·식당 연락하는 경로. 03 "예약 상세에서 취소" 링크의 도착지.</li>
+      <li><b>환불 정책 cutoff 식당 협의 확정</b> — 30분/5분 시점은 v0.1 잠정값. 조리 시작 후 환불 불가 메뉴(찜·전골 등)는 별 정책 필요.</li>
+      <li><b>다음 슬롯 노출</b> — 오늘 4 슬롯 외 내일·모레. 탭 / 캘린더 UX 결정. 슬롯별 잔여 자리 수 노출 여부.</li>
+      <li><b>인원·수량 변형</b> — 2명 이상, 메뉴 2개 이상. 합계·약관(예약 정보 제공) 영향.</li>
+      <li><b>메뉴 옵션</b> — 토핑·매운맛·드레싱 등 식당별 옵션. 01·02 합계 변화.</li>
+      <li><b>영수증 PDF</b> — 03에서 다운로드/공유. 경리·정산 케이스.</li>
+      <li><b>길찾기 외부 지도 앱 선택</b> — 카카오맵·네이버지도·시스템 기본. 사용자 설정.</li>
+      <li><b>보증금/예약금 분기 모델</b> — 일부 식당이 예약금만 받고 매장에서 잔액 받는 모델 채택 시. v0.1 가정과 별 흐름.</li>
+      <li><b>시니어 SaaS 기획자 검토 라운드</b> — 구독 v0.1 → v0.2처럼 약점 5~7개 도출 후 v0.2 보강 계획.</li>
+    </ul>
+  </div>
+
+  <!-- SSoT -->
+  <h2 class="text-lg font-bold mt-9 mb-3">SSoT · 다음 단계</h2>
+  <div class="bg-white border border-gray-200 rounded-2xl p-5 text-[13px] text-gray-600 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1.5">
+      <li>v0.1 사용자 검토 → 시니어 검토 라운드 → v0.2 보강 또는 노션 description 작성 진행.</li>
+      <li>확정 후 노션 화면 Description 작성 → Figma 이식 → <code>FIGMA-MANIFEST.md</code>에 "04 결제 — 단건" 항목 신규 등록.</li>
+      <li>SSoT 우선순위: <b>Figma &gt; 노션 &gt; git</b>. 셋이 어긋나면 Figma 캐노니컬.</li>
+      <li>기존 옛 mockup <code>14-lunch-payment.html · 15-lunch-confirmed.html</code>은 04 결제 폴더 루트에 이력 보존 — 단건 v0.1 시점에서 카드 raw 입력·DEMO 워터마크 패턴은 모두 폐기, PG 위임 + wireframe 표준으로 전환.</li>
+      <li>구독 결제 v0.2와 약관·결제수단·PG 오버레이를 토큰 수준에서 동기화 — 어느 한 쪽 변경 시 양쪽 동시 갱신 필요.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-400 mt-8">Life OS.ONE — U-?? 단건 결제 v0.1 · 2026-05-18</p>
+
+</div>
+</body>
+</html>

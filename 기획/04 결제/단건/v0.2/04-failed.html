@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 결제 실패 · 단건 v0.2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px;position:relative}
+.cap{width:320px;font-size:12px;color:#4b5563;line-height:1.55}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap h3.phase{margin-top:14px;padding-top:10px;border-top:1px dashed #d1d5db}
+.cap .row{display:flex;gap:8px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cap .num.crit{outline:2px solid #1f1f1f;outline-offset:1.5px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-20{width:20px;height:20px}.lc-22{width:22px;height:22px}
+.sec-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#9ca3af;padding:0 0 8px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.summary{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+.hero-circle{width:88px;height:88px;border-radius:999px;display:flex;align-items:center;justify-content:center;animation:pop .55s cubic-bezier(0.34, 1.56, 0.64, 1) both;background:#fff;color:#1f1f1f;border:3px solid #1f1f1f}
+.hero-circle.bang{font-size:46px;font-weight:900;line-height:1}
+@keyframes pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px}
+.kv-row + .kv-row{border-top:1px solid #f3f4f6}
+.kv-key{display:flex;align-items:center;gap:8px;color:#6b7280;font-size:12.5px}
+.kv-val{font-weight:600;color:#111827}
+.ryan-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:13px;display:flex;gap:11px;align-items:flex-start}
+.ryan-ic{flex-shrink:0;width:36px;height:36px;border-radius:999px;background:#e5e7eb;border:1px solid #d1d5db;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#4b5563;letter-spacing:.02em}
+.cta{background:#1f1f1f;color:#fff;border-radius:14px;padding:14px 0;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.cta-secondary{background:#fff;color:#111827;border:1px solid #e5e7eb;border-radius:14px;padding:14px 0;font-size:14.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;width:100%}
+.step-pill{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#fff;color:#1f1f1f;border:1px dashed #1f1f1f}
+.crit-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:#1f1f1f;color:#fff;margin-left:5px}
+.phase-label{font-size:10px;font-weight:800;letter-spacing:.05em;color:#4b5563;background:#f3f4f6;padding:4px 10px;border-radius:999px;margin-bottom:10px;display:inline-block}
+.hold-box{background:#fff;border:1px dashed #1f1f1f;border-radius:12px;padding:10px 12px;font-size:11.5px;color:#374151;display:flex;gap:8px;align-items:center}
+.hold-box b{color:#111827}
+.slot-pill{padding:11px 0;border:1px solid #e5e7eb;border-radius:11px;font-size:13px;font-weight:600;color:#374151;text-align:center;background:#fff}
+.slot-pill.sel{border:2px solid #1f1f1f;color:#111827;background:#fff;padding:10px 0;font-weight:800}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-credit-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.01"/></symbol>
+</defs></svg>
+
+<div class="max-w-[1700px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> 단건 v0.2 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">04 결제 실패 · 단건 v0.2</h1>
+  <p class="text-sm text-gray-600 mt-1">결제 자체가 PG 단계에서 실패하거나, 결제는 됐는데 컨텍스트(슬롯·식당)가 변한 경우의 도착 화면. <b>v0.2 신규(약점 ①)</b>. 단건 고유 4 사유 분기 — <b>잔액 부족·한도 초과</b> · <b>PG 일반 오류</b> · <b>슬롯 마감</b> · <b>식당 영업 종료</b>. 사용자 행동이 사유에 따라 갈리므로 phone 2개로 패턴 분리 — <b>결제수단 문제(Phone 1)</b> vs <b>컨텍스트 문제(Phone 2)</b>.</p>
+</div>
+
+<div class="max-w-[1700px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ PHONE 1 — 결제수단 문제 (잔액 부족) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="02-checkout.html" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="step-pill">결제 실패</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <div class="flex flex-col items-center text-center pt-4 pb-2">
+        <div class="hero-circle bang" aria-hidden="true">!</div>
+        <span class="phase-label mt-5">결제수단 문제</span>
+        <h2 class="text-[20px] font-bold leading-tight">결제가 되지 않았어요</h2>
+        <p class="text-[13px] text-gray-500 mt-1.5 leading-relaxed">선택하신 카드의 <b>잔액이 부족하거나<br>한도가 초과</b>됐어요.</p>
+      </div>
+
+      <!-- 시도 내역 -->
+      <p class="sec-label mt-7">시도 내역</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 메뉴·식당</span>
+          <span class="kv-val">닭가슴살 샐러드 · B카페</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-clock"/></svg> 예약 시간</span>
+          <span class="kv-val">오늘 12:30</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-credit-card"/></svg> 시도한 수단</span>
+          <span class="kv-val">토스페이 · 농협카드 ****1234</span>
+        </div>
+        <div class="kv-row" style="padding-top:11px">
+          <span class="text-[13px] text-gray-500">결제 예정</span>
+          <span class="text-[18px] font-bold">₩8,500</span>
+        </div>
+      </div>
+
+      <!-- 슬롯 홀드 -->
+      <div class="hold-box mt-4">
+        <svg class="lc lc-16" aria-hidden="true"><use href="#i-clock"/></svg>
+        <div><b>12:30 자리는 14:45까지 보관</b>해드려요. 그 안에 결제하시면 같은 자리.</div>
+      </div>
+
+      <!-- 라이언 안내 -->
+      <div class="ryan-box mt-4">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">다른 결제수단으로 바꿔볼까요?</p>
+          <p class="mt-1 text-gray-700">카카오페이·네이버페이·삼성페이 또는 다른 카드로 다시 시도할 수 있어요. 결제 정보는 우리 앱에 저장되지 않으니 안심하세요.</p>
+        </div>
+      </div>
+
+      <p class="text-[11.5px] text-gray-500 mt-5 text-center leading-relaxed">
+        같은 카드로 다시 결제해도 같은 오류일 수 있어요.<br>
+        은행 앱에서 한도·잔액을 먼저 확인해보세요.
+      </p>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white grid grid-cols-5 gap-2.5">
+      <a href="#" class="cta-secondary col-span-2">홈으로</a>
+      <a href="02-checkout.html" class="cta col-span-3">
+        <svg class="lc lc-16"><use href="#i-credit-card"/></svg>
+        결제수단 바꾸기
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ PHONE 2 — 컨텍스트 문제 (슬롯 마감) ============ -->
+  <div class="phone">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="02-checkout.html" class="text-gray-400" aria-label="뒤로"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a>
+      <span class="step-pill">예약 어려움</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6">
+
+      <div class="flex flex-col items-center text-center pt-4 pb-2">
+        <div class="hero-circle">
+          <svg class="lc" style="width:42px;height:42px"><use href="#i-x"/></svg>
+        </div>
+        <span class="phase-label mt-5">컨텍스트 문제</span>
+        <h2 class="text-[20px] font-bold leading-tight">12:30 자리가 방금 찼어요</h2>
+        <p class="text-[13px] text-gray-500 mt-1.5 leading-relaxed">결제 진행 중에 다른 분이<br>같은 시간을 잡으셨어요. 결제는 되지 않았어요.</p>
+      </div>
+
+      <!-- 시도 내역 -->
+      <p class="sec-label mt-7">시도한 예약</p>
+      <div class="summary">
+        <div class="kv-row" style="border-top:none;padding-top:0">
+          <span class="kv-key"><svg class="lc lc-14"><use href="#i-store"/></svg> 메뉴·식당</span>
+          <span class="kv-val">닭가슴살 샐러드 · B카페</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">사유</span>
+          <span class="kv-val">12:30 슬롯 동시 결제</span>
+        </div>
+        <div class="kv-row">
+          <span class="kv-key">결제</span>
+          <span class="kv-val">처리되지 않음 (₩0 청구)</span>
+        </div>
+      </div>
+
+      <!-- 대안 슬롯 -->
+      <p class="sec-label mt-6">B카페 다른 시간</p>
+      <div class="grid grid-cols-3 gap-2">
+        <button class="slot-pill">12:00<br><span class="text-[10px] font-normal text-gray-500">2자리</span></button>
+        <button class="slot-pill sel">13:00<br><span class="text-[10px] font-normal">3자리</span></button>
+        <button class="slot-pill">13:15<br><span class="text-[10px] font-normal text-gray-500">5자리</span></button>
+      </div>
+
+      <!-- 라이언 안내 -->
+      <div class="ryan-box mt-5">
+        <span class="ryan-ic" aria-hidden="true">라이언</span>
+        <div class="text-[12.5px] text-gray-800 leading-relaxed">
+          <p class="font-bold text-[13px] text-gray-900">13:00은 점심 끝나는 시간이라 비교적 한산해요</p>
+          <p class="mt-1 text-gray-700">B카페 다른 시간이 모두 안 맞으면 근처에 비슷한 단백질 메뉴 2곳도 있어요. 어느 쪽으로 갈까요?</p>
+        </div>
+      </div>
+
+      <p class="text-[11.5px] text-gray-500 mt-5 text-center leading-relaxed">
+        결제는 시도되지 않았으니 환불 절차 없이 다시 진행하실 수 있어요.
+      </p>
+
+    </div>
+
+    <div class="px-5 py-4 border-t border-gray-100 bg-white grid grid-cols-5 gap-2.5">
+      <a href="01-menu-detail.html" class="cta-secondary col-span-2">대안 식당</a>
+      <a href="02-checkout.html" class="cta col-span-3">
+        <svg class="lc lc-16"><use href="#i-refresh"/></svg>
+        13:00으로 다시 결제
+      </a>
+    </div>
+  </div>
+
+  <!-- ============ CAPTION ============ -->
+  <div class="cap">
+    <h3>흐름 · 4 사유 분기 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">★</span><div>02 CTA → PG 외부 진행 → 실패 콜백 시 사유에 따라 phone 분기:
+    <ul class="list-disc pl-4 mt-1 space-y-0.5">
+      <li><b>잔액 부족·한도 초과</b> → <b>Phone 1</b> (결제수단 변경 유도)</li>
+      <li><b>PG 일반 오류</b>(SDK 오류·네트워크) → <b>Phone 1</b> 변형 (재시도 강조)</li>
+      <li><b>슬롯 마감</b>(PG 진행 중 동시 결제) → <b>Phone 2</b> (시간 변경)</li>
+      <li><b>식당 영업 종료</b>(PG 진행 중 식당 영업 신호 변경) → <b>Phone 2</b> 변형 (대안 식당 강조)</li>
+    </ul>
+    원칙: <b>결제수단 문제(Phone 1) = 사용자가 수단 바꾸면 됨</b>. <b>컨텍스트 문제(Phone 2) = 메뉴·시간을 바꿔야 함</b>. 행동이 다르므로 화면 자체를 분리.</div></div>
+
+    <h3 class="phase">PHONE 1 · 결제수단 문제</h3>
+
+    <h3>① 헤더 — 뒤로 + "결제 실패" pill</h3>
+    <div class="row"><span class="num">1</span><div>← 02로 복귀(결제 정보 유지). 03 같은 X 닫기가 아닌 ← 뒤로 — <b>흐름이 끝난 게 아니라 재시도 단계</b>. pill 점선 보더로 "확정 X" 시각화.</div></div>
+
+    <h3>② ! 원 + 헤드라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">2</span><div>검정 보더 + 흰 배경 ! 원형(03 거절 X 원형과 같은 톤 = "확정 아님" 동족 신호). 헤드라인 "<b>결제가 되지 않았어요</b>" + 부제 = <b>구체 사유</b>("잔액 부족 또는 한도 초과"). 일반 멘트("결제 오류") X — 사용자가 다음 행동 알 수 있게.</div></div>
+
+    <h3>③ 시도 내역 — 부정 영수증</h3>
+    <div class="row"><span class="num">3</span><div>"<b>시도 내역</b>" (영수증 X, 처리된 결제 아님). 메뉴·식당·시간·시도한 수단·금액. <b>시도한 수단을 명시</b> — 사용자가 "어느 카드였더라" 헷갈리지 않게(특히 여러 카드 등록 시).</div></div>
+
+    <h3>④ 슬롯 임시 홀드 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">4</span><div>"<b>12:30 자리는 14:45까지 보관</b>" — 점선 보더 박스로 강조. PG 진행 시점에 슬롯을 <b>15분 임시 홀드</b>, 결제 실패해도 홀드 유지. 그 안에 사용자가 재시도하면 같은 자리. 만료 시점을 절대 시각으로 표기(사용자 계산 X).
+    <br><br><b>미결</b>: 홀드 만료 후 슬롯이 차면 Phone 2로 전환. 홀드 카운트다운 갱신은 push 또는 in-app 토스트. v0.3 라운드.</div></div>
+
+    <h3>⑤ 라이언 + 다른 수단 권장</h3>
+    <div class="row"><span class="num">5</span><div>"<b>다른 결제수단으로 바꿔볼까요?</b>" — 사용자에게 명확한 다음 행동 제시. 보안 안심 한 줄(저장 안 됨). 같은 카드 재시도가 자주 같은 결과임을 마지막 안내로 알림(불필요 재시도 방지).</div></div>
+
+    <h3>⑥ CTA 2갈래 — 홈/결제수단 바꾸기</h3>
+    <div class="row"><span class="num">6</span><div>"<b>결제수단 바꾸기</b>"(주) → 02로 복귀(결제수단 라디오 강조). "홈으로"(보조). <b>"같은 수단 재시도" CTA 없음</b> — 다크패턴(반복 실패) 회피.</div></div>
+
+    <h3 class="phase">PHONE 2 · 컨텍스트 문제</h3>
+
+    <h3>⑦ 헤더 — "예약 어려움" pill</h3>
+    <div class="row"><span class="num">7</span><div>Phone 1과 다른 라벨 ("결제 실패"가 아닌 "예약 어려움") — 결제 자체는 시도되지도 않음을 명확히.</div></div>
+
+    <h3>⑧ X 원 + 사실 헤드라인 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">8</span><div>03 phone 3과 같은 X 원형. 헤드라인 "<b>12:30 자리가 방금 찼어요</b>" — <b>구체 사실</b>(시간 + "방금"). 부제 "결제 진행 중에 다른 분이 같은 시간 / <b>결제는 되지 않았어요</b>" — 사용자가 가장 불안한 "결제됐는지" 즉시 해소.</div></div>
+
+    <h3>⑨ 시도 내역 — ₩0 청구 명시</h3>
+    <div class="row"><span class="num crit">9</span><div>3 필드 — 메뉴/사유/결제. <b>"처리되지 않음 (₩0 청구)"</b> 명시 — 환불 절차 불필요. 환불 안내(03 phone 3)와는 다른 처리(미청구 vs 청구 후 환불).</div></div>
+
+    <h3>⑩ 대안 슬롯 3개 + 잔여 자리 <span class="crit-badge">CRITICAL</span></h3>
+    <div class="row"><span class="num crit">10</span><div>같은 식당(B카페)의 다른 시간 3 슬롯 + <b>잔여 자리 수</b>(2/3/5). 사용자가 즉시 시간 변경 가능. 라이언이 한 슬롯 추천(default 선택). <b>"가까운 시간 우선"</b> 정렬.</div></div>
+
+    <h3>⑪ 라이언 — 대안 슬롯 컨텍스트 + 대안 식당 백업</h3>
+    <div class="row"><span class="num">11</span><div>"<b>13:00은 점심 끝나는 시간이라 한산</b>" — 추천 시간의 이유. 마지막에 "비슷한 메뉴 2곳도 있어요" — 식당 자체를 바꾸는 경로 보장(B카페 다른 시간 모두 안 맞을 때).</div></div>
+
+    <h3>⑫ CTA 2갈래 — 대안 식당/다시 결제</h3>
+    <div class="row"><span class="num">12</span><div>"<b>13:00으로 다시 결제</b>"(주) → 02 (시간만 변경된 상태). "<b>대안 식당</b>"(보조) → 01 (라이언이 새 식당 추천 컨텍스트로 진입).</div></div>
+
+    <h3 class="phase">접근성 · 시스템 (2 phones 공통)</h3>
+    <div class="row"><span class="num">A</span><div>각 hero = <code>role="alert" aria-live="assertive"</code>(상태 변경이 사용자에게 의미가 크므로 polite 대신 assertive). ! 원·X 원 = aria-hidden(헤드라인 텍스트로 의미 전달). 슬롯 = <code>role="radiogroup"</code>. 슬롯 홀드 박스 = <code>role="status" aria-live="polite"</code>로 만료 시각 발음. <b>색만으로 신호 X</b> — 보더·아이콘·텍스트(pill 라벨·헤드라인) 3중.</div></div>
+  </div>
+
+</div>
+</body>
+</html>
