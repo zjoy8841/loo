@@ -1,15 +1,52 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import RyanMascot, { type RyanMascotHandle } from "@/components/RyanMascot";
 
 export default function SignupAccount() {
+  const router = useRouter();
+  const mascotRef = useRef<RyanMascotHandle>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (submitting) return;
+    setError("");
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setError(data.error ?? "가입에 실패했어요");
+        return;
+      }
+      const r = await signIn("credentials", { email, password, redirect: false });
+      if (r?.error) {
+        setError("자동 로그인에 실패했어요. 다시 시도해주세요.");
+        return;
+      }
+      mascotRef.current?.bounce();
+      setTimeout(() => router.push("/user/signup/health"), 700);
+    } catch {
+      setError("네트워크 오류가 발생했어요");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <form onSubmit={handleSubmit} className="min-h-screen flex flex-col">
       <header className="px-6 pt-6 pb-4 flex items-center justify-between">
         <Link href="/user" className="text-2xl text-gray-500">
           ←
@@ -22,20 +59,33 @@ export default function SignupAccount() {
         </div>
       </div>
 
-      <div className="flex-1 px-6 pt-8">
-        <h1 className="text-2xl font-bold mb-2">계정을 만들어요</h1>
-        <p className="text-gray-500 mb-8 text-sm">
+      <div className="flex justify-center pt-4 pb-2">
+        <RyanMascot ref={mascotRef} size={160} />
+      </div>
+
+      <div className="flex-1 px-6 pt-2">
+        <h1 className="text-2xl font-bold mb-2 text-center">계정을 만들어요</h1>
+        <p className="text-gray-500 mb-8 text-sm text-center">
           이메일과 비밀번호로 시작하세요
         </p>
 
         <div className="space-y-4">
-          <Field label="이름" placeholder="홍길동" value={name} onChange={setName} />
+          <Field
+            label="이름"
+            placeholder="홍길동"
+            value={name}
+            onChange={setName}
+            required
+            autoComplete="name"
+          />
           <Field
             label="이메일"
             type="email"
             placeholder="you@example.com"
             value={email}
             onChange={setEmail}
+            required
+            autoComplete="email"
           />
           <Field
             label="비밀번호"
@@ -43,8 +93,16 @@ export default function SignupAccount() {
             placeholder="8자 이상"
             value={password}
             onChange={setPassword}
+            required
+            autoComplete="new-password"
           />
         </div>
+
+        {error && (
+          <p className="mt-4 text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3">
+            {error}
+          </p>
+        )}
 
         <div className="my-8 flex items-center gap-3">
           <div className="flex-1 h-px bg-gray-200" />
@@ -65,14 +123,15 @@ export default function SignupAccount() {
       </div>
 
       <div className="px-6 py-4 border-t border-gray-200">
-        <Link
-          href="/user/signup/health"
-          className="block w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-4 rounded-xl text-center transition"
+        <button
+          type="submit"
+          disabled={submitting}
+          className="block w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
-          다음
-        </Link>
+          {submitting ? "가입 중…" : "다음"}
+        </button>
       </div>
-    </main>
+    </form>
   );
 }
 
@@ -82,12 +141,16 @@ function Field({
   placeholder,
   value,
   onChange,
+  required,
+  autoComplete,
 }: {
   label: string;
   type?: string;
   placeholder?: string;
   value: string;
   onChange: (v: string) => void;
+  required?: boolean;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -97,6 +160,8 @@ function Field({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
+        autoComplete={autoComplete}
         className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500"
       />
     </div>
