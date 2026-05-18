@@ -55,7 +55,7 @@ export default function SignupAccount() {
       </header>
       <div className="px-6">
         <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-emerald-500" style={{ width: "14.3%" }} />
+          <div className="h-full bg-[#4F8BD9]" style={{ width: "14.3%" }} />
         </div>
       </div>
 
@@ -111,14 +111,10 @@ export default function SignupAccount() {
         </div>
 
         <div className="grid grid-cols-4 gap-3">
-          <SocialButton label="K" bg="bg-yellow-300" />
-          <SocialButton label="N" bg="bg-green-500" textColor="text-white" />
-          <SocialButton
-            label="G"
-            bg="bg-white border border-gray-200"
-            textColor="text-blue-500"
-          />
-          <SocialButton label="" bg="bg-black" textColor="text-white" />
+          <SocialButton label="K" color="#FEE500" />
+          <SocialButton label="N" color="#03C75A" />
+          <SocialButton label="G" color="#4285F4" />
+          <SocialButton label="" color="#000000" />
         </div>
       </div>
 
@@ -126,7 +122,7 @@ export default function SignupAccount() {
         <button
           type="submit"
           disabled={submitting}
-          className="block w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
+          className="block w-full bg-[#4F8BD9] hover:bg-[#3B73C2] disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
           {submitting ? "가입 중…" : "다음"}
         </button>
@@ -162,26 +158,19 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         required={required}
         autoComplete={autoComplete}
-        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500"
+        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:border-[#4F8BD9]"
       />
     </div>
   );
 }
 
-function SocialButton({
-  label,
-  bg,
-  textColor = "",
-}: {
-  label: string;
-  bg: string;
-  textColor?: string;
-}) {
+function SocialButton({ label, color }: { label: string; color: string }) {
   return (
     <button
       type="button"
       onClick={() => alert("곧 지원 예정이에요")}
-      className={`aspect-square rounded-xl flex items-center justify-center text-xl font-bold ${bg} ${textColor}`}
+      className="aspect-square rounded-xl flex items-center justify-center text-xl font-bold bg-white border-2 transition"
+      style={{ borderColor: color, color }}
     >
       {label}
     </button>

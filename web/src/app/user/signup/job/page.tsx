@@ -44,7 +44,7 @@ export default function SignupJob() {
       </header>
       <div className="px-6">
         <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-emerald-500" style={{ width: "85.7%" }} />
+          <div className="h-full bg-[#4F8BD9]" style={{ width: "85.7%" }} />
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export default function SignupJob() {
               onClick={() => setSelected(i)}
               className={`rounded-2xl p-4 text-left border-2 transition ${
                 selected === i
-                  ? "bg-emerald-500 text-white border-emerald-500"
+                  ? "bg-[#4F8BD9] text-white border-[#4F8BD9]"
                   : "bg-white border-gray-200"
               }`}
             >
@@ -83,7 +83,7 @@ export default function SignupJob() {
             onClick={() => setSelected(ETC_INDEX)}
             className={`col-span-2 rounded-2xl p-4 text-left border-2 transition ${
               selected === ETC_INDEX
-                ? "bg-emerald-500 text-white border-emerald-500"
+                ? "bg-[#4F8BD9] text-white border-[#4F8BD9]"
                 : "bg-white border-gray-200"
             }`}
           >
@@ -106,7 +106,7 @@ export default function SignupJob() {
           type="button"
           onClick={() => handleNext(false)}
           disabled={submitting}
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
+          className="col-span-2 bg-[#4F8BD9] hover:bg-[#3B73C2] disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
           {submitting ? "저장 중…" : "다음"}
         </button>

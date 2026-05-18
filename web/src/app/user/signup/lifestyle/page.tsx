@@ -41,7 +41,7 @@ export default function SignupLifestyle() {
       </header>
       <div className="px-6">
         <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-emerald-500" style={{ width: "71.4%" }} />
+          <div className="h-full bg-[#4F8BD9]" style={{ width: "71.4%" }} />
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export default function SignupLifestyle() {
               onClick={() => toggle(i)}
               className={`rounded-2xl p-4 text-left border-2 transition ${
                 selected.includes(i)
-                  ? "bg-emerald-500 text-white border-emerald-500"
+                  ? "bg-[#4F8BD9] text-white border-[#4F8BD9]"
                   : "bg-white border-gray-200"
               }`}
             >
@@ -72,9 +72,9 @@ export default function SignupLifestyle() {
           ))}
         </div>
 
-        <div className="mt-8 bg-emerald-50 rounded-2xl px-4 py-3 flex gap-3 items-start">
+        <div className="mt-8 bg-[#EEF3FB] rounded-2xl px-4 py-3 flex gap-3 items-start">
           <span className="text-xl">🎉</span>
-          <p className="text-sm text-emerald-700 leading-relaxed">
+          <p className="text-sm text-[#2A5BA0] leading-relaxed">
             두 단계 남았어요!
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function SignupLifestyle() {
           type="button"
           onClick={() => handleNext(false)}
           disabled={submitting}
-          className="col-span-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
+          className="col-span-2 bg-[#4F8BD9] hover:bg-[#3B73C2] disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
         >
           {submitting ? "저장 중…" : "다음"}
         </button>
