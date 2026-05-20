@@ -14,6 +14,10 @@ Thumbs.db
 # Playwright MCP 산출물 (도구 캐시 — 공유 가치 없음)
 .playwright-mcp/
 
+# 루트의 dev 검증용 스크린샷·snapshot (개발 시 확인만 — 보존 가치 없음)
+/*.png
+/*-snapshot.md
+
 # Node / Next.js (개발/web/.gitignore 와 중첩 적용)
 node_modules/
 .next/

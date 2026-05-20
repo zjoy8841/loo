@@ -42,6 +42,15 @@ body {
   font-family: var(--font-sans);
 }
 
+/* 가로 스크롤 영역(빠른 액션 칩 등)에서 스크롤바 숨김 */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* description §10: prefers-reduced-motion 시 단계 전환 모션 0ms */
 @media (prefers-reduced-motion: reduce) {
   *,

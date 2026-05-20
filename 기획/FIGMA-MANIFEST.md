@@ -37,7 +37,9 @@
 
 - 노션 description 부모: https://www.notion.so/35fc2986e14081cc9890efbd525ab46d
 - U-02 공통 패턴 (SignupContext · 라우팅 가드 · 접근성 · 분석): https://www.notion.so/35fc2986e14081d88fbef8d8763f82d2
-- 코드: `개발/web/src/app/user/signup/*/page.tsx`
+- 코드:
+  - U-01 스플래시: `web/src/app/user/page.tsx`
+  - U-02 회원가입 7단계: `web/src/app/user/signup/*/page.tsx`
 - 미작성 description: U-02-1-terms (약관 본문) · U-02-SNS (SNS 가입) · U-02-1-login (로그인)
 
 ### 02 메인 (U-03) — 화면 2 상태 (active + idle)
@@ -50,7 +52,7 @@
 - Figma 페이지 `메인_v1`: `39:9079`
 - 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조)
 - git wireframe: `기획/02 메인/v0.1/` (active + idle 2장 + index)
-- 코드: `개발/web/src/app/user/home/page.tsx` (현 페이지 단일, 모드 분기 미구현)
+- 코드: `web/src/app/user/home/page.tsx` + `web/src/components/home/*` (active/idle mode state 분기, 2026-05-20 v0.1 구현)
 
 ### 03 알림 (U-04) — 공통 패턴 + 8화면
 
@@ -68,7 +70,16 @@
 
 - git wireframe: `기획/03 알림/v0.3/` (6장) + `v0.31/` (2장)
 - Figma node: 사용자가 옮기면 갱신
-- 코드: `개발/web/src/app/user/notifications/page.tsx` 등 (모드별 분기 미구현)
+- 코드 (2026-05-20 v0.1 구현):
+  - U-04-1 센터: `web/src/app/user/notifications/page.tsx`
+  - U-04-2 도착: `web/src/app/user/notifications/[id]/page.tsx`
+  - U-04-3 타임라인: `web/src/app/user/schedule/page.tsx`
+  - U-04-4 폼: `web/src/app/user/schedule/new/page.tsx`
+  - U-04-5 설정: `web/src/app/user/notifications/settings/page.tsx`
+  - U-04-6 결과 상세: `web/src/app/user/notifications/[id]/result/page.tsx`
+  - U-04-7 대화: `web/src/app/user/notifications/chat/page.tsx`
+  - U-04-8 플랜 풀뷰: `web/src/app/user/plan/[id]/page.tsx`
+- mock 데이터: `web/src/lib/notifications/mock.ts`
 
 ### 04 결제 — 단건 (U-05) v1, 구독 TBD
 
@@ -85,6 +96,13 @@
 - Figma 페이지 `결제_v1`: `39:9011`
 - U-05 공통 패턴 (라이언 박스·영수증·환불 박스·PG 오버레이·슬롯 그리드·상태 머신·다국어·접근성): https://www.notion.so/364c2986e14081d6980ade96f86c561c
 - git wireframe: `기획/04 결제/단건/v0.2/` (시니어 검토 라운드 1)
+- 코드 (2026-05-20 v0.1 구현):
+  - U-05-1 메뉴 상세: `web/src/app/user/order/page.tsx`
+  - U-05-2 결제 확인: `web/src/app/user/order/checkout/page.tsx`
+  - U-05-3 예약 상태: `web/src/app/user/order/status/page.tsx` (query `?phase=waiting|confirmed|rejected`)
+  - U-05-4 결제 실패: `web/src/app/user/order/failed/page.tsx` (query `?variant=method|context`)
+  - U-05-5 예약 상세: `web/src/app/user/reservation/[id]/page.tsx` (query `?status=...`)
+- 공통: `web/src/components/payment/PaymentHeader.tsx` · `web/src/components/payment/RyanBox.tsx`
 
 #### 구독 결제 (U-14) — 화면 8개 + 공통 패턴
 
