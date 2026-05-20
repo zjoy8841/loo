@@ -14,7 +14,7 @@ Thumbs.db
 # Playwright MCP 산출물 (도구 캐시 — 공유 가치 없음)
 .playwright-mcp/
 
-# Node / Next.js (web/.gitignore 와 중첩 적용)
+# Node / Next.js (개발/web/.gitignore 와 중첩 적용)
 node_modules/
 .next/
 out/
