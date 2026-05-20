@@ -104,7 +104,7 @@ export default function HomeActive({ name }: { name: string }) {
           className="text-gray-500 shrink-0"
         />
         <span>
-          <span className="text-gray-400 mr-1">
+          <span className="text-gray-400 mr-1.5">
             {t("user.home.insight_prefix")}
           </span>
           {INSIGHT_LUNCH}
