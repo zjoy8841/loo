@@ -37,20 +37,38 @@
 
 - 노션 description 부모: https://www.notion.so/35fc2986e14081cc9890efbd525ab46d
 - U-02 공통 패턴 (SignupContext · 라우팅 가드 · 접근성 · 분석): https://www.notion.so/35fc2986e14081d88fbef8d8763f82d2
-- 코드: `web/src/app/user/signup/*/page.tsx`
+- 코드: `개발/web/src/app/user/signup/*/page.tsx`
 - 미작성 description: U-02-1-terms (약관 본문) · U-02-SNS (SNS 가입) · U-02-1-login (로그인)
 
-### 02 메인 (U-03) — TBD
+### 02 메인 (U-03) — 화면 2 상태 (active + idle)
 
 | 화면 | Figma node | 노션 description |
 |---|---|---|
-| U-03 메인 | _TBD_ | _TBD_ |
+| U-03 메인 · active (알림 인터럽트) | `70:3216` | https://www.notion.so/366c2986e14081569cafc2b8e64d3893 |
+| U-03 메인 · idle (알림 없음) | `70:2751` | https://www.notion.so/366c2986e14081569cafc2b8e64d3893 |
 
-### 03 알림 (U-04) — TBD
+- Figma 페이지 `메인_v1`: `39:9079`
+- 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조)
+- git wireframe: `기획/02 메인/v0.1/` (active + idle 2장 + index)
+- 코드: `개발/web/src/app/user/home/page.tsx` (현 페이지 단일, 모드 분기 미구현)
+
+### 03 알림 (U-04) — 공통 패턴 + 8화면
 
 | 화면 | Figma node | 노션 description |
 |---|---|---|
-| U-04 알림 | _TBD_ | _TBD_ |
+| U-04 공통 패턴 | — | https://www.notion.so/366c2986e14081a9a917c5899c59ca04 |
+| U-04-1 알림 센터 | _TBD_ | https://www.notion.so/366c2986e1408123b1b8c7c5e44c8815 |
+| U-04-2 알림 도착 | _TBD_ | https://www.notion.so/366c2986e14081a5b96ed963829206ca |
+| U-04-3 일정 타임라인 | _TBD_ | https://www.notion.so/366c2986e1408135b227ce031db580d6 |
+| U-04-4 생성·편집 폼 | _TBD_ | https://www.notion.so/366c2986e1408151a876dee891b26af4 |
+| U-04-5 알림 설정 | _TBD_ | https://www.notion.so/366c2986e140817fab4ff27a01e083ea |
+| U-04-6 결과 상세 | _TBD_ | https://www.notion.so/366c2986e14081ad97dfd062c317e953 |
+| U-04-7 라이언과 대화 | _TBD_ | https://www.notion.so/366c2986e14081cb8e75f9ff60350754 |
+| U-04-8 플랜 풀뷰 | _TBD_ | https://www.notion.so/366c2986e14081d99647d9bb23328a8c |
+
+- git wireframe: `기획/03 알림/v0.3/` (6장) + `v0.31/` (2장)
+- Figma node: 사용자가 옮기면 갱신
+- 코드: `개발/web/src/app/user/notifications/page.tsx` 등 (모드별 분기 미구현)
 
 ### 04 결제 — 단건 (U-05) v1, 구독 TBD
 
@@ -68,13 +86,23 @@
 - U-05 공통 패턴 (라이언 박스·영수증·환불 박스·PG 오버레이·슬롯 그리드·상태 머신·다국어·접근성): https://www.notion.so/364c2986e14081d6980ade96f86c561c
 - git wireframe: `기획/04 결제/단건/v0.2/` (시니어 검토 라운드 1)
 
-#### 구독 결제 — TBD
+#### 구독 결제 (U-14) — 화면 8개 + 공통 패턴
 
 | 화면 | Figma node | 노션 description |
 |---|---|---|
-| 마이페이지 / 요금제 / 결제 확인 / 결제 완료 / 구독 관리 / 해지 / 결제 실패 / Paywall | Figma `결제_v1` 페이지 노드 박힘 (`39:14656`/`14961`/`14907`/`14988`/`15015`/`14934`/`15042`/`14880`) | _TBD_ — 단건 패턴 그대로 작성 예정 |
+| U-14 공통 패턴 | — | https://www.notion.so/366c2986e14081899273e8e940dabf5b |
+| U-14-1 마이페이지/구독 | `39:14656` | https://www.notion.so/366c2986e140812bb383e00211f55950 |
+| U-14-2 요금제 선택 | `39:14961` | https://www.notion.so/366c2986e14081f6b9a8e8c2f2e08680 |
+| U-14-3 결제 확인 | `39:14907` | https://www.notion.so/366c2986e14081b6a5e4df7ffb127011 |
+| U-14-4 결제 완료 | `39:14988` | https://www.notion.so/366c2986e14081f6972bf47ab29e3936 |
+| U-14-5 구독 관리 | `39:15015` | https://www.notion.so/366c2986e14081d69e92e35942b11f4a |
+| U-14-6 구독 해지 | `39:14934` | https://www.notion.so/366c2986e140819f9412ddd0269685d8 |
+| U-14-7 결제 실패 | `39:15042` | https://www.notion.so/366c2986e1408133b68ede550466aa73 |
+| U-14-8 Paywall | `39:14880` | https://www.notion.so/366c2986e14081849ebace70f33be381 |
 
+- Figma 페이지 `결제_v1`: `39:9011`
 - git wireframe: `기획/04 결제/구독/v0.2/`
+- 단건 결제(U-05) 컴포넌트·PG·카피 공유
 
 ### 05 마이페이지 (U-12) — TBD
 
@@ -87,7 +115,7 @@
 1. 이 매니페스트에서 작업할 화면의 **Figma node + 노션 URL** 확인
 2. **Figma fetch** (`get_figma_data` with fileKey + nodeId) — 화면 설계 확보
 3. **노션 description fetch** — API·DB·검증·접근성·zod·ICU 디테일 확보
-4. **git** 코드 작업 (`web/src/app/...`)
+4. **git** 코드 작업 (`개발/web/src/app/...`)
 5. 셋이 어긋나면 **Figma 캐노니컬**
 
 ⚠️ 선결 조건: 개발 환경에 `figma-developer-mcp` MCP + File content:read scope PAT 설정 필요.

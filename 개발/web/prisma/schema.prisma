@@ -25,10 +25,16 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  profile      Profile?
-  merchantId   String?  @unique
-  merchant     Merchant? @relation(fields: [merchantId], references: [id])
-  reservations Reservation[]
+  profile         Profile?
+  merchantId      String?       @unique
+  merchant        Merchant?     @relation(fields: [merchantId], references: [id])
+  reservations    Reservation[]
+  charges         Charge[]
+  subscription    Subscription?
+  paymentMethods  PaymentMethod[]
+  notifications   Notification[]
+  notificationRules NotificationRule[]
+  plans           Plan[]
 }
 
 // 회원가입 7단계 중 1단계(account)는 User에, 2~7단계는 Profile에 저장.
@@ -104,24 +110,272 @@ model Menu {
 // Reservation (예약)
 // ============================================================
 
+// 예약 — 단건 결제 description U-05 §4-2·4-3 상태 머신 정합
+// status: WAITING(결제 후 수락 대기) | CONFIRMED | REJECTED | CANCELLED | COMPLETED | EXPIRED
+// rejectionReason: out_of_stock | kitchen_busy | closing_early | auto_timeout | null
+// cancelledBy: USER | MERCHANT | SYSTEM
 model Reservation {
+  id                  String   @id @default(cuid())
+  reservationNumber   String   @unique  // 예: LO-26052013-742 (U-05 공통 패턴 §10-2)
+  userId              String
+  user                User     @relation(fields: [userId], references: [id])
+  merchantId          String
+  merchant            Merchant @relation(fields: [merchantId], references: [id])
+  menuId              String?
+  menu                Menu?    @relation(fields: [menuId], references: [id])
+
+  status              String   @default("WAITING")
+  reservationTime     DateTime
+  partySize           Int      @default(1)
+  note                String?
+
+  // 슬롯 홀드 (U-05 §6) — PG 진입 시점 + 15분
+  slotHoldExpiresAt   DateTime?
+
+  // 수락·거절 (U-05-3)
+  acceptedAt          DateTime?
+  rejectedAt          DateTime?
+  rejectionReason     String?  // out_of_stock | kitchen_busy | closing_early | auto_timeout
+
+  // 취소 (U-05-5)
+  cancelledAt         DateTime?
+  cancelledBy         String?  // USER | MERCHANT | SYSTEM
+  cancelReason        String?
+
+  // 알림 발화 (U-05 §9)
+  prereminderSentAt   DateTime?  // 5분 전 알림 발화
+
+  // 완료
+  completedAt         DateTime?
+
+  // 연결
+  charges             Charge[]
+  notifications       Notification[]
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([userId])
+  @@index([merchantId])
+  @@index([status])
+  @@index([reservationTime])
+  @@index([slotHoldExpiresAt])
+}
+
+// ============================================================
+// Payment — Charge · Subscription · PaymentMethod
+// ============================================================
+
+// 결제 트랜잭션 — 단건(reservationId) 또는 구독(subscriptionId) 중 하나
+// status: INITIATED | SUCCESS | FAILED | REFUNDED
+model Charge {
   id              String   @id @default(cuid())
   userId          String
   user            User     @relation(fields: [userId], references: [id])
-  merchantId      String
-  merchant        Merchant @relation(fields: [merchantId], references: [id])
-  menuId          String?
-  menu            Menu?    @relation(fields: [menuId], references: [id])
 
-  status          String   @default("PENDING") // PENDING | ACCEPTED | REJECTED | CANCELLED
-  reservationTime DateTime
-  partySize       Int      @default(1)
-  note            String?
+  // 둘 중 하나만 (단건 vs 구독)
+  reservationId   String?
+  reservation     Reservation? @relation(fields: [reservationId], references: [id])
+  subscriptionId  String?
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  amount          Int      // 원 단위
+  currency        String   @default("KRW")
+
+  // PG (U-05 §8)
+  method          String   // TOSS | KAKAO | NAVER | SAMSUNG | CARD
+  pgRef           String?  // PG 측 트랜잭션 ID
+  status          String   @default("INITIATED")
+  failureCode     String?  // insufficient | expired | limit | declined | network | unknown
+  failureText     String?
+
+  // idempotency (U-05 §8) — 중복 결제 방지
+  idempotencyKey  String   @unique
+
+  // 환불 (U-05 §5)
+  refundAmount    Int?
+  refundedAt      DateTime?
+  refundReason    String?  // merchant_reject | user_cancel_full | user_cancel_partial | none
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   @@index([userId])
-  @@index([merchantId])
+  @@index([reservationId])
+  @@index([subscriptionId])
   @@index([status])
+}
+
+// 구독 상태 머신 — U-14 공통 패턴 §2
+// state: TRIAL | ACTIVE | CANCELED_ACTIVE | PAUSED | EXPIRED
+// plan: MONTH | YEAR
+model Subscription {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id])
+
+  plan                String   // MONTH | YEAR
+  state               String   @default("TRIAL")
+
+  startedAt           DateTime @default(now())
+  trialEndsAt         DateTime?    // 7일 무료 종료 시각
+  currentPeriodStart  DateTime
+  currentPeriodEnd    DateTime     // 다음 결제일 (= canceled_active 시 권한 만료일)
+  nextChargeAt        DateTime?    // null이면 갱신 안 됨
+
+  // 해지 (U-14-6)
+  canceledAt          DateTime?
+  cancelReason        String?      // cost | not_using | missing_feature | alternative | other | no_consent
+  cancelNote          String?
+
+  // 결제 실패 grace (U-14 §8)
+  pausedAt            DateTime?
+  graceUntil          DateTime?
+
+  // 현재 사용 중인 결제 수단
+  paymentMethodId     String?
+  paymentMethod       PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+
+  charges             Charge[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([state])
+  @@index([nextChargeAt])
+}
+
+// 저장된 결제 수단 (PG 토큰)
+model PaymentMethod {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider      String   // TOSS | KAKAO | NAVER | SAMSUNG | CARD
+  pgToken       String   // PG가 발급한 빌링 토큰 (raw 카드 X)
+  maskedLabel   String   // 예: "토스페이 (1234)"
+  isDefault     Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@index([userId])
+}
+
+// ============================================================
+// Notification — U-04 공통 패턴 §6·§8
+// ============================================================
+
+// 알림 인스턴스 (도착한 알림 하나하나)
+// kind: EVENT | SCHEDULE | SYSTEM
+// status: UNREAD | READ | ACTIONED | DISMISSED | EXPIRED
+model Notification {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  kind            String
+  variant         String   // event-payment | event-accept | event-reject | event-prereminder | schedule | system
+  title           String
+  body            String
+  payload         String   @default("{}")  // JSON-as-String. 도메인별 payload (예약ID, 결제ID, 플랜ID 등)
+  deepLink        String?  // 도착 화면(U-04-6) → 도메인 화면 매핑용
+
+  // 상태 (U-04 §8)
+  status          String   @default("UNREAD")
+  readAt          DateTime?
+  actionedAt      DateTime?
+  dismissedAt     DateTime?
+  expiresAt       DateTime?
+
+  // 연결 (선택)
+  reservationId   String?
+  reservation     Reservation? @relation(fields: [reservationId], references: [id])
+  ruleId          String?
+  rule            NotificationRule? @relation(fields: [ruleId], references: [id])
+
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([status])
+  @@index([kind])
+  @@index([createdAt])
+}
+
+// 일정 알림 규칙 (반복 패턴) — U-04-3
+// state: ACTIVE | PAUSED | DONE
+model NotificationRule {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title           String
+  pattern         String   // JSON: { type: "daily"|"weekly"|"monthly"|"custom", weekdays?: [], interval?: int, ... }
+  triggerTime     String   // "HH:MM" KST
+  condition       String?  // JSON 조건 조립 (예: 날씨·일정·위치 조합)
+  action          String   // recommend_menu | reminder | schedule_event | custom
+
+  state           String   @default("ACTIVE")
+  enabled         Boolean  @default(true)
+  pausedAt        DateTime?
+  nextTriggerAt   DateTime?  // 다음 발화 예정 시각 (스케줄러가 계산·갱신)
+
+  // 연결 (선택) — 이 규칙으로부터 생성된 플랜
+  planId          String?
+  plan            Plan?     @relation(fields: [planId], references: [id])
+
+  notifications   Notification[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([nextTriggerAt])
+  @@index([state])
+}
+
+// ============================================================
+// Plan — 라이언 대화 결과 일정 (U-04-7·U-04-8)
+// ============================================================
+
+model Plan {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  summary     String?
+  goalText    String?
+  durationDays Int?
+
+  source      String   @default("chat") // chat | manual | rule
+  conversationId String? // U-04-7 대화 추적용
+
+  items       PlanItem[]
+  rules       NotificationRule[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// 플랜의 각 항목 (U-04-8 PlanTimeline)
+// status: PENDING | COMPLETED | SKIPPED
+model PlanItem {
+  id        String   @id @default(cuid())
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  title     String
+  ts        DateTime
+  status    String   @default("PENDING")
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([planId])
+  @@index([ts])
 }

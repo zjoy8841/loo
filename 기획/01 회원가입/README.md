@@ -25,7 +25,7 @@
 
 1. **Figma fetch** (위 nodeId 7개) — 화면 + 인터랙션 캡션 확보
 2. **노션 description 9 페이지 fetch** — API·DB·검증·접근성·zod·ICU 디테일
-3. **git** `web/src/app/user/signup/*/page.tsx` 코드 작업
+3. **git** `개발/web/src/app/user/signup/*/page.tsx` 코드 작업
 4. **3 source cross-check** — Figma(what) + 노션(how/why) + git(code)
 
 ⚠️ Figma·노션·git 셋이 어긋나면 **Figma가 캐노니컬**. 노션·git을 그에 맞춰 보정.
@@ -33,6 +33,6 @@
 ## 🔗 상위 인덱스
 
 - Life OS ONE_v2 인덱스: https://www.notion.so/35dc2986e14081a2b4b9dd2b1ddcc486
-- 코드: `web/src/app/user/signup/*/page.tsx`
+- 코드: `개발/web/src/app/user/signup/*/page.tsx`
 - API: `/api/auth/signup`, `/api/auth/email-check`, `/api/auth/[...nextauth]`
 - 별도 description 필요: U-02-1-terms (약관 본문) · U-02-SNS (SNS 가입 흐름) · U-02-1-login (로그인 화면)

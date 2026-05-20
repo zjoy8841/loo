@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메인 v0.1 — wireframe + 시점 매트릭스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Pretendard,system-ui,sans-serif}</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+<div class="max-w-5xl mx-auto p-8">
+  <h1 class="text-2xl font-bold mb-1">메인 (U-03) v0.1 — wireframe + 시점 매트릭스</h1>
+  <p class="text-gray-600 text-sm mb-8">기존 회원가입·알림·결제 기획과 동선이 맞물리는 메인 화면 골격. 점심 시점 1장으로 시작, 시점 6개의 hero/grid 콘텐츠는 매트릭스로 정의.</p>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.1 스코프</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>점심 시점 2장 (active + idle)</strong> — 같은 URL <code>/user/home</code>의 두 상태. active = 알림 인터럽트 도착 / idle = 알림 없는 평소.</li>
+      <li><strong>active</strong>: Hero에 알림 콘텐츠가 결정 카드로 표시 + 결제 CTA. 점심·결제 추천 알림 예시.</li>
+      <li><strong>idle</strong>: Hero 없음, 미니멀. 인사 + 마스코트 placeholder + 페르소나 칩 + 채팅 입력바 + 빠른 액션 칩.</li>
+      <li><strong>다른 시점</strong> (아침/오전/오후/저녁/야간)은 동일 active/idle 골격 위에서 콘텐츠만 바뀜 → 시점 매트릭스 참조.</li>
+      <li><strong>회원가입 v0.2 패턴 그대로</strong> — Phone 420 + Caption 320, ①~⑧ 마커, Critical 인터랙션 8개.</li>
+      <li><strong>기존 기획 동선 정합</strong> — 결제 진입(④) = U-05 description §4-1 일치 / 종(①) = U-04 알림 / 아바타(②) = U-12 마이페이지.</li>
+      <li><strong>v0.1 범위 외</strong> — Splash 후 첫 진입 환영 화면 / 시점 자동 전환 로직 / 사이드 패널 메뉴 항목 확정 / 디테일 그리드 탭 인터랙션 (display only) / 채팅 입력 결과의 카드 갱신 시퀀스.</li>
+      <li><strong>구조 결정</strong> — 하단 nav 5칸 폐기. <strong>상단 햄버거 → 사이드 패널(좌측 모달)</strong> + <strong>하단 채팅 입력바(ChatGPT 메인 스타일)</strong>. 메뉴 추가/변경 시 메인 화면 영향 없음.</li>
+    </ul>
+  </section>
+
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">소스 of Truth</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li>노션 <strong>화면 IA v2</strong>: <a href="https://www.notion.so/35dc2986e1408177972fc89299154926" class="underline text-gray-700">35dc2986e1408177972fc89299154926</a> — 디폴트 박스 도입·추천 먼저 원칙</li>
+      <li>노션 <strong>유저 플로우 v1</strong>: <a href="https://www.notion.so/35ec2986e140819fb2f3cbfc36318f41" class="underline text-gray-700">35ec2986e140819fb2f3cbfc36318f41</a> — 시점 6개·hero·grid 매트릭스</li>
+      <li>노션 <strong>U-05 단건 결제 공통 패턴</strong>: <a href="https://www.notion.so/364c2986e14081d6980ade96f86c561c" class="underline text-gray-700">364c2986e14081d6980ade96f86c561c</a> — 진입 경로 §4-1</li>
+      <li>노션 <strong>기획서 v5</strong>: <a href="https://www.notion.so/35ec2986e1408111972bd8a7b16c8c0c" class="underline text-gray-700">35ec2986e1408111972bd8a7b16c8c0c</a> — 메인 = "아침·점심·저녁 시나리오 포함"</li>
+    </ul>
+  </section>
+
+  <h2 class="font-bold text-lg mb-4">2 화면 (v0.1)</h2>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-10">
+    <a href="01-home-lunch-active.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-03 · 12-13시 · active ★</div>
+      <div class="font-semibold text-sm">홈 · 점심 · 알림 도착</div>
+      <div class="text-xs text-gray-500 mt-1">8 캡션 · Hero 결정 카드 + 결제 CTA</div>
+    </a>
+    <a href="02-home-lunch-idle.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-03 · 12-13시 · idle</div>
+      <div class="font-semibold text-sm">홈 · 점심 · 알림 없음</div>
+      <div class="text-xs text-gray-500 mt-1">7 캡션 · 미니멀 · 채팅 입력 중심</div>
+    </a>
+  </div>
+
+  <h2 class="font-bold text-lg mb-4">시점 매트릭스 (6 시점 · 골격 동일)</h2>
+  <div class="bg-white border border-gray-300 rounded-2xl overflow-hidden mb-8">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+        <tr>
+          <th class="text-left p-3">시점</th>
+          <th class="text-left p-3">Hero (디폴트 박스)</th>
+          <th class="text-left p-3">Grid 1</th>
+          <th class="text-left p-3">Grid 2</th>
+          <th class="text-left p-3">Grid 3</th>
+          <th class="text-left p-3">주 CTA</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="p-3 font-semibold">06-08 아침</td>
+          <td class="p-3">"자켓·우산 챙기세요"</td>
+          <td class="p-3 text-gray-600">OUTFIT</td>
+          <td class="p-3 text-gray-600">BREAKFAST</td>
+          <td class="p-3 text-gray-600">KEY EVENT</td>
+          <td class="p-3 text-gray-500">없음 (display)</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold">10-11 오전</td>
+          <td class="p-3">"점심엔 단백질 위주로"</td>
+          <td class="p-3 text-gray-600">YESTERDAY</td>
+          <td class="p-3 text-gray-600">SUGGESTED</td>
+          <td class="p-3 text-gray-600">NEARBY</td>
+          <td class="p-3 text-gray-500">없음 (display)</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="p-3 font-semibold">12-13 점심 ★</td>
+          <td class="p-3 font-semibold">"닭가슴살 샐러드 어떠세요?"</td>
+          <td class="p-3 text-gray-600">RESTAURANT</td>
+          <td class="p-3 text-gray-600">NUTRITION</td>
+          <td class="p-3 text-gray-600">NEARBY</td>
+          <td class="p-3"><strong>예약하고 결제</strong> → U-05-1</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold">14-16 오후</td>
+          <td class="p-3">"디자인 리뷰 1시간 37분 뒤"</td>
+          <td class="p-3 text-gray-600">FOLLOW UP</td>
+          <td class="p-3 text-gray-600">PREP</td>
+          <td class="p-3 text-gray-600">BREAK</td>
+          <td class="p-3 text-gray-500">없음 (display)</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold">19-21 저녁</td>
+          <td class="p-3">"지원이와 저녁 시간이에요"</td>
+          <td class="p-3 text-gray-600">TODAY</td>
+          <td class="p-3 text-gray-600">SUGGESTED</td>
+          <td class="p-3 text-gray-600">TOMORROW</td>
+          <td class="p-3 text-gray-500">없음 (display)</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold">22+ 야간</td>
+          <td class="p-3">"토요일, 지원이 생일이에요"</td>
+          <td class="p-3 text-gray-600">UPCOMING</td>
+          <td class="p-3 text-gray-600">TONIGHT</td>
+          <td class="p-3 text-gray-400">—</td>
+          <td class="p-3 text-gray-500">없음 (display)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="font-bold text-lg mb-4">다른 기획과의 접점 (개발 시 함께 봐야 할 페이지)</h2>
+  <div class="bg-white border border-gray-300 rounded-2xl overflow-hidden mb-8">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+        <tr>
+          <th class="text-left p-3">메인 요소</th>
+          <th class="text-left p-3">→ 연결 화면</th>
+          <th class="text-left p-3">상태</th>
+          <th class="text-left p-3">노션 description</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="p-3">① 햄버거 (헤더 좌)</td>
+          <td class="p-3">사이드 패널 모달 (메뉴 항목 미정)</td>
+          <td class="p-3 text-gray-500">v0.1은 진입점만, 항목은 추후</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr>
+          <td class="p-3">② 종 (헤더 우)</td>
+          <td class="p-3">U-04 알림 센터</td>
+          <td class="p-3 text-gray-500">TBD (description 없음)</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr>
+          <td class="p-3">사이드 패널 항목 (예정)</td>
+          <td class="p-3">U-12 마이페이지 외 다수</td>
+          <td class="p-3 text-gray-500">메뉴 구조 미정</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="p-3">④ "예약하고 결제" CTA</td>
+          <td class="p-3"><strong>U-05-1 메뉴 상세</strong></td>
+          <td class="p-3"><strong>✓ description v1</strong></td>
+          <td class="p-3"><a href="https://www.notion.so/364c2986e140814d8b80c2b89c2d783d" class="underline text-gray-700">U-05-1</a></td>
+        </tr>
+        <tr>
+          <td class="p-3">⑤ "다른 추천"</td>
+          <td class="p-3">v1=카드 회전 / v2=/user/lunch</td>
+          <td class="p-3 text-gray-500">v1은 자체 처리</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr>
+          <td class="p-3">⑥ Grid → RESTAURANT/NEARBY 탭</td>
+          <td class="p-3">/user/map · 가맹점 상세</td>
+          <td class="p-3 text-gray-500">v1 display only</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr>
+          <td class="p-3">⑧ 채팅 입력바 마이크</td>
+          <td class="p-3">음성 풀스크린 (재번호 예정)</td>
+          <td class="p-3 text-gray-500">진입점만 v0.1, 화면은 별도</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+        <tr>
+          <td class="p-3">⑧ 채팅 입력바 텍스트/전송</td>
+          <td class="p-3">라이언 응답 → 메인 카드 갱신</td>
+          <td class="p-3 text-gray-500">시퀀스 미정</td>
+          <td class="p-3 text-gray-400">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="font-bold text-lg mb-4">미결 (v0.2 라운드)</h2>
+  <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5 bg-white border border-gray-300 rounded-2xl p-6 mb-8">
+    <li><strong>시점 자동 전환 로직</strong> — 클라이언트 시간 기반인지 서버 hint인지 (유저플로우 §8-1 미결)</li>
+    <li><strong>"다른 추천" 동작</strong> — v1 카드 회전 vs v2 대화 화면 진입 (유저플로우 §8-3 미결)</li>
+    <li><strong>사이드 패널 메뉴 항목 확정</strong> — 홈/알림/마이페이지/시점 시나리오/결제 내역/지도/설정/로그아웃 등 후보. IA 별도 작업 필요</li>
+    <li><strong>채팅 입력바 결과 시퀀스</strong> — 라이언 응답을 (a) Hero 카드 자동 갱신 (b) 대화 로그 시트 (c) /user/voice 전환 중 어느 패턴? 알림·시나리오와 함께 정의 필요</li>
+    <li><strong>다른 시점 5장 그리기 필요 여부</strong> — 골격 동일이라 매트릭스만으로 충분한가, 아니면 저녁/야간 등 정서 톤 다른 시점은 별도 wireframe 필요한가</li>
+    <li><strong>Hero Decision Card 영역에 라이언 마스코트 노출 여부</strong> — 라이언 v1(blink/breathe/bounce/tilt) 통합 위치 결정</li>
+    <li><strong>오늘의 한 줄 ↔ 인사이트 ↔ 일정 알림 분리 정책</strong> — 알림 description과 함께 정의 필요</li>
+    <li><strong>Splash → 회원가입 완료 → 메인 첫 진입 환영 화면</strong> — 화면 IA v2 §4 마지막 줄에 "강화" 표현만 있고 별도 정의 없음</li>
+  </ul>
+
+  <p class="text-xs text-gray-500 mt-8 leading-relaxed">
+    ※ 본 wireframe은 인터랙션·동작 매핑 목적. 색·폰트·픽셀·radius·motion·WCAG는 디자인 가이드(v.7 / v.8 / v.9) 참조.<br>
+    ※ 점심 시점 컬러 시안은 이미 v6.10 best (디자인/추가 시안/메인_iOS_HIG_v6/) 등 11장 있음 — 본 wireframe은 그것과 별개의 동작 매핑 도면.<br>
+    ※ 노션 description (U-03)은 본 wireframe 확정 후 작성 예정.
+  </p>
+</div>
+</body>
+</html>
