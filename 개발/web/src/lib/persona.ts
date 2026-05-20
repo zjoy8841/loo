@@ -25,17 +25,6 @@ export type ProfileLike = {
 
 export type Chip = { emoji: string; label: string };
 
-// JSON-as-String 컬럼을 안전하게 array로 풀기.
-export function parseJsonArray(s: string | null | undefined): string[] {
-  if (!s) return [];
-  try {
-    const arr = JSON.parse(s);
-    return Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
 // 메인 화면의 "나의 페르소나" 칩 (최대 N개).
 // 우선순위: health(걱정) > shape > diet > lifestyle.
 // "healthy"(일단은 멀쩡)는 정보값 낮으므로 제외.

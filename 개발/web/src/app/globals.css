@@ -1,10 +1,37 @@
 @import "tailwindcss";
 
+/*
+ * 디자인 토큰 — swap-ready
+ * 디자인 컨펌 전 임시값. 컨펌 후 이 블록만 교체하면 전 화면 톤 변경.
+ * 인라인 hex(`#xxx`) 박지 말고 항상 이 토큰의 Tailwind 클래스 사용.
+ *   bg-signup-accent / text-signup-accent / border-signup-accent / hover:bg-signup-accent-hover
+ */
 @theme {
+  /* 기존 글로벌 (메인·랜딩) — 디자인 가이드 v7 후속 정리 대상 */
   --color-ivory: #FAF7F0;
   --color-charcoal: #1F2937;
   --color-mustard: #F59E0B;
   --color-lavender: #8B5CF6;
+
+  /*
+   * 회원가입 톤 — 그레이스케일 (2026-05-20)
+   * 디자인 컨펌 전 임시. wireframe과 동일하게 무채색만.
+   * 컨펌된 컬러 시안이 들어오면 이 5개 변수만 교체.
+   */
+  --color-signup-accent: #1F2937;        /* Primary / 선택 카드 — gray-800 */
+  --color-signup-accent-hover: #111827;  /* hover — gray-900 */
+  --color-signup-accent-soft: #F3F4F6;   /* soft 배경 — gray-100 */
+  --color-signup-accent-deep: #374151;   /* deep text — gray-700 */
+  --color-signup-surface: #FFFFFF;       /* page surface — white */
+
+  /*
+   * 신호색도 그레이스케일. 강조는 굵기·보더로 표현.
+   * 컨펌 후 시멘틱 컬러(빨강/초록) 입힘.
+   */
+  --color-danger: #111827;       /* gray-900 — 보더·굵은 글자로 강조 */
+  --color-danger-soft: #F3F4F6;  /* gray-100 */
+  --color-success: #374151;      /* gray-700 */
+
   --font-sans: "Pretendard Variable", "Pretendard", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -13,4 +40,16 @@ body {
   background-color: var(--color-ivory);
   color: var(--color-charcoal);
   font-family: var(--font-sans);
+}
+
+/* description §10: prefers-reduced-motion 시 단계 전환 모션 0ms */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }

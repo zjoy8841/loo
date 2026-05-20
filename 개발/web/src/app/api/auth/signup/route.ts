@@ -7,6 +7,13 @@ const schema = z.object({
   email: z.string().email("올바른 이메일 형식이 아니에요"),
   password: z.string().min(8, "비밀번호는 8자 이상이어야 해요"),
   name: z.string().min(1, "이름을 입력해주세요"),
+  agreeTerms: z.literal(true, {
+    message: "서비스 이용약관 동의가 필요해요",
+  }),
+  agreePrivacy: z.literal(true, {
+    message: "개인정보 처리방침 동의가 필요해요",
+  }),
+  agreeMarketing: z.boolean().optional(),
 });
 
 export async function POST(req: Request) {

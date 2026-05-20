@@ -7,7 +7,6 @@ import {
   getMetaChips,
   getGreetingForHour,
   getAvatarInitial,
-  parseJsonArray,
 } from "@/lib/persona";
 
 // 뉴스·미션·추천 등은 아직 mock — DB·LLM 연동은 후속 작업.
@@ -55,11 +54,11 @@ export default async function UserHome() {
   const profile = {
     shapeKey: user.profile?.shapeKey ?? null,
     jobKey: user.profile?.jobKey ?? null,
-    healthTags: parseJsonArray(user.profile?.healthTags),
-    dietTags: parseJsonArray(user.profile?.dietTags),
-    allergyTags: parseJsonArray(user.profile?.allergyTags),
-    lifestyleTags: parseJsonArray(user.profile?.lifestyleTags),
-    interests: parseJsonArray(user.profile?.interests),
+    healthTags: user.profile?.healthTags ?? [],
+    dietTags: user.profile?.dietTags ?? [],
+    allergyTags: user.profile?.allergyTags ?? [],
+    lifestyleTags: user.profile?.lifestyleTags ?? [],
+    interests: user.profile?.interests ?? [],
   };
 
   const personaChips = getPersonaChips(profile);

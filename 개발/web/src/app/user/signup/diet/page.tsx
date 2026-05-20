@@ -1,24 +1,41 @@
 "use client";
 
-import Link from "next/link";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useRouter } from "next/navigation";
+import { UtensilsCrossed } from "lucide-react";
 import { DIET_TAGS, ALLERGY_TAGS } from "@/lib/enums";
-
-// Mock 초기값: diet[4]='omnivore' 선택
-const DEFAULT_DIET = [4];
-const DEFAULT_ALLERGY: number[] = [];
+import { useT } from "@/lib/i18n";
+import {
+  SignupShell,
+  StepIntro,
+  OptionGrid,
+  OptionCard,
+  BottomActions,
+  LaterButton,
+  PrimaryActionButton,
+  ConfirmDialog,
+  EnumIcon,
+} from "@/components/signup";
 
 export default function SignupDiet() {
   const router = useRouter();
-  const [diet, setDiet] = useState<number[]>(DEFAULT_DIET);
-  const [allergy, setAllergy] = useState<number[]>(DEFAULT_ALLERGY);
+  const t = useT();
+  const [diet, setDiet] = useState<number[]>([]);
+  const [allergy, setAllergy] = useState<number[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [allergySkipDialogOpen, setAllergySkipDialogOpen] = useState(false);
 
-  const toggle = (
-    setter: Dispatch<SetStateAction<number[]>>,
-    i: number,
-  ) => setter((s) => (s.includes(i) ? s.filter((x) => x !== i) : [...s, i]));
+  // description §5: 알레르기 미입력 상태에서 "건너뛰기" 클릭 시 strong-warn 다이얼로그
+  const requestSkip = () => {
+    if (allergy.length === 0) {
+      setAllergySkipDialogOpen(true);
+    } else {
+      handleNext(true);
+    }
+  };
+
+  const toggle = (setter: Dispatch<SetStateAction<number[]>>, i: number) =>
+    setter((s) => (s.includes(i) ? s.filter((x) => x !== i) : [...s, i]));
 
   async function handleNext(skip = false) {
     if (submitting) return;
@@ -40,99 +57,84 @@ export default function SignupDiet() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col">
-      <header className="px-6 pt-6 pb-4 flex items-center justify-between">
-        <Link href="/user/signup/shape" className="text-2xl text-gray-500">
-          ←
-        </Link>
-        <span className="text-sm text-gray-500">4 / 7</span>
-      </header>
-      <div className="px-6">
-        <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-[#4F8BD9]" style={{ width: "57.1%" }} />
-        </div>
-      </div>
+    <SignupShell
+      step={4}
+      backHref="/user/signup/shape"
+      scrollable
+      bottomActions={
+        <BottomActions>
+          <LaterButton
+            onPress={requestSkip}
+            disabled={submitting}
+            warnLevel="strong"
+          />
+          <PrimaryActionButton
+            label={t("signup.cta.next")}
+            onPress={() => handleNext(false)}
+            loading={submitting}
+          />
+        </BottomActions>
+      }
+    >
+      <StepIntro
+        icon={<UtensilsCrossed size={32} strokeWidth={1.5} aria-hidden />}
+        heading={t("signup.step4.heading")}
+        description={t("signup.step4.description")}
+      />
 
-      <div className="flex-1 px-6 pt-10 overflow-y-auto">
-        <div className="text-3xl mb-3">🍽️</div>
-        <h1 className="text-2xl font-bold mb-2">음식은 어떠세요?</h1>
-        <p className="text-gray-500 mb-6 text-sm">해당되는 것 모두 골라주세요</p>
+      <SectionLabel>{t("signup.step4.section.diet")}</SectionLabel>
+      <OptionGrid variant="multi" className="mb-6">
+        {DIET_TAGS.map((tag, i) => (
+          <OptionCard
+            key={tag.key}
+            variant="multi"
+            selected={diet.includes(i)}
+            onPress={() => toggle(setDiet, i)}
+            icon={<EnumIcon name={tag.iconKey} size={24} />}
+            label={tag.label}
+            wide={tag.key === "omnivore"}
+            size="compact"
+          />
+        ))}
+      </OptionGrid>
 
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-          식이 성향
-        </p>
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {DIET_TAGS.map((t, i) => {
-            const wide = t.key === "omnivore";
-            return (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => toggle(setDiet, i)}
-                className={`rounded-2xl p-3 text-left border-2 transition ${
-                  wide ? "col-span-2" : ""
-                } ${
-                  diet.includes(i)
-                    ? "bg-[#4F8BD9] text-white border-[#4F8BD9]"
-                    : "bg-white border-gray-200"
-                }`}
-              >
-                <div className="text-xl mb-1">{t.emoji}</div>
-                <div className="text-sm font-semibold whitespace-pre-line">
-                  {t.label}
-                </div>
-              </button>
-            );
-          })}
-        </div>
+      <SectionLabel>{t("signup.step4.section.allergy")}</SectionLabel>
+      <OptionGrid variant="multi">
+        {ALLERGY_TAGS.map((tag, i) => (
+          <OptionCard
+            key={tag.key}
+            variant="multi"
+            selected={allergy.includes(i)}
+            onPress={() => toggle(setAllergy, i)}
+            icon={<EnumIcon name={tag.iconKey} size={24} />}
+            label={tag.label}
+            wide={tag.key === "lactose"}
+            size="compact"
+          />
+        ))}
+      </OptionGrid>
 
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-          알레르기 / 못 먹는 것
-        </p>
-        <div className="grid grid-cols-2 gap-3">
-          {ALLERGY_TAGS.map((t, i) => {
-            const wide = t.key === "lactose";
-            return (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => toggle(setAllergy, i)}
-                className={`rounded-2xl p-3 text-left border-2 transition ${
-                  wide ? "col-span-2" : ""
-                } ${
-                  allergy.includes(i)
-                    ? "bg-[#4F8BD9] text-white border-[#4F8BD9]"
-                    : "bg-white border-gray-200"
-                }`}
-              >
-                <div className="text-xl mb-1">{t.emoji}</div>
-                <div className="text-sm font-semibold leading-tight whitespace-pre-line">
-                  {t.label}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <ConfirmDialog
+        open={allergySkipDialogOpen}
+        title={t("signup.step4.skipDialog.title")}
+        description={t("signup.step4.skipDialog.description")}
+        cancelLabel={t("signup.step4.skipDialog.cancel")}
+        confirmLabel={t("signup.step4.skipDialog.confirm")}
+        confirmVariant="danger"
+        onCancel={() => setAllergySkipDialogOpen(false)}
+        onConfirm={() => {
+          setAllergySkipDialogOpen(false);
+          handleNext(true);
+        }}
+      />
+    </SignupShell>
+  );
+}
 
-      <div className="px-6 py-4 border-t border-gray-200 grid grid-cols-3 gap-3">
-        <button
-          type="button"
-          onClick={() => handleNext(true)}
-          disabled={submitting}
-          className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50"
-        >
-          건너뛰기
-        </button>
-        <button
-          type="button"
-          onClick={() => handleNext(false)}
-          disabled={submitting}
-          className="col-span-2 bg-[#4F8BD9] hover:bg-[#3B73C2] disabled:bg-gray-300 text-white font-semibold py-4 rounded-xl text-center transition"
-        >
-          {submitting ? "저장 중…" : "다음"}
-        </button>
-      </div>
-    </main>
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+      {children}
+    </p>
   );
 }

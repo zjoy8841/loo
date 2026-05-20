@@ -1,15 +1,21 @@
-// Life OS.ONE — Prisma 스키마
+// Life OS.ONE — Prisma 스키마 (Postgres / Supabase)
 // 단일 진실 공급원: 노션 API 명세 v1
-// SQLite 로컬 개발용. 프로덕션 Postgres 이전 시 provider만 교체하고
-// JSON-as-String 컬럼들은 String[] 로 마이그레이션.
+//
+// Supabase Postgres 사용:
+//   DATABASE_URL = pgbouncer pooled connection (서버 런타임용, port 6543)
+//   DIRECT_URL   = 직결 connection (migrations 전용, port 5432)
+//
+// 배열 컬럼은 Postgres String[]. JSON 구조체는 Json.
+// SQLite 시절의 JSON-as-String 패턴은 폐기.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ============================================================
@@ -38,8 +44,6 @@ model User {
 }
 
 // 회원가입 7단계 중 1단계(account)는 User에, 2~7단계는 Profile에 저장.
-// 태그류는 SQLite array 미지원으로 JSON 문자열 (예: '["cholesterol","fatigue"]').
-// 건너뛰기 시 기본값 "[]" 또는 null 유지.
 model Profile {
   userId        String   @id
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -48,12 +52,12 @@ model Profile {
   shapeKey      String?  // gain | diet | bulk | never-ending-dieter | maintain
   jobKey        String?  // student | employee | medical | freelancer | parent | senior | etc
 
-  // 다중 선택 (JSON-as-String)
-  healthTags    String   @default("[]") // cholesterol | hypertension | blood-sugar | fatigue | joints | healthy
-  dietTags      String   @default("[]") // vegetarian | vegan | pesco | halal | omnivore
-  allergyTags   String   @default("[]") // nuts | shellfish | lactose
-  lifestyleTags String   @default("[]") // caffeine | alcohol | night-owl | early-bird
-  interests     String   @default("[]") // economy | entertainment | sports | it | health | fashion | self-dev | parenting | food | travel
+  // 다중 선택 (Postgres String[])
+  healthTags    String[] @default([]) // cholesterol | hypertension | blood-sugar | fatigue | joints | healthy
+  dietTags      String[] @default([]) // vegetarian | vegan | pesco | halal | omnivore
+  allergyTags   String[] @default([]) // nuts | shellfish | lactose
+  lifestyleTags String[] @default([]) // caffeine | alcohol | night-owl | early-bird
+  interests     String[] @default([]) // economy | entertainment | sports | it | health | fashion | self-dev | parenting | food | travel
 
   // 위치 (선택)
   addressLat    Float?
@@ -77,7 +81,7 @@ model Merchant {
   phone         String?
   description   String?
   thumbnail     String?  // 이미지 URL (선택)
-  tags          String   @default("[]") // 저염 | 단백질 강조 | 글루텐프리 등
+  tags          String[] @default([]) // 저염 | 단백질 강조 | 글루텐프리 등
   active        Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -97,8 +101,8 @@ model Menu {
   proteinG     Float?
   prepMinutes  Int?
   description  String?
-  dietTags     String   @default("[]") // 고단백 | 저염 | 채식 등
-  allergens    String   @default("[]") // 글루텐 | 견과 | 유당 등
+  dietTags     String[] @default([]) // 고단백 | 저염 | 채식 등
+  allergens    String[] @default([]) // 글루텐 | 견과 | 유당 등
   isSignature  Boolean  @default(false)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -279,7 +283,7 @@ model Notification {
   variant         String   // event-payment | event-accept | event-reject | event-prereminder | schedule | system
   title           String
   body            String
-  payload         String   @default("{}")  // JSON-as-String. 도메인별 payload (예약ID, 결제ID, 플랜ID 등)
+  payload         Json     // 도메인별 payload (예약ID, 결제ID, 플랜ID 등)
   deepLink        String?  // 도착 화면(U-04-6) → 도메인 화면 매핑용
 
   // 상태 (U-04 §8)
@@ -311,9 +315,9 @@ model NotificationRule {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   title           String
-  pattern         String   // JSON: { type: "daily"|"weekly"|"monthly"|"custom", weekdays?: [], interval?: int, ... }
+  pattern         Json     // { type: "daily"|"weekly"|"monthly"|"custom", weekdays?: [], interval?: int, ... }
   triggerTime     String   // "HH:MM" KST
-  condition       String?  // JSON 조건 조립 (예: 날씨·일정·위치 조합)
+  condition       Json?    // 조건 조립 (예: 날씨·일정·위치 조합)
   action          String   // recommend_menu | reminder | schedule_event | custom
 
   state           String   @default("ACTIVE")

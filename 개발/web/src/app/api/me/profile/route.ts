@@ -39,11 +39,11 @@ export async function PATCH(req: Request) {
   const data: Record<string, unknown> = {};
   if (input.shapeKey !== undefined) data.shapeKey = input.shapeKey;
   if (input.jobKey !== undefined) data.jobKey = input.jobKey;
-  if (input.healthTags) data.healthTags = JSON.stringify(input.healthTags);
-  if (input.dietTags) data.dietTags = JSON.stringify(input.dietTags);
-  if (input.allergyTags) data.allergyTags = JSON.stringify(input.allergyTags);
-  if (input.lifestyleTags) data.lifestyleTags = JSON.stringify(input.lifestyleTags);
-  if (input.interests) data.interests = JSON.stringify(input.interests);
+  if (input.healthTags) data.healthTags = input.healthTags;
+  if (input.dietTags) data.dietTags = input.dietTags;
+  if (input.allergyTags) data.allergyTags = input.allergyTags;
+  if (input.lifestyleTags) data.lifestyleTags = input.lifestyleTags;
+  if (input.interests) data.interests = input.interests;
   if (input.addressLat !== undefined) data.addressLat = input.addressLat;
   if (input.addressLng !== undefined) data.addressLng = input.addressLng;
 
