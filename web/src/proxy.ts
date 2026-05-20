@@ -21,6 +21,10 @@ const PROTECTED_ROUTES = [
   "/user/lunch",
   "/user/evening",
   "/user/map",
+  "/user/order",
+  "/user/reservation",
+  "/user/schedule",
+  "/user/plan",
 ];
 
 const SESSION_COOKIES = [
@@ -62,5 +66,9 @@ export const config = {
     "/user/lunch/:path*",
     "/user/evening/:path*",
     "/user/map/:path*",
+    "/user/order/:path*",
+    "/user/reservation/:path*",
+    "/user/schedule/:path*",
+    "/user/plan/:path*",
   ],
 };

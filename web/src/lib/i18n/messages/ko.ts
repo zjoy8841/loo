@@ -19,7 +19,7 @@ const ko = {
       close_aria: "닫기",
       cta: {
         next: "다음",
-        pay: "₩{amount} 결제하기",
+        pay: "{amount} 결제하기",
         cancel: "취소하고 돌아가기",
         directions: "길찾기 시작",
         alternatives: "대안 메뉴 보기",
