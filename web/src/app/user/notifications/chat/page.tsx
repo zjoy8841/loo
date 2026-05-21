@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Plus, Mic, ArrowUp } from "lucide-react";
 import RyanMascot from "@/components/RyanMascot";
-import { useT } from "@/lib/i18n";
 
 type Msg = { who: "ryan" | "me"; text: string };
 
@@ -23,7 +22,6 @@ const SUGGESTIONS = [
 ];
 
 export default function NotificationChatPage() {
-  const t = useT();
   const router = useRouter();
   const [msgs, setMsgs] = useState<Msg[]>(INITIAL);
   const [draft, setDraft] = useState("");

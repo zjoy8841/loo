@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AlertTriangle, CreditCard, Clock } from "lucide-react";
 import PaymentHeader from "@/components/payment/PaymentHeader";
@@ -23,6 +24,14 @@ function won(n: number) {
 }
 
 export default function OrderFailedPage() {
+  return (
+    <Suspense fallback={null}>
+      <OrderFailedContent />
+    </Suspense>
+  );
+}
+
+function OrderFailedContent() {
   const t = useT();
   const router = useRouter();
   const search = useSearchParams();

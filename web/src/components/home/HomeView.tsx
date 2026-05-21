@@ -19,11 +19,11 @@ export default function HomeView({
   const router = useRouter();
   const [mode, setMode] = useState<"active" | "idle">(initialMode);
 
-  function handleChat(_text: string) {
+  function handleChat() {
     if (mode === "idle") setMode("active");
   }
 
-  function handleQuickAction(_key: string) {
+  function handleQuickAction() {
     setMode("active");
   }
 

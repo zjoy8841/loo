@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { findRule } from "@/lib/notifications/mock";
@@ -11,6 +11,14 @@ const PATTERNS = ["daily", "weekly", "weekday", "once"] as const;
 type Pattern = (typeof PATTERNS)[number];
 
 export default function NewRulePage() {
+  return (
+    <Suspense fallback={null}>
+      <NewRuleContent />
+    </Suspense>
+  );
+}
+
+function NewRuleContent() {
   const t = useT();
   const router = useRouter();
   const search = useSearchParams();

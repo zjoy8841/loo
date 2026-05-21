@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import {
   Navigation,
@@ -7,7 +8,6 @@ import {
   CalendarClock,
   XCircle,
   Check,
-  Circle,
   Clock,
   CheckCircle2,
 } from "lucide-react";
@@ -31,6 +31,14 @@ function won(n: number) {
 }
 
 export default function ReservationDetailPage() {
+  return (
+    <Suspense fallback={null}>
+      <ReservationDetailContent />
+    </Suspense>
+  );
+}
+
+function ReservationDetailContent() {
   const t = useT();
   const router = useRouter();
   const search = useSearchParams();

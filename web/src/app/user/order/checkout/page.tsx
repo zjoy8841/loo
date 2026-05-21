@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Check, AlertCircle } from "lucide-react";
 import PaymentHeader from "@/components/payment/PaymentHeader";
@@ -25,6 +25,14 @@ function won(n: number) {
 }
 
 export default function OrderCheckoutPage() {
+  return (
+    <Suspense fallback={null}>
+      <OrderCheckoutContent />
+    </Suspense>
+  );
+}
+
+function OrderCheckoutContent() {
   const t = useT();
   const router = useRouter();
   const search = useSearchParams();
