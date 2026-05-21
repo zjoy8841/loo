@@ -23,7 +23,21 @@ export type RecommendationProfile = {
   shapeKey: string | null;
 };
 
-export function pickMenu(profile: RecommendationProfile): MenuMock {
+// 같은 user는 항상 같은 메뉴를 보도록(시연 일관성), 같은 점수 메뉴 중
+// user별로 다른 winner가 나오도록 deterministic hash.
+function hashCode(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h << 5) - h + s.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+export function pickMenu(
+  profile: RecommendationProfile,
+  seed?: string,
+): MenuMock {
   const { healthTags, dietTags, allergyTags } = profile;
 
   const safe = MENUS.filter(
@@ -44,7 +58,12 @@ export function pickMenu(profile: RecommendationProfile): MenuMock {
     score: m.healthFit.filter((h) => healthTags.includes(h)).length,
   }));
 
-  scored.sort((a, b) => b.score - a.score);
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    if (seed) return hashCode(seed + a.menu.id) - hashCode(seed + b.menu.id);
+    return 0;
+  });
+
   return scored[0]?.menu ?? MENUS[0];
 }
 

@@ -39,7 +39,7 @@ export default async function UserHome({
     shapeKey: user.profile?.shapeKey ?? null,
   };
 
-  const menu = pickMenu(profile);
+  const menu = pickMenu(profile, session.user.id);
   const personaChips = buildPersonaChips(profile);
   const insight = buildInsight();
 
