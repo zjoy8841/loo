@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에러 페이지 v0.1 — wireframe + 코드별 변형</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.inline-tag{margin-left:8px;vertical-align:middle}
+.metric{font-size:10px;color:#888;letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.code-display{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;letter-spacing:-0.04em;color:#1f1f1f;line-height:0.9}
+.mascot-circle{border-radius:999px;border:2px dashed #bbb;background:#f7f7f7;display:flex;align-items:center;justify-content:center;color:#999;font-size:10px;text-align:center;flex-direction:column;line-height:1.2}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+<div class="max-w-5xl mx-auto p-8">
+
+  <h1 class="text-2xl font-bold mb-1">에러 페이지 v0.1 — wireframe + 코드별 변형</h1>
+  <p class="text-gray-600 text-sm mb-8">HTTP 에러 코드를 그대로 노출하면서 위트 있는 카피로 사용자를 안내하는 단일 템플릿. 코드별로 헤드라인·설명·CTA만 바뀌고 골격은 동일.</p>
+
+  <!-- 스코프 -->
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.1 스코프</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>1 템플릿 · N 코드</strong> — 같은 화면 구조에서 헤드라인·설명·CTA 카피만 코드별로 교체. 코드 자체를 큰 숫자로 노출하는 게 핵심 의도.</li>
+      <li><strong>위트 카피</strong> — "서버가 점심 먹으러 갔어요"(503), "전 주전자라서요"(418) 등 친근한 한 줄 + 정확한 HTTP 영문 라벨 병기.</li>
+      <li><strong>라이언 마스코트 활용</strong> — mount 시 <strong>tilt</strong>(갸우뚱) 한 번 트리거 → 어리둥절함 표현. 마스코트 탭 시 <strong>bounce</strong>.</li>
+      <li><strong>그레이스케일</strong> — 시멘틱 컬러 X. 강조는 굵기·보더·코드 숫자 크기로.</li>
+      <li><strong>대표 화면 1장 (404)</strong> + <strong>코드별 변형 비교 5장</strong> (403 · 401 · 500 · 503 · 418).</li>
+      <li><strong>v0.1 범위 외</strong> — 라우트 설계(Next.js <code>not-found.tsx</code>/<code>error.tsx</code> 매핑), 다국어, 에러 원인 자동 진단, 운영팀 알림 전송 로직. 디자인 컨펌 후 개발 라운드에서 진행.</li>
+    </ul>
+  </section>
+
+  <!-- 디자인 원칙 -->
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">디자인 원칙</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>코드 우선 노출</strong> — 화면 진입 후 0.5초 안에 "내가 무슨 에러를 만났는지" 인식 가능해야 함. 코드 숫자가 시각적 anchor.</li>
+      <li><strong>HTTP 표준 영문 병기</strong> — 코드 옆에 <code>NOT FOUND</code>, <code>SERVICE UNAVAILABLE</code> 등 표준 라벨. 검색·디버깅 단서.</li>
+      <li><strong>위트 ≠ 무책임</strong> — 농담은 헤드라인 한 줄까지. 설명·hint는 정중하게. 사용자가 "내 잘못인가?" 헷갈리지 않게 카탈로그 표 <strong>책임</strong> 컬럼처럼 사용자/서비스 측 중 누구 문제인지 분명히.</li>
+      <li><strong>CTA는 막다른 길 회피</strong> — 홈으로 / 이전 페이지 / 다시 시도 중 항상 최소 1개. 모든 변형에 "홈으로" 기본 포함.</li>
+      <li><strong>접근성</strong> — 코드 숫자는 <code>aria-label="에러 코드 404"</code>. CTA는 키보드 포커스 가능. 마스코트는 <code>aria-hidden</code> (장식).</li>
+    </ul>
+  </section>
+
+  <!-- ───── 대표 화면 (404) — Phone 420 + Caption 320 ───── -->
+  <h2 class="font-bold text-lg mb-1">대표 화면 — 404 NOT FOUND</h2>
+  <p class="text-gray-600 text-sm mb-4">인터랙션 매핑 wireframe 표준 (Phone 420 + Caption 320, ①~⑤ 마커).</p>
+
+  <div class="bg-gray-200 rounded-2xl p-6 mb-10">
+    <div class="flex flex-wrap gap-5 justify-center items-start">
+
+      <!-- Phone frame -->
+      <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+        <!-- 헤더 (최소) -->
+        <div class="px-6 pt-6 pb-3 flex items-center justify-between">
+          <button class="relative">
+            <span class="ic">≡</span>
+          </button>
+          <div class="text-xs text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+          <button class="relative">
+            <span class="ic">×</span>
+            <span class="tag inline-tag" style="position:absolute;top:-10px;right:-12px">1</span>
+          </button>
+        </div>
+
+        <!-- 본문 -->
+        <div class="flex-1 flex flex-col items-center text-center px-8 pt-12 pb-6">
+
+          <!-- 라이언 마스코트 (갸우뚱) -->
+          <div class="mascot-circle relative" style="width:120px;height:120px">
+            <span>라이언</span>
+            <span class="text-[9px]">tilt 자동</span>
+            <span class="tag inline-tag" style="position:absolute;top:-10px;right:-10px">2</span>
+          </div>
+
+          <!-- 코드 숫자 (메인 시각 anchor) -->
+          <div class="mt-8 relative">
+            <div class="code-display" style="font-size:120px" aria-label="에러 코드 404">404</div>
+            <span class="tag inline-tag" style="position:absolute;top:8px;right:-28px">3</span>
+          </div>
+
+          <!-- HTTP 표준 영문 -->
+          <div class="mt-2 text-xs tracking-[0.3em] text-gray-500 font-semibold">NOT FOUND</div>
+
+          <!-- 위트 헤드라인 -->
+          <h1 class="mt-6 text-xl font-bold leading-snug text-gray-900">
+            여긴 아무것도 없어요
+          </h1>
+
+          <!-- 설명 -->
+          <p class="mt-3 text-sm text-gray-600 leading-relaxed max-w-[260px]">
+            주소가 잘못됐거나, 페이지가 사라졌거나,<br>라이언이 길을 잃었어요.
+          </p>
+
+          <!-- hint -->
+          <p class="mt-4 text-xs text-gray-500 leading-relaxed max-w-[260px]">
+            주소를 다시 확인하거나 홈으로 돌아가세요.
+          </p>
+
+        </div>
+
+        <!-- CTA 영역 -->
+        <div class="px-6 pb-8 pt-2 relative">
+          <span class="tag" style="position:absolute;top:-10px;left:14px">4</span>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="bg-gray-900 text-white font-semibold py-3 rounded-xl text-sm">
+              홈으로
+            </button>
+            <button class="bg-white border border-gray-300 text-gray-900 font-semibold py-3 rounded-xl text-sm">
+              이전 페이지
+            </button>
+          </div>
+
+          <!-- 메타 (에러 ID — 운영 대응용) -->
+          <div class="mt-4 text-center relative">
+            <span class="tag inline-tag" style="position:absolute;top:-6px;right:50%;margin-right:-90px">5</span>
+            <p class="text-[10px] text-gray-400 font-mono tracking-wider">
+              ERR-ID · 8f3a2c · 2026-05-21 14:32
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caption column -->
+      <div class="cap w-[320px]">
+        <h2>주요 인터랙션 매핑</h2>
+
+        <div class="tag-row">
+          <span class="tag">1</span>
+          <div class="body"><strong>× 닫기 (옵션)</strong><br>모달/오버레이 형태로 호출된 에러일 때만 노출. 풀스크린 에러 페이지(라우트 진입형)에선 숨김. 닫으면 <code>router.back()</code>.</div>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">2</span>
+          <div class="body"><strong>라이언 마스코트 — 갸우뚱 (tilt)</strong><br>mount 시 <strong>tilt</strong> 1회 자동 트리거 → 어리둥절함 표현. 탭 시 <strong>bounce</strong>. <code>aria-hidden="true"</code> (장식). <code>prefers-reduced-motion</code>이면 정적 표시. 마스코트 컴포넌트 = <code>RyanMascot</code> (web/src/components/RyanMascot.tsx).</div>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">3</span>
+          <div class="body"><strong>코드 숫자 — 메인 시각 anchor</strong><br>120px 큰 숫자 + 아래 HTTP 표준 영문 라벨 (NOT FOUND). <code>aria-label="에러 코드 404"</code>. 코드 자체가 검색·디버깅 단서이므로 화면 진입 후 0.5초 안에 인식되게 우선 배치.</div>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">4</span>
+          <div class="body"><strong>CTA — 막다른 길 회피</strong><br>모든 에러 변형에 <strong>"홈으로"</strong> 기본 포함. 코드별로 보조 CTA만 교체: 404·403 = "이전 페이지" / 500·503·504 = "다시 시도" / 401 = "로그인". 키보드 포커스 가능, Enter/Space 동작.</div>
+        </div>
+
+        <div class="tag-row">
+          <span class="tag">5</span>
+          <div class="body"><strong>ERR-ID · 타임스탬프 (운영 대응용)</strong><br>500번대일 때 필수. 사용자가 운영팀에 문의할 때 이 ID로 로그 조회. 4xx는 옵션. 폰트 작게, 회색으로. 길게 누르면 클립보드 복사 (v0.2).</div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-gray-200">
+          <p class="text-[11px] text-gray-500 leading-relaxed">
+            ※ 색·폰트·픽셀·radius·motion·WCAG 등 시각 사양은 디자인 가이드 참조. 본 wireframe은 인터랙션·동작 매핑 목적.
+          </p>
+          <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+            ※ 라우트 매핑(Next.js <code>not-found.tsx</code>/<code>error.tsx</code>/<code>global-error.tsx</code>), 다국어, 에러 자동 진단은 v0.1 범위 외 — 개발 라운드에서 결정.
+          </p>
+          <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+            ※ 같은 골격으로 다른 코드는 어떻게 보이는지 → 아래 <strong>코드별 변형 비교</strong> 섹션.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── 코드별 변형 비교 ───── -->
+  <h2 class="font-bold text-lg mb-1">코드별 변형 비교</h2>
+  <p class="text-gray-600 text-sm mb-4">같은 템플릿에서 코드 · 헤드라인 · 설명 · 보조 CTA만 교체. mini phone 280px 그리드.</p>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+
+    <!-- 403 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">403</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">FORBIDDEN</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">여긴 회원님 자리가 아니에요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          권한이 필요한 페이지예요.<br>라이언도 못 들여보내요.
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-2 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+        <button class="border border-gray-300 text-gray-900 text-[11px] font-semibold py-2 rounded-lg">이전</button>
+      </div>
+    </div>
+
+    <!-- 401 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">401</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">UNAUTHORIZED</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">누구세요? 처음 뵙는데요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          이 페이지는 로그인한<br>회원만 들어올 수 있어요.
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-2 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">로그인</button>
+        <button class="border border-gray-300 text-gray-900 text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+      </div>
+    </div>
+
+    <!-- 500 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">500</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">SERVER ERROR</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">서버가 잠깐 졸고 있어요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          라이언도 예상 못 한 에러가<br>났어요. 곧 깨워올게요.
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-2 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">다시 시도</button>
+        <button class="border border-gray-300 text-gray-900 text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+      </div>
+    </div>
+
+    <!-- 503 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">503</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">UNAVAILABLE</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">서버가 점심 먹으러 갔어요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          지금은 이용할 수 없어요.<br>곧 자리로 돌아옵니다.
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-2 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">다시 시도</button>
+        <button class="border border-gray-300 text-gray-900 text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+      </div>
+    </div>
+
+    <!-- 429 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">Life OS.ONE</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">429</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">TOO MANY</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">잠깐, 숨 좀 돌릴게요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          짧은 시간에 너무 많이<br>요청하셨어요.
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-2 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">다시 시도</button>
+        <button class="border border-gray-300 text-gray-900 text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+      </div>
+    </div>
+
+    <!-- 418 — 보너스 -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border-2 border-dashed border-gray-400">
+      <div class="px-4 pt-4 pb-2 flex items-center justify-between">
+        <span class="ic" style="width:24px;height:24px;font-size:8px">≡</span>
+        <div class="text-[9px] text-gray-400 tracking-wider uppercase">★ 보너스</div>
+        <span class="w-6"></span>
+      </div>
+      <div class="flex flex-col items-center text-center px-4 pt-4 pb-4">
+        <div class="mascot-circle" style="width:60px;height:60px">
+          <span class="text-[8px]">라이언</span>
+        </div>
+        <div class="code-display mt-4" style="font-size:64px">418</div>
+        <div class="text-[9px] tracking-[0.25em] text-gray-500 font-semibold mt-1">I'M A TEAPOT</div>
+        <h3 class="mt-3 text-sm font-bold text-gray-900">전 주전자라서요</h3>
+        <p class="mt-1.5 text-[11px] text-gray-600 leading-snug">
+          커피는 못 끓여요. (1998<br>만우절에 만든 진짜 HTTP 코드)
+        </p>
+      </div>
+      <div class="px-4 pb-4 grid grid-cols-1 gap-1.5">
+        <button class="bg-gray-900 text-white text-[11px] font-semibold py-2 rounded-lg">홈으로</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 카피 카탈로그 -->
+  <h2 class="font-bold text-lg mb-1">카피 카탈로그</h2>
+  <p class="text-gray-600 text-sm mb-4">코드별 헤드라인(위트) · 짧은 설명 · 기본 CTA · 책임 주체. 개발 라운드에서 i18n 키로 옮길 원본.</p>
+
+  <div class="bg-white border border-gray-300 rounded-2xl overflow-hidden mb-10">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+        <tr>
+          <th class="text-left p-3 w-14">코드</th>
+          <th class="text-left p-3 w-40">HTTP 라벨</th>
+          <th class="text-left p-3">헤드라인 (위트)</th>
+          <th class="text-left p-3">설명</th>
+          <th class="text-left p-3 w-28">기본 CTA</th>
+          <th class="text-left p-3 w-20">책임</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="p-3 font-mono font-bold">400</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">BAD REQUEST</td>
+          <td class="p-3 font-semibold">라이언이 못 알아들었어요</td>
+          <td class="p-3 text-gray-600">요청 형식이 살짝 어긋났어요. 입력값 확인해 주세요.</td>
+          <td class="p-3 text-xs text-gray-700">이전 페이지</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">401</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">UNAUTHORIZED</td>
+          <td class="p-3 font-semibold">누구세요? 처음 뵙는데요</td>
+          <td class="p-3 text-gray-600">로그인한 회원만 들어올 수 있어요.</td>
+          <td class="p-3 text-xs text-gray-700">로그인 · 홈으로</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">403</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">FORBIDDEN</td>
+          <td class="p-3 font-semibold">여긴 회원님 자리가 아니에요</td>
+          <td class="p-3 text-gray-600">권한이 필요한 페이지예요.</td>
+          <td class="p-3 text-xs text-gray-700">홈으로 · 이전</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="p-3 font-mono font-bold">404</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">NOT FOUND</td>
+          <td class="p-3 font-semibold">여긴 아무것도 없어요</td>
+          <td class="p-3 text-gray-600">주소가 잘못됐거나, 페이지가 사라졌거나, 라이언이 길을 잃었어요.</td>
+          <td class="p-3 text-xs text-gray-700">홈으로 · 이전</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">408</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">TIMEOUT</td>
+          <td class="p-3 font-semibold">너무 오래 기다렸나봐요</td>
+          <td class="p-3 text-gray-600">서버가 응답하기 전에 시간이 다 됐어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">418</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">I'M A TEAPOT</td>
+          <td class="p-3 font-semibold">전 주전자라서요</td>
+          <td class="p-3 text-gray-600">커피는 못 끓여요. (네, 진짜 있는 HTTP 코드예요.)</td>
+          <td class="p-3 text-xs text-gray-700">홈으로</td>
+          <td class="p-3 text-xs text-gray-500">농담</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">429</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">TOO MANY REQUESTS</td>
+          <td class="p-3 font-semibold">잠깐, 숨 좀 돌릴게요</td>
+          <td class="p-3 text-gray-600">짧은 시간에 너무 많은 요청을 보내셨어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도</td>
+          <td class="p-3 text-xs text-gray-500">사용자</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">500</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">SERVER ERROR</td>
+          <td class="p-3 font-semibold">서버가 잠깐 졸고 있어요</td>
+          <td class="p-3 text-gray-600">라이언도 예상 못 한 에러가 났어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도 · 홈으로</td>
+          <td class="p-3 text-xs text-gray-500">서비스</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">502</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">BAD GATEWAY</td>
+          <td class="p-3 font-semibold">중간에서 길이 막혔어요</td>
+          <td class="p-3 text-gray-600">서버끼리 대화가 잘 안 통하고 있어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도</td>
+          <td class="p-3 text-xs text-gray-500">서비스</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">503</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">UNAVAILABLE</td>
+          <td class="p-3 font-semibold">서버가 점심 먹으러 갔어요</td>
+          <td class="p-3 text-gray-600">지금은 서비스를 이용할 수 없어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도</td>
+          <td class="p-3 text-xs text-gray-500">서비스</td>
+        </tr>
+        <tr>
+          <td class="p-3 font-mono font-bold">504</td>
+          <td class="p-3 text-gray-600 font-mono text-xs">GATEWAY TIMEOUT</td>
+          <td class="p-3 font-semibold">응답이 안 오네요</td>
+          <td class="p-3 text-gray-600">다른 서버가 제때 답을 주지 못했어요.</td>
+          <td class="p-3 text-xs text-gray-700">다시 시도</td>
+          <td class="p-3 text-xs text-gray-500">서비스</td>
+        </tr>
+        <tr class="bg-gray-100">
+          <td class="p-3 font-mono font-bold text-gray-500">?</td>
+          <td class="p-3 text-gray-500 font-mono text-xs">UNKNOWN</td>
+          <td class="p-3 font-semibold text-gray-700">어… 이거 처음 보는 에러예요</td>
+          <td class="p-3 text-gray-500">알 수 없는 코드 fallback. 코드 자체는 그대로 노출.</td>
+          <td class="p-3 text-xs text-gray-500">다시 시도 · 홈으로</td>
+          <td class="p-3 text-xs text-gray-500">미상</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 후속 정책 (개발로 넘기는 추천안) -->
+  <section class="mb-10 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">후속 정책 (개발 라운드 추천안)</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>Next.js 라우트 매핑</strong> — <code>app/not-found.tsx</code>(404) · <code>app/error.tsx</code>(500 런타임) · <code>app/global-error.tsx</code>(root). 카탈로그를 props로 받는 <code>&lt;ErrorScreen code={...}/&gt;</code> 단일 컴포넌트.</li>
+      <li><strong>운영 대응</strong> — 500번대는 ERR-ID(uuid 짧은 6자리) 생성 + 서버 로그에 동일 ID 기록 → 사용자 문의 시 추적 가능. 4xx는 ID 미생성.</li>
+      <li><strong>다국어</strong> — <code>error.404.title</code> · <code>error.404.description</code> 형태 i18n 키. 카피 카탈로그가 원본.</li>
+      <li><strong>모션</strong> — <code>RyanMascot</code> mount 시 tilt 1회 (description §10 <code>prefers-reduced-motion</code>이면 skip). 코드 숫자 fade-in 200ms.</li>
+      <li><strong>모달 모드</strong> — 결제·예약 중간 실패는 풀스크린 라우트 대신 BottomSheet에 같은 ErrorScreen 임베드 (× 닫기 노출). U-05 공통 패턴 §4 결제 실패와 정합 검토.</li>
+    </ul>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="text-center text-xs text-gray-400 mt-12">
+    Life OS.ONE · 에러 페이지 v0.1 wireframe · 그레이스케일
+  </footer>
+
+</div>
+
+</body>
+</html>
