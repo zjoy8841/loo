@@ -60,7 +60,7 @@ export default async function UserHome({
   const insight = buildInsight();
 
   const { mode } = await searchParams;
-  const initialMode: "active" | "idle" = mode === "idle" ? "idle" : "active";
+  const initialMode: "active" | "idle" = mode === "active" ? "active" : "idle";
 
   return (
     <HomeView

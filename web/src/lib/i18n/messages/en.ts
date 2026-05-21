@@ -247,6 +247,11 @@ const en: Messages = {
         reserve_and_pay: "Reserve & pay",
         alternatives: "Other picks",
       },
+      notif: {
+        from: "Ryan · just now",
+        title: "{name}, a {menu} pick just arrived",
+        aria: "Ryan notification — open",
+      },
       detail_label: {
         restaurant: "RESTAURANT",
         nutrition: "NUTRITION",

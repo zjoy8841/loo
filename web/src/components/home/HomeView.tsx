@@ -63,6 +63,8 @@ export default function HomeView({
             name={name}
             timeLabel={t("user.home.time_label.lunch")}
             personaChips={personaChips}
+            incomingMenu={candidates[0] ?? null}
+            onAccept={() => setMode("active")}
             onQuickAction={handleQuickAction}
           />
         )}

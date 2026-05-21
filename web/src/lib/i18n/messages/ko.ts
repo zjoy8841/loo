@@ -245,6 +245,11 @@ const ko = {
         reserve_and_pay: "예약하고 결제",
         alternatives: "다른 추천",
       },
+      notif: {
+        from: "라이언 · 방금",
+        title: "{name}님, {menu} 추천이 도착했어요",
+        aria: "라이언 알림 — 자세히 보기",
+      },
       detail_label: {
         restaurant: "RESTAURANT",
         nutrition: "NUTRITION",
