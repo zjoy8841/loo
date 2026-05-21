@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-3 점심 알림 HUD · v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.glass{position:relative;width:540px;height:340px;border-radius:28px;overflow:hidden;background:#1f2937;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column}
+.glass-label{position:absolute;top:10px;left:14px;font-size:10px;font-weight:700;letter-spacing:.06em;color:#d1d5db;text-transform:uppercase}
+.glass-clock{position:absolute;top:10px;right:14px;font-size:10px;font-weight:600;color:#d1d5db}
+/* 회의실 시야 (조용한 환경) */
+.pov-meeting{background:linear-gradient(180deg,#374151 0%,#4b5563 55%,#6b7280 100%)}
+.pov-meeting::before{content:"";position:absolute;left:8%;top:38%;width:84%;height:18%;background:#1f2937;border-radius:6px}
+.pov-meeting::after{content:"회의실 · 발표 중";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:11.5px;font-weight:700;color:#d1d5db;letter-spacing:.05em}
+/* HUD 카드 */
+.hud{position:absolute;background:rgba(255,255,255,.96);color:#111827;border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.45;box-shadow:0 4px 14px rgba(0,0,0,.3);backdrop-filter:blur(8px)}
+.hud-md{width:220px}
+.hud-expand{width:260px}
+.hud-dim{opacity:.7}
+.hud-dot{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}
+.hud-dot::before{content:"";width:6px;height:6px;border-radius:999px;background:#2563eb}
+.muted-bar{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:#9ca3af;font-weight:600;background:#f3f4f6;padding:2px 7px;border-radius:999px;margin-left:6px}
+.chip{font-size:10px;font-weight:700;border:1px solid #d1d5db;border-radius:999px;padding:2px 7px;color:#374151}
+.chip-fill{background:#1f1f1f;color:#fff;border-color:#1f1f1f}
+.timeout-bar{height:3px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:8px}
+.timeout-fill{height:100%;width:55%;background:#9ca3af;border-radius:999px}
+/* 하단 힌트 (음성 OFF 상태) */
+.hint{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(17,24,39,.6);color:#d1d5db;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:7px 11px;backdrop-filter:blur(8px);font-size:11px;display:flex;align-items:center;gap:8px}
+.hint::before{content:"";width:6px;height:6px;border-radius:999px;background:#6b7280}
+.cap{width:340px;font-size:12px;color:#4b5563;line-height:1.6}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:9px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:20px;height:20px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.stage{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:#374151;background:#fff;border:1px solid #d1d5db;border-radius:999px;padding:5px 11px;margin-bottom:10px}
+.stage-n{width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 9px;background:#f3f4f6;border-radius:999px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-volume-x" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></symbol>
+</defs></svg>
+
+<div class="max-w-[2200px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.1 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">G-3 점심 알림 HUD · v0.1</h1>
+  <p class="text-sm text-gray-600 mt-1 max-w-3xl leading-relaxed">음성을 쓸 수 없는 환경(회의·발표·도서관)에서 <b>HUD 시각만으로 알림 전달</b>. 우측 안쪽 모서리에 작은 카드, 시야를 가리지 않음. 3초 후 자동 미니화, 추가 조작 없으면 8초 후 닫힘. 사용자는 <b>head tilt 한 번</b>으로 확장, 1회 더 끄덕임으로 폰으로 이어보기.</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#9ca3af"></span>음성 OFF — HUD 단독</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#2563eb"></span>HUD 활성</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#6b7280"></span>자동 닫힘 카운트</span>
+  </div>
+</div>
+
+<div class="max-w-[2200px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ STAGE 1 — HUD 도착 (피크) ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">1</span>알림 도착 → HUD 피크</div>
+    <div class="glass pov-meeting">
+      <span class="glass-label">G-3 · 12:00</span>
+      <span class="glass-clock"><span class="muted-bar"><svg class="lc lc-12"><use href="#i-volume-x"/></svg> 음소거</span></span>
+      <!-- HUD 카드 (피크 — 우측 상단) -->
+      <div class="hud hud-md" style="top:48px;right:14px">
+        <div class="flex items-center gap-1.5">
+          <span class="hud-dot">점심 알림</span>
+        </div>
+        <p class="font-bold text-[12.5px] mt-1.5">점심 메뉴 추천</p>
+        <div class="flex items-start gap-1.5 mt-1.5">
+          <svg class="lc lc-12 mt-0.5" style="color:#6b7280"><use href="#i-map-pin"/></svg>
+          <p class="text-[11px] text-gray-700 leading-snug"><b>솥앤솥</b> · 도보 4분<br><span class="text-gray-500">제육덮밥 · 단백질 충분</span></p>
+        </div>
+        <p class="text-[10px] text-gray-400 mt-2">시야를 살짝 위로 → 자세히</p>
+      </div>
+      <!-- 음성 OFF 힌트 -->
+      <div class="hint">
+        <svg class="lc lc-12"><use href="#i-volume-x"/></svg>
+        음소거 환경 감지 — HUD 시각 알림만 전달
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STAGE 2 — Head tilt → HUD 확장 ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">2</span>Head tilt → 카드 확장</div>
+    <div class="glass pov-meeting">
+      <span class="glass-label">G-3 · 12:00</span>
+      <span class="glass-clock"><span class="muted-bar"><svg class="lc lc-12"><use href="#i-volume-x"/></svg> 음소거</span></span>
+      <!-- HUD 확장 카드 -->
+      <div class="hud hud-expand" style="top:48px;right:14px">
+        <div class="flex items-center gap-1.5">
+          <span class="hud-dot">자세히 · AI</span>
+        </div>
+        <p class="font-bold text-[13px] mt-1.5">점심 메뉴 추천</p>
+        <div class="flex items-start gap-2 mt-1.5">
+          <svg class="lc lc-14 mt-0.5" style="color:#374151"><use href="#i-map-pin"/></svg>
+          <div class="flex-1 min-w-0">
+            <p class="text-[12px] font-bold">솥앤솥 <span class="text-[10.5px] font-normal text-gray-400">· 도보 4분</span></p>
+            <p class="text-[11px] text-gray-600 mt-0.5">제육덮밥 — 단백질 충분, 국물 적게</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5 mt-2.5">
+          <span class="chip-fill" style="font-size:10px;font-weight:700;border-radius:999px;padding:4px 0;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px"><svg class="lc lc-12"><use href="#i-phone"/></svg> 폰으로</span>
+          <span class="chip" style="text-align:center;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:4px"><svg class="lc lc-12"><use href="#i-clock"/></svg> 15분 뒤</span>
+        </div>
+        <div class="timeout-bar" aria-hidden="true"><div class="timeout-fill"></div></div>
+        <p class="text-[10px] text-gray-400 mt-1">5초 후 자동 미니화</p>
+      </div>
+      <div class="hint">
+        <svg class="lc lc-12"><use href="#i-chevron-down"/></svg>
+        끄덕임 = "폰으로 이어보기" · 좌우 흔들기 = 닫기
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STAGE 3 — 끄덕임 → 폰으로 ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">3</span>끄덕임 → 폰 이어보기 / 미반응 → 닫힘</div>
+    <div class="glass pov-meeting" style="background:linear-gradient(180deg,#374151,#4b5563 60%,#6b7280)">
+      <span class="glass-label">G-3 · 12:00</span>
+      <span class="glass-clock"><span class="muted-bar"><svg class="lc lc-12"><use href="#i-volume-x"/></svg> 음소거</span></span>
+      <!-- 두 분기 (작은 카드 2개) -->
+      <div class="hud hud-md hud-dim" style="top:48px;right:14px;width:220px">
+        <span class="hud-dot" style="color:#6b7280">미반응 (~8s)</span>
+        <p class="font-bold text-[12px] mt-1 text-gray-500">자동 닫힘 → 폰 알림 센터에 그대로 남음</p>
+        <p class="text-[10.5px] text-gray-400 mt-1.5 leading-snug">점심 알림은 사라지지 않음. 폰 <code>01 알림 센터</code>에서 다시 확인.</p>
+      </div>
+      <div class="hud hud-md" style="bottom:64px;left:14px;width:240px;border:1.5px solid #111827">
+        <span class="hud-dot">끄덕임 감지</span>
+        <div class="flex items-center gap-2 mt-1.5">
+          <svg class="lc lc-14"><use href="#i-phone"/></svg>
+          <p class="font-bold text-[12px]">폰으로 보냈어요</p>
+        </div>
+        <p class="text-[10.5px] text-gray-500 mt-1.5 leading-snug">폰 <code>06 결과 상세</code> 자동 열림. 회의 끝나고 폰에서 이어보기.</p>
+      </div>
+      <div class="hint" style="background:rgba(17,24,39,.5)">
+        <svg class="lc lc-12"><use href="#i-x"/></svg>
+        두 분기 중 하나로 종료 — HUD는 더는 노출되지 않음
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>HUD 단독 채널</b> — 음소거 모드(폰·캘린더 회의 중·시간대 설정) 감지 시 G-1(음성)이 자동으로 G-3(HUD)로 전환. 동일 알림이 채널만 갈아탐.</div></div>
+    <div class="row"><span class="num">2</span><div><b>피크 → 미니화</b> — 첫 3초만 카드(중간 크기). 3초 후 우상단 작은 도트 + "점심" 텍스트로 축소. 시야 방해 최소화.</div></div>
+    <div class="row"><span class="num">3</span><div><b>Head tilt up</b> — 시야를 살짝 위로 들면 카드 확장(피크 → 자세히). 일반적인 시선 이동(좌우)으로는 트리거되지 않음. 위쪽 15° 유지 1초가 임계값.</div></div>
+    <div class="row"><span class="num">4</span><div><b>끄덕임 (nod)</b> — 카드 확장 상태에서 위아래 끄덕임 = "폰으로 이어보기". 폰이 활성 상태면 즉시 <code>06 결과 상세</code> 열림. 잠금 상태면 알림 배너만 띄움.</div></div>
+    <div class="row"><span class="num">5</span><div><b>좌우 흔들기 (shake)</b> — "닫기". 알림은 폰 센터에 그대로 남음(글래스에서 닫아도 사라지지 않음). 회의 끝나고 폰에서 확인 가능.</div></div>
+    <div class="row"><span class="num">6</span><div><b>자동 닫힘 (timeout)</b> — 미니화 후 8초 추가 무반응 시 HUD 완전 닫힘. 알림 자체는 폰에 남음. 같은 알림이 30분 안에 다시 노출되지 않음(스누즈 기본).</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div><b>음소거 감지 우선순위</b> — ① 캘린더 회의/포커스 모드 ② 폰 무음 ③ 사용자 수동 토글 ④ 환경 소음 분석(보조). 셋 중 하나라도 켜져 있으면 HUD 단독.</div></div>
+    <div class="row"><span class="num">·</span><div><b>HUD 위치</b> — 우측 안쪽 모서리 기본. 사용자가 마이페이지에서 좌/우/상단 중앙 선택 가능. 시선이 자연스럽게 향하는 위치에 배치.</div></div>
+    <div class="row"><span class="num">·</span><div><b>HUD 카드 정보 밀도</b> — 한 번에 최대 5요소(타이틀·메타·아이콘·액션·타임아웃). 더 많은 정보는 폰으로 위임. 손코딩 가능한 마이크로 디스플레이 텍스트 한계 고려.</div></div>
+    <div class="row"><span class="num">·</span><div><b>제스처 오인식</b> — 발표자가 끄덕끄덕하는 회의 환경에서 오트리거 방지. 시선이 HUD 영역(위쪽)에 머문 후 0.5초 안에 끄덕임이 와야 유효. 단순 끄덕임은 무시.</div></div>
+    <div class="row"><span class="num">·</span><div><b>접근성</b> — 제스처 사용이 어려운 사용자: 측면 물리 버튼 1탭 = 확장 / 2탭 = 폰으로 / 길게 = 닫기. 모든 제스처는 폴백 매핑 존재.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G-1 출근길 음성 알림 · v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+/* ====== Glass POV frame ====== */
+.glass{position:relative;width:540px;height:340px;border-radius:28px;overflow:hidden;background:#1f2937;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;flex-direction:column}
+.glass-label{position:absolute;top:10px;left:14px;font-size:10px;font-weight:700;letter-spacing:.06em;color:#d1d5db;text-transform:uppercase}
+.glass-clock{position:absolute;top:10px;right:14px;font-size:10px;font-weight:600;color:#d1d5db}
+/* 1인칭 시야 — 그라데이션으로 환경 추상 */
+.pov-commute{background:linear-gradient(180deg,#374151 0%,#4b5563 40%,#6b7280 100%)}
+.pov-commute::before{content:"";position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(180deg,transparent,#1f2937)}
+.pov-commute::after{content:"지하철 · 출근 인파";position:absolute;left:50%;top:54%;transform:translateX(-50%);font-size:11px;color:#9ca3af;letter-spacing:.04em;background:rgba(31,41,55,.4);padding:3px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+/* HUD 카드 — 우측 상단 작은 카드 */
+.hud{position:absolute;background:rgba(255,255,255,.95);color:#111827;border-radius:10px;padding:9px 11px;font-size:11px;line-height:1.45;box-shadow:0 4px 12px rgba(0,0,0,.25);backdrop-filter:blur(8px)}
+.hud-min{width:130px}
+.hud-md{width:200px}
+.hud-lg{width:240px}
+.hud-dot{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}
+.hud-dot::before{content:"";width:6px;height:6px;border-radius:999px;background:#2563eb}
+/* 음성 캡션 (하단 슬리브) */
+.voice{position:absolute;left:14px;right:14px;bottom:14px;background:rgba(17,24,39,.78);color:#fff;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:9px 12px;backdrop-filter:blur(8px)}
+.voice-label{font-size:9.5px;font-weight:700;color:#9ca3af;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.voice-label::before{content:"";width:6px;height:6px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+.voice-text{font-size:12px;line-height:1.5;font-weight:500}
+.voice-text b{font-weight:700}
+/* Caption (오른쪽 인터랙션 매핑) */
+.cap{width:340px;font-size:12px;color:#4b5563;line-height:1.6}
+.cap h3{font-size:13px;font-weight:700;color:#111827;margin-bottom:8px}
+.cap .row{display:flex;gap:9px;margin-bottom:9px}
+.cap .num{flex-shrink:0;width:20px;height:20px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+/* Stage 박스 (단계 컨테이너 묶음 위 라벨) */
+.stage{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:#374151;background:#fff;border:1px solid #d1d5db;border-radius:999px;padding:5px 11px;margin-bottom:10px}
+.stage-n{width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.legend{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 9px;background:#f3f4f6;border-radius:999px}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}
+code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:11.5px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+<symbol id="i-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+<symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></symbol>
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+</defs></svg>
+
+<div class="max-w-[2200px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.1 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">G-1 출근길 글래스 음성 알림 · v0.1</h1>
+  <p class="text-sm text-gray-600 mt-1 max-w-3xl leading-relaxed">손이 자유롭지 않은 출근길에서 <b>오늘 첫 알림을 TTS로</b> 글래스 스피커에 흘려준다. 시각은 보조(작은 HUD 도트만), 음성이 메인 채널. 사용자는 폰을 꺼낼 필요가 없고, 음성 응답("응", "넘겨")이나 무반응(자동 닫힘)으로 처리한다.</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#22c55e"></span>스피커 활성 — TTS 발화 중</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#2563eb"></span>HUD 도트 — 알림 있음 표시</span>
+    <span class="legend"><span class="w-2 h-2 rounded-full" style="background:#9ca3af"></span>음성 OFF — 보조 HUD만 노출</span>
+  </div>
+</div>
+
+<div class="max-w-[2200px] mx-auto flex flex-wrap gap-9 items-start">
+
+  <!-- ============ STAGE 1 — TTS 발화 ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">1</span>알림 도착 → 음성 발화</div>
+    <div class="glass pov-commute">
+      <span class="glass-label">G-1 · 08:14</span>
+      <span class="glass-clock">82%</span>
+      <!-- 작은 HUD 도트 (알림 있음) -->
+      <div class="hud hud-min" style="top:48px;right:14px;padding:7px 9px">
+        <span class="hud-dot">알림 1</span>
+        <p class="text-[10.5px] text-gray-500 mt-1">LIFE OS.ONE</p>
+      </div>
+      <!-- 음성 캡션 -->
+      <div class="voice">
+        <p class="voice-label"><svg class="lc lc-12"><use href="#i-volume"/></svg> 글래스 스피커 · TTS</p>
+        <p class="voice-text">"오늘 첫 알림이에요. <b>주간 보고서 제출, 오후 5시 마감.</b> 30분 전에 다시 알려 드릴게요. 자세히 듣기는 '응'이라고 말씀하세요."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STAGE 2 — "응" 응답 → 풀 브리핑 ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">2</span>"응" 응답 → 자세히 듣기</div>
+    <div class="glass pov-commute">
+      <span class="glass-label">G-1 · 08:14</span>
+      <span class="glass-clock">82%</span>
+      <!-- HUD 카드 (자세히 진입 표시) -->
+      <div class="hud hud-md" style="top:48px;right:14px">
+        <span class="hud-dot">자세히</span>
+        <p class="font-bold text-[12px] mt-1">주간 보고서</p>
+        <p class="text-[10.5px] text-gray-500 mt-0.5 leading-snug">오후 5시 마감 · 첨부 3건 · 30분 전 알림</p>
+        <p class="text-[10px] text-gray-400 mt-1.5">상세는 폰 알림 센터로 →</p>
+      </div>
+      <!-- 음성 + 마이크 활성 -->
+      <div class="voice">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="voice-label flex-1"><svg class="lc lc-12"><use href="#i-mic"/></svg> 마이크 ON · 음성 입력</span>
+          <span class="voice-label" style="margin:0"><svg class="lc lc-12"><use href="#i-volume"/></svg> 응답 중</span>
+        </div>
+        <p class="voice-text">사용자: "<b>응</b>" → 시스템: "<b>오후 5시까지 주간 보고서</b> 한 건. 첨부 파일 세 개. 다른 알림 두 건은 09시·12시 예정. 더 들으시려면 '계속'."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STAGE 3 — "넘겨" 또는 무반응 ============ -->
+  <div>
+    <div class="stage"><span class="stage-n">3</span>"넘겨" / 무반응 → 자동 닫힘</div>
+    <div class="glass pov-commute" style="background:linear-gradient(180deg,#374151,#4b5563)">
+      <span class="glass-label">G-1 · 08:14</span>
+      <span class="glass-clock">82%</span>
+      <!-- HUD 최소화 -->
+      <div class="hud hud-min" style="top:48px;right:14px;opacity:.55;padding:6px 8px">
+        <span class="hud-dot" style="color:#9ca3af">대기</span>
+      </div>
+      <!-- 닫힘 안내 -->
+      <div class="voice" style="background:rgba(17,24,39,.55)">
+        <p class="voice-label" style="color:#9ca3af">음성 채널 닫힘 · 다음 알림 09:00</p>
+        <p class="voice-text text-gray-300">사용자: "<b>넘겨</b>" 또는 8초 무반응 → 음성 종료. 알림은 폰 <code class="bg-white/10 text-gray-200 px-1 rounded">01 알림 센터</code>에 그대로 남음. 다음 알림이 정시(09:00)에 다시 도착.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CAPTIONS ============ -->
+  <div class="cap pt-7">
+    <h3>인터랙션 매핑</h3>
+    <div class="row"><span class="num">1</span><div><b>알림 트리거</b> — 폰의 <code>03 알림</code> 도착 이벤트가 글래스 채널로 라우팅(마이페이지·기기 라우팅 정책에서 "출근 시간대 = 글래스 우선"으로 설정된 경우). 정시성 모델(<code>U-04-2</code>의 약점 2 보완)을 그대로 따름 — 알림은 정각에, AI 결과가 늦으면 "준비 중" 멘트.</div></div>
+    <div class="row"><span class="num">2</span><div><b>HUD 도트 (보조)</b> — 시야 우상단에 작은 도트 + "알림 1". 시각 의존 최소화. 시야를 가리지 않도록 우측 안쪽 모서리.</div></div>
+    <div class="row"><span class="num">3</span><div><b>TTS 발화 (메인)</b> — 첫 줄은 <b>요지 한 문장</b>(무엇·언제), 둘째 줄은 <b>응답 가이드</b>("자세히는 '응'"). 너무 길면 사용자가 못 따라옴 — 2초 안에 끝나도록 카피 압축.</div></div>
+    <div class="row"><span class="num">4</span><div><b>음성 응답 키워드</b> — "응/계속" = 자세히, "넘겨/안 들을래" = 닫음, "다시" = 재생. 모든 키워드는 짧고 한 음절~두 음절. 외국어 환경 대비 영어 대응어("yes/skip/again")도 동의어 사전에 추가.</div></div>
+    <div class="row"><span class="num">5</span><div><b>자동 닫힘</b> — 응답 없으면 8초 후 음성 종료. 알림 자체는 사라지지 않고 폰 센터에 그대로 남음 — "못 들었으면 폰에서 본다"가 기본 동작.</div></div>
+    <div class="row"><span class="num">6</span><div><b>상세 진입 경로</b> — 음성으론 요지+한 단계 더만 전달. "전체 보기"가 필요하면 음성으로 "폰으로 보낼게요" → 폰 <code>06 결과 상세</code> 자동 열림(폰 활성 상태일 때). 글래스 단독으로 긴 콘텐츠를 다 못 읽음.</div></div>
+
+    <h3 class="mt-5">동작·상태 규칙</h3>
+    <div class="row"><span class="num">·</span><div><b>발화 우선순위</b> — 출근 시간대 첫 알림 한 건만 자동 발화. 그 이후 도착은 HUD 도트만 깜빡(시야 최소 침범), 사용자가 "오늘 알림" 호출해야 읽음.</div></div>
+    <div class="row"><span class="num">·</span><div><b>방해 금지</b> — 마이페이지에서 "통화/네비 중 글래스 발화 끔" 설정 시 HUD 도트만. 폰 무음 모드 자동 동기화.</div></div>
+    <div class="row"><span class="num">·</span><div><b>실패 케이스</b> — TTS 모델 호출 실패 시 단축 알림음 + HUD 카드 "주간 보고서, 17시" 텍스트만. 사용자가 후속 행동 결정.</div></div>
+    <div class="row"><span class="num">·</span><div><b>접근성</b> — 청각 보조기 사용자: 음성 발화 시 폰에 진동 + 자막 동기 전송. 시각 보조 사용자: HUD 도트 비활성, TTS 단독.</div></div>
+    <div class="row"><span class="num">·</span><div><b>프라이버시</b> — 출근 인파 근처에서 TTS는 <b>이름·구체적 일정 명사 마스킹</b> 옵션. "오늘 첫 일정이 곧 시작돼요" 식으로 일반화. 마이페이지에서 토글.</div></div>
+  </div>
+
+</div>
+
+</body>
+</html>

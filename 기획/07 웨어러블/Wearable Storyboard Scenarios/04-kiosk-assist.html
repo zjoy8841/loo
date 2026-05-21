@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스토리보드 ④ 키오스크 보조 · 07 웨어러블</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--ink:#1f2937;--ink-soft:#6b7280;--paper:#fafafa;--key:#2563eb;--key-bg:rgba(37,99,235,.06)}
+body{font-family:Pretendard,system-ui,sans-serif;background:#f3f4f6;color:var(--ink)}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.cut{background:#fff;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.cut-frame{aspect-ratio:3/2;border-bottom:1.5px solid var(--ink);position:relative;background:var(--paper);overflow:hidden}
+.cut-svg{width:100%;height:100%;display:block}
+.cut-caption{padding:11px 13px;font-size:12px;line-height:1.6;color:#374151;min-height:74px}
+.cut-num{font-weight:800;color:var(--ink);margin-right:6px}
+.hud{position:absolute;border:1.5px solid var(--key);background:#fff;border-radius:6px;padding:6px 8px;color:var(--key);font-size:9.5px;line-height:1.4;font-weight:600;box-shadow:0 2px 5px rgba(37,99,235,.12)}
+.hud-title{font-weight:800;font-size:10.5px;color:var(--key)}
+.hud-sub{font-weight:500;color:#374151;font-size:9px;margin-top:2px}
+.hud-divider{border-top:1px dashed #c7d2fe;margin:4px -2px}
+.bubble{position:absolute;background:#fff;border:1.5px solid var(--ink);border-radius:14px;padding:6px 10px;font-size:10px;color:var(--ink);font-weight:600}
+.bubble-tail{position:absolute;width:9px;height:9px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg)}
+.label-strip{position:absolute;top:10px;left:10px;font-size:9.5px;font-weight:800;color:#6b7280;letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body class="min-h-screen p-8">
+
+<div class="max-w-[1280px] mx-auto">
+
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1">← 스토리보드 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">④ 키오스크 보조 — 어르신 + 손주</h1>
+  <p class="text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+    디지털 키오스크 앞에서 어려움을 겪는 어르신을 위한 보조. 글래스 카메라가 키오스크 화면을 인식하고, 사용자의 자연어 요청("아이들이 좋아하는 메뉴 주문해줘")에 맞게 <b>화면 위에 직접 화살표로 어디를 눌러야 하는지 안내</b>한다.
+  </p>
+
+  <div class="board mt-7">
+
+    <!-- ============ CUT 1 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 1 · 입장</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <!-- 매장 바닥 -->
+          <line x1="0" y1="220" x2="380" y2="220" stroke="#9ca3af" stroke-width="1.3"/>
+          <!-- 매장 입구 -->
+          <rect x="0" y="50" width="380" height="170" stroke="#9ca3af" stroke-width="1.2" fill="none"/>
+          <line x1="0" y1="80" x2="380" y2="80" stroke="#9ca3af" stroke-width="1.2"/>
+          <text x="190" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="#1f2937">BASKIN ROBBINS 31</text>
+          <!-- 진열대 (배경) -->
+          <rect x="20" y="120" width="100" height="50" stroke="#9ca3af" stroke-width="1.2" fill="none"/>
+          <circle cx="40" cy="135" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="58" cy="135" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="76" cy="135" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="94" cy="135" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="40" cy="153" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="58" cy="153" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="76" cy="153" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <circle cx="94" cy="153" r="6" stroke="#1f2937" stroke-width="1.2" fill="none"/>
+          <!-- 어르신 -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="200" cy="125" r="14"/>
+            <path d="M 188 120 Q 200 116 212 120"/> <!-- 백발 표시 -->
+            <line x1="200" y1="139" x2="200" y2="180"/>
+            <line x1="200" y1="150" x2="183" y2="170"/>
+            <line x1="200" y1="150" x2="217" y2="170"/>
+            <line x1="200" y1="180" x2="185" y2="215"/>
+            <line x1="200" y1="180" x2="215" y2="215"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="195" cy="122" r="3.5"/>
+            <circle cx="205" cy="122" r="3.5"/>
+            <line x1="198.5" y1="122" x2="201.5" y2="122"/>
+          </g>
+          <!-- 손주 1 (작음, 어르신 오른쪽 손) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="245" cy="160" r="9"/>
+            <line x1="245" y1="169" x2="245" y2="195"/>
+            <line x1="245" y1="175" x2="232" y2="170"/>
+            <line x1="245" y1="175" x2="255" y2="190"/>
+            <line x1="245" y1="195" x2="238" y2="215"/>
+            <line x1="245" y1="195" x2="252" y2="215"/>
+          </g>
+          <!-- 손주 2 (작음, 어르신 왼쪽 손) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="160" cy="160" r="9"/>
+            <line x1="160" y1="169" x2="160" y2="195"/>
+            <line x1="160" y1="175" x2="173" y2="170"/>
+            <line x1="160" y1="175" x2="150" y2="190"/>
+            <line x1="160" y1="195" x2="153" y2="215"/>
+            <line x1="160" y1="195" x2="167" y2="215"/>
+          </g>
+          <!-- 손잡고 있는 라인 -->
+          <line x1="173" y1="170" x2="183" y2="170" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/>
+          <line x1="217" y1="170" x2="232" y2="170" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">1.</span> <b>어르신이 손주 둘의 손을 잡고</b> 아이스크림 매장 입장. 키오스크 주문이 익숙하지 않지만 손주들에게 좋은 모습을 보여주고 싶다.
+      </p>
+    </div>
+
+    <!-- ============ CUT 2 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 2 · 키오스크 앞 음성 명령</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <line x1="0" y1="220" x2="380" y2="220" stroke="#9ca3af" stroke-width="1.3"/>
+          <!-- 키오스크 (직사각형 스탠드) -->
+          <g stroke="#1f2937" stroke-width="1.8" stroke-linejoin="round" fill="none">
+            <rect x="240" y="60" width="115" height="140"/>
+            <rect x="248" y="68" width="99" height="105" fill="#fafafa"/>
+            <!-- 화면 안 메뉴 그리드 -->
+            <rect x="255" y="76" width="22" height="22" stroke-width="1"/>
+            <rect x="282" y="76" width="22" height="22" stroke-width="1"/>
+            <rect x="309" y="76" width="22" height="22" stroke-width="1"/>
+            <rect x="336" y="76" width="6" height="22" stroke-width="1"/>
+            <rect x="255" y="103" width="22" height="22" stroke-width="1"/>
+            <rect x="282" y="103" width="22" height="22" stroke-width="1"/>
+            <rect x="309" y="103" width="22" height="22" stroke-width="1"/>
+            <rect x="255" y="130" width="22" height="22" stroke-width="1"/>
+            <rect x="282" y="130" width="22" height="22" stroke-width="1"/>
+            <rect x="309" y="130" width="22" height="22" stroke-width="1"/>
+            <!-- 결제 버튼 (하단) -->
+            <rect x="255" y="158" width="85" height="12" stroke-width="1.2" fill="#f3f4f6"/>
+            <!-- 스탠드 받침 -->
+            <line x1="248" y1="200" x2="355" y2="200"/>
+            <line x1="260" y1="200" x2="260" y2="218"/>
+            <line x1="343" y1="200" x2="343" y2="218"/>
+          </g>
+          <!-- 어르신 (정면) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="110" cy="120" r="14"/>
+            <path d="M 98 115 Q 110 111 122 115"/>
+            <line x1="110" y1="134" x2="110" y2="175"/>
+            <line x1="110" y1="146" x2="92" y2="168"/>
+            <line x1="110" y1="146" x2="128" y2="168"/>
+            <line x1="110" y1="175" x2="95" y2="210"/>
+            <line x1="110" y1="175" x2="125" y2="210"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="104" cy="118" r="3.5"/>
+            <circle cx="116" cy="118" r="3.5"/>
+            <line x1="108" y1="118" x2="112" y2="118"/>
+          </g>
+          <!-- 손주 둘 (낮음, 옆) -->
+          <g stroke="#9ca3af" stroke-width="1.7" stroke-linecap="round" fill="none" opacity=".7">
+            <circle cx="160" cy="170" r="8"/>
+            <line x1="160" y1="178" x2="160" y2="210"/>
+            <circle cx="65" cy="170" r="8"/>
+            <line x1="65" y1="178" x2="65" y2="210"/>
+          </g>
+        </svg>
+        <!-- 말풍선 -->
+        <div class="bubble" style="top:60px;left:130px;width:180px">"아이들이 좋아하는 메뉴 주문해줘"</div>
+        <div class="bubble-tail" style="top:85px;left:145px"></div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">2.</span> 키오스크 앞에 선 어르신이 화면을 보며 음성으로 "<b>아이들이 좋아하는 메뉴 주문해줘</b>" — 글래스가 자연어 명령을 받아 키오스크 보조 모드로 진입.
+      </p>
+    </div>
+
+    <!-- ============ CUT 3 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 3 · 1인칭 — AR 화살표 안내</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <rect x="0" y="0" width="380" height="250" fill="#fafafa"/>
+          <!-- 키오스크 화면 (크게, 1인칭 시야) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linejoin="round" fill="none">
+            <rect x="40" y="20" width="300" height="220"/>
+            <text x="190" y="38" text-anchor="middle" font-size="9" font-weight="700" fill="#1f2937">BASKIN ROBBINS · 메뉴 선택</text>
+            <line x1="40" y1="45" x2="340" y2="45"/>
+          </g>
+          <!-- 메뉴 그리드 (3x3) -->
+          <g stroke="#9ca3af" stroke-width="1.3" fill="none">
+            <rect x="55" y="58" width="80" height="55"/>
+            <rect x="150" y="58" width="80" height="55"/>
+            <rect x="245" y="58" width="80" height="55"/>
+            <rect x="55" y="125" width="80" height="55"/>
+            <rect x="245" y="125" width="80" height="55"/>
+          </g>
+          <!-- 추천 메뉴 강조 (정중앙) -->
+          <g stroke="#2563eb" stroke-width="2.5" fill="rgba(37,99,235,.06)">
+            <rect x="150" y="125" width="80" height="55"/>
+          </g>
+          <!-- 메뉴 이름 텍스트 -->
+          <text x="95" y="92" text-anchor="middle" font-size="8" fill="#6b7280">엄마는 외계인</text>
+          <text x="190" y="92" text-anchor="middle" font-size="8" fill="#6b7280">민트초콜릿</text>
+          <text x="285" y="92" text-anchor="middle" font-size="8" fill="#6b7280">아몬드봉봉</text>
+          <text x="95" y="158" text-anchor="middle" font-size="8" fill="#6b7280">바람과 함께</text>
+          <text x="190" y="155" text-anchor="middle" font-size="9" fill="#2563eb" font-weight="700">사랑에 빠진</text>
+          <text x="190" y="167" text-anchor="middle" font-size="9" fill="#2563eb" font-weight="700">딸기 (패밀리)</text>
+          <text x="285" y="158" text-anchor="middle" font-size="8" fill="#6b7280">초콜릿 무스</text>
+          <!-- 결제 버튼 -->
+          <rect x="55" y="195" width="270" height="32" stroke="#9ca3af" stroke-width="1.5" fill="#f3f4f6"/>
+          <text x="190" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#6b7280">결제하기</text>
+          <!-- AR 큰 화살표 ① — 메뉴 가리킴 -->
+          <g fill="#2563eb" stroke="#2563eb" stroke-width="2" stroke-linejoin="round">
+            <polygon points="190,105 178,90 184,90 184,75 196,75 196,90 202,90"/>
+          </g>
+          <circle cx="190" cy="68" r="9" fill="#2563eb"/>
+          <text x="190" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">1</text>
+          <!-- AR 큰 화살표 ② — 결제 가리킴 -->
+          <g fill="#2563eb" stroke="#2563eb" stroke-width="2" stroke-linejoin="round" opacity=".55">
+            <polygon points="190,237 178,222 184,222 184,209 196,209 196,222 202,222"/>
+          </g>
+        </svg>
+        <!-- HUD 상단 -->
+        <div class="hud" style="top:14px;left:14px;width:130px">
+          <p class="hud-title">🎯 키오스크 보조</p>
+          <p class="hud-sub">화면 인식 중 · OK</p>
+        </div>
+        <!-- HUD 우측 추천 카드 -->
+        <div class="hud" style="bottom:14px;right:14px;width:155px">
+          <p class="hud-title">추천 · 아이들 인기</p>
+          <p class="hud-sub" style="color:#1f2937;font-weight:700">사랑에 빠진 딸기 (패밀리)</p>
+          <p class="hud-sub">15,800원 · 4~5인분</p>
+          <div class="hud-divider"></div>
+          <p class="hud-sub">① 메뉴 누르기 → ② 결제</p>
+        </div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">3.</span> 키오스크 화면을 카메라가 인식 → <b>HUD가 추천 메뉴와 결제 버튼을 큰 화살표로 직접 가리킴</b>. 어르신은 화살표 따라 두 번만 누르면 됨.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- 메모 -->
+  <div class="mt-8 bg-white border border-gray-200 rounded-xl p-5 max-w-4xl">
+    <p class="text-[13px] font-bold text-gray-900 mb-2">시나리오 메모</p>
+    <ul class="text-[12.5px] text-gray-700 list-disc list-inside space-y-1.5 leading-relaxed">
+      <li><b>핵심 가치</b> — 디지털 소외 해소. 키오스크가 무엇을 묻고 어느 버튼을 눌러야 하는지 글래스가 화면 위에 직접 안내. 손주들 앞에서 어르신 자존감 유지.</li>
+      <li><b>화면 인식</b> — 키오스크 UI를 비전 모델이 분석 → 메뉴·가격·버튼 위치 좌표 추출. AR 정합으로 1인칭 시야에 화살표 오버레이.</li>
+      <li><b>추천 로직</b> — "아이들이 좋아하는 메뉴" = 매장 인기 메뉴 + 가족 단위 패밀리/4인 사이즈 + 아동 친화 카테고리. 매장 데이터 미연동 시 일반 인기 순위 기반.</li>
+      <li><b>적용 범위</b> — 베스킨라빈스뿐 아니라 패스트푸드·약국·은행·지자체 무인기. <b>키오스크 보조</b>는 별도 모드명으로 일반화 가능.</li>
+      <li><b>다국어</b> — 외국인 관광객에게도 한국어 키오스크 화면을 모국어로 안내 가능 (자막 모드 연동).</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스토리보드 ③ 연락처 등록 · 07 웨어러블</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{--ink:#1f2937;--ink-soft:#6b7280;--paper:#fafafa;--key:#2563eb;--key-bg:rgba(37,99,235,.06)}
+body{font-family:Pretendard,system-ui,sans-serif;background:#f3f4f6;color:var(--ink)}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.cut{background:#fff;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.cut-frame{aspect-ratio:3/2;border-bottom:1.5px solid var(--ink);position:relative;background:var(--paper);overflow:hidden}
+.cut-svg{width:100%;height:100%;display:block}
+.cut-caption{padding:11px 13px;font-size:12px;line-height:1.6;color:#374151;min-height:74px}
+.cut-num{font-weight:800;color:var(--ink);margin-right:6px}
+.hud{position:absolute;border:1.5px solid var(--key);background:#fff;border-radius:6px;padding:6px 8px;color:var(--key);font-size:9.5px;line-height:1.4;font-weight:600;box-shadow:0 2px 5px rgba(37,99,235,.12)}
+.hud-title{font-weight:800;font-size:10.5px;color:var(--key)}
+.hud-sub{font-weight:500;color:#374151;font-size:9px;margin-top:2px}
+.hud-divider{border-top:1px dashed #c7d2fe;margin:4px -2px}
+.hud-btn{border:1px solid #c7d2fe;background:#fff;color:var(--key);font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block}
+.hud-btn-on{background:var(--key);color:#fff;border-color:var(--key)}
+.bubble{position:absolute;background:#fff;border:1.5px solid var(--ink);border-radius:14px;padding:6px 10px;font-size:10px;color:var(--ink);font-weight:600}
+.bubble-tail{position:absolute;width:9px;height:9px;background:#fff;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg)}
+.label-strip{position:absolute;top:10px;left:10px;font-size:9.5px;font-weight:800;color:#6b7280;letter-spacing:.08em;text-transform:uppercase}
+.face-frame{position:absolute;border:1.5px solid var(--key);border-radius:4px}
+.face-frame::before,.face-frame::after{content:"";position:absolute;width:8px;height:8px;border:2px solid var(--key)}
+.face-frame::before{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.face-frame::after{bottom:-2px;right:-2px;border-left:none;border-top:none}
+</style>
+</head>
+<body class="min-h-screen p-8">
+
+<div class="max-w-[1280px] mx-auto">
+
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1">← 스토리보드 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">③ 연락처 등록 — 거래처 미팅</h1>
+  <p class="text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+    비즈니스 미팅에서 처음 만난 거래처 담당자의 정보를 글래스가 자동으로 수집·정리한다. 카메라 안면 인식 + 명함 캡처 + 대화 STT를 결합해, 인사 후 미팅 종료 시점에 한 카드로 "저장할까요?" 제안. 사용자는 저장 버튼 한 번으로 마무리.
+  </p>
+
+  <div class="board mt-7">
+
+    <!-- ============ CUT 1 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 1 · 미팅 시작</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <!-- 사무실 배경 -->
+          <line x1="0" y1="200" x2="380" y2="200" stroke="#9ca3af" stroke-width="1.3"/>
+          <rect x="20" y="60" width="80" height="60" stroke="#9ca3af" stroke-width="1.2" fill="none"/>
+          <line x1="60" y1="60" x2="60" y2="120" stroke="#d1d5db" stroke-width="1"/>
+          <text x="60" y="50" text-anchor="middle" font-size="9" fill="#9ca3af">창문</text>
+          <!-- 책상 -->
+          <rect x="120" y="160" width="160" height="6" stroke="#1f2937" stroke-width="1.3" fill="#fff"/>
+          <line x1="135" y1="166" x2="135" y2="195" stroke="#1f2937" stroke-width="1.3"/>
+          <line x1="265" y1="166" x2="265" y2="195" stroke="#1f2937" stroke-width="1.3"/>
+          <!-- 사용자 (왼쪽) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="100" cy="110" r="13"/>
+            <line x1="100" y1="123" x2="100" y2="155"/>
+            <line x1="100" y1="135" x2="120" y2="155"/>
+            <line x1="100" y1="135" x2="85" y2="155"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="95" cy="108" r="3"/>
+            <circle cx="105" cy="108" r="3"/>
+            <line x1="98.5" y1="108" x2="101.5" y2="108"/>
+          </g>
+          <!-- 거래처 담당자 (오른쪽) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="290" cy="110" r="13"/>
+            <line x1="290" y1="123" x2="290" y2="155"/>
+            <line x1="290" y1="135" x2="270" y2="155"/>
+            <line x1="290" y1="135" x2="305" y2="155"/>
+          </g>
+          <!-- 악수 -->
+          <line x1="120" y1="155" x2="270" y2="155" stroke="#1f2937" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="195" cy="155" r="6" stroke="#1f2937" stroke-width="1.5" fill="#fafafa"/>
+        </svg>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">1.</span> 거래처 사무실에서 첫 미팅. 글래스를 쓴 사용자가 담당자와 <b>악수하며 인사</b>. 글래스는 이미 비즈니스 컨텍스트(캘린더에 "거래처 미팅" 등록)를 인지하고 백그라운드 수집 모드.
+      </p>
+    </div>
+
+    <!-- ============ CUT 2 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 2 · 안면 인식 캡처</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <rect x="0" y="0" width="380" height="250" fill="#fafafa"/>
+          <!-- 1인칭 시야 — 상대방 얼굴이 중앙 가까이 -->
+          <line x1="0" y1="210" x2="380" y2="210" stroke="#d1d5db" stroke-width="1"/>
+          <!-- 상대방 머리·어깨 (정면, 크게) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="190" cy="110" r="42"/>
+            <!-- 눈 -->
+            <circle cx="175" cy="105" r="2" fill="#1f2937"/>
+            <circle cx="205" cy="105" r="2" fill="#1f2937"/>
+            <!-- 코 -->
+            <path d="M 190 110 L 188 122 L 192 122"/>
+            <!-- 입 -->
+            <path d="M 178 132 Q 190 138 202 132"/>
+            <!-- 어깨 -->
+            <path d="M 130 200 Q 130 160 165 152"/>
+            <path d="M 250 200 Q 250 160 215 152"/>
+          </g>
+        </svg>
+        <!-- 얼굴 인식 박스 (푸른) -->
+        <div class="face-frame" style="top:48px;left:35%;width:30%;height:42%"></div>
+        <!-- HUD 상단 안내 -->
+        <div class="hud" style="top:14px;left:14px;width:160px">
+          <p class="hud-title">🎯 안면 인식 중…</p>
+          <p class="hud-sub">신규 인물 · 캘린더 매칭</p>
+          <p class="hud-sub">"○○상사 김OO 부장님" 추정</p>
+        </div>
+        <!-- HUD 우측 명함 캡처 안내 -->
+        <div class="hud" style="bottom:18px;right:14px;width:140px">
+          <p class="hud-title">📇 명함 받으면 자동 캡처</p>
+          <p class="hud-sub">정보 자동 매칭</p>
+        </div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">2.</span> 글래스 카메라가 <b>상대방 얼굴을 안면 인식</b> 박스로 캡처. 캘린더 미팅 정보와 매칭해 인물을 추정. 명함을 받으면 OCR로 자동 캡처.
+      </p>
+    </div>
+
+    <!-- ============ CUT 3 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 3 · 대화 중 STT</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <line x1="0" y1="200" x2="380" y2="200" stroke="#9ca3af" stroke-width="1.3"/>
+          <rect x="120" y="160" width="160" height="6" stroke="#1f2937" stroke-width="1.3" fill="#fff"/>
+          <!-- 사용자 -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="100" cy="115" r="13"/>
+            <line x1="100" y1="128" x2="100" y2="160"/>
+            <line x1="100" y1="140" x2="115" y2="155"/>
+            <line x1="100" y1="140" x2="85" y2="155"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="95" cy="113" r="3"/>
+            <circle cx="105" cy="113" r="3"/>
+            <line x1="98.5" y1="113" x2="101.5" y2="113"/>
+          </g>
+          <!-- 상대방 -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="290" cy="115" r="13"/>
+            <line x1="290" y1="128" x2="290" y2="160"/>
+            <line x1="290" y1="140" x2="275" y2="155"/>
+            <line x1="290" y1="140" x2="305" y2="155"/>
+          </g>
+        </svg>
+        <!-- 상대방 말풍선 -->
+        <div class="bubble" style="top:30px;left:185px;width:155px">"○○상사 마케팅팀 김도훈 부장입니다."</div>
+        <div class="bubble-tail" style="top:55px;left:267px"></div>
+        <!-- STT 캡처 HUD (하단) -->
+        <div class="hud" style="bottom:14px;left:14px;width:280px">
+          <p class="hud-title">🎤 대화 캡처 · 정보 추출 중</p>
+          <div class="hud-divider"></div>
+          <p class="hud-sub"><b style="color:#1f2937">회사</b> · ○○상사</p>
+          <p class="hud-sub"><b style="color:#1f2937">부서</b> · 마케팅팀</p>
+          <p class="hud-sub"><b style="color:#1f2937">이름</b> · 김도훈</p>
+          <p class="hud-sub"><b style="color:#1f2937">직책</b> · 부장</p>
+        </div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">3.</span> 대화 중 상대방의 자기소개를 <b>STT로 실시간 캡처</b>. NER(개체명 인식)로 회사·부서·이름·직책을 추출해 HUD에 한 줄씩 채워나감.
+      </p>
+    </div>
+
+    <!-- ============ CUT 4 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 4 · 미팅 종료 · 저장 제안</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <line x1="0" y1="210" x2="380" y2="210" stroke="#9ca3af" stroke-width="1.3"/>
+          <!-- 사용자 (정면, 글래스 보는 중) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="80" cy="120" r="13"/>
+            <line x1="80" y1="133" x2="80" y2="170"/>
+            <line x1="80" y1="145" x2="95" y2="160"/>
+            <line x1="80" y1="145" x2="65" y2="160"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="75" cy="118" r="3"/>
+            <circle cx="85" cy="118" r="3"/>
+          </g>
+          <!-- 상대방 -->
+          <g stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".7">
+            <circle cx="330" cy="125" r="11"/>
+            <line x1="330" y1="136" x2="330" y2="165"/>
+          </g>
+        </svg>
+        <!-- 큰 HUD 카드 — 저장 제안 -->
+        <div class="hud" style="top:16px;left:110px;width:235px;padding:8px 10px">
+          <p class="hud-title" style="font-size:11px">📇 연락처에 저장할까요?</p>
+          <div class="hud-divider"></div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <!-- 사진 placeholder -->
+            <div style="width:36px;height:36px;border:1.3px solid #1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="1.5"><circle cx="12" cy="9" r="3"/><path d="M5 20 Q 5 14 12 14 Q 19 14 19 20"/></svg>
+            </div>
+            <div style="flex:1;min-width:0">
+              <p class="hud-sub" style="margin:0;color:#1f2937;font-weight:800;font-size:10px">김도훈 부장</p>
+              <p class="hud-sub" style="margin-top:1px">○○상사 · 마케팅팀</p>
+            </div>
+          </div>
+          <div class="hud-divider"></div>
+          <p class="hud-sub">📞 010-1234-5678</p>
+          <p class="hud-sub">✉ dh.kim@ooco.kr</p>
+          <p class="hud-sub">🏢 서울 강남구 ○○로 12</p>
+          <div class="hud-divider"></div>
+          <div style="display:flex;gap:5px;margin-top:4px">
+            <span class="hud-btn hud-btn-on">✓ 저장</span>
+            <span class="hud-btn">수정</span>
+            <span class="hud-btn">취소</span>
+          </div>
+        </div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">4.</span> 인사 후 자리에서 일어나는 시점에 글래스가 <b>종합 카드 제안</b> — 사진·이름·직책·전화·이메일·회사·주소를 한 번에 정리. "저장할까요?"
+      </p>
+    </div>
+
+    <!-- ============ CUT 5 ============ -->
+    <div class="cut">
+      <div class="cut-frame">
+        <span class="label-strip">CUT 5 · 저장 완료</span>
+        <svg viewBox="0 0 380 250" class="cut-svg">
+          <line x1="0" y1="210" x2="380" y2="210" stroke="#9ca3af" stroke-width="1.3"/>
+          <!-- 사용자 (걸어나감) -->
+          <g stroke="#1f2937" stroke-width="2" stroke-linecap="round" fill="none">
+            <circle cx="180" cy="115" r="13"/>
+            <line x1="180" y1="128" x2="180" y2="165"/>
+            <line x1="180" y1="140" x2="165" y2="158"/>
+            <line x1="180" y1="140" x2="195" y2="155"/>
+            <line x1="180" y1="165" x2="168" y2="200"/>
+            <line x1="180" y1="165" x2="192" y2="205"/>
+          </g>
+          <g stroke="#2563eb" stroke-width="1.8" fill="none">
+            <circle cx="175" cy="113" r="3"/>
+            <circle cx="185" cy="113" r="3"/>
+            <line x1="178.5" y1="113" x2="181.5" y2="113"/>
+          </g>
+          <!-- 손 (저장 버튼 누른 후) -->
+          <line x1="195" y1="155" x2="220" y2="135" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="222" cy="133" r="3" fill="#1f2937"/>
+          <!-- 큰 체크 마크 (저장 완료) -->
+          <g stroke="#2563eb" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <circle cx="295" cy="100" r="32" stroke-width="2.5" fill="rgba(37,99,235,.08)"/>
+            <polyline points="280,100 292,114 312,90"/>
+          </g>
+        </svg>
+        <div class="hud" style="top:18px;left:18px;width:170px">
+          <p class="hud-title">✓ 저장 완료</p>
+          <p class="hud-sub">김도훈 부장 · ○○상사</p>
+          <p class="hud-sub">연락처 + 비즈니스 노트에 동기화</p>
+          <div class="hud-divider"></div>
+          <p class="hud-sub" style="color:var(--key);font-weight:700">2주 뒤 "팔로업" 미리 알림 등록 제안</p>
+        </div>
+      </div>
+      <p class="cut-caption">
+        <span class="cut-num">5.</span> 저장 버튼 제스처 → <b>연락처 + 비즈니스 노트에 동기화</b>. 후속 액션으로 "2주 뒤 팔로업 알림" 자동 제안. 글래스가 인맥 관리를 도와줌.
+      </p>
+    </div>
+
+    <div></div>
+  </div>
+
+  <!-- 메모 -->
+  <div class="mt-8 bg-white border border-gray-200 rounded-xl p-5 max-w-4xl">
+    <p class="text-[13px] font-bold text-gray-900 mb-2">시나리오 메모</p>
+    <ul class="text-[12.5px] text-gray-700 list-disc list-inside space-y-1.5 leading-relaxed">
+      <li><b>컨텍스트 감지</b> — 캘린더 "거래처 미팅" 이벤트 + 위치 기반. 일반 사적 만남에서는 자동 발동 X (프라이버시).</li>
+      <li><b>정보 출처 3종</b> — ① 안면 인식(사진), ② 명함 OCR(전화·이메일·주소), ③ 대화 STT(직책·소속·맥락). 셋이 교차 검증되어 신뢰도 높은 항목만 카드에 노출.</li>
+      <li><b>상대방 동의</b> — 명함 교환 행위 자체가 정보 공유 동의로 간주. 명함 없이 일방적 안면 캡처만 한 경우 저장 카드 노출 X (법적·윤리적 가드).</li>
+      <li><b>팔로업 제안</b> — 비즈니스 미팅 자동 분류 → 알림 시스템(03 알림)과 연동해 후속 액션 시드 생성.</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
