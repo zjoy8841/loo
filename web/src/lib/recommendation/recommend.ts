@@ -34,10 +34,11 @@ function hashCode(s: string): number {
   return Math.abs(h);
 }
 
-export function pickMenu(
+export function pickMenuCandidates(
   profile: RecommendationProfile,
   seed?: string,
-): MenuMock {
+  limit = 6,
+): MenuMock[] {
   const { healthTags, dietTags, allergyTags } = profile;
 
   const safe = MENUS.filter(
@@ -64,7 +65,14 @@ export function pickMenu(
     return 0;
   });
 
-  return scored[0]?.menu ?? MENUS[0];
+  return scored.slice(0, limit).map((s) => s.menu);
+}
+
+export function pickMenu(
+  profile: RecommendationProfile,
+  seed?: string,
+): MenuMock {
+  return pickMenuCandidates(profile, seed, 1)[0] ?? MENUS[0];
 }
 
 function oneLineLabel(label: string): string {

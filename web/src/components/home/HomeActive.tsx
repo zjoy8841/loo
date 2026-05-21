@@ -14,11 +14,15 @@ export default function HomeActive({
   menu,
   personaChips,
   insight,
+  onAlternative,
+  altCount,
 }: {
   name: string;
   menu: MenuMock;
   personaChips: string[];
   insight: string;
+  onAlternative: () => void;
+  altCount: number;
 }) {
   const t = useT();
 
@@ -71,7 +75,9 @@ export default function HomeActive({
             </Link>
             <button
               type="button"
-              className="px-4 h-12 rounded-xl border border-gray-300 text-gray-700 font-semibold text-sm"
+              onClick={onAlternative}
+              disabled={altCount <= 1}
+              className="px-4 h-12 rounded-xl border border-gray-300 text-gray-700 font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {t("user.home.cta.alternatives")}
             </button>

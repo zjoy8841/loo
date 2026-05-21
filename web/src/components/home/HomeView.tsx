@@ -12,19 +12,20 @@ import HomeIdle from "./HomeIdle";
 export default function HomeView({
   name,
   initialMode,
-  menu,
+  candidates,
   personaChips,
   insight,
 }: {
   name: string;
   initialMode: "active" | "idle";
-  menu: MenuMock;
+  candidates: MenuMock[];
   personaChips: string[];
   insight: string;
 }) {
   const t = useT();
   const router = useRouter();
   const [mode, setMode] = useState<"active" | "idle">(initialMode);
+  const [menuIndex, setMenuIndex] = useState(0);
 
   function handleChat() {
     if (mode === "idle") setMode("active");
@@ -33,6 +34,12 @@ export default function HomeView({
   function handleQuickAction() {
     setMode("active");
   }
+
+  function handleAlternative() {
+    setMenuIndex((i) => (i + 1) % candidates.length);
+  }
+
+  const menu = candidates[menuIndex] ?? candidates[0];
 
   return (
     <div className="min-h-screen flex flex-col bg-white pb-24">
@@ -48,6 +55,8 @@ export default function HomeView({
             menu={menu}
             personaChips={personaChips}
             insight={insight}
+            onAlternative={handleAlternative}
+            altCount={candidates.length}
           />
         ) : (
           <HomeIdle
