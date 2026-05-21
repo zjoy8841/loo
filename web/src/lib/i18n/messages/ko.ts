@@ -273,7 +273,8 @@ const ko = {
     cta: {
       next: "다음",
       complete: "완료",
-      later: "건너뛰기",
+      later: "나중에 입력",
+      laterSubtext: "권장 안 함",
       laterWarnSr: "권장하지 않습니다. 정확도가 떨어질 수 있어요.",
       loadingSave: "저장 중…",
       loadingSubmit: "가입 중…",
@@ -299,7 +300,14 @@ const ko = {
         email: "이메일",
         emailPlaceholder: "you@example.com",
         password: "비밀번호",
-        passwordPlaceholder: "8자 이상",
+        passwordPlaceholder: "8자 이상 · 영문+숫자",
+      },
+      email: {
+        statusChecking: "확인 중",
+        statusAvailable: "사용 가능",
+        statusTaken: "중복",
+        takenHint: "이미 가입된 이메일이에요 ·",
+        loginLink: "로그인하기",
       },
       sns: {
         divider: "또는 SNS로",
@@ -324,9 +332,15 @@ const ko = {
           veryWeak: "매우 약함",
           weak: "약함",
           fair: "보통",
-          strong: "강함",
+          strong: "매우 강함",
         },
         hint: "영문·숫자·특수문자 섞으면 더 안전해요",
+        conditions: {
+          length: "8자 이상",
+          letter: "영문 포함",
+          digit: "숫자 포함",
+          special: "특수문자 포함",
+        },
       },
     },
     step2: {
@@ -344,6 +358,7 @@ const ko = {
         diet: "식이 성향",
         allergy: "알레르기 / 못 먹는 것",
       },
+      allergyWarn: "건너뛰기 비권장 — 알레르기 정보 누락 시 추천 안전성 보장 불가",
       skipDialog: {
         title: "알레르기 정보 없이 건너뛸까요?",
         description:

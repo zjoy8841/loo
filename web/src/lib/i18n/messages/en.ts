@@ -276,6 +276,7 @@ const en: Messages = {
       next: "Next",
       complete: "Done",
       later: "Skip for now",
+      laterSubtext: "Not recommended",
       laterWarnSr: "Not recommended. Recommendations may be less accurate.",
       loadingSave: "Saving…",
       loadingSubmit: "Signing up…",
@@ -301,7 +302,14 @@ const en: Messages = {
         email: "Email",
         emailPlaceholder: "you@example.com",
         password: "Password",
-        passwordPlaceholder: "8+ characters",
+        passwordPlaceholder: "8+ chars · letters + numbers",
+      },
+      email: {
+        statusChecking: "Checking",
+        statusAvailable: "Available",
+        statusTaken: "Taken",
+        takenHint: "Already registered ·",
+        loginLink: "Sign in",
       },
       sns: {
         divider: "Or with SNS",
@@ -326,9 +334,15 @@ const en: Messages = {
           veryWeak: "Very weak",
           weak: "Weak",
           fair: "Fair",
-          strong: "Strong",
+          strong: "Very strong",
         },
         hint: "Mix letters, numbers, and symbols for safety",
+        conditions: {
+          length: "8+ characters",
+          letter: "Letters",
+          digit: "Numbers",
+          special: "Special characters",
+        },
       },
     },
     step2: {
@@ -346,6 +360,7 @@ const en: Messages = {
         diet: "Diet style",
         allergy: "Allergies / off-limits",
       },
+      allergyWarn: "Skipping not recommended — recommendations can't guarantee safety without allergy info",
       skipDialog: {
         title: "Skip without allergy info?",
         description:

@@ -45,11 +45,13 @@ function ModeChip({ mode }: { mode: "multi" | "single" | "multi-min3" }) {
         ? "signup.mode.multiMin3"
         : "signup.mode.multi";
   return (
-    <p
-      aria-hidden="true"
-      className="text-xs text-signup-accent-deep/70 mb-3 font-medium"
-    >
-      {t(key)}
-    </p>
+    <div className="mb-3">
+      <span
+        aria-hidden="true"
+        className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 border border-gray-300 text-[11px] text-gray-600 font-medium leading-none"
+      >
+        {t(key)}
+      </span>
+    </div>
   );
 }

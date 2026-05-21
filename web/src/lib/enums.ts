@@ -40,7 +40,7 @@ export const SHAPE_GOALS = [
   { key: "diet",                label: "다이어트\n중",            emoji: "🏃‍♀️", iconKey: "TrendingDown" },
   { key: "bulk",                label: "벌크업\n중",              emoji: "💪", iconKey: "Dumbbell" },
   { key: "never-ending-dieter", label: "네버엔딩\n다이어터",      emoji: "♾️", iconKey: "Infinity" },
-  { key: "maintain",            label: "그냥 유지만 할래요",       emoji: "🧘", iconKey: "Equal" },
+  { key: "maintain",            label: "유지어터",                  emoji: "🧘", iconKey: "Equal" },
 ] as const satisfies readonly EnumItem<string>[];
 
 export type ShapeKey = (typeof SHAPE_GOALS)[number]["key"];

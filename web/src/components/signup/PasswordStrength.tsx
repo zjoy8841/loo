@@ -1,12 +1,13 @@
 "use client";
 
+import { Check, X } from "lucide-react";
 import { useT } from "@/lib/i18n";
 
 /**
- * 비밀번호 강도 미터 4단계.
- * description §8: account.password — 강도 미터 4단계.
+ * 비밀번호 강도 미터 4단계 + 조건 체크리스트.
+ * description §8 + Figma U-02-1 시안.
  *
- * 점수 산출 (단순·예측 가능):
+ * 점수 산출:
  *  - 8자 이상  → +1
  *  - 12자 이상 → +1
  *  - 영문 + 숫자 혼합 → +1
@@ -43,11 +44,23 @@ const BAR_COLORS = [
   "bg-gray-900",
 ] as const;
 
+const CONDITION_KEYS = ["length", "letter", "digit", "special"] as const;
+
+function evaluateConditions(pw: string) {
+  return {
+    length: pw.length >= 8,
+    letter: /[A-Za-z]/.test(pw),
+    digit: /\d/.test(pw),
+    special: /[^A-Za-z0-9]/.test(pw),
+  };
+}
+
 export default function PasswordStrength({ password }: { password: string }) {
   const t = useT();
   const score = scorePassword(password);
   const label = t(LABEL_KEYS[score]);
   const empty = !password;
+  const conditions = evaluateConditions(password);
 
   return (
     <div className="mt-2" aria-live="polite">
@@ -75,8 +88,35 @@ export default function PasswordStrength({ password }: { password: string }) {
         }`}
       >
         {label}
-        {!empty && score < 3 ? ` · ${t("signup.step1.password.hint")}` : ""}
       </p>
+      <ul className="mt-2 grid grid-cols-2 gap-y-1 gap-x-3" aria-hidden>
+        {CONDITION_KEYS.map((key) => {
+          const met = conditions[key];
+          return (
+            <li
+              key={key}
+              className="flex items-center gap-1.5 text-[11px] leading-tight"
+            >
+              {met ? (
+                <Check
+                  size={12}
+                  strokeWidth={2.5}
+                  className="text-gray-900 shrink-0"
+                />
+              ) : (
+                <X
+                  size={12}
+                  strokeWidth={2.5}
+                  className="text-gray-300 shrink-0"
+                />
+              )}
+              <span className={met ? "text-gray-700" : "text-gray-400"}>
+                {t(`signup.step1.password.conditions.${key}`)}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

@@ -29,16 +29,19 @@ export default function BottomActions({
 export function LaterButton({
   onPress,
   label,
+  subtext,
   warnLevel = "soft",
   disabled,
 }: {
   onPress: () => void;
   label?: string;
+  subtext?: string;
   warnLevel?: "soft" | "strong";
   disabled?: boolean;
 }) {
   const t = useT();
   const helpId = warnLevel === "strong" ? "later-strong-warn" : undefined;
+  const sub = subtext ?? t("signup.cta.laterSubtext");
   return (
     <>
       <button
@@ -47,9 +50,12 @@ export function LaterButton({
         disabled={disabled}
         aria-describedby={helpId}
         data-warn-level={warnLevel}
-        className="col-span-1 bg-white border border-gray-200 text-gray-500 font-semibold py-4 rounded-xl text-center disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
+        className="col-span-1 bg-white border border-gray-300 text-gray-500 font-semibold py-3 rounded-xl flex flex-col items-center justify-center gap-0.5 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
       >
-        {label ?? t("signup.cta.later")}
+        <span className="text-sm">{label ?? t("signup.cta.later")}</span>
+        {sub ? (
+          <span className="text-[10px] font-semibold text-gray-400">{sub}</span>
+        ) : null}
       </button>
       {warnLevel === "strong" ? (
         <span id={helpId} className="sr-only">

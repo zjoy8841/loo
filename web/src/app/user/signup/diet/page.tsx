@@ -2,7 +2,7 @@
 
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { useRouter } from "next/navigation";
-import { UtensilsCrossed } from "lucide-react";
+import { UtensilsCrossed, AlertCircle } from "lucide-react";
 import { DIET_TAGS, ALLERGY_TAGS } from "@/lib/enums";
 import { useT } from "@/lib/i18n";
 import {
@@ -113,6 +113,23 @@ export default function SignupDiet() {
           />
         ))}
       </OptionGrid>
+
+      {allergy.length === 0 && (
+        <div
+          role="note"
+          className="mt-4 flex items-start gap-3 rounded-xl border border-gray-300 bg-white px-4 py-3"
+        >
+          <AlertCircle
+            size={20}
+            strokeWidth={1.75}
+            aria-hidden
+            className="text-gray-700 shrink-0 mt-0.5"
+          />
+          <p className="text-[11px] font-bold text-gray-700 leading-relaxed">
+            {t("signup.step4.allergyWarn")}
+          </p>
+        </div>
+      )}
 
       <ConfirmDialog
         open={allergySkipDialogOpen}
