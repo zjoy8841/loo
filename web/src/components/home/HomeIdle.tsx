@@ -4,15 +4,16 @@ import RyanMascot from "@/components/RyanMascot";
 import { useT } from "@/lib/i18n";
 
 const QUICK_KEYS = ["lunch", "schedule", "weather", "reservations", "walk", "water"] as const;
-const PERSONA_CHIPS = ["콜레스테롤 관리", "단백질 부족"] as const;
 
 export default function HomeIdle({
   name,
   timeLabel,
+  personaChips,
   onQuickAction,
 }: {
   name: string;
   timeLabel: string;
+  personaChips: string[];
   onQuickAction: (key: string) => void;
 }) {
   const t = useT();
@@ -34,7 +35,7 @@ export default function HomeIdle({
       </div>
 
       <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-        {PERSONA_CHIPS.map((c) => (
+        {personaChips.map((c) => (
           <span
             key={c}
             className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"

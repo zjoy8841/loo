@@ -3,25 +3,23 @@
 import Link from "next/link";
 import { Utensils, Activity, MapPin, CalendarClock } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import type { MenuMock } from "@/lib/recommendation/menus";
 
-const PERSONA_CHIPS = ["콜레스테롤 관리", "단백질 부족"] as const;
+function won(n: number) {
+  return `${n.toLocaleString("ko-KR")}원`;
+}
 
-const HERO_LUNCH = {
-  title: "닭가슴살 샐러드 어떠세요?",
-  merchant: "B카페 · 도보 3분",
-  price: "9,800원",
-  nutrition: "단백질 32g · 420 kcal",
-} as const;
-
-const DETAIL_LUNCH = {
-  restaurant: { value: "B카페", meta: "4.7 ★ · 도보 3분" },
-  nutrition: { value: "단백질 32g", meta: "420 kcal" },
-  nearby: { value: "5곳", meta: "도보 3분 내" },
-} as const;
-
-const INSIGHT_LUNCH = "14:00 디자인 리뷰까지 1시간 37분";
-
-export default function HomeActive({ name }: { name: string }) {
+export default function HomeActive({
+  name,
+  menu,
+  personaChips,
+  insight,
+}: {
+  name: string;
+  menu: MenuMock;
+  personaChips: string[];
+  insight: string;
+}) {
   const t = useT();
 
   return (
@@ -31,7 +29,7 @@ export default function HomeActive({ name }: { name: string }) {
           {t("user.home.greeting.lunch_active", { name })}
         </h1>
         <div className="mt-3 flex flex-wrap gap-1.5">
-          {PERSONA_CHIPS.map((c) => (
+          {personaChips.map((c) => (
             <span
               key={c}
               className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
@@ -50,17 +48,23 @@ export default function HomeActive({ name }: { name: string }) {
           <Utensils size={48} strokeWidth={1.25} aria-hidden />
         </div>
         <div className="p-4">
-          <h2 className="text-lg font-bold text-gray-900">{HERO_LUNCH.title}</h2>
-          <p className="mt-1 text-xs text-gray-500">{HERO_LUNCH.merchant}</p>
+          <h2 className="text-lg font-bold text-gray-900">
+            {menu.name} 어떠세요?
+          </h2>
+          <p className="mt-1 text-xs text-gray-500">
+            {menu.merchant.split(" · ")[0]} · 도보 {menu.walkMin}분
+          </p>
           <div className="mt-3 flex items-baseline gap-3">
             <span className="text-xl font-bold text-gray-900">
-              {HERO_LUNCH.price}
+              {won(menu.price)}
             </span>
-            <span className="text-xs text-gray-500">{HERO_LUNCH.nutrition}</span>
+            <span className="text-xs text-gray-500">
+              단백질 {menu.proteinG}g · {menu.kcal} kcal
+            </span>
           </div>
           <div className="mt-4 flex gap-2">
             <Link
-              href="/user/order?menu=m-chicken-salad&source=home"
+              href={`/user/order?menu=${menu.id}&source=home`}
               className="flex-1 h-12 rounded-xl bg-signup-accent hover:bg-signup-accent-hover text-white font-semibold text-sm flex items-center justify-center transition"
             >
               {t("user.home.cta.reserve_and_pay")}
@@ -79,20 +83,20 @@ export default function HomeActive({ name }: { name: string }) {
         <DetailCard
           Icon={Utensils}
           label={t("user.home.detail_label.restaurant")}
-          value={DETAIL_LUNCH.restaurant.value}
-          meta={DETAIL_LUNCH.restaurant.meta}
+          value={menu.merchant.split(" · ")[0]}
+          meta={`도보 ${menu.walkMin}분`}
         />
         <DetailCard
           Icon={Activity}
           label={t("user.home.detail_label.nutrition")}
-          value={DETAIL_LUNCH.nutrition.value}
-          meta={DETAIL_LUNCH.nutrition.meta}
+          value={`단백질 ${menu.proteinG}g`}
+          meta={`${menu.kcal} kcal`}
         />
         <DetailCard
           Icon={MapPin}
           label={t("user.home.detail_label.nearby")}
-          value={DETAIL_LUNCH.nearby.value}
-          meta={DETAIL_LUNCH.nearby.meta}
+          value="5곳"
+          meta={`도보 ${menu.walkMin + 2}분 내`}
         />
       </section>
 
@@ -107,7 +111,7 @@ export default function HomeActive({ name }: { name: string }) {
           <span className="text-gray-400 mr-1.5">
             {t("user.home.insight_prefix")}
           </span>
-          {INSIGHT_LUNCH}
+          {insight}
         </span>
       </section>
     </div>

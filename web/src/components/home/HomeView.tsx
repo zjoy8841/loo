@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n";
+import type { MenuMock } from "@/lib/recommendation/menus";
 import HomeHeader from "./HomeHeader";
 import ChatInputBar from "./ChatInputBar";
 import HomeActive from "./HomeActive";
@@ -11,9 +12,15 @@ import HomeIdle from "./HomeIdle";
 export default function HomeView({
   name,
   initialMode,
+  menu,
+  personaChips,
+  insight,
 }: {
   name: string;
   initialMode: "active" | "idle";
+  menu: MenuMock;
+  personaChips: string[];
+  insight: string;
 }) {
   const t = useT();
   const router = useRouter();
@@ -36,11 +43,17 @@ export default function HomeView({
       />
       <main className="flex-1 flex flex-col px-5">
         {mode === "active" ? (
-          <HomeActive name={name} />
+          <HomeActive
+            name={name}
+            menu={menu}
+            personaChips={personaChips}
+            insight={insight}
+          />
         ) : (
           <HomeIdle
             name={name}
             timeLabel={t("user.home.time_label.lunch")}
+            personaChips={personaChips}
             onQuickAction={handleQuickAction}
           />
         )}
