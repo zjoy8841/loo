@@ -89,9 +89,7 @@ export const JOBS = [
   { key: "employee",   label: "직장인",     emoji: "💼",     iconKey: "Briefcase",     description: "경제·산업·시사" },
   { key: "medical",    label: "의료인",     emoji: "👨‍⚕️",   iconKey: "Stethoscope",   description: "논문·학회·가이드" },
   { key: "freelancer", label: "프리랜서",   emoji: "💻",     iconKey: "Laptop",        description: "스타트업·기술·세션" },
-  { key: "parent",     label: "부모",       emoji: "👶",     iconKey: "Baby",          description: "육아·교육·학교" },
-  { key: "senior",     label: "시니어",     emoji: "👴",     iconKey: "UserRound",     description: "건강·복지·동네" },
-  { key: "etc",        label: "기타 / 직접 선택할게요", emoji: "✨",     iconKey: "MoreHorizontal", description: "" },
+  { key: "etc",        label: "기타",       emoji: "✨",     iconKey: "MoreHorizontal", description: "그 외" },
 ] as const satisfies readonly EnumItem<string>[];
 
 export type JobKey = (typeof JOBS)[number]["key"];

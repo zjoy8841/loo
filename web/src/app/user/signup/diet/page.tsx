@@ -92,7 +92,6 @@ export default function SignupDiet() {
             onPress={() => toggle(setDiet, i)}
             icon={<EnumIcon name={tag.iconKey} size={24} />}
             label={tag.label}
-            wide={tag.key === "omnivore"}
             size="compact"
           />
         ))}
@@ -108,7 +107,6 @@ export default function SignupDiet() {
             onPress={() => toggle(setAllergy, i)}
             icon={<EnumIcon name={tag.iconKey} size={24} />}
             label={tag.label}
-            wide={tag.key === "lactose"}
             size="compact"
           />
         ))}

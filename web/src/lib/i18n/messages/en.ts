@@ -376,7 +376,7 @@ const en: Messages = {
     },
     step6: {
       heading: "What do you do?",
-      description: "Pick one. We'll show relevant insights on home.",
+      description: "We'll show insights and news matched to your work.",
     },
     step7: {
       heading: "What interests you?",

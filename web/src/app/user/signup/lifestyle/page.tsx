@@ -77,12 +77,6 @@ export default function SignupLifestyle() {
           />
         ))}
       </OptionGrid>
-
-      <div className="mt-8 bg-signup-accent-soft rounded-2xl px-4 py-3 flex gap-3 items-start">
-        <p className="text-sm text-signup-accent-deep leading-relaxed">
-          {t("signup.step5.banner")}
-        </p>
-      </div>
     </SignupShell>
   );
 }

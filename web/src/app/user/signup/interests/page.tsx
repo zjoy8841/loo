@@ -94,12 +94,6 @@ export default function SignupInterests() {
           />
         ))}
       </OptionGrid>
-
-      <div className="bg-signup-accent-soft rounded-2xl px-4 py-3 flex gap-3 items-start mt-6">
-        <p className="text-sm text-signup-accent-deep leading-relaxed">
-          {t("signup.step7.banner")}
-        </p>
-      </div>
     </SignupShell>
   );
 }

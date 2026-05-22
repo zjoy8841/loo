@@ -71,7 +71,6 @@ export default function SignupJob() {
             icon={<EnumIcon name={j.iconKey} size={28} />}
             label={j.label}
             sublabel={j.description}
-            wide={j.key === "etc"}
           />
         ))}
       </OptionGrid>

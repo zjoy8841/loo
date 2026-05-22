@@ -70,7 +70,6 @@ export default function SignupShape() {
             onPress={() => setSelected(i)}
             icon={<EnumIcon name={tag.iconKey} size={28} />}
             label={tag.label}
-            wide={tag.key === "maintain"}
           />
         ))}
       </OptionGrid>
