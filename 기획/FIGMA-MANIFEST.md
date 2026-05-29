@@ -41,6 +41,9 @@
   - U-01 스플래시: `web/src/app/user/page.tsx`
   - U-02 회원가입 7단계: `web/src/app/user/signup/*/page.tsx`
 - 미작성 description: U-02-1-terms (약관 본문) · U-02-SNS (SNS 가입) · U-02-1-login (로그인)
+- git wireframe (활성): `기획/01 회원가입/v0.4/` — U-02-1에 성별(남/여/선택안함) · 생년월일(YYYY-MM-DD) 추가. Fragment 11종. 다른 6단계는 v0.3 그대로 카피.
+- git wireframe (이력): `기획/01 회원가입/v0.3/` 보존.
+- **v0.4 신규 필드 근거**: 큐레이션 도메인(U-15) 코호트 추천 + 생일 쿠폰 카드 시연. DB 영향: User 모델에 `gender` (enum) + `birthdate` (Date) 컬럼 추가, Prisma migration 필요.
 
 ### 02 메인 (U-03) — 화면 2 상태 (active + idle)
 

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02-6 직업 · v0.4 Base + Fragments</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:840px}
+.frag{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:16px;width:360px;border:1px dashed #cbd5e1}
+.frag-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;color:#fff;margin-bottom:10px}
+.frag-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:rgba(255,255,255,.25);font-size:10px;font-weight:800}
+.f-base{background:#6b7280}.f-info{background:#2563eb}.f-warn{background:#ca8a04}.f-ok{background:#16a34a}
+
+.chip{position:relative;background:#fff;border:2px solid #d1d5db;border-radius:18px;padding:14px;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:4px;width:100%}
+.chip.active{background:#1f1f1f;border-color:#1f1f1f;color:#fff}
+.chip .mark{position:absolute;top:8px;right:8px;width:18px;height:18px;border:1.5px solid #888;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center}
+.chip.active .mark{background:#fff;border-color:#fff;position:relative}
+.chip.active .mark::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;background:#1f1f1f;border-radius:999px;transform:translate(-50%,-50%)}
+.chip-ic{width:32px;height:32px;border-radius:999px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888}
+.chip.active .chip-ic{color:#fff}
+.chip-text{font-size:13px;font-weight:600;line-height:1.3}
+.chip-sub{font-size:10px;color:#9ca3af;margin-top:2px}
+.chip.active .chip-sub{color:#d1d5db}
+.badge{display:inline-block;background:#f3f4f6;border:1px solid #d1d5db;border-radius:999px;padding:2px 10px;font-size:11px;color:#4b5563}
+
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:600;padding:14px;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn-disabled{background:#e5e7eb;color:#9ca3af}
+.btn-ghost{background:#fff;border:1px solid #d1d5db;color:#6b7280;font-weight:600;padding:12px;border-radius:12px;text-align:center;font-size:13px;line-height:1.3}
+.btn-ghost-sm{font-size:10px;color:#9ca3af;display:block;margin-top:2px}
+
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-22{width:22px;height:22px}
+.legend-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 8px;background:#f3f4f6;border-radius:999px}
+.legend-dot{width:8px;height:8px;border-radius:999px;display:inline-block}
+.focus-ring{outline:2px solid #2563eb;outline-offset:2px;border-radius:18px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  </defs>
+</svg>
+
+<div class="max-w-[1400px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.4 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-02-6 직업 · Base + 인터랙션 Fragments</h1>
+  <p class="text-sm text-gray-600 mt-1">Single-select 5개. 라벨 1줄 + 서브텍스트 1줄. "기타" 선택 시 별도 화면 없이 7단계 진행.</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend-pill"><span class="legend-dot" style="background:#6b7280"></span>BASE</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#2563eb"></span>INFO</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#ca8a04"></span>WARN</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#16a34a"></span>OK</span>
+  </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto flex flex-wrap gap-8 items-start">
+
+  <div>
+    <div class="frag-label f-base"><span class="frag-num">B</span>BASE · 0개 선택</div>
+    <div class="phone">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between"><a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a><span class="text-xs text-gray-500">6 / 7</span></div>
+      <div class="px-5"><div class="h-1 bg-gray-200 rounded-full"><div class="h-full bg-gray-900 rounded-full" style="width:85.7%"></div></div></div>
+      <div class="flex-1 px-5 pt-6">
+        <div class="chip-ic mb-3" style="width:42px;height:42px;font-size:10px;border-width:2px">아이콘</div>
+        <h2 class="text-xl font-bold mb-2">어떻게 일하세요?</h2>
+        <span class="badge mb-2 inline-block">1개만 선택</span>
+        <p class="text-xs text-gray-500 mb-4">직업에 맞는 인사이트와 뉴스를 메인에 보여드려요.</p>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">의료인</span><span class="chip-sub">논문·학회·가이드</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">프리랜서</span><span class="chip-sub">스타트업·기술·세션</span></button>
+          <button class="chip col-span-2"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타 / 직접 선택할게요</span></button>
+        </div>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200 grid grid-cols-3 gap-2">
+        <div class="btn-ghost col-span-1">나중에 입력<span class="btn-ghost-sm">권장 안 함</span></div>
+        <div class="btn-primary btn-disabled col-span-2"><svg class="lc lc-14"><use href="#i-lock"/></svg> 다음</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-5">
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">1</span>Chip · single 선택 + 서브텍스트</div>
+      <div class="frag">
+        <div class="grid grid-cols-2 gap-2.5">
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
+          <button class="chip active"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">라벨 + 서브텍스트 2줄. 같은 행 카드 <code class="bg-gray-100 px-1 rounded">align-items: stretch</code>로 높이 통일.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">2</span>Chip · "기타" 단독 행</div>
+      <div class="frag">
+        <div class="grid grid-cols-2 gap-2.5">
+          <button class="chip active col-span-2"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타 / 직접 선택할게요</span></button>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">"기타" 선택 시 별도 입력 화면 없이 7단계(관심사) 진행. 정식 출시 시 자유 입력 화면 검토.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">3</span>Keyboard · radiogroup 포커스</div>
+      <div class="frag">
+        <div class="grid grid-cols-2 gap-2.5">
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
+          <button class="chip active focus-ring"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2"><code class="bg-gray-100 px-1 rounded">role="radiogroup"</code>, 첫 카드 tab stop, Arrow → 자동 선택.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-warn"><span class="frag-num">4</span>Primary · 0개 → disabled</div>
+      <div class="frag">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="btn-ghost col-span-1">나중에 입력<span class="btn-ghost-sm">권장 안 함</span></div>
+          <div class="btn-primary btn-disabled col-span-2"><svg class="lc lc-14"><use href="#i-lock"/></svg> 다음</div>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">"나중에 입력" 가능 (<code class="bg-gray-100 px-1 rounded">job: null</code>).</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-ok"><span class="frag-num">5</span>Primary · 1개 → enabled</div>
+      <div class="frag">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="btn-ghost col-span-1">나중에 입력<span class="btn-ghost-sm">권장 안 함</span></div>
+          <div class="btn-primary col-span-2">다음 <svg class="lc lc-14"><use href="#i-arrow-right"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02-7 관심사 · 가입 · v0.4 Base + Fragments</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:880px}
+.frag{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:16px;width:360px;border:1px dashed #cbd5e1}
+.frag-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;color:#fff;margin-bottom:10px}
+.frag-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:rgba(255,255,255,.25);font-size:10px;font-weight:800}
+.f-base{background:#6b7280}.f-info{background:#2563eb}.f-err{background:#dc2626}.f-warn{background:#ca8a04}.f-ok{background:#16a34a}
+
+.chip{position:relative;background:#fff;border:2px solid #d1d5db;border-radius:14px;padding:12px;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:4px;width:100%}
+.chip.active{background:#1f1f1f;border-color:#1f1f1f;color:#fff}
+.chip .mark{position:absolute;top:6px;right:6px;width:16px;height:16px;border:1.5px solid #888;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center}
+.chip.active .mark{background:#fff;border-color:#fff}
+.chip.active .mark .lc{color:#1f1f1f}
+.chip-ic{width:28px;height:28px;border-radius:999px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:8px;color:#888}
+.chip.active .chip-ic{color:#fff}
+.chip-text{font-size:13px;font-weight:600;line-height:1.3}
+.badge{display:inline-block;background:#f3f4f6;border:1px solid #d1d5db;border-radius:999px;padding:2px 10px;font-size:11px;color:#4b5563}
+.counter{font-size:11px;color:#6b7280}
+.counter strong{color:#1f1f1f}
+.counter.ok strong{color:#16a34a}
+
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:600;padding:14px;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn-disabled{background:#e5e7eb;color:#9ca3af}
+.btn-loading{background:#1f1f1f;color:#fff;cursor:progress}
+.btn-ghost{background:#fff;border:1px solid #d1d5db;color:#6b7280;font-weight:600;padding:12px;border-radius:12px;text-align:center;font-size:13px;line-height:1.3}
+.btn-ghost-sm{font-size:10px;color:#9ca3af;display:block;margin-top:2px}
+
+.spin-white{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast-err{background:#dc2626;color:#fff;font-size:12px;padding:12px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.toast{background:#1f1f1f;color:#fff;font-size:12px;padding:12px 16px;border-radius:12px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-16{width:16px;height:16px}.lc-18{width:18px;height:18px}.lc-22{width:22px;height:22px}
+.legend-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 8px;background:#f3f4f6;border-radius:999px}
+.legend-dot{width:8px;height:8px;border-radius:999px;display:inline-block}
+
+.seq-row{display:flex;gap:8px;align-items:flex-start;padding:6px 0;font-size:11px;color:#4b5563;border-bottom:1px dashed #e5e7eb}
+.seq-row:last-child{border-bottom:0}
+.seq-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:#1f1f1f;color:#fff;font-size:10px;font-weight:700;flex-shrink:0}
+.code{background:#f3f4f6;padding:1px 5px;border-radius:4px;font-size:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  </defs>
+</svg>
+
+<div class="max-w-[1400px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.4 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-02-7 관심사 · 가입 · Base + 인터랙션 Fragments</h1>
+  <p class="text-sm text-gray-600 mt-1">Multi-min3 카운터. Primary "완료" → POST /api/auth/signup + Idempotency-Key. 가입 API 시퀀스 4단계 + 에러 케이스(EMAIL_TAKEN / 5xx).</p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend-pill"><span class="legend-dot" style="background:#6b7280"></span>BASE</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#2563eb"></span>INFO</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#dc2626"></span>ERROR</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#ca8a04"></span>WARN</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#16a34a"></span>OK</span>
+  </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto flex flex-wrap gap-8 items-start">
+
+  <div>
+    <div class="frag-label f-base"><span class="frag-num">B</span>BASE · 0개 선택</div>
+    <div class="phone">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between"><a href="#" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a><span class="text-xs text-gray-500">7 / 7</span></div>
+      <div class="px-5"><div class="h-1 bg-gray-200 rounded-full"><div class="h-full bg-gray-900 rounded-full" style="width:100%"></div></div></div>
+      <div class="flex-1 px-5 pt-6">
+        <div class="chip-ic mb-3" style="width:42px;height:42px;font-size:10px;border-width:2px">아이콘</div>
+        <h2 class="text-xl font-bold mb-2">어떤 소식이 궁금하세요?</h2>
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <span class="badge inline-block">복수 선택</span>
+          <span class="counter">최소 <strong>3개</strong> 권장 · 선택 <strong>0</strong>개</span>
+        </div>
+        <p class="text-xs text-gray-500 mb-3">관심 있는 분야 모두 골라주세요.</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">경제·시사</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">엔터·연예</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">스포츠</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">IT·테크</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">의료·헬스</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">패션·라이프</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">자기계발</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">육아·교육</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">음식·요리</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">여행</span></button>
+        </div>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200 grid grid-cols-3 gap-2">
+        <div class="btn-ghost col-span-1">나중에 입력<span class="btn-ghost-sm">권장 안 함</span></div>
+        <div class="btn-primary col-span-2">완료</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-5">
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">1</span>카운터 · 0개</div>
+      <div class="frag">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="badge inline-block">복수 선택</span>
+          <span class="counter">최소 <strong>3개</strong> 권장 · 선택 <strong>0</strong>개</span>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">ICU plural · <code class="code">aria-live="polite"</code> debounce 500ms (발성 폭주 방지).</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-ok"><span class="frag-num">2</span>카운터 · 3개+ (충분해요 강조)</div>
+      <div class="frag">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="badge inline-block">복수 선택</span>
+          <span class="counter ok">선택 <strong>5</strong>개 · 충분해요 <svg class="lc lc-12" style="color:#16a34a"><use href="#i-check"/></svg></span>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">N≥3 시 강조 카피만 변경. 0개여도 "완료" 활성 (강제 X).</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">3</span>Chip · 다중 선택</div>
+      <div class="frag">
+        <div class="grid grid-cols-2 gap-2">
+          <button class="chip active"><span class="mark"><svg class="lc lc-12"><use href="#i-check"/></svg></span><span class="chip-ic">아이콘</span><span class="chip-text">경제·시사</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">엔터·연예</span></button>
+          <button class="chip active"><span class="mark"><svg class="lc lc-12"><use href="#i-check"/></svg></span><span class="chip-ic">아이콘</span><span class="chip-text">IT·테크</span></button>
+          <button class="chip active"><span class="mark"><svg class="lc lc-12"><use href="#i-check"/></svg></span><span class="chip-ic">아이콘</span><span class="chip-text">의료·헬스</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">4</span>Primary · 가입 중 (loading)</div>
+      <div class="frag">
+        <div class="btn-primary btn-loading"><span class="spin-white"></span> 가입 중...</div>
+        <p class="text-[10px] text-gray-500 mt-2"><code class="code">POST /api/auth/signup</code> + header <code class="code">Idempotency-Key</code>. 서버 1시간 캐시로 더블 클릭 안전.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-err"><span class="frag-num">5</span>EMAIL_TAKEN · 1단계 redirect 토스트</div>
+      <div class="frag">
+        <div class="toast-err"><svg class="lc lc-14"><use href="#i-alert-circle"/></svg> 이미 가입된 이메일이에요. 다시 입력해주세요</div>
+        <p class="text-[10px] text-gray-500 mt-2">email-check 통과해도 race로 그 사이 가입된 케이스 방어. <code class="code">router.replace('/user/signup/account')</code>.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-warn"><span class="frag-num">6</span>5xx · 다시 시도</div>
+      <div class="frag">
+        <div class="toast"><svg class="lc lc-14"><use href="#i-alert-circle"/></svg> 잠시 후 다시 시도해주세요 <button class="ml-2 underline font-semibold inline-flex items-center gap-1"><svg class="lc lc-12"><use href="#i-refresh"/></svg> 다시 시도</button></div>
+        <p class="text-[10px] text-gray-500 mt-2">같은 <code class="code">Idempotency-Key</code> 재사용 → 서버 단일 처리 보장. 네트워크 timeout 10s도 동일.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="frag-label f-base"><span class="frag-num">7</span>가입 API 시퀀스 (Critical)</div>
+      <div class="frag">
+        <div class="seq-row"><span class="seq-num">①</span><span><code class="code">POST /api/auth/signup</code> + header <code class="code">Idempotency-Key</code></span></div>
+        <div class="seq-row"><span class="seq-num">②</span><span><code class="code">signIn('credentials', { redirect:true, callbackUrl:'/user/home?from=signup' })</code></span></div>
+        <div class="seq-row"><span class="seq-num">③</span><span>4xx <code class="code">EMAIL_TAKEN</code> → 1단계 redirect</span></div>
+        <div class="seq-row"><span class="seq-num">④</span><span>5xx → 토스트 + "다시 시도" (같은 key)</span></div>
+        <p class="text-[10px] text-gray-500 mt-2">⚠ <code class="code">redirect:false + router.replace</code> 패턴 금지 (race condition). NextAuth가 cookie set + redirect 일괄 처리.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

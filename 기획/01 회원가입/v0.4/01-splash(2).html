@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-01 Splash · v0.3 (데이지 · 핑크 변형)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Hi+Melody&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg-outer: linear-gradient(160deg, #FFE8EE 0%, #FFF5F8 60%, #FFEFF4 100%);
+    --phone: #FFFAFB;
+    --title-ink: #3C1F2A;
+    --body-ink: #6E4F5A;
+    --subtle-ink: #9A7A86;
+    --card-bg: #FFF1F5;
+    --card-ring: #F2D3DE;
+    --card-ink: #5A3A47;
+    --icon-stroke: #C97E97;
+    --cta-bg: #E06088;
+    --cta-bg-hover: #D14F7A;
+    --link-emph: #D14F7A;
+    --shadow: 0 12px 40px rgba(213, 95, 130, 0.12), 0 2px 8px rgba(213, 95, 130, 0.06);
+  }
+  body { font-family: 'Gowun Dodum', 'Pretendard', system-ui, sans-serif; background: var(--bg-outer); min-height: 100vh; }
+  .title-font { font-family: 'Gaegu', 'Gowun Dodum', system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+  .phone { background: var(--phone); box-shadow: var(--shadow); }
+  .nav-link { color: var(--subtle-ink); }
+  .title { color: var(--title-ink); }
+  .subtitle { color: var(--body-ink); }
+  .card { background: var(--card-bg); border: 1px solid var(--card-ring); }
+  .card-text { color: var(--card-ink); }
+  .ic {
+    border-radius: 999px;
+    border: 1.5px solid var(--icon-stroke);
+    background: rgba(255, 255, 255, 0.5);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-stroke);
+    font-weight: 500;
+  }
+  .cta {
+    background: var(--cta-bg);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(224, 96, 136, 0.35);
+    transition: background .15s ease, transform .1s ease;
+  }
+  .cta:hover { background: var(--cta-bg-hover); }
+  .cta:active { transform: translateY(1px); }
+  .login-text { color: var(--subtle-ink); }
+  .login-emph { color: var(--link-emph); font-weight: 700; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+</style>
+</head>
+<body class="text-gray-900 p-4 sm:p-8">
+<a href="index.html" class="block max-w-[420px] mx-auto mb-3 text-sm nav-link">← v0.4 인덱스</a>
+
+<div class="phone max-w-[420px] mx-auto rounded-[2rem] overflow-hidden flex flex-col" style="min-height:844px">
+
+  <div class="flex-1 flex flex-col items-center justify-center px-8 pt-16">
+    <img src="./daisy.png" alt="데이지 마스코트" class="mb-4" style="width:240px;height:auto;object-fit:contain;filter:drop-shadow(0 8px 20px rgba(213,95,130,0.15))">
+    <h1 class="title-font text-4xl text-center mb-3 title">데이지</h1>
+    <p class="subtitle text-center leading-relaxed text-sm">내 일상을 운영체계처럼<br>다음 한 걸음을 비서가 먼저 챙겨요</p>
+
+    <div class="mt-10 w-full space-y-3">
+      <div class="card flex items-center gap-3 rounded-2xl px-4 py-3">
+        <div class="ic" style="width:34px;height:34px;font-size:9px">아이콘</div>
+        <p class="text-sm card-text">건강·식성·관심사 맞춤 추천</p>
+      </div>
+      <div class="card flex items-center gap-3 rounded-2xl px-4 py-3">
+        <div class="ic" style="width:34px;height:34px;font-size:9px">아이콘</div>
+        <p class="text-sm card-text">아침·점심·저녁 시점별 안내</p>
+      </div>
+      <div class="card flex items-center gap-3 rounded-2xl px-4 py-3">
+        <div class="ic" style="width:34px;height:34px;font-size:9px">아이콘</div>
+        <p class="text-sm card-text">근처 가맹점 자동 매칭</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-8 pb-12 pt-8 space-y-3">
+    <a href="02-signup-account.html" class="cta block w-full font-semibold py-4 rounded-2xl text-center text-base">3분 만에 시작하기</a>
+    <p class="text-center text-sm login-text">이미 계정이 있으신가요? <a href="#" class="login-emph">로그인</a></p>
+  </div>
+
+</div>
+</body>
+</html>
