@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-8 뉴스 상세 · v0.4 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.icbtn{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#555;width:36px;height:36px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.news-tag{display:inline-block;font-size:10px;color:#555;border:1px solid #ccc;border-radius:4px;padding:1px 6px}
+.summary-box{background:#fafafa;border-left:3px solid #1f1f1f;padding:12px 14px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.55;color:#333}
+.related{border:1px solid #d4d4d4;border-radius:10px;padding:12px;background:#fff;display:flex;gap:10px;align-items:center}
+.thumb-sm{width:50px;height:50px;border-radius:6px;border:1px dashed #d4d4d4;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.action-bar{display:flex;gap:8px;padding:10px 16px;border-top:1px solid #eee;background:#fff}
+.action-bar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;font-size:10px;color:#555;border-radius:8px}
+.action-bar button:hover{background:#f5f5f5}
+.action-bar button.active{color:#1f1f1f;font-weight:700}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.4 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:920px">
+
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="07-news-list.html" class="icbtn"><i data-lucide="arrow-left" class="w-5 h-5"></i></a>
+      <div class="flex items-center gap-2">
+        <button class="icbtn" style="width:32px;height:32px"><i data-lucide="bookmark" class="w-4 h-4"></i></button>
+        <button class="icbtn" style="width:32px;height:32px"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+
+    <!-- 본문 스크롤 -->
+    <div class="flex-1 overflow-y-auto relative">
+
+      <!-- 헤더 -->
+      <div class="px-6 pt-5 pb-4 border-b border-gray-100 relative">
+        <span class="tag" style="position:absolute;top:8px;left:18px">1</span>
+        <span class="news-tag mb-2 inline-block">정책</span>
+        <h1 class="text-xl font-bold leading-snug mb-3">육아휴직 분할 사용 횟수 확대 — 6월 시행 시행령 정리</h1>
+        <div class="flex items-center justify-between text-[11px] text-gray-500">
+          <span>고용노동부 · 김OO 기자</span>
+          <span>2026-06-12 07:18</span>
+        </div>
+      </div>
+
+      <!-- 라이언 한 줄 요약 (v0.3 신규) -->
+      <div class="px-6 py-4 relative">
+        <span class="tag" style="position:absolute;top:14px;left:18px">2</span>
+        <div class="summary-box">
+          <div class="text-[10px] text-gray-500 mb-1.5 uppercase tracking-wider flex items-center gap-1">
+            <i data-lucide="sparkles" class="w-3 h-3"></i> 라이언 한 줄 요약
+          </div>
+          <strong>육아휴직 분할 사용 횟수가 2회 → 3회로 늘어요.</strong> 6월부터 시행. 30세 이상 직장 여성에게 영향 큼.
+        </div>
+      </div>
+
+      <!-- 본문 (mock) -->
+      <article class="px-6 pb-6 space-y-3 text-[13px] leading-relaxed text-gray-800 relative">
+        <span class="tag" style="position:absolute;top:0px;left:18px">3</span>
+        <div class="w-full h-40 rounded-lg border border-dashed border-gray-300 flex items-center justify-center bg-gray-50 my-3">
+          <i data-lucide="image" class="w-6 h-6 text-gray-400"></i>
+        </div>
+        <p>고용노동부가 6월부터 육아휴직 분할 사용 횟수를 기존 <strong>2회에서 3회로 확대</strong>한다고 발표했다. 영유아 자녀를 둔 근로자가 보다 유연하게 육아휴직을 활용할 수 있도록 하기 위한 조치다.</p>
+        <p>이번 시행령 개정에 따라 만 8세 이하 또는 초등학교 2학년 이하의 자녀를 양육하는 근로자는 육아휴직을 3차례로 나눠 사용할 수 있게 된다. 부모가 모두 사용할 경우 최대 18개월까지 보장된다.</p>
+        <p>특히 30~40대 맞벌이 가구의 경우 자녀의 성장 시기에 맞춰 휴직을 배분할 수 있어 실효성이 클 것으로 기대된다. 사업주는 정당한 이유 없이 거부할 수 없으며, 위반 시 500만원 이하의 과태료가 부과된다.</p>
+        <p>고용노동부 관계자는 "분할 사용 확대를 통해 일·가정 양립에 기여할 것"이라며 "추후 1개월 미만 단기 분할도 검토하겠다"고 밝혔다.</p>
+      </article>
+
+      <!-- 관련 추천 -->
+      <div class="px-6 pb-6 relative">
+        <span class="tag" style="position:absolute;top:-2px;left:18px">4</span>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 pl-8">관련 추천</h3>
+        <div class="space-y-2.5">
+          <a href="08-news-detail.html" class="related">
+            <div class="thumb-sm"><i data-lucide="image" class="w-4 h-4 text-gray-400"></i></div>
+            <div class="flex-1">
+              <div class="text-[11px] text-gray-500">정책</div>
+              <div class="text-sm font-semibold leading-tight mt-0.5">난임 시술 휴가 5일 → 10일로 확대 검토</div>
+            </div>
+          </a>
+          <a href="08-news-detail.html" class="related">
+            <div class="thumb-sm"><i data-lucide="image" class="w-4 h-4 text-gray-400"></i></div>
+            <div class="flex-1">
+              <div class="text-[11px] text-gray-500">경제</div>
+              <div class="text-sm font-semibold leading-tight mt-0.5">맞벌이 가구 평균 가계 부담 — 통계청 발표</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 액션 바 -->
+    <div class="action-bar relative">
+      <span class="tag" style="position:absolute;top:-12px;left:14px">5</span>
+      <button class="active"><i data-lucide="thumbs-up" class="w-4 h-4"></i><span>좋아요</span></button>
+      <button><i data-lucide="bookmark" class="w-4 h-4"></i><span>저장</span></button>
+      <button><i data-lucide="message-square" class="w-4 h-4"></i><span>라이언에게</span></button>
+      <button><i data-lucide="share-2" class="w-4 h-4"></i><span>공유</span></button>
+    </div>
+
+  </div>
+
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-8</h2>
+
+    <div class="tag-row"><span class="tag">1</span><div class="body">
+      <strong>기사 헤더</strong> — 카테고리 라벨 + 제목 + 출처/기자/발행시각. 상단 헤더는 [북마크]·[공유] 단축.
+    </div></div>
+
+    <div class="tag-row"><span class="tag">2</span><div class="body">
+      <strong>라이언 한 줄 요약 (sparkles) — v0.3 신규</strong> — LLM 후처리 50자 요약 + 사용자 코호트 영향("30세 이상 직장 여성에게 영향 큼") 자동 첨언. Life OS 차별점 ("내 상황 기준 해석").
+    </div></div>
+
+    <div class="tag-row"><span class="tag">3</span><div class="body">
+      <strong>본문</strong> — 표준 기사 본문. 외부 API 사용 시 원본 URL 링크 동반. 시연 중엔 mock 5-10 기사.
+      <br>스크롤 도달 시 [읽음] 로그 → 활동 학습.
+    </div></div>
+
+    <div class="tag-row"><span class="tag">4</span><div class="body">
+      <strong>관련 추천</strong> — 같은 카테고리 + 키워드 매칭 + 사용자 학습. 2-3개 카드.
+    </div></div>
+
+    <div class="tag-row"><span class="tag">5</span><div class="body">
+      <strong>액션 바</strong> — [좋아요·저장·라이언에게·공유]. <strong>[라이언에게]</strong>는 챗봇 UI로 전환 + 이 기사 컨텍스트 전달("이 기사 더 설명해줘").
+    </div></div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>접근성</strong>: 본문 <code>role="article"</code>, 액션 바 <code>role="toolbar"</code>.<br>
+      <strong>학습 신호</strong>: 좋아요·저장·라이언에게·완독 = positive / 빠른 이탈 = negative.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/news/[id]/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

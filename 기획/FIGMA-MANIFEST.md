@@ -175,8 +175,8 @@
 - **아이콘 시스템**: Lucide line (CDN) · 1.5px stroke · currentColor 상속 (그레이스케일 유지).
 - **햄버거 메뉴 통합**: `/menu` → "일정" 항목 → `/user/curation/calendar` (U-15-5)로 도달. UI 별도 작업.
 - **03 알림 도메인 통합 가능성**: 기존 `U-04-3 schedule-timeline`은 본 캘린더(U-15-5)로 발전 통합 가능 — 다음 라운드 검토.
-- git wireframe (활성): `기획/08 큐레이션/v0.3/` (인덱스 + 8장)
-- git wireframe (이력): `기획/08 큐레이션/v0.1/` (인덱스 + 5장 보존)
+- git wireframe (활성): `기획/08 큐레이션/v0.4/` (인덱스 + 8장) — 캘린더 진입 아이콘 헤더 한 단 아래 + 02 아침 [전체 보기]→일자 상세(오늘) + 04 저녁 "내일 미리보기" 카드 = 아침 "오늘 일정" 동일 형식 + 03 점심 [예약]→04 결제 U-05-1
+- git wireframe (이력): `기획/08 큐레이션/v0.1/` (5장) · `v0.3/` (8장) 보존
 - 회의 근거: `회의록/텍스트파일/260528_LOO 회의_정리.txt` + 2026-05-29 v0.2/v0.3 컨펌
 - 코드 (예정): `web/src/app/user/curation/{morning,noon,evening,calendar,calendar/[date],news,news/[id]}/page.tsx` + `web/src/components/home/CurationChips.tsx`
 
