@@ -51,7 +51,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
 <div class="max-w-[1400px] mx-auto mb-6">
   <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.5 인덱스</a>
   <h1 class="text-2xl font-bold mt-2">U-02-7 직업 · Base + 인터랙션 Fragments</h1>
-  <p class="text-sm text-gray-600 mt-1">Single-select 5개. 라벨 1줄 + 서브텍스트 1줄. "기타" 선택 시 별도 화면 없이 7단계 진행.</p>
+  <p class="text-sm text-gray-600 mt-1">Single-select 5개. 라벨 1줄 + 서브텍스트 1줄. "기타" 선택 시 별도 화면 없이 8단계(관심사) 진행.</p>
   <div class="flex flex-wrap gap-2 mt-3">
     <span class="legend-pill"><span class="legend-dot" style="background:#6b7280"></span>BASE</span>
     <span class="legend-pill"><span class="legend-dot" style="background:#2563eb"></span>INFO</span>
@@ -77,7 +77,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">의료인</span><span class="chip-sub">논문·학회·가이드</span></button>
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">프리랜서</span><span class="chip-sub">스타트업·기술·세션</span></button>
-          <button class="chip col-span-2"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타 / 직접 선택할게요</span></button>
+          <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타</span><span class="chip-sub">그 외</span></button>
         </div>
       </div>
       <div class="px-5 py-4 border-t border-gray-200 grid grid-cols-3 gap-2">
@@ -101,12 +101,12 @@ body{font-family:Pretendard,system-ui,sans-serif}
     </div>
 
     <div>
-      <div class="frag-label f-info"><span class="frag-num">2</span>Chip · "기타" 단독 행</div>
+      <div class="frag-label f-info"><span class="frag-num">2</span>Chip · "기타" 일반 2열 grid 카드</div>
       <div class="frag">
         <div class="grid grid-cols-2 gap-2.5">
-          <button class="chip active col-span-2"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타 / 직접 선택할게요</span></button>
+          <button class="chip active"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타</span><span class="chip-sub">그 외</span></button>
         </div>
-        <p class="text-[10px] text-gray-500 mt-2">"기타" 선택 시 별도 입력 화면 없이 7단계(관심사) 진행. 정식 출시 시 자유 입력 화면 검토.</p>
+        <p class="text-[10px] text-gray-500 mt-2">"기타" 선택 시 별도 입력 화면 없이 8단계(관심사) 진행. 정식 출시 시 자유 입력 화면 검토.</p>
       </div>
     </div>
 
