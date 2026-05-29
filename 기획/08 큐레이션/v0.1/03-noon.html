@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-3 점심 큐레이션 · v0.1 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.chip-time{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid #1f1f1f;border-radius:999px;font-size:12px;font-weight:600;color:#1f1f1f;background:#fff}
+.chip-time.active{background:#1f1f1f;color:#fff}
+.card-main{border:1.5px solid #1f1f1f;border-radius:18px;padding:18px;background:#fff;position:relative}
+.card-sub{border:1px solid #d4d4d4;border-radius:14px;padding:14px;background:#fff;position:relative}
+.thumb{width:48px;height:48px;border-radius:8px;border:1px dashed #d4d4d4;display:flex;align-items:center;justify-content:center;font-size:10px;color:#999;flex-shrink:0}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.1 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <!-- 헤더 -->
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <button><span class="ic">←</span></button>
+      <div class="text-sm font-semibold">점심 큐레이션</div>
+      <button><span class="ic">⋯</span></button>
+    </div>
+
+    <!-- 시간대 칩 -->
+    <div class="px-6 py-3 flex gap-2">
+      <button class="chip-time">🌅 아침</button>
+      <button class="chip-time active">🍱 점심</button>
+      <button class="chip-time">🌙 저녁</button>
+    </div>
+
+    <!-- 카드 스택 -->
+    <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-4">
+
+      <!-- 🌟 메인 카드: 점심 한 큐 추천 -->
+      <div class="card-main">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">1</span>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[11px] text-gray-500 uppercase tracking-wider">점심 · 12:15</p>
+          <span class="text-2xl">🍜</span>
+        </div>
+        <h2 class="text-xl font-bold leading-snug mb-2">
+          오늘은 비 오니까<br><strong>○○칼국수</strong> 어때요?
+        </h2>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          도보 4분 · 12:15 현재 한산<br>
+          시그니처: 사골 칼국수 9,000원
+        </p>
+        <div class="flex gap-2 mt-4">
+          <button class="flex-1 py-2.5 border border-gray-800 rounded-full text-sm font-semibold">길찾기</button>
+          <button class="flex-1 py-2.5 bg-gray-900 text-white rounded-full text-sm font-semibold">예약</button>
+        </div>
+      </div>
+
+      <!-- 보조 카드 1: 동선 위 식당 3곳 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">2</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold">동선 위 다른 선택지</h3>
+          <span class="text-[10px] text-gray-500 border border-gray-300 rounded-full px-2 py-0.5">외근지 경유</span>
+        </div>
+        <ul class="space-y-2.5">
+          <li class="flex items-center gap-3">
+            <div class="thumb">img</div>
+            <div class="flex-1 text-sm">
+              <div class="font-semibold">△△김밥 광화문점</div>
+              <div class="text-[11px] text-gray-500">도보 2분 · 빠른 식사 · 6,500원~</div>
+            </div>
+          </li>
+          <li class="flex items-center gap-3">
+            <div class="thumb">img</div>
+            <div class="flex-1 text-sm">
+              <div class="font-semibold">□□일식</div>
+              <div class="text-[11px] text-gray-500">도보 7분 · 점심 정식 · 12,000원~</div>
+            </div>
+          </li>
+          <li class="flex items-center gap-3">
+            <div class="thumb">img</div>
+            <div class="flex-1 text-sm">
+              <div class="font-semibold">◇◇파스타</div>
+              <div class="text-[11px] text-gray-500">도보 5분 · 비건 옵션 있음 · 14,000원~</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 보조 카드 2: 점심 예산·페이 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">3</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold">이번 주 점심</h3>
+          <span class="text-[10px] text-gray-500">목요일까지</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="text-[11px] text-gray-500 mb-1">누적 결제</div>
+            <div class="text-lg font-bold">45,200<span class="text-xs font-normal text-gray-500"> 원</span></div>
+            <div class="text-[10px] text-gray-500">4회 · 평균 11,300원</div>
+          </div>
+          <div>
+            <div class="text-[11px] text-gray-500 mb-1">페이 잔액</div>
+            <div class="text-lg font-bold">128,000<span class="text-xs font-normal text-gray-500"> 원</span></div>
+            <div class="text-[10px] text-gray-500">포인트 1,240P</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── Caption ───── -->
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-3</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body">
+        <strong>메인 카드 — 점심 한 큐 추천</strong> — 가맹점 1곳을 "콕 찍어주는" 결정 보조 카드. 데이터: GPS + 가맹점 DB + 날씨(컨텍스트 매칭) + 혼잡도(가맹점 활동 로그). [길찾기]·[예약] 둘 다 1·2단계 트랙과 연동.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body">
+        <strong>동선 위 다른 선택지 (3곳)</strong> — Google Maps "on-the-way" 패턴. 회의·외근 일정 좌표 기준으로 경로상 식당 필터링. 거리·시간·가격대 메타 노출.
+        <br>의존: GPS + Google Calendar (외근지 좌표) + 가맹점 DB.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body">
+        <strong>이번 주 점심 예산·페이</strong> — 누적 결제·평균·페이 잔액·포인트. 토스 위젯 + Bixby Wallet 패턴.
+        <br>데이터: activity_log (event_type='pay').
+      </div>
+    </div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>개인화</strong>: 회원가입 4단계 알레르기·식이(기존) + 활동 로그 학습. 동일 가맹점 2회 이상 방문 시 상위 노출 룰.<br>
+      <strong>접근성</strong>: 카드 내 액션 버튼 최소 44pt tap target.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/noon/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

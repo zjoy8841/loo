@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>08 큐레이션 (U-15) · v0.1 wireframe · 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.card{background:#fff;border:1px solid #d4d4d4;border-radius:14px;padding:18px;transition:transform .12s ease}
+.card:hover{transform:translateY(-2px);border-color:#222}
+.k{display:inline-block;background:#eee;border-radius:4px;padding:1px 6px;font-size:11px;color:#444;margin-right:6px}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<div class="max-w-[920px] mx-auto">
+
+  <header class="mb-8">
+    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">기획 / 08 큐레이션</p>
+    <h1 class="text-3xl font-bold mb-2">U-15 시간대별 큐레이션 대시보드 — v0.1 wireframe</h1>
+    <p class="text-sm text-gray-600 leading-relaxed">
+      2026-06-12 발대식 시연 3단계 화면.
+      메인 챗봇 UI 안에 morning/noon/evening 버튼 칩 3개 → 클릭 시 메인 카드 1장 + 보조 카드 2~3장이 풍선처럼 슬라이드인.
+      <br><strong>SSoT</strong>: Figma &gt; 노션 &gt; git. 본 와이어프레임은 그레이스케일 + 인터랙션 캡션 표준 (v0.2 양식).
+    </p>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <span class="k">grayscale</span>
+      <span class="k">Phone 420 + Caption 320</span>
+      <span class="k">One Big Thing 패턴</span>
+      <span class="k">Fantastical 8PM trigger</span>
+      <span class="k">시연용 3-button</span>
+    </div>
+  </header>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+    <a href="01-entry.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-1 · 진입점</div>
+      <h2 class="text-lg font-bold mb-2">메인 챗봇 UI · 큐레이션 칩 3개</h2>
+      <p class="text-sm text-gray-600">
+        기존 메인 화면 하단에 morning/noon/evening 시연용 버튼 칩 노출.
+        시연자가 칩 탭하면 02~04 화면으로 전환.
+      </p>
+    </a>
+
+    <a href="02-morning.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-2 · 아침</div>
+      <h2 class="text-lg font-bold mb-2">아침 큐레이션</h2>
+      <p class="text-sm text-gray-600">
+        메인: 굿모닝 + 오늘 한 줄 (날씨+첫 일정).
+        보조: ① 오늘 일정 타임라인 · ② 출근길 가맹점 1곳.
+      </p>
+    </a>
+
+    <a href="03-noon.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-3 · 점심</div>
+      <h2 class="text-lg font-bold mb-2">점심 큐레이션</h2>
+      <p class="text-sm text-gray-600">
+        메인: 점심 한 큐 추천 (가맹점 1곳 콕 찍기).
+        보조: ① 동선 위 식당 3곳 · ② 이번 주 점심 예산·페이.
+      </p>
+    </a>
+
+    <a href="04-evening.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-4 · 저녁</div>
+      <h2 class="text-lg font-bold mb-2">저녁 큐레이션</h2>
+      <p class="text-sm text-gray-600">
+        메인: 오늘 하루 회고 (활동·결제 요약).
+        보조: ① 저녁 추천 1곳 · ② 내일 미리보기 (Fantastical 8PM) · ③ 모레 한 줄.
+      </p>
+    </a>
+
+    <a href="05-evening-tomorrow-full.html" class="card sm:col-span-2">
+      <div class="text-xs text-gray-500 mb-1">U-15-5 · 저녁 → 내일 일정 펼침</div>
+      <h2 class="text-lg font-bold mb-2">내일 일정 타임라인 (풀스크린)</h2>
+      <p class="text-sm text-gray-600">
+        04 화면에서 "내일 전체 보기" 탭 시 전환. Google Calendar Schedule view 패턴 — 오전/오후 타임라인 + 날씨 결합.
+      </p>
+    </a>
+
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-300 text-xs text-gray-500 leading-relaxed">
+    <p><strong>참조 메모리</strong>: project-demo-0612 · feedback-wireframe-grayscale · feedback-wireframe-interaction-caption</p>
+    <p class="mt-1"><strong>회의 근거</strong>: 회의록/텍스트파일/260528_LOO 회의_정리.txt</p>
+    <p class="mt-1"><strong>회원가입 신규 항목</strong>: 성별 (남/여/선택안함), 생년월일 (YYYY-MM-DD) — U-02-2 (기본정보) 확장 예정</p>
+    <p class="mt-1"><strong>외부 의존</strong>: Google Calendar OAuth · 날씨 API · 가맹점 DB (1·2단계 트랙 공유)</p>
+  </footer>
+
+</div>
+</body>
+</html>

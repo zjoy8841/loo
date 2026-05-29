@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-5 내일 일정 타임라인 (풀스크린) · v0.1 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.tl-row{display:grid;grid-template-columns:48px 12px 1fr;gap:8px;align-items:start;padding:8px 0;border-bottom:1px dashed #eee}
+.tl-row.empty{color:#bbb}
+.tl-time{font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#666;padding-top:2px}
+.tl-dot{width:8px;height:8px;border-radius:999px;background:#1f1f1f;margin-top:6px;justify-self:center}
+.tl-dot.empty{background:transparent;border:1px dashed #ccc}
+.tl-body .title{font-size:13px;font-weight:600}
+.tl-body .meta{font-size:11px;color:#888;margin-top:2px}
+.tl-section{background:#fafafa;padding:6px 10px;border-radius:6px;font-size:10px;color:#666;letter-spacing:.04em;text-transform:uppercase;margin:12px 0 4px}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.1 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <!-- 헤더 -->
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <a href="04-evening.html"><span class="ic">←</span></a>
+      <div class="text-sm font-semibold">내일 일정 · 2026-06-13 금</div>
+      <button><span class="ic">+</span></button>
+    </div>
+
+    <!-- 날씨 요약 바 -->
+    <div class="px-6 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between relative">
+      <span class="tag" style="position:absolute;top:8px;left:-2px">1</span>
+      <div class="text-sm">
+        <span class="text-2xl mr-2">⛅</span>
+        <span class="font-semibold">19~24°C</span>
+        <span class="text-[11px] text-gray-500 ml-1">강수 40% · 오후 흐림</span>
+      </div>
+      <span class="text-[11px] text-gray-500">일정 4개</span>
+    </div>
+
+    <!-- 타임라인 -->
+    <div class="flex-1 px-5 pb-5 overflow-y-auto relative pt-3">
+      <span class="tag" style="position:absolute;top:14px;left:18px">2</span>
+
+      <!-- 오전 -->
+      <div class="tl-section">오전 (AM)</div>
+
+      <div class="tl-row empty">
+        <span class="tl-time">07:00</span>
+        <span class="tl-dot empty"></span>
+        <div class="tl-body">
+          <div class="title">— (빈 시간)</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">10:00</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <div class="title">팀 위클리</div>
+          <div class="meta">회의실 A · 1시간 · 박부장 외 4명</div>
+        </div>
+      </div>
+      <div class="tl-row empty">
+        <span class="tl-time">11:00</span>
+        <span class="tl-dot empty"></span>
+        <div class="tl-body">
+          <div class="title">— (이동 가능)</div>
+        </div>
+      </div>
+
+      <!-- 오후 -->
+      <div class="tl-section">오후 (PM)</div>
+
+      <div class="tl-row">
+        <span class="tl-time">12:30</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <div class="title">점심 (자유)</div>
+          <div class="meta">광화문 인근 · 큐레이션 보기 →</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">15:00</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <div class="title">고객사 미팅</div>
+          <div class="meta">강남 D빌딩 · 외근 · 우산 ☂</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">18:30</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <div class="title">저녁 약속 — 박○○</div>
+          <div class="meta">을지로 ◇◇식당 · 예약 완료</div>
+        </div>
+      </div>
+
+      <!-- 모레 미리보기 -->
+      <div class="tl-section relative">
+        <span class="tag" style="position:absolute;top:-6px;right:8px">3</span>
+        모레부터 (06-14 토~)
+      </div>
+      <div class="tl-row empty">
+        <span class="tl-time">06-14</span>
+        <span class="tl-dot empty"></span>
+        <div class="tl-body">
+          <div class="title text-gray-700">휴무 · ☀️ 맑음</div>
+        </div>
+      </div>
+      <div class="tl-row">
+        <span class="tl-time">06-15</span>
+        <span class="tl-dot"></span>
+        <div class="tl-body">
+          <div class="title">발대식 워크숍 (대전)</div>
+          <div class="meta">전 직원 · 09:00 출발</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── Caption ───── -->
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-5</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body">
+        <strong>날씨 요약 바</strong> — 내일 종일 기온 범위 + 강수 + 오후 변화 한 줄. 외근·약속 일정에 자동 우산 알림 표기 (③·⑤).
+        <br>데이터: 날씨 API (D+1).
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body">
+        <strong>오전·오후 분리 타임라인</strong> — Google Calendar Schedule view 패턴. 일정 있는 행은 검정 dot, 빈 시간은 회색 dashed dot으로 여백 시각화.
+        <br>+ 버튼으로 새 일정 생성 (03 알림 도메인 연결).
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body">
+        <strong>모레 이후 미리보기</strong> — Notion Calendar agenda 스타일. 날짜·날씨·한 줄 제목만. 무한 스크롤로 확장 (D+2, D+3, …).
+      </div>
+    </div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>인터랙션</strong>: 일정 row 탭 → 03 알림 도메인 결과 상세(U-04-6)로 전환. 우산 ☂ 아이콘 탭 → 날씨 상세 모달.<br>
+      <strong>접근성</strong>: 타임라인은 <code>role="list"</code> + 각 row는 <code>role="listitem"</code>.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/evening/tomorrow/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-4 저녁 큐레이션 · v0.1 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.chip-time{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid #1f1f1f;border-radius:999px;font-size:12px;font-weight:600;color:#1f1f1f;background:#fff}
+.chip-time.active{background:#1f1f1f;color:#fff}
+.card-main{border:1.5px solid #1f1f1f;border-radius:18px;padding:18px;background:#fff;position:relative}
+.card-sub{border:1px solid #d4d4d4;border-radius:14px;padding:14px;background:#fff;position:relative}
+.metric{text-align:center}
+.metric .num{font-size:18px;font-weight:700}
+.metric .lbl{font-size:10px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.1 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <!-- 헤더 -->
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <button><span class="ic">←</span></button>
+      <div class="text-sm font-semibold">저녁 큐레이션</div>
+      <button><span class="ic">⋯</span></button>
+    </div>
+
+    <!-- 시간대 칩 -->
+    <div class="px-6 py-3 flex gap-2">
+      <button class="chip-time">🌅 아침</button>
+      <button class="chip-time">🍱 점심</button>
+      <button class="chip-time active">🌙 저녁</button>
+    </div>
+
+    <!-- 카드 스택 -->
+    <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-4">
+
+      <!-- 🌟 메인 카드: 오늘 하루 회고 -->
+      <div class="card-main">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">1</span>
+        <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-2">오늘 · 20:18</p>
+        <h2 class="text-xl font-bold leading-snug mb-3">오늘 하루 잘 보내셨어요</h2>
+        <div class="grid grid-cols-4 gap-2 my-3">
+          <div class="metric"><div class="num">8,420</div><div class="lbl">걸음</div></div>
+          <div class="metric"><div class="num">3</div><div class="lbl">가맹점</div></div>
+          <div class="metric"><div class="num">12k</div><div class="lbl">점심</div></div>
+          <div class="metric"><div class="num">4</div><div class="lbl">회의</div></div>
+        </div>
+        <div class="pt-3 border-t border-gray-200 text-[12px] text-gray-600 leading-relaxed">
+          가장 많이 머문 곳: <strong>광화문 D타워</strong> (2시간 30분)
+        </div>
+      </div>
+
+      <!-- 보조 카드 1: 저녁 추천 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">2</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold">저녁 추천</h3>
+          <span class="text-[10px] text-gray-500 border border-gray-300 rounded-full px-2 py-0.5">퇴근길</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-[10px] text-gray-400">img</div>
+          <div class="flex-1">
+            <div class="text-sm font-bold">◎◎분식 광화문점</div>
+            <div class="text-[11px] text-gray-500">비 와서 한산 · 도보 6분 · 떡볶이 5,500원</div>
+          </div>
+          <button class="text-xs px-3 py-1.5 border border-gray-800 rounded-full font-semibold">주문</button>
+        </div>
+      </div>
+
+      <!-- 🔮 보조 카드 2: 내일 미리보기 (Fantastical 8PM trigger) -->
+      <div class="card-sub" style="border-color:#1f1f1f">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">3</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2">
+            <span>내일 미리보기</span>
+            <span class="text-[10px] font-normal text-gray-500">2026-06-13 금</span>
+          </h3>
+          <span class="text-xl">⛅</span>
+        </div>
+        <ul class="space-y-2.5 mb-3">
+          <li class="flex items-start gap-3 text-sm">
+            <span class="text-[11px] text-gray-500 w-12 pt-0.5 font-mono">10:00</span>
+            <div class="flex-1">
+              <div class="font-semibold">팀 위클리</div>
+              <div class="text-[11px] text-gray-500">회의실 A · 1시간</div>
+            </div>
+          </li>
+          <li class="flex items-start gap-3 text-sm">
+            <span class="text-[11px] text-gray-500 w-12 pt-0.5 font-mono">15:00</span>
+            <div class="flex-1">
+              <div class="font-semibold">고객사 미팅</div>
+              <div class="text-[11px] text-gray-500">강남 · 외근 (☂ 우산)</div>
+            </div>
+          </li>
+        </ul>
+        <a href="05-evening-tomorrow-full.html" class="block w-full text-center py-2.5 border border-gray-800 rounded-full text-xs font-semibold">
+          내일 전체 보기 →
+        </a>
+      </div>
+
+      <!-- 보조 카드 3: 모레 한 줄 -->
+      <div class="card-sub" style="background:#fafafa">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">4</span>
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <span class="text-[11px] text-gray-500 mr-2">모레 · 06-14 토</span>
+            <span class="font-semibold">휴무</span>
+          </div>
+          <span class="text-[11px] text-gray-500">☀️ 맑음</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── Caption ───── -->
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-4</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body">
+        <strong>메인 카드 — 오늘 하루 회고</strong> — Apple Screen Time Daily Report 패턴. 4 메트릭(걸음·가맹점·결제·회의) + 가장 많이 머문 장소.
+        <br>데이터: activity_log 일일 집계 (event_type='visit'·'pay'+캘린더).
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body">
+        <strong>저녁 추천 1곳</strong> — 퇴근 동선 기반. 점심 메인 카드와 동일 구조 (시간대만 다름). [주문] → 2단계 가맹점 앱 연동.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body">
+        <strong>내일 미리보기 (Fantastical 8PM trigger)</strong> — 저녁 슬롯의 핵심 차별 카드. 내일 일정 1~2개 + 날씨 결합 ("☂ 우산"). [내일 전체 보기] 탭 시 <code>U-15-5</code> 풀스크린 타임라인 전환.
+        <br>데이터: Google Calendar (D+1) + 날씨 API (D+1 예보).
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body">
+        <strong>모레 한 줄</strong> — Notion Calendar agenda 스타일 한 줄 미리보기. 일정 없으면 "휴무"·"일정 없음" + 날씨만.
+        <br>의도: 사용자 부담 줄이기 + 주말·연속 일정 시각화.
+      </div>
+    </div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>개인화</strong>: 회고 카드의 "가장 많이 머문 곳"은 GPS dwell time top 1.<br>
+      <strong>접근성</strong>: 메트릭 숫자는 <code>aria-label="걸음 8,420"</code> 명시.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/evening/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
