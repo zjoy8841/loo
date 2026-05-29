@@ -28,7 +28,7 @@
 |---|---|---|
 | U-01 스플래시 | `1:211` | https://www.notion.so/35fc2986e140810593dcd80f2786e026 |
 | U-02-1 계정 | `2:463` | https://www.notion.so/35fc2986e1408192b124e0a13ed56469 |
-| U-02-2 기본정보 (성별·생년월일) | `317:1068` | _TBD_ |
+| U-02-2 기본정보 (성별·생년월일) | `317:1068` | https://www.notion.so/36fc2986e140815bbb03f517ad8fa76d |
 | U-02-3 건강 | `2:510` | https://www.notion.so/35fc2986e140817d8618ffc225ec27f7 |
 | U-02-4 체형 | `2:591` | https://www.notion.so/35fc2986e140814aac67f8ebaffe2356 |
 | U-02-5 식이/알레르기 | `2:672` | https://www.notion.so/35fc2986e1408110ae35c55a5eac02ff |
