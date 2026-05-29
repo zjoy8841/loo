@@ -14,12 +14,12 @@ body{font-family:Pretendard,system-ui,sans-serif}
 .frag-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:rgba(255,255,255,.25);font-size:10px;font-weight:800}
 .f-base{background:#6b7280}.f-info{background:#2563eb}.f-warn{background:#ca8a04}.f-ok{background:#16a34a}
 
-.chip{position:relative;background:#fff;border:2px solid #d1d5db;border-radius:18px;padding:14px;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:4px;width:100%}
+.chip{position:relative;background:#fff;border:2px solid #d1d5db;border-radius:16px;padding:14px 14px 12px;text-align:left;transition:.15s;display:flex;flex-direction:column;gap:6px;width:100%;min-height:104px;box-sizing:border-box}
 .chip.active{background:#1f1f1f;border-color:#1f1f1f;color:#fff}
 .chip .mark{position:absolute;top:8px;right:8px;width:18px;height:18px;border:1.5px solid #888;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center}
 .chip.active .mark{background:#fff;border-color:#fff;position:relative}
 .chip.active .mark::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;background:#1f1f1f;border-radius:999px;transform:translate(-50%,-50%)}
-.chip-ic{width:32px;height:32px;border-radius:999px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888}
+.chip-ic{width:32px;height:32px;border-radius:999px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888;flex-shrink:0}
 .chip.active .chip-ic{color:#fff}
 .chip-text{font-size:13px;font-weight:600;line-height:1.3}
 .chip-sub{font-size:10px;color:#9ca3af;margin-top:2px}
@@ -72,7 +72,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
         <h2 class="text-xl font-bold mb-2">어떻게 일하세요?</h2>
         <span class="badge mb-2 inline-block">1개만 선택</span>
         <p class="text-xs text-gray-500 mb-4">직업에 맞는 인사이트와 뉴스를 메인에 보여드려요.</p>
-        <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid grid-cols-2 gap-2.5 auto-rows-fr">
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">의료인</span><span class="chip-sub">논문·학회·가이드</span></button>
@@ -92,7 +92,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
     <div>
       <div class="frag-label f-info"><span class="frag-num">1</span>Chip · single 선택 + 서브텍스트</div>
       <div class="frag">
-        <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid grid-cols-2 gap-2.5 auto-rows-fr">
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
           <button class="chip active"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
         </div>
@@ -103,7 +103,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
     <div>
       <div class="frag-label f-info"><span class="frag-num">2</span>Chip · "기타" 일반 2열 grid 카드</div>
       <div class="frag">
-        <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid grid-cols-2 gap-2.5 auto-rows-fr">
           <button class="chip active"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">기타</span><span class="chip-sub">그 외</span></button>
         </div>
         <p class="text-[10px] text-gray-500 mt-2">"기타" 선택 시 별도 입력 화면 없이 8단계(관심사) 진행. 정식 출시 시 자유 입력 화면 검토.</p>
@@ -113,7 +113,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
     <div>
       <div class="frag-label f-info"><span class="frag-num">3</span>Keyboard · radiogroup 포커스</div>
       <div class="frag">
-        <div class="grid grid-cols-2 gap-2.5">
+        <div class="grid grid-cols-2 gap-2.5 auto-rows-fr">
           <button class="chip"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">학생</span><span class="chip-sub">전공·시험·공모전</span></button>
           <button class="chip active focus-ring"><span class="mark"></span><span class="chip-ic">아이콘</span><span class="chip-text">직장인</span><span class="chip-sub">경제·산업·시사</span></button>
         </div>
