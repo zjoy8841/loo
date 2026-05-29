@@ -47,17 +47,23 @@
 - **v0.5 신규 필드 근거**: 큐레이션 도메인(U-15) 코호트 추천 + 생일 쿠폰 카드 시연. DB 영향: User 모델에 `gender` (enum) + `birthdate` (Date) 컬럼 추가, Prisma migration 필요.
 - **노션 ID 시프트 미정합**: 노션 description 페이지 7개의 URL은 그대로지만 페이지 본문의 "U-02-N XXX" 헤더 표기는 여전히 v0.4 기준 — 다음 라운드 일괄 시프트.
 
-### 02 메인 (U-03) — 화면 2 상태 (active + idle)
+### 02 메인 (U-03) — 화면 5 상태 (active + idle + morning + noon + evening)
 
 | 화면 | Figma node | 노션 description |
 |---|---|---|
 | U-03 메인 · active (알림 인터럽트) | `70:3216` | https://www.notion.so/366c2986e14081569cafc2b8e64d3893 |
-| U-03 메인 · idle (알림 없음) | `70:2751` | https://www.notion.so/366c2986e14081569cafc2b8e64d3893 |
+| U-03 메인 · idle (알림 없음 · 시간대 칩 진입점) | `70:2751` | https://www.notion.so/366c2986e14081569cafc2b8e64d3893 |
+| U-03 메인 · morning (아침 카드 스택) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-03 메인 · noon (점심 카드 스택) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-03 메인 · evening (저녁 카드 스택) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 
 - Figma 페이지 `메인_v1`: `39:9079`
-- 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조)
-- git wireframe: `기획/02 메인/v0.1/` (active + idle 2장 + index)
-- 코드: `web/src/app/user/home/page.tsx` + `web/src/components/home/*` (active/idle mode state 분기, 2026-05-20 v0.1 구현)
+- 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조) — 시간대 3 상태는 큐레이션 description 페이지 공유.
+- git wireframe (v0.1): `기획/02 메인/v0.1/` (active + idle 2장)
+- **시간대 카드 스택 wireframe**: `기획/08 큐레이션/v0.4/02-morning.html` · `03-noon.html` · `04-evening.html` (도메인 부분 통합 결정 — 2026-05-29. 큐레이션 v0.4 폴더에 보존 + 매니페스트 상으론 메인 도메인 5 상태)
+- 코드: `web/src/app/user/home/page.tsx` + `web/src/components/home/*` (active/idle mode state + 시간대 카드 슬라이드인 분기, 5 상태)
+
+> 📌 **부분 통합 결정 (2026-05-29)**: 시간대별 큐레이션 카드(아침·점심·저녁)는 메인 챗봇 UI 안에서 시간대 칩 클릭 시 카드 스택으로 슬라이드인 동작. 별도 도메인 화면이 아니라 메인의 한 상태로 정의. 회의록 5/28 "메인 챗봇 UI 안 카드 누적 노출"과 정합. 풀스크린 화면(캘린더·일자 상세·뉴스)은 메인에서 진입하는 별도 도메인 유지(↓ 08 큐레이션 풀스크린 섹션).
 
 ### 03 알림 (U-04) — 공통 패턴 + 8화면
 
@@ -149,22 +155,26 @@
 
 2026-05-28 회의에서 글래스·워치 모두 6/12 발대식 시연 제외 결정. 산출물(스토리보드 5편 + G-1~G-4 wireframe)은 후속 차수용으로 `기획/07 웨어러블/` 보존. 본 매니페스트 등재는 다음 라운드에서.
 
-### 08 큐레이션 (U-15) — 화면 8개 · 2026-06-12 발대식 시연 신규 트랙
+### 08 큐레이션 풀스크린 (U-15) — 메인 진입 풀스크린 4화면
+
+> 📌 **부분 통합 결정 (2026-05-29)**: 큐레이션 8 화면 중 4 화면(U-15-1·2·3·4)는 **02 메인 도메인의 5 상태로 흡수** — 메인 챗봇 UI 안 카드 스택. 본 섹션은 메인에서 진입하는 **풀스크린 화면**만 정리. 회의록 5/28 "메인 챗봇 UI 안 카드 누적 노출" 결정과 정합.
+>
+> 흡수된 4 화면은 매니페스트 02 메인 섹션에 등재 (`U-03 메인 · morning/noon/evening` 상태 + idle은 진입점 흡수).
 
 > ⚠️ **화면 ID 정정 (2026-05-29)**: 초안에 U-08로 박았으나 인벤토리 U-08(점심 결제 모달)과 충돌 — U-15로 재번호. 폴더 prefix `08 큐레이션`은 카테고리 8번 도메인 의미로 유지.
 
-> 🔄 **v0.3 확장 (2026-05-29 야간)**: v0.1 5장 → v0.3 8장. 추가 화면: 캘린더 뷰(U-15-5) · 일자 상세(U-15-6) · 뉴스 리스트(U-15-7) · 뉴스 상세(U-15-8). 이모지 → Lucide line 아이콘 전체 교체. v0.1 폴더는 이력 보존.
-
 | 화면 | Figma node | 노션 description |
 |---|---|---|
-| U-15-1 진입점 (메인 챗봇 UI 시간대 칩 3개) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-2 아침 큐레이션 (+ 관심사 뉴스 + 생일 쿠폰) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-3 점심 큐레이션 (+ 속보) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-4 저녁 큐레이션 (+ 주요 뉴스 + 콘텐츠) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 | U-15-5 캘린더 뷰 (월/주) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 | U-15-6 일자 상세 일정 (오전/오후 + 결제 통합) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 | U-15-7 뉴스 리스트 (카테고리 + 추천) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 | U-15-8 뉴스 상세 (라이언 한 줄 요약 + 관련 추천) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+
+**메인 도메인으로 이전 (참고)** — 02 메인 섹션 참조
+- ~~U-15-1 진입점~~ → U-03 메인 · idle (진입점 흡수)
+- ~~U-15-2 아침 큐레이션~~ → U-03 메인 · morning
+- ~~U-15-3 점심 큐레이션~~ → U-03 메인 · noon
+- ~~U-15-4 저녁 큐레이션~~ → U-03 메인 · evening
 
 - **One Big Thing 패턴**: 시간대마다 메인 카드 1장 + 보조 카드 2~3장 (Oura/Gemini/Samsung Now Brief 공통).
 - **시간대 전환**: 시연 편의용 morning/noon/evening 버튼 칩 3개. 자동 전환 X.
@@ -173,12 +183,13 @@
 - **외부 의존**: Google Calendar API + 날씨 API + 가맹점 DB (1·2단계 트랙 공유) + 뉴스 API (또는 시연 mock 30-50건).
 - **역할 분담**: 1·2단계(GPS 알림 + 양방향) 타 팀원 / 3단계(시간대별 큐레이션) 오다환+ClaudeCode.
 - **아이콘 시스템**: Lucide line (CDN) · 1.5px stroke · currentColor 상속 (그레이스케일 유지).
-- **햄버거 메뉴 통합**: `/menu` → "일정" 항목 → `/user/curation/calendar` (U-15-5)로 도달. UI 별도 작업.
+- **햄버거 메뉴 통합**: `/menu` → "일정" 항목 → `/user/home/calendar` (U-15-5)로 도달. UI 별도 작업.
 - **03 알림 도메인 통합 가능성**: 기존 `U-04-3 schedule-timeline`은 본 캘린더(U-15-5)로 발전 통합 가능 — 다음 라운드 검토.
-- git wireframe (활성): `기획/08 큐레이션/v0.4/` (인덱스 + 8장) — 캘린더 진입 아이콘 헤더 한 단 아래 + 02 아침 [전체 보기]→일자 상세(오늘) + 04 저녁 "내일 미리보기" 카드 = 아침 "오늘 일정" 동일 형식 + 03 점심 [예약]→04 결제 U-05-1
+- git wireframe (활성): `기획/08 큐레이션/v0.4/05~08*.html` (캘린더·일자상세·뉴스리스트·뉴스상세 4장) + 시간대 카드 wireframe(02~04)은 02 메인 도메인의 시간대 상태로 인덱스됨.
 - git wireframe (이력): `기획/08 큐레이션/v0.1/` (5장) · `v0.3/` (8장) 보존
-- 회의 근거: `회의록/텍스트파일/260528_LOO 회의_정리.txt` + 2026-05-29 v0.2/v0.3 컨펌
-- 코드 (예정): `web/src/app/user/curation/{morning,noon,evening,calendar,calendar/[date],news,news/[id]}/page.tsx` + `web/src/components/home/CurationChips.tsx`
+- 회의 근거: `회의록/텍스트파일/260528_LOO 회의_정리.txt` + 2026-05-29 v0.2/v0.3/v0.4 컨펌 + 부분 통합 결정
+- **코드 라우트 (예정)**: 메인 시간대 카드 = `/user/home` (시간대 칩 상태) · 풀스크린 = `/user/home/calendar` · `/user/home/day/[date]` · `/user/home/news` · `/user/home/news/[id]` — 모두 메인 도메인 하위
+- 컴포넌트 (예정): `web/src/components/home/CurationChips.tsx` · `MorningCards.tsx` · `NoonCards.tsx` · `EveningCards.tsx`
 
 ## 👨‍💻 개발 ClaudeCode 시작 절차
 
