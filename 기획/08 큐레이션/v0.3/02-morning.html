@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-2 아침 큐레이션 · v0.3 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.icbtn{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#555;width:36px;height:36px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.chip-time{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid #1f1f1f;border-radius:999px;font-size:12px;font-weight:600;color:#1f1f1f;background:#fff}
+.chip-time.active{background:#1f1f1f;color:#fff}
+.card-main{border:1.5px solid #1f1f1f;border-radius:18px;padding:18px;background:#fff;position:relative}
+.card-sub{border:1px solid #d4d4d4;border-radius:14px;padding:14px;background:#fff;position:relative}
+.card-coupon{border:1.5px dashed #1f1f1f;border-radius:14px;padding:14px;background:#fafafa;position:relative}
+.thumb{width:48px;height:48px;border-radius:8px;border:1px dashed #d4d4d4;display:flex;align-items:center;justify-content:center;font-size:10px;color:#999;flex-shrink:0}
+.news-tag{display:inline-block;font-size:10px;color:#555;border:1px solid #ccc;border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:920px">
+
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <button class="icbtn"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+      <div class="text-sm font-semibold">아침 큐레이션</div>
+      <button class="icbtn"><i data-lucide="more-horizontal" class="w-5 h-5"></i></button>
+    </div>
+
+    <div class="px-6 py-3 flex gap-2 relative">
+      <span class="tag" style="position:absolute;top:-2px;left:18px">1</span>
+      <button class="chip-time active"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
+      <button class="chip-time"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
+      <button class="chip-time"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    </div>
+
+    <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-4">
+
+      <!-- 메인 카드 -->
+      <div class="card-main">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">2</span>
+        <div class="flex items-center justify-between mb-3">
+          <p class="text-[11px] text-gray-500 uppercase tracking-wider">2026-06-12 목 · 09:24</p>
+          <i data-lucide="cloud-rain" class="w-6 h-6 text-gray-700"></i>
+        </div>
+        <h2 class="text-xl font-bold leading-snug mb-2">좋은 아침이에요, 다환님</h2>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          비 오는 화요일, 우산 챙기세요.<br>
+          <strong>오전 10시 광화문 미팅</strong> 1건 있습니다.
+        </p>
+        <div class="mt-3 pt-3 border-t border-gray-200 flex items-center justify-between text-[11px] text-gray-500">
+          <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> 서울 · 17°C · 강수 80%</span>
+          <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> 1개</span>
+        </div>
+      </div>
+
+      <!-- 보조: 오늘 일정 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">3</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="calendar-days" class="w-4 h-4"></i> 오늘 일정</h3>
+          <a href="05-calendar.html" class="text-[11px] text-gray-500 flex items-center gap-0.5">전체 보기 <i data-lucide="chevron-right" class="w-3 h-3"></i></a>
+        </div>
+        <ul class="space-y-2.5">
+          <li class="flex items-start gap-3 text-sm">
+            <span class="text-[11px] text-gray-500 w-12 pt-0.5 font-mono">10:00</span>
+            <div class="flex-1">
+              <div class="font-semibold">광화문 미팅</div>
+              <div class="text-[11px] text-gray-500">박부장 외 2명 · 광화문 D타워</div>
+            </div>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-gray-400">
+            <span class="text-[11px] w-12 pt-0.5 font-mono">14:30</span>
+            <div class="flex-1"><div>— 빈 시간</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 보조: 출근길 가맹점 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">4</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="coffee" class="w-4 h-4"></i> 출근길 추천</h3>
+          <span class="text-[10px] text-gray-500 border border-gray-300 rounded-full px-2 py-0.5">도보 4분</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="thumb"><i data-lucide="image" class="w-4 h-4 text-gray-400"></i></div>
+          <div class="flex-1">
+            <div class="text-sm font-bold">○○카페 광화문점</div>
+            <div class="text-[11px] text-gray-500">아메리카노 10% 할인 · 비 와서 따뜻한 라떼</div>
+          </div>
+          <button class="text-xs px-3 py-1.5 border border-gray-800 rounded-full font-semibold">주문</button>
+        </div>
+      </div>
+
+      <!-- 보조: 관심사 뉴스 (NEW v0.3) -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">5</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="newspaper" class="w-4 h-4"></i> 오늘 아침 추천</h3>
+          <span class="text-[10px] text-gray-500">34세 여성 · 직장인 기준</span>
+        </div>
+        <ul class="space-y-3">
+          <li>
+            <span class="news-tag">정책</span>
+            <a href="08-news-detail.html" class="block text-sm font-semibold leading-snug mt-1.5">육아휴직 분할 사용 횟수 확대 — 6월 시행 시행령 정리</a>
+            <div class="text-[11px] text-gray-500 mt-0.5">고용노동부 · 2시간 전</div>
+          </li>
+          <li>
+            <span class="news-tag">경제</span>
+            <a href="08-news-detail.html" class="block text-sm font-semibold leading-snug mt-1.5">기준금리 동결, 가계대출 변동금리 영향은</a>
+            <div class="text-[11px] text-gray-500 mt-0.5">매일경제 · 1시간 전</div>
+          </li>
+        </ul>
+        <a href="07-news-list.html" class="block w-full text-center mt-3 pt-2.5 border-t border-gray-100 text-[11px] text-gray-500">전체 뉴스 보기</a>
+      </div>
+
+      <!-- 보조: 생일 쿠폰 (조건 노출) -->
+      <div class="card-coupon">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">6</span>
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="gift" class="w-4 h-4"></i> 곧 다가오는 생일</h3>
+          <span class="text-[10px] text-gray-700 font-semibold">D-3</span>
+        </div>
+        <p class="text-xs text-gray-600 mb-3">다환님 생일을 축하해요. 단골 가맹점 쿠폰 3장 도착.</p>
+        <div class="flex gap-2 overflow-x-auto">
+          <div class="flex-shrink-0 border border-gray-300 rounded-lg p-2 text-center min-w-[90px]">
+            <div class="text-[10px] text-gray-500">○○카페</div>
+            <div class="text-xs font-bold mt-1">-20%</div>
+          </div>
+          <div class="flex-shrink-0 border border-gray-300 rounded-lg p-2 text-center min-w-[90px]">
+            <div class="text-[10px] text-gray-500">△△김밥</div>
+            <div class="text-xs font-bold mt-1">+1잔</div>
+          </div>
+          <div class="flex-shrink-0 border border-gray-300 rounded-lg p-2 text-center min-w-[90px]">
+            <div class="text-[10px] text-gray-500">□□베이커리</div>
+            <div class="text-xs font-bold mt-1">5천 적립</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-2</h2>
+
+    <div class="tag-row"><span class="tag">1</span><div class="body"><strong>시간대 칩 (활성=아침)</strong> — 다른 칩 탭으로 03/04 즉시 전환. <code>aria-current="time"</code>.</div></div>
+
+    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>메인 카드 (One Big Thing)</strong> — 슬라이드인 240ms. 헤더: 날짜·날씨 아이콘(<code>cloud-rain</code>). 본문: 인사 + 오늘 핵심 1줄. 푸터: <code>map-pin</code>·<code>calendar</code> 메타.</div></div>
+
+    <div class="tag-row"><span class="tag">3</span><div class="body"><strong>오늘 일정 (calendar-days)</strong> — 최대 3개 + [전체 보기] → 캘린더(U-15-5). 빈 시간 회색.<br>데이터: Google Calendar OAuth.</div></div>
+
+    <div class="tag-row"><span class="tag">4</span><div class="body"><strong>출근길 가맹점 (coffee)</strong> — 집→직장 동선 + GPS + 가맹점 DB. 날씨 컨텍스트("비 와서 따뜻한 라떼"). [주문] → 2단계 가맹점 앱.</div></div>
+
+    <div class="tag-row"><span class="tag">5</span><div class="body"><strong>관심사 뉴스 (newspaper) — v0.3 신규</strong> — 사용자 코호트(성별·나이·직업·관심) 기반 추천. 카테고리 라벨(정책/경제/IT/사회/문화). [전체 뉴스 보기] → U-15-7.<br>알고리즘: 활동 로그 학습 — 자주 누른 카테고리 가중치 +.</div></div>
+
+    <div class="tag-row"><span class="tag">6</span><div class="body"><strong>생일 쿠폰 (gift) — v0.3 신규 조건 노출</strong> — 생일 D-N (N≤7) 또는 당일에만 활성. 단골 가맹점(visit_count≥2) 쿠폰 자동 매칭. <strong>회원가입 생년월일을 받는 명분의 시각화</strong>.</div></div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>개인화</strong>: 코호트(성별·생년월일) + 활동 로그(visit·view_card·pay).<br>
+      <strong>접근성</strong>: 카드 = <code>role="region" aria-label="아침 큐레이션"</code>.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/morning/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

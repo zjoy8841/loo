@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-4 저녁 큐레이션 · v0.3 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.icbtn{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#555;width:36px;height:36px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.chip-time{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid #1f1f1f;border-radius:999px;font-size:12px;font-weight:600;color:#1f1f1f;background:#fff}
+.chip-time.active{background:#1f1f1f;color:#fff}
+.card-main{border:1.5px solid #1f1f1f;border-radius:18px;padding:18px;background:#fff;position:relative}
+.card-sub{border:1px solid #d4d4d4;border-radius:14px;padding:14px;background:#fff;position:relative}
+.metric{text-align:center}
+.metric .num{font-size:18px;font-weight:700}
+.metric .lbl{font-size:10px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.news-tag{display:inline-block;font-size:10px;color:#555;border:1px solid #ccc;border-radius:4px;padding:1px 6px}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:980px">
+
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between border-b border-gray-100">
+      <button class="icbtn"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+      <div class="text-sm font-semibold">저녁 큐레이션</div>
+      <button class="icbtn"><i data-lucide="more-horizontal" class="w-5 h-5"></i></button>
+    </div>
+
+    <div class="px-6 py-3 flex gap-2">
+      <button class="chip-time"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
+      <button class="chip-time"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
+      <button class="chip-time active"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    </div>
+
+    <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-4">
+
+      <!-- 메인: 오늘 회고 -->
+      <div class="card-main">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">1</span>
+        <p class="text-[11px] text-gray-500 uppercase tracking-wider mb-2">오늘 · 20:18</p>
+        <h2 class="text-xl font-bold leading-snug mb-3">오늘 하루 잘 보내셨어요</h2>
+        <div class="grid grid-cols-4 gap-2 my-3">
+          <div class="metric"><div class="num">8,420</div><div class="lbl">걸음</div></div>
+          <div class="metric"><div class="num">3</div><div class="lbl">가맹점</div></div>
+          <div class="metric"><div class="num">12k</div><div class="lbl">점심</div></div>
+          <div class="metric"><div class="num">4</div><div class="lbl">회의</div></div>
+        </div>
+        <div class="pt-3 border-t border-gray-200 text-[12px] text-gray-600 leading-relaxed flex items-center gap-1.5">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          가장 많이 머문 곳: <strong>광화문 D타워</strong> (2시간 30분)
+        </div>
+      </div>
+
+      <!-- 보조: 저녁 추천 -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">2</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="store" class="w-4 h-4"></i> 저녁 추천</h3>
+          <span class="text-[10px] text-gray-500 border border-gray-300 rounded-full px-2 py-0.5">퇴근길</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg border border-dashed border-gray-300 flex items-center justify-center"><i data-lucide="image" class="w-4 h-4 text-gray-400"></i></div>
+          <div class="flex-1">
+            <div class="text-sm font-bold">◎◎분식 광화문점</div>
+            <div class="text-[11px] text-gray-500">비 와서 한산 · 도보 6분 · 떡볶이 5,500원</div>
+          </div>
+          <button class="text-xs px-3 py-1.5 border border-gray-800 rounded-full font-semibold">주문</button>
+        </div>
+      </div>
+
+      <!-- 내일 미리보기 (v0.3: [전체 보기] → 캘린더로 변경) -->
+      <div class="card-sub" style="border-color:#1f1f1f">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">3</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> 내일 미리보기
+            <span class="text-[10px] font-normal text-gray-500">2026-06-13 금</span>
+          </h3>
+          <i data-lucide="cloud-sun" class="w-5 h-5 text-gray-700"></i>
+        </div>
+        <ul class="space-y-2.5 mb-3">
+          <li class="flex items-start gap-3 text-sm">
+            <span class="text-[11px] text-gray-500 w-12 pt-0.5 font-mono">10:00</span>
+            <div class="flex-1">
+              <div class="font-semibold">팀 위클리</div>
+              <div class="text-[11px] text-gray-500">회의실 A · 1시간</div>
+            </div>
+          </li>
+          <li class="flex items-start gap-3 text-sm">
+            <span class="text-[11px] text-gray-500 w-12 pt-0.5 font-mono">15:00</span>
+            <div class="flex-1">
+              <div class="font-semibold">고객사 미팅</div>
+              <div class="text-[11px] text-gray-500 flex items-center gap-1">강남 · 외근 <i data-lucide="umbrella" class="w-3 h-3"></i> 우산</div>
+            </div>
+          </li>
+        </ul>
+        <a href="05-calendar.html" class="w-full text-center py-2.5 border border-gray-800 rounded-full text-xs font-semibold flex items-center justify-center gap-1">
+          캘린더에서 전체 보기 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- 모레 한 줄 -->
+      <div class="card-sub" style="background:#fafafa">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">4</span>
+        <div class="flex items-center justify-between text-sm">
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-gray-500">모레 · 06-14 토</span>
+            <span class="font-semibold">휴무</span>
+          </div>
+          <div class="flex items-center gap-1 text-[11px] text-gray-500"><i data-lucide="sun" class="w-3.5 h-3.5"></i> 맑음</div>
+        </div>
+      </div>
+
+      <!-- 오늘 주요 뉴스 (v0.3 신규) -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">5</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="newspaper" class="w-4 h-4"></i> 오늘 주요 뉴스</h3>
+          <span class="text-[10px] text-gray-500">관심 분야 우선</span>
+        </div>
+        <ul class="space-y-3">
+          <li>
+            <span class="news-tag">정책</span>
+            <a href="08-news-detail.html" class="block text-sm font-semibold leading-snug mt-1.5">육아휴직 분할 사용 횟수 확대 — 6월 시행 정리</a>
+            <div class="text-[11px] text-gray-500 mt-0.5">고용노동부 · 오전 9시</div>
+          </li>
+          <li>
+            <span class="news-tag">경제</span>
+            <a href="08-news-detail.html" class="block text-sm font-semibold leading-snug mt-1.5">기준금리 동결, 가계대출 변동금리 영향은</a>
+            <div class="text-[11px] text-gray-500 mt-0.5">매일경제 · 오후 2시</div>
+          </li>
+          <li>
+            <span class="news-tag">사회</span>
+            <a href="08-news-detail.html" class="block text-sm font-semibold leading-snug mt-1.5">광화문 인근 1호선 운행 정상화</a>
+            <div class="text-[11px] text-gray-500 mt-0.5">연합뉴스 · 오후 1시</div>
+          </li>
+        </ul>
+        <a href="07-news-list.html" class="block w-full text-center mt-3 pt-2.5 border-t border-gray-100 text-[11px] text-gray-700 font-semibold flex items-center justify-center gap-1">
+          더 보기 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- 콘텐츠 추천 (v0.3 신규) -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">6</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="film" class="w-4 h-4"></i> 오늘 저녁에 어때요</h3>
+          <span class="text-[10px] text-gray-500">자주 본 카테고리 기반</span>
+        </div>
+        <div class="flex gap-2 overflow-x-auto pb-1">
+          <div class="flex-shrink-0 w-[100px]">
+            <div class="aspect-[3/4] rounded-lg border border-gray-300 mb-1.5 flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-gray-400"></i></div>
+            <div class="text-[11px] font-semibold leading-tight">○○ 시즌 2 6화</div>
+            <div class="text-[10px] text-gray-500">드라마 · 신규</div>
+          </div>
+          <div class="flex-shrink-0 w-[100px]">
+            <div class="aspect-[3/4] rounded-lg border border-gray-300 mb-1.5 flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-gray-400"></i></div>
+            <div class="text-[11px] font-semibold leading-tight">△△ 다큐</div>
+            <div class="text-[10px] text-gray-500">다큐 · 인기↑</div>
+          </div>
+          <div class="flex-shrink-0 w-[100px]">
+            <div class="aspect-[3/4] rounded-lg border border-gray-300 mb-1.5 flex items-center justify-center"><i data-lucide="image" class="w-5 h-5 text-gray-400"></i></div>
+            <div class="text-[11px] font-semibold leading-tight">□□ 웹툰 신작</div>
+            <div class="text-[10px] text-gray-500">웹툰 · 1화 무료</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-4</h2>
+
+    <div class="tag-row"><span class="tag">1</span><div class="body"><strong>오늘 하루 회고 (One Big Thing)</strong> — Apple Screen Time Daily Report. 4 메트릭 + 가장 많이 머문 장소(<code>map-pin</code>).<br>데이터: <code>activity_log</code> 일일 집계.</div></div>
+
+    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>저녁 추천 (store)</strong> — 퇴근 동선 기반. 점심 메인과 동일 구조 시간대만 다름. [주문] → 2단계.</div></div>
+
+    <div class="tag-row"><span class="tag">3</span><div class="body"><strong>내일 미리보기 (calendar) — Fantastical 8PM trigger</strong> — 내일 일정 1~2개 + 날씨(<code>cloud-sun</code>) + 외근 우산(<code>umbrella</code>) 자동 표기. <strong>[캘린더에서 전체 보기] → U-15-5 캘린더 뷰</strong> (v0.3 변경, v0.1은 곧장 풀스크린 타임라인이었음).<br>데이터: Google Calendar (D+1) + 날씨 API.</div></div>
+
+    <div class="tag-row"><span class="tag">4</span><div class="body"><strong>모레 한 줄 (sun/cloud-rain)</strong> — Notion Calendar agenda 한 줄. 날짜·날씨·제목만.</div></div>
+
+    <div class="tag-row"><span class="tag">5</span><div class="body"><strong>오늘 주요 뉴스 (newspaper) — v0.3 신규</strong> — 사용자 코호트 + 활동 학습. 3 카테고리(정책·경제·사회). 카테고리 라벨 노출. [더 보기] → U-15-7 리스트.</div></div>
+
+    <div class="tag-row"><span class="tag">6</span><div class="body"><strong>콘텐츠 추천 (film) — v0.3 신규</strong> — 자주 본 카테고리 기반 가로 스크롤(드라마·다큐·웹툰). 활동 로그 학습 → 카테고리 가중치 +. 시연 시 mock 데이터.</div></div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>일정 진입 변경 (v0.3)</strong>: [내일 전체 보기] → 캘린더(U-15-5) → 일자 상세(U-15-6). 햄버거 메뉴 진입도 동일 화면.<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/app/user/curation/evening/page.tsx</code>
+    </p>
+  </div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

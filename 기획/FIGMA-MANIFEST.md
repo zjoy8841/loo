@@ -144,27 +144,36 @@
 
 2026-05-28 회의에서 글래스·워치 모두 6/12 발대식 시연 제외 결정. 산출물(스토리보드 5편 + G-1~G-4 wireframe)은 후속 차수용으로 `기획/07 웨어러블/` 보존. 본 매니페스트 등재는 다음 라운드에서.
 
-### 08 큐레이션 (U-15) — 화면 5개 · 2026-06-12 발대식 시연 신규 트랙
+### 08 큐레이션 (U-15) — 화면 8개 · 2026-06-12 발대식 시연 신규 트랙
 
 > ⚠️ **화면 ID 정정 (2026-05-29)**: 초안에 U-08로 박았으나 인벤토리 U-08(점심 결제 모달)과 충돌 — U-15로 재번호. 폴더 prefix `08 큐레이션`은 카테고리 8번 도메인 의미로 유지.
+
+> 🔄 **v0.3 확장 (2026-05-29 야간)**: v0.1 5장 → v0.3 8장. 추가 화면: 캘린더 뷰(U-15-5) · 일자 상세(U-15-6) · 뉴스 리스트(U-15-7) · 뉴스 상세(U-15-8). 이모지 → Lucide line 아이콘 전체 교체. v0.1 폴더는 이력 보존.
 
 | 화면 | Figma node | 노션 description |
 |---|---|---|
 | U-15-1 진입점 (메인 챗봇 UI 시간대 칩 3개) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-2 아침 큐레이션 | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-3 점심 큐레이션 | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-4 저녁 큐레이션 | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
-| U-15-5 내일 일정 타임라인 (풀스크린) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-2 아침 큐레이션 (+ 관심사 뉴스 + 생일 쿠폰) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-3 점심 큐레이션 (+ 속보) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-4 저녁 큐레이션 (+ 주요 뉴스 + 콘텐츠) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-5 캘린더 뷰 (월/주) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-6 일자 상세 일정 (오전/오후 + 결제 통합) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-7 뉴스 리스트 (카테고리 + 추천) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
+| U-15-8 뉴스 상세 (라이언 한 줄 요약 + 관련 추천) | _TBD_ | https://www.notion.so/36fc2986e1408170bcbfc3e389e9c4c9 |
 
 - **One Big Thing 패턴**: 시간대마다 메인 카드 1장 + 보조 카드 2~3장 (Oura/Gemini/Samsung Now Brief 공통).
 - **시간대 전환**: 시연 편의용 morning/noon/evening 버튼 칩 3개. 자동 전환 X.
 - **저녁 슬롯 차별 카드**: Fantastical 8 PM trigger 모티브 — "내일 미리보기" + [전체 보기]로 U-15-5 풀스크린 타임라인 전환.
-- **회원가입 신규 항목**: 성별 (남/여/선택안함), 생년월일 (YYYY-MM-DD) — U-02-2 (계정/기본정보) 확장. Google Calendar OAuth는 7단계 마지막.
-- **외부 의존**: Google Calendar API + 날씨 API + 가맹점 DB (1·2단계 트랙 공유).
+- **회원가입 신규 항목**: 성별 (남/여/선택안함), 생년월일 (YYYY-MM-DD) — U-02-2 (계정/기본정보) 확장. Google Calendar OAuth는 7단계 마지막. 생일 쿠폰 카드(U-15-2)가 생년월일을 받는 명분의 시각화.
+- **외부 의존**: Google Calendar API + 날씨 API + 가맹점 DB (1·2단계 트랙 공유) + 뉴스 API (또는 시연 mock 30-50건).
 - **역할 분담**: 1·2단계(GPS 알림 + 양방향) 타 팀원 / 3단계(시간대별 큐레이션) 오다환+ClaudeCode.
-- git wireframe: `기획/08 큐레이션/v0.1/` (인덱스 + 5장)
-- 회의 근거: `회의록/텍스트파일/260528_LOO 회의_정리.txt`
-- 코드 (예정): `web/src/app/user/curation/{morning,noon,evening,evening/tomorrow}/page.tsx` + `web/src/components/home/CurationChips.tsx`
+- **아이콘 시스템**: Lucide line (CDN) · 1.5px stroke · currentColor 상속 (그레이스케일 유지).
+- **햄버거 메뉴 통합**: `/menu` → "일정" 항목 → `/user/curation/calendar` (U-15-5)로 도달. UI 별도 작업.
+- **03 알림 도메인 통합 가능성**: 기존 `U-04-3 schedule-timeline`은 본 캘린더(U-15-5)로 발전 통합 가능 — 다음 라운드 검토.
+- git wireframe (활성): `기획/08 큐레이션/v0.3/` (인덱스 + 8장)
+- git wireframe (이력): `기획/08 큐레이션/v0.1/` (인덱스 + 5장 보존)
+- 회의 근거: `회의록/텍스트파일/260528_LOO 회의_정리.txt` + 2026-05-29 v0.2/v0.3 컨펌
+- 코드 (예정): `web/src/app/user/curation/{morning,noon,evening,calendar,calendar/[date],news,news/[id]}/page.tsx` + `web/src/components/home/CurationChips.tsx`
 
 ## 👨‍💻 개발 ClaudeCode 시작 절차
 

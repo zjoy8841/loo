@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-15-1 진입점 · 시연 버튼 칩 3개 · v0.3 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.icbtn{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#555;width:36px;height:36px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.inline-tag{margin-left:8px;vertical-align:middle}
+.chip-time{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1.5px solid #1f1f1f;border-radius:999px;font-size:13px;font-weight:600;color:#1f1f1f;background:#fff}
+.chip-time.active{background:#1f1f1f;color:#fff}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between">
+      <button class="icbtn"><i data-lucide="menu" class="w-5 h-5"></i></button>
+      <div class="font-bold text-lg tracking-tight">라이언</div>
+      <button class="icbtn"><i data-lucide="bell" class="w-5 h-5"></i></button>
+    </div>
+
+    <div class="flex-1 px-6 flex flex-col items-center justify-center text-center relative pt-8">
+      <div class="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 mb-5 flex items-center justify-center text-[10px] text-gray-400 text-center leading-tight">
+        라이언<br>마스코트
+      </div>
+      <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">오늘 · 09:24</p>
+      <h1 class="text-2xl font-bold leading-snug mb-3">다환님, 안녕하세요</h1>
+      <p class="text-sm text-gray-600 leading-relaxed max-w-[280px]">
+        시간대를 선택하면<br>맞춤 큐레이션을 보여드릴게요.
+      </p>
+    </div>
+
+    <div class="px-6 pb-8 relative">
+      <span class="tag" style="position:absolute;top:-8px;left:24px">1</span>
+      <p class="text-[11px] text-gray-500 mb-3 px-1">시연용 큐레이션 진입</p>
+      <div class="flex gap-2 justify-center flex-wrap">
+        <button class="chip-time relative">
+          <i data-lucide="sunrise" class="w-4 h-4"></i>
+          <span>아침</span>
+          <span class="tag inline-tag" style="position:absolute;top:-10px;right:-8px">2</span>
+        </button>
+        <button class="chip-time relative">
+          <i data-lucide="utensils" class="w-4 h-4"></i>
+          <span>점심</span>
+          <span class="tag inline-tag" style="position:absolute;top:-10px;right:-8px">3</span>
+        </button>
+        <button class="chip-time relative">
+          <i data-lucide="moon" class="w-4 h-4"></i>
+          <span>저녁</span>
+          <span class="tag inline-tag" style="position:absolute;top:-10px;right:-8px">4</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="px-4 pb-6 pt-2 border-t border-gray-100">
+      <div class="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-3 relative">
+        <span class="tag" style="position:absolute;top:-10px;left:8px">5</span>
+        <span class="text-gray-400 text-sm flex-1">라이언에게 말해보세요</span>
+        <button class="icbtn" style="width:28px;height:28px;border-width:1px"><i data-lucide="mic" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cap w-[320px]">
+    <h2>인터랙션 매핑 · U-15-1</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body">
+        <strong>큐레이션 진입 영역</strong> — 메인 챗봇 UI 하단에 상시 노출되는 시연용 진입점. 시간대 칩 외 일정·메뉴 접근은 헤더 햄버거(<code>menu</code>)에서.
+        <code>aria-label="큐레이션 시간대 선택"</code>
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body">
+        <strong>아침 칩 (sunrise)</strong> — 탭 시 <code>U-15-2 morning</code> 화면 전환. 현재 시간 05~11시면 기본 활성.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body">
+        <strong>점심 칩 (utensils)</strong> — 탭 시 <code>U-15-3 noon</code> 화면 전환. 11~17시 기본 활성.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body">
+        <strong>저녁 칩 (moon)</strong> — 탭 시 <code>U-15-4 evening</code> 화면 전환. 17시 이후 기본 활성. 저녁은 캘린더(U-15-5)·뉴스 리스트(U-15-7) 모진입점.
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">5</span>
+      <div class="body">
+        <strong>입력 바</strong> — 기존 챗봇 인풋. <code>mic</code> 아이콘으로 음성 입력. 큐레이션 화면 전환 후에도 자유 발화 가능.
+      </div>
+    </div>
+
+    <p class="text-[11px] text-gray-500 mt-4 pt-3 border-t">
+      <strong>아이콘 시스템</strong>: Lucide line · 1.5px stroke · currentColor 상속 (그레이스케일 유지).<br>
+      <strong>코드 위치(예정)</strong>: <code>web/src/components/home/CurationChips.tsx</code>
+    </p>
+  </div>
+
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>
