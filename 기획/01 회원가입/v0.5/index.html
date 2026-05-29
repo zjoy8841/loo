@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입 v0.5 — 기본정보 분리(8단계) + 생년월일 드롭다운</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:Pretendard,system-ui,sans-serif}</style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+<div class="max-w-5xl mx-auto p-8">
+  <a href="../v0.4/index.html" class="text-sm text-gray-500">← v0.4 인덱스</a>
+  <h1 class="text-2xl font-bold mb-1 mt-2">회원가입 v0.5 — 기본정보 분리(8단계) + 생년월일 드롭다운</h1>
+  <p class="text-gray-600 text-sm mb-8">v0.4에서 U-02-1에 박혀있던 성별·생년월일을 신규 U-02-2 기본정보 화면으로 분리. 7단계 → 8단계.</p>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">v0.4 대비 변경 사항</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li><strong>신규 U-02-2 기본정보</strong> — 성별 칩(3종) + 생년월일 드롭다운(연/월/일 select). 기존 U-02-1에서 분리.</li>
+      <li><strong>생년월일 입력 UI</strong>: 텍스트 input → <strong>select 드롭다운</strong>으로 교체. 일자 옵션은 월·윤년 따라 동적 갱신.</li>
+      <li><strong>오늘 이후 날짜 차단</strong>: select 옵션 생성 시 미래 일자는 disabled. JS 가드 추가.</li>
+      <li><strong>만 14세 미만</strong>: 경고 toast (보호자 동의 안내). 정책상 차단 여부는 노션 description 결정.</li>
+      <li><strong>U-02-1 계정</strong>은 v0.3 구성으로 환원 (성별·생년월일 영역 + Fragment 9~11 제거).</li>
+      <li><strong>ID 시프트</strong>: 기존 U-02-2~7(건강·체형·식이·라이프·직업·관심사) → U-02-3~8. 진행번호·progress bar·헤더 일괄 갱신.</li>
+      <li><strong>파일명 시프트</strong>: <code>03-signup-health.html</code> → <code>04-signup-health.html</code> 식으로 +1. 신규 <code>03-signup-basic.html</code>.</li>
+    </ul>
+  </section>
+
+  <section class="mb-6 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">근거</h2>
+    <ul class="text-sm space-y-2 text-gray-800 leading-relaxed list-disc pl-5">
+      <li>2026-05-29 사용자 결정 — "성별과 생년월일을 화면에 따로 빼서 8개 화면으로 만들어줘".</li>
+      <li>2026-05-29 사용자 결정 — "생년월일은 텍스트 입력이 아니고 선택박스 UI로 선택하게끔 / 오늘 이후 입력 불가".</li>
+      <li>v0.4 근거 유지 — 큐레이션 도메인(U-15) 코호트 추천 + 생일 쿠폰 카드 시연.</li>
+    </ul>
+  </section>
+
+  <section class="mb-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">SSoT 우선순위</h2>
+    <ol class="text-sm space-y-2 text-gray-800 leading-relaxed list-decimal pl-5">
+      <li><strong>Figma</strong> = 캐노니컬. 회원가입1 노드 <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">2-463</code>에 신규 단계 추가 + 기존 단계 ID 시프트 정합 필요.</li>
+      <li><strong>노션 description</strong> = 정책 본체. 신규 U-02-2 기본정보 description 페이지 생성 + 기존 페이지 ID 표기 일괄 +1 시프트 필요.</li>
+      <li><strong>git v0.5 HTML</strong> = 인터랙션 시각화 (본 폴더).</li>
+    </ol>
+  </section>
+
+  <h2 class="font-bold text-lg mb-4">8 화면 · v0.5</h2>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    <a href="02-signup-account.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-1 · 1/8</div>
+      <div class="font-semibold text-sm">계정</div>
+      <div class="text-xs text-gray-500 mt-1">v0.3 구성 환원 · Base + 8 fragments</div>
+    </a>
+    <a href="03-signup-basic.html" class="block bg-white border-2 border-gray-900 rounded-xl p-4 hover:bg-gray-50">
+      <div class="text-xs font-mono text-gray-500 mb-1 flex items-center gap-1.5">U-02-2 · 2/8 <span class="text-[9px] bg-gray-900 text-white px-1.5 py-0.5 rounded font-bold">NEW</span></div>
+      <div class="font-semibold text-sm">기본정보</div>
+      <div class="text-xs text-gray-500 mt-1">성별 칩 + 생년월일 select · Base + 8 fragments</div>
+    </a>
+    <a href="04-signup-health.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-3 · 3/8</div>
+      <div class="font-semibold text-sm">건강 <span class="text-[10px] text-gray-400">(v0.4 U-02-2)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 6 fragments</div>
+    </a>
+    <a href="05-signup-shape.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-4 · 4/8</div>
+      <div class="font-semibold text-sm">체형 <span class="text-[10px] text-gray-400">(v0.4 U-02-3)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 4 fragments</div>
+    </a>
+    <a href="06-signup-diet.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-5 · 5/8</div>
+      <div class="font-semibold text-sm">식이/알레르기 <span class="text-[10px] text-gray-400">(v0.4 U-02-4)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 6 fragments</div>
+    </a>
+    <a href="07-signup-lifestyle.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-6 · 6/8</div>
+      <div class="font-semibold text-sm">라이프스타일 <span class="text-[10px] text-gray-400">(v0.4 U-02-5)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 4 fragments</div>
+    </a>
+    <a href="08-signup-job.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-7 · 7/8</div>
+      <div class="font-semibold text-sm">직업 <span class="text-[10px] text-gray-400">(v0.4 U-02-6)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 5 fragments</div>
+    </a>
+    <a href="09-signup-interests.html" class="block bg-white border border-gray-300 rounded-xl p-4 hover:border-gray-700">
+      <div class="text-xs font-mono text-gray-500 mb-1">U-02-8 · 8/8</div>
+      <div class="font-semibold text-sm">관심사 · 가입 <span class="text-[10px] text-gray-400">(v0.4 U-02-7)</span></div>
+      <div class="text-xs text-gray-500 mt-1">v0.4 그대로 · Base + 7 fragments</div>
+    </a>
+  </div>
+
+  <section class="mt-8 bg-white border border-gray-300 rounded-2xl p-6">
+    <h2 class="font-bold mb-3 text-sm text-gray-700 uppercase tracking-wider">Fragment 총량 (v0.5)</h2>
+    <div class="text-sm text-gray-700 grid grid-cols-2 md:grid-cols-4 gap-2 leading-relaxed">
+      <div>U-02-1 계정 — 8 <span class="text-gray-400">(v0.4=11 → -3 환원)</span></div>
+      <div>U-02-2 기본정보 — <strong>8</strong> <span class="text-[10px] bg-gray-900 text-white px-1.5 py-0.5 rounded font-bold">NEW</span></div>
+      <div>U-02-3 건강 — 6</div>
+      <div>U-02-4 체형 — 4</div>
+      <div>U-02-5 식이 — 6</div>
+      <div>U-02-6 라이프 — 4</div>
+      <div>U-02-7 직업 — 5</div>
+      <div>U-02-8 관심사 — 7</div>
+      <div class="font-bold col-span-2 md:col-span-4">합계 — 48 fragments</div>
+    </div>
+  </section>
+
+  <p class="text-xs text-gray-500 mt-8 leading-relaxed">
+    ※ DB 스키마 영향: v0.4와 동일 — <code>User</code>에 <code>gender</code> (enum) + <code>birthdate</code> (Date) 컬럼. Prisma migration 필요.<br>
+    ※ 노션 description 페이지 ID 표기는 기존 7개 + 신규 1개. URL은 그대로 유지하되 페이지 내 "U-02-N XXX" 헤더 일괄 시프트 필요 — 다음 라운드.<br>
+    ※ 시드 계정 2개(남/여) 데이터에 신규 필드 채워야 — 큐레이션 시연 의존.
+  </p>
+</div>
+</body>
+</html>

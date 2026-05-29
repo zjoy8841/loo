@@ -28,12 +28,13 @@
 |---|---|---|
 | U-01 스플래시 | `1:211` | https://www.notion.so/35fc2986e140810593dcd80f2786e026 |
 | U-02-1 계정 | `2:463` | https://www.notion.so/35fc2986e1408192b124e0a13ed56469 |
-| U-02-2 건강 | `2:510` | https://www.notion.so/35fc2986e140817d8618ffc225ec27f7 |
-| U-02-3 체형 | `2:591` | https://www.notion.so/35fc2986e140814aac67f8ebaffe2356 |
-| U-02-4 식이/알레르기 | `2:672` | https://www.notion.so/35fc2986e1408110ae35c55a5eac02ff |
-| U-02-5 라이프스타일 | `2:753` | https://www.notion.so/35fc2986e140811e9320dce3c64ed9d9 |
-| U-02-6 직업 | `2:834` | https://www.notion.so/35fc2986e140810b918dd1623291a72e |
-| U-02-7 관심사 | `2:915` | https://www.notion.so/35fc2986e14081708d2bc44b4a3e63ae |
+| U-02-2 기본정보 (성별·생년월일) | _TBD_ | _TBD_ |
+| U-02-3 건강 | `2:510` | https://www.notion.so/35fc2986e140817d8618ffc225ec27f7 |
+| U-02-4 체형 | `2:591` | https://www.notion.so/35fc2986e140814aac67f8ebaffe2356 |
+| U-02-5 식이/알레르기 | `2:672` | https://www.notion.so/35fc2986e1408110ae35c55a5eac02ff |
+| U-02-6 라이프스타일 | `2:753` | https://www.notion.so/35fc2986e140811e9320dce3c64ed9d9 |
+| U-02-7 직업 | `2:834` | https://www.notion.so/35fc2986e140810b918dd1623291a72e |
+| U-02-8 관심사 | `2:915` | https://www.notion.so/35fc2986e14081708d2bc44b4a3e63ae |
 
 - 노션 description 부모: https://www.notion.so/35fc2986e14081cc9890efbd525ab46d
 - U-02 공통 패턴 (SignupContext · 라우팅 가드 · 접근성 · 분석): https://www.notion.so/35fc2986e14081d88fbef8d8763f82d2
@@ -41,9 +42,10 @@
   - U-01 스플래시: `web/src/app/user/page.tsx`
   - U-02 회원가입 7단계: `web/src/app/user/signup/*/page.tsx`
 - 미작성 description: U-02-1-terms (약관 본문) · U-02-SNS (SNS 가입) · U-02-1-login (로그인)
-- git wireframe (활성): `기획/01 회원가입/v0.4/` — U-02-1에 성별(남/여/선택안함) · 생년월일(YYYY-MM-DD) 추가. Fragment 11종. 다른 6단계는 v0.3 그대로 카피.
-- git wireframe (이력): `기획/01 회원가입/v0.3/` 보존.
-- **v0.4 신규 필드 근거**: 큐레이션 도메인(U-15) 코호트 추천 + 생일 쿠폰 카드 시연. DB 영향: User 모델에 `gender` (enum) + `birthdate` (Date) 컬럼 추가, Prisma migration 필요.
+- git wireframe (활성): `기획/01 회원가입/v0.5/` — v0.4의 성별·생년월일을 신규 U-02-2 기본정보 화면으로 분리. 7단계 → 8단계. 기존 U-02-2~7 → U-02-3~8 ID 시프트. 생년월일은 select 드롭다운(연/월/일), 오늘 이후 차단.
+- git wireframe (이력): `기획/01 회원가입/v0.3/` · `v0.4/` 보존.
+- **v0.5 신규 필드 근거**: 큐레이션 도메인(U-15) 코호트 추천 + 생일 쿠폰 카드 시연. DB 영향: User 모델에 `gender` (enum) + `birthdate` (Date) 컬럼 추가, Prisma migration 필요.
+- **노션 ID 시프트 미정합**: 노션 description 페이지 7개의 URL은 그대로지만 페이지 본문의 "U-02-N XXX" 헤더 표기는 여전히 v0.4 기준 — 다음 라운드 일괄 시프트.
 
 ### 02 메인 (U-03) — 화면 2 상태 (active + idle)
 

@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-01 Splash · v0.5 (그레이스케일)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-14{width:14px;height:14px}.lc-18{width:18px;height:18px}.lc-22{width:22px;height:22px}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+
+<!-- ───── SVG line icon defs ───── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M12 3 L13.5 9 L20 10.5 L13.5 12 L12 18 L10.5 12 L4 10.5 L10.5 9 Z"/><path d="M19 16 L19.7 18.3 L22 19 L19.7 19.7 L19 22 L18.3 19.7 L16 19 L18.3 18.3 Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  </defs>
+</svg>
+
+<a href="index.html" class="block max-w-[420px] mx-auto mb-3 text-sm text-gray-500">← v0.5 인덱스</a>
+
+<div class="max-w-[420px] mx-auto bg-white rounded-3xl shadow overflow-hidden flex flex-col" style="min-height:844px">
+  <div class="flex-1 flex flex-col items-center justify-center px-8 pt-16">
+
+    <!-- 라이언 마스코트 placeholder (그레이스케일 wireframe 표준) -->
+    <div class="w-48 h-48 rounded-full border-2 border-dashed border-gray-300 mb-8 flex items-center justify-center text-[11px] text-gray-400 text-center leading-tight">
+      라이언<br>마스코트
+    </div>
+
+    <h1 class="text-3xl font-bold text-center mb-3">라이언</h1>
+    <p class="text-gray-500 text-center leading-relaxed text-sm">
+      내 일상을 운영체계처럼<br>다음 한 걸음을 비서가 먼저 챙겨요
+    </p>
+
+    <div class="mt-10 w-full space-y-3">
+      <div class="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
+        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 flex-shrink-0">
+          <svg class="lc lc-18"><use href="#i-sparkles"/></svg>
+        </div>
+        <p class="text-sm text-gray-700">건강·식성·관심사 맞춤 추천</p>
+      </div>
+      <div class="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
+        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 flex-shrink-0">
+          <svg class="lc lc-18"><use href="#i-clock"/></svg>
+        </div>
+        <p class="text-sm text-gray-700">아침·점심·저녁 시점별 안내</p>
+      </div>
+      <div class="flex items-center gap-3 bg-gray-100 rounded-xl px-4 py-3">
+        <div class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 flex-shrink-0">
+          <svg class="lc lc-18"><use href="#i-map-pin"/></svg>
+        </div>
+        <p class="text-sm text-gray-700">근처 가맹점 자동 매칭</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="px-8 pb-12 pt-8 space-y-3">
+    <a href="02-signup-account.html" class="flex items-center justify-center gap-2 w-full bg-gray-900 text-white font-semibold py-4 rounded-xl text-center">
+      3분 만에 시작하기 <svg class="lc lc-14"><use href="#i-arrow-right"/></svg>
+    </a>
+    <p class="text-center text-sm text-gray-500">이미 계정이 있으신가요? <a href="#" class="text-gray-900 font-semibold underline">로그인</a></p>
+  </div>
+</div>
+
+</body>
+</html>

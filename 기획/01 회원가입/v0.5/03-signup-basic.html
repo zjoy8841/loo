@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-02-2 기본정보 · v0.5 Base + Fragments (성별·생년월일)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.phone{background:#fff;border-radius:24px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;width:420px;min-height:920px}
+.frag{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);padding:16px;width:360px;border:1px dashed #cbd5e1}
+.frag-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px;color:#fff;margin-bottom:10px;letter-spacing:.02em}
+.frag-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:999px;background:rgba(255,255,255,.25);font-size:10px;font-weight:800}
+.f-base{background:#6b7280}.f-info{background:#2563eb}.f-err{background:#dc2626}.f-warn{background:#ca8a04}.f-ok{background:#16a34a}
+
+.helper{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:5px;line-height:1.4}
+.helper-err{color:#dc2626}.helper-ok{color:#16a34a}.helper-warn{color:#ca8a04}.helper-info{color:#2563eb}
+
+/* select(드롭다운) 필드 — 그레이스케일 */
+.sel{width:100%;background:#fff;border:1px solid #d1d5db;border-radius:12px;padding:12px 36px 12px 14px;font-size:14px;color:#1f1f1f;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:14px}
+.sel.placeholder{color:#9ca3af}
+.b-err{border-color:#dc2626 !important;box-shadow:0 0 0 3px rgba(220,38,38,.08)}
+.b-ok{border-color:#16a34a !important;box-shadow:0 0 0 3px rgba(22,163,74,.08)}
+.b-warn{border-color:#ca8a04 !important;box-shadow:0 0 0 3px rgba(202,138,4,.08)}
+
+.lc{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;flex-shrink:0;vertical-align:middle}
+.lc-12{width:12px;height:12px}.lc-14{width:14px;height:14px}.lc-18{width:18px;height:18px}.lc-22{width:22px;height:22px}
+
+.toast-warn{background:#fef3c7;border:1px solid #fcd34d;color:#854d0e;font-size:11px;padding:8px 10px;border-radius:8px;margin-top:6px;display:flex;align-items:center;gap:6px}
+.banner-info{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:11px;padding:10px 12px;border-radius:10px;display:flex;align-items:center;gap:8px}
+.btn-primary{background:#1f1f1f;color:#fff;font-weight:600;padding:14px;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn-disabled{background:#e5e7eb;color:#9ca3af;cursor:not-allowed}
+.legend-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#374151;padding:4px 8px;background:#f3f4f6;border-radius:999px}
+.legend-dot{width:8px;height:8px;border-radius:999px;display:inline-block}
+.chip{border:1px solid #d1d5db;border-radius:12px;padding:11px 8px;font-size:13px;color:#374151;background:#fff;text-align:center}
+.chip.active{border:2px solid #1f1f1f;background:#1f1f1f;color:#fff;font-weight:600;padding:10px 8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.chip.dim{color:#9ca3af}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6">
+
+<!-- ───── SVG line icon defs ───── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="i-alert-tri" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  </defs>
+</svg>
+
+<!-- ───── Header ───── -->
+<div class="max-w-[1400px] mx-auto mb-6">
+  <a href="index.html" class="text-sm text-gray-500 inline-flex items-center gap-1"><svg class="lc lc-14"><use href="#i-arrow-left"/></svg> v0.5 인덱스</a>
+  <h1 class="text-2xl font-bold mt-2">U-02-2 기본정보 · Base + 인터랙션 Fragments</h1>
+  <p class="text-sm text-gray-600 mt-1">왼쪽 Base 화면 1개 + 우측 fragments(컴포넌트 슬라이스). Figma 디자이너가 Base 위에 fragment를 교체/오버레이.</p>
+  <p class="text-xs text-gray-700 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2 mt-2 inline-flex items-center gap-2">
+    <svg class="lc lc-14"><use href="#i-info"/></svg>
+    <span><strong>v0.5 신규</strong>: v0.4에서 U-02-1에 박혀있던 성별·생년월일을 본 화면으로 분리. <strong>생년월일은 select 드롭다운</strong>(연/월/일 3종). 미래 날짜 선택 차단.</span>
+  </p>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <span class="legend-pill"><span class="legend-dot" style="background:#6b7280"></span>BASE</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#2563eb"></span>INFO</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#dc2626"></span>ERROR</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#ca8a04"></span>WARN</span>
+    <span class="legend-pill"><span class="legend-dot" style="background:#16a34a"></span>OK</span>
+  </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto flex flex-wrap gap-8 items-start">
+
+  <!-- ════════════ BASE PHONE (Empty 상태) ════════════ -->
+  <div>
+    <div class="frag-label f-base"><span class="frag-num">B</span>BASE · Empty 상태</div>
+    <div class="phone">
+      <div class="px-5 pt-5 pb-3 flex items-center justify-between"><a href="02-signup-account.html" class="text-gray-400"><svg class="lc lc-22"><use href="#i-arrow-left"/></svg></a><span class="text-xs text-gray-500">2 / 8</span></div>
+      <div class="px-5"><div class="h-1 bg-gray-200 rounded-full"><div class="h-full bg-gray-900 rounded-full" style="width:25%"></div></div></div>
+      <div class="flex-1 px-5 pt-6">
+        <h2 class="text-xl font-bold mb-1">기본 정보를 알려주세요</h2>
+        <p class="text-xs text-gray-500 mb-5">맞춤 큐레이션 추천에 사용해요</p>
+
+        <div class="space-y-5">
+          <!-- 성별 -->
+          <div>
+            <label class="block text-xs font-semibold mb-1.5">성별 *</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" class="chip">남성</button>
+              <button type="button" class="chip">여성</button>
+              <button type="button" class="chip dim">선택 안 함</button>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-1.5">언제든 변경 가능</p>
+          </div>
+
+          <!-- 생년월일 (드롭다운) -->
+          <div>
+            <label class="block text-xs font-semibold mb-1.5">생년월일 *</label>
+            <div class="grid grid-cols-3 gap-2">
+              <select class="sel placeholder" aria-label="연">
+                <option value="">연</option>
+                <option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option>
+              </select>
+              <select class="sel placeholder" aria-label="월">
+                <option value="">월</option>
+                <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+              </select>
+              <select class="sel placeholder" aria-label="일">
+                <option value="">일</option>
+                <option>01</option><option>02</option><option>03</option><option>04</option><option>05</option>
+              </select>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-1.5">연령대 추천 + 생일 축하/쿠폰 큐레이션 · 오늘 이후 날짜는 선택 불가</p>
+          </div>
+        </div>
+      </div>
+      <div class="px-5 py-4 border-t border-gray-200"><div class="btn-primary btn-disabled"><svg class="lc lc-14"><use href="#i-lock"/></svg> 다음</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════ FRAGMENTS 컬럼 ════════════ -->
+  <div class="flex flex-col gap-5">
+
+    <!-- F1 성별: 여성 선택 -->
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">1</span>성별 · "여성" 선택 상태</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">성별 * <span class="text-[10px] text-blue-700 font-medium">· 여성 선택됨</span></label>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" class="chip dim">남성</button>
+          <button type="button" class="chip active"><svg class="lc lc-14"><use href="#i-check"/></svg> 여성</button>
+          <button type="button" class="chip dim">선택 안 함</button>
+        </div>
+        <p class="helper helper-info"><svg class="lc lc-12"><use href="#i-info"/></svg> "선택 안 함" 시 코호트 분기 미적용 · 추천 가중치 ↓</p>
+      </div>
+    </div>
+
+    <!-- F2 생년월일: 연만 선택 (월·일 placeholder 유지) -->
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">2</span>생년월일 · 연 선택 진행 중</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">생년월일 * <span class="text-[10px] text-gray-500">· 입력 중</span></label>
+        <div class="grid grid-cols-3 gap-2">
+          <select class="sel"><option>1991</option></select>
+          <select class="sel placeholder"><option value="">월</option></select>
+          <select class="sel placeholder"><option value="">일</option></select>
+        </div>
+        <p class="helper helper-info"><svg class="lc lc-12"><use href="#i-info"/></svg> 월·일 선택 시 일자 옵션이 월·윤년에 맞춰 동적 갱신</p>
+      </div>
+    </div>
+
+    <!-- F3 생년월일: 모두 선택 완료 + 유효 + 생일 D-3 -->
+    <div>
+      <div class="frag-label f-ok"><span class="frag-num">3</span>생년월일 · 유효 + 생일 D-3</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">생년월일 * <span class="text-[10px] text-green-600 font-medium">· 만 34세 · 생일 D-3</span></label>
+        <div class="grid grid-cols-3 gap-2">
+          <select class="sel b-ok"><option>1991</option></select>
+          <select class="sel b-ok"><option>06</option></select>
+          <select class="sel b-ok"><option>15</option></select>
+        </div>
+        <p class="helper helper-ok"><svg class="lc lc-12"><use href="#i-check"/></svg> 생일 쿠폰 카드(U-15-2) 큐레이션 활성화 (D-7 ~ 당일)</p>
+      </div>
+    </div>
+
+    <!-- F4 생년월일: 오늘 이후 차단 -->
+    <div>
+      <div class="frag-label f-err"><span class="frag-num">4</span>생년월일 · 오늘 이후 선택 차단</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">생년월일 * <span class="text-[10px] text-red-600 font-medium">· 미래 날짜 차단</span></label>
+        <div class="grid grid-cols-3 gap-2">
+          <select class="sel b-err"><option>2026</option></select>
+          <select class="sel b-err"><option>12</option></select>
+          <select class="sel b-err"><option>—</option></select>
+        </div>
+        <p class="helper helper-err"><svg class="lc lc-12"><use href="#i-alert-circle"/></svg> 오늘 이후 일자는 select 옵션에서 자동 제외 (회색 표시 + 선택 불가)</p>
+      </div>
+    </div>
+
+    <!-- F5 생년월일: 만 14세 미만 경고 -->
+    <div>
+      <div class="frag-label f-warn"><span class="frag-num">5</span>생년월일 · 만 14세 미만</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">생년월일 * <span class="text-[10px] text-yellow-700 font-medium">· 만 13세</span></label>
+        <div class="grid grid-cols-3 gap-2">
+          <select class="sel b-warn"><option>2012</option></select>
+          <select class="sel b-warn"><option>06</option></select>
+          <select class="sel b-warn"><option>10</option></select>
+        </div>
+        <div class="toast-warn"><svg class="lc lc-14"><use href="#i-alert-tri"/></svg> 만 14세 미만은 보호자 동의가 필요해요</div>
+      </div>
+    </div>
+
+    <!-- F6 일자 동적 갱신: 2월(윤년 X) -->
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">6</span>일자 옵션 · 월·윤년 동적 갱신</div>
+      <div class="frag">
+        <label class="block text-xs font-semibold mb-1.5">일자 select · 2026-02</label>
+        <div class="grid grid-cols-7 gap-1 text-[10px]">
+          <span class="bg-gray-100 rounded p-1.5 text-center">01</span>
+          <span class="bg-gray-100 rounded p-1.5 text-center">02</span>
+          <span class="bg-gray-100 rounded p-1.5 text-center">…</span>
+          <span class="bg-gray-100 rounded p-1.5 text-center">28</span>
+          <span class="bg-gray-200 rounded p-1.5 text-center text-gray-400 line-through">29</span>
+          <span class="bg-gray-200 rounded p-1.5 text-center text-gray-400 line-through">30</span>
+          <span class="bg-gray-200 rounded p-1.5 text-center text-gray-400 line-through">31</span>
+        </div>
+        <p class="helper helper-info"><svg class="lc lc-12"><use href="#i-info"/></svg> 평년 2월 = 28일까지 / 윤년 = 29일 / 4·6·9·11월 = 30일 / 그 외 = 31일</p>
+      </div>
+    </div>
+
+    <!-- F7 Primary 활성 -->
+    <div>
+      <div class="frag-label f-ok"><span class="frag-num">7</span>Primary · 모든 조건 충족 → 활성</div>
+      <div class="frag">
+        <div class="btn-primary">다음 <svg class="lc lc-14"><use href="#i-arrow-right"/></svg></div>
+        <p class="text-[10px] text-gray-500 mt-2 text-center"><strong>gender 선택</strong> <em>AND</em> <strong>birthdate 유효</strong> (오늘 이전 + 만 14세 이상)</p>
+      </div>
+    </div>
+
+    <!-- F8 큐레이션 연계 안내 banner -->
+    <div>
+      <div class="frag-label f-info"><span class="frag-num">8</span>Banner · 큐레이션 연계 안내</div>
+      <div class="frag">
+        <div class="banner-info"><svg class="lc lc-14"><use href="#i-gift"/></svg> 생년월일은 생일 쿠폰 알림에만 사용되고 외부에 공개되지 않아요</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto mt-10 p-5 bg-white rounded-2xl border border-gray-200 text-xs text-gray-600 leading-relaxed">
+  <p class="font-bold text-gray-900 mb-2">⚙ select 동작 사양 (개발용 노트)</p>
+  <ul class="space-y-1.5 list-disc pl-5">
+    <li><strong>연 옵션</strong>: 1900 ~ (오늘 연도) 내림차순. 사용자 컨퍼트를 위해 최근 30년 디폴트 + "더 보기"로 확장 가능. 또는 풀 list.</li>
+    <li><strong>월 옵션</strong>: 01 ~ 12 고정.</li>
+    <li><strong>일 옵션</strong>: 선택된 연·월에 따라 동적 (28/29/30/31). 윤년 = 연 % 4 == 0 AND (연 % 100 != 0 OR 연 % 400 == 0).</li>
+    <li><strong>미래 날짜 차단</strong>: select 옵션 생성 시 오늘(YYYY-MM-DD) 이후는 disabled 처리 또는 옵션 자체 미생성. <code>new Date() &gt; selectedDate</code> 가드 추가.</li>
+    <li><strong>14세 미만</strong>: 가입 자체는 허용하되 warning 노출. 정책상 차단이면 zod refine로 막음 — 노션 description 결정.</li>
+    <li>이모지 금지. 모든 시각 시그널은 라인 아이콘.</li>
+  </ul>
+</div>
+
+</body>
+</html>
