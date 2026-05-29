@@ -59,8 +59,9 @@
 
 - Figma 페이지 `메인_v1`: `39:9079`
 - 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조) — 시간대 3 상태는 큐레이션 description 페이지 공유.
-- git wireframe (v0.1): `기획/02 메인/v0.1/` (active + idle 2장)
-- **시간대 카드 스택 wireframe**: `기획/08 큐레이션/v0.4/02-morning.html` · `03-noon.html` · `04-evening.html` (도메인 부분 통합 결정 — 2026-05-29. 큐레이션 v0.4 폴더에 보존 + 매니페스트 상으론 메인 도메인 5 상태)
+- git wireframe (활성): `기획/02 메인/v0.2/` — 5 상태 통합 인덱스 + 5 화면 (01-active, 02-idle, 03-morning, 04-noon, 05-evening). 풀스크린 4장은 08 큐레이션 폴더에서 링크.
+- git wireframe (이력): `기획/02 메인/v0.1/` (active + idle 2장)
+- **시간대 카드 원본 (이력)**: `기획/08 큐레이션/v0.4/02-morning.html` · `03-noon.html` · `04-evening.html` (v0.2로 카피되어 통합됨)
 - 코드: `web/src/app/user/home/page.tsx` + `web/src/components/home/*` (active/idle mode state + 시간대 카드 슬라이드인 분기, 5 상태)
 
 > 📌 **부분 통합 결정 (2026-05-29)**: 시간대별 큐레이션 카드(아침·점심·저녁)는 메인 챗봇 UI 안에서 시간대 칩 클릭 시 카드 스택으로 슬라이드인 동작. 별도 도메인 화면이 아니라 메인의 한 상태로 정의. 회의록 5/28 "메인 챗봇 UI 안 카드 누적 노출"과 정합. 풀스크린 화면(캘린더·일자 상세·뉴스)은 메인에서 진입하는 별도 도메인 유지(↓ 08 큐레이션 풀스크린 섹션).

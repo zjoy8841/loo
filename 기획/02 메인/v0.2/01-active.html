@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-03 메인 · 점심 시점 · active (알림 도착) · v0.1 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.inline-tag{margin-left:8px;vertical-align:middle}
+.chip{display:inline-flex;align-items:center;padding:4px 10px;border:1px solid #ccc;border-radius:999px;font-size:11px;color:#444;background:#fff}
+.metric{font-size:10px;color:#888;letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.dotline{border-top:1px dashed #ccc}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <!-- 헤더 -->
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between">
+      <button class="relative">
+        <span class="ic">≡</span>
+        <span class="tag inline-tag" style="position:absolute;top:-10px;left:-12px">1</span>
+      </button>
+      <div class="font-bold text-lg tracking-tight">라이언</div>
+      <button class="relative">
+        <span class="ic">종</span>
+        <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-gray-900 border-2 border-white"></span>
+        <span class="tag inline-tag" style="position:absolute;top:-10px;right:-12px">2</span>
+      </button>
+    </div>
+
+    <!-- 인사 영역 -->
+    <div class="px-6 pt-2 pb-4">
+      <h1 class="text-xl font-bold leading-tight">지금 점심 시간이에요, 다환님</h1>
+      <div class="mt-2 flex gap-2 flex-wrap">
+        <span class="chip">콜레스테롤 관리</span>
+        <span class="chip">단백질 부족</span>
+      </div>
+    </div>
+
+    <!-- Hero Decision Card (디폴트 박스) -->
+    <div class="px-6 pb-4">
+      <div class="border border-gray-300 rounded-2xl p-5 relative">
+        <span class="tag" style="position:absolute;top:-10px;left:14px">3</span>
+        <div class="metric">오늘 점심 추천</div>
+        <h2 class="text-2xl font-bold leading-snug">닭가슴살 샐러드 어떠세요?</h2>
+        <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+          어제 단백질 23g 부족했어요. <strong class="text-gray-900">B카페 · 강남점</strong>에서 도보 약 5분.
+        </p>
+
+        <!-- 메뉴 미리보기 (이미지 자리) -->
+        <div class="mt-4 flex items-center gap-3">
+          <div class="w-16 h-16 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center text-[10px] text-gray-400 text-center leading-tight">메뉴<br>이미지</div>
+          <div class="text-sm">
+            <div class="font-semibold">닭가슴살 샐러드 · ₩8,500</div>
+            <div class="text-gray-500 text-xs mt-0.5">단백질 32g · 420kcal · 여유</div>
+          </div>
+        </div>
+
+        <!-- CTA 2종 -->
+        <div class="mt-5 grid grid-cols-5 gap-2">
+          <button class="col-span-3 bg-gray-900 text-white font-semibold py-3 rounded-xl text-sm relative">
+            예약하고 결제
+            <span class="tag inline-tag" style="background:#fff;color:#1f1f1f;position:absolute;top:-10px;right:-8px">4</span>
+          </button>
+          <button class="col-span-2 bg-white border border-gray-300 text-gray-900 font-semibold py-3 rounded-xl text-sm relative">
+            다른 추천
+            <span class="tag inline-tag" style="position:absolute;top:-10px;right:-8px">5</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Grid 3 cards -->
+    <div class="px-6 pb-4">
+      <div class="grid grid-cols-3 gap-2 relative">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">6</span>
+        <div class="border border-gray-300 rounded-xl p-3">
+          <div class="metric" style="font-size:9px">RESTAURANT</div>
+          <div class="text-xs font-semibold">B카페</div>
+          <div class="text-[10px] text-gray-500 mt-1">여유 · 도보 5분</div>
+        </div>
+        <div class="border border-gray-300 rounded-xl p-3">
+          <div class="metric" style="font-size:9px">NUTRITION</div>
+          <div class="text-xs font-semibold">단백질 -23g</div>
+          <div class="text-[10px] text-gray-500 mt-1">어제 대비</div>
+        </div>
+        <div class="border border-gray-300 rounded-xl p-3">
+          <div class="metric" style="font-size:9px">NEARBY</div>
+          <div class="text-xs font-semibold">+3개</div>
+          <div class="text-[10px] text-gray-500 mt-1">대안 보기 →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 인사이트 한 줄 -->
+    <div class="px-6 pb-6 flex-1">
+      <div class="border-t border-gray-200 pt-4 relative">
+        <span class="tag" style="position:absolute;top:8px;right:0">7</span>
+        <div class="metric">오늘의 한 줄</div>
+        <p class="text-sm text-gray-700 leading-relaxed pr-8">
+          모레 토요일은 <strong class="text-gray-900">지원이 생일</strong>이에요. 미리 준비할까요?
+        </p>
+      </div>
+    </div>
+
+    <!-- 하단 채팅 입력바 (ChatGPT 메인 스타일) -->
+    <div class="border-t border-gray-200 px-4 py-3 relative">
+      <span class="tag" style="position:absolute;top:-10px;left:14px">8</span>
+      <div class="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-full pl-2 pr-2 py-2">
+        <button class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-base text-gray-600 font-light">+</button>
+        <input type="text" placeholder="라이언에게 말 걸기" class="flex-1 bg-transparent text-sm outline-none placeholder-gray-400" />
+        <button class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-[9px] text-gray-500">마이크</button>
+        <button class="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── Caption column ───── -->
+  <div class="cap w-[320px]">
+    <h2>주요 인터랙션 매핑</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body"><strong>햄버거 → 사이드 패널 (좌측 슬라이드 모달)</strong><br>메뉴 항목은 <strong>v0.1 범위 외 (미정)</strong> — 메뉴 추가/변경 시 메인 화면 영향 없도록 분리한 게 핵심 의도.<br>placeholder 후보: <em>홈 · 알림 · 마이페이지 · 시점 시나리오(아침/점심/저녁) · 결제·예약 내역 · 맛집 지도 · 설정 · 로그아웃</em>. <code>role="dialog" aria-modal="true"</code> + 외부 클릭/Esc 닫기 + focus trap.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body"><strong>종 → 알림 센터</strong><br><code>router.push('/user/notifications')</code> → <strong>U-04 알림</strong>. 배지는 미확인 알림 count &gt; 0일 때만. 0이면 점 숨김. 마이페이지 진입은 사이드 패널 항목으로 이전.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body"><strong>Hero Decision Card (active 상태)</strong><br><strong>본 화면 = active 메인</strong> — 사용자가 메인 보던 중 알림 인터럽트 도착. Hero에 그 알림 콘텐츠가 결정 카드로 표시됨. 점심 시점·결제 추천 알림 예시. 알림 종류에 따라 옷·일정·취침 등 다른 콘텐츠.<br>알림 없는 평소 메인은 <a href="02-home-lunch-idle.html" class="underline">02-home-lunch-idle.html</a>. 앱 종료 후 알림 탭해서 들어온 화면은 알림 도메인(U-04) wireframe v0.3.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body"><strong>"예약하고 결제" → 결제 진입</strong><br><code>router.push('/user/lunch/payment?menuId=&merchantId=&source=home')</code> → <strong>U-05-1 메뉴 상세</strong>. 결제 description §4-1 진입 경로 1번 일치. 라이언 컨텍스트 payload 전달.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">5</span>
+      <div class="body"><strong>"다른 추천" — 카드 회전</strong><br>v1: <strong>같은 카드 영역에서 추천 2~3개를 회전</strong> (별 화면 X). v2: <code>/user/lunch</code> 대화 화면 진입 옵션.<br>v1 회전 시 fade + skeleton. 추천 0개 폴백: "잠시 후 다시 시도".</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">6</span>
+      <div class="body"><strong>디테일 그리드 3 카드</strong><br>시점별 콘텐츠 다름 (index.html 시점 매트릭스 참조). 탭 시: RESTAURANT → 가맹점 상세 / NUTRITION → 페르소나 상세 / NEARBY → /user/map. <strong>v1 점심: 탭 X (display only)</strong>.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">7</span>
+      <div class="body"><strong>인사이트 한 줄</strong><br>다가오는 일정·페르소나 속보 1건. 탭 시 해당 시점 화면 또는 대화로 진입. <strong>v1: display only</strong>. 0건이면 영역 자체 숨김.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">8</span>
+      <div class="body"><strong>채팅 입력바 (ChatGPT 메인 스타일)</strong><br>좌측부터: <strong>+ 첨부</strong> · "라이언에게 말 걸기" 텍스트 · 마이크 · ↑ 전송.<br>· <strong>+ 첨부</strong> = 시트 펼침 [사진·파일·카메라]. 음식 사진(영양 분석)·영수증·식단표 등. 시트 화면 자체는 v0.2.<br>· <strong>텍스트</strong> = 라이언 응답을 Hero/Grid 카드로 갱신<br>· <strong>마이크</strong> = 음성 풀스크린 <code>/user/voice</code> (U-13) 진입<br>· <strong>↑ 전송</strong> = 빠른 액션 실행. 채팅 대화 로그는 메인에 노출 X (라이언 답변은 카드 형태로). 기획서 v5 §1 "음성+네이티브UI+텍스트 fallback / 채팅 인터페이스는 기본 포맷 X" 정합.</div>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <p class="text-[11px] text-gray-500 leading-relaxed">
+        ※ 색·폰트·픽셀·radius·motion·WCAG 등 시각 사양은 디자인 가이드 참조. 본 wireframe은 인터랙션·동작 매핑 목적.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 시점 6개(아침·오전·점심·오후·저녁·야간)의 hero/grid 콘텐츠 매트릭스는 <a href="index.html" class="underline">인덱스</a> 참조. 골격은 동일.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 결제 진입은 결제 description §4-1과 일치. 알림 도착지·마이페이지 진입점도 화면 IA·결제 description 정합.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 하단 nav 5칸은 v0.1에서 제거 — 메뉴 항목 미정 상태에서 nav를 박으면 추가될 때마다 메인 수정 필요. <strong>햄버거 + 사이드 패널 구조</strong>로 메뉴 자유도 확보.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 본 화면은 <strong>active</strong> (알림 인터럽트 도착 메인). 알림 없는 평소 메인 = <a href="02-home-lunch-idle.html" class="underline">02-home-lunch-idle.html</a>. 메인 보던 중 알림 도착 시퀀스(transition·애니메이션·자동 진입 여부)는 v0.2 라운드.
+      </p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

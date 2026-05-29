@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-03 메인 · 점심 시점 · idle (알림 없음) · v0.1 wireframe + 인터랙션 매핑</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.ic{border-radius:999px;border:1.5px solid #888;display:inline-flex;align-items:center;justify-content:center;color:#888;font-weight:500;width:36px;height:36px;font-size:10px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fff;border:1.5px solid #1f1f1f;color:#1f1f1f;font-size:11px;font-weight:700;flex-shrink:0;line-height:1}
+.tag-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px}
+.tag-row .body{font-size:12px;line-height:1.55;color:#222}
+.tag-row .body code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tag-row .body strong{color:#000}
+.cap{background:#fff;border:1px solid #ccc;border-radius:20px;padding:24px}
+.cap h2{font-size:13px;font-weight:700;color:#1f1f1f;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.inline-tag{margin-left:8px;vertical-align:middle}
+.chip{display:inline-flex;align-items:center;padding:4px 10px;border:1px solid #ccc;border-radius:999px;font-size:11px;color:#444;background:#fff}
+</style>
+</head>
+<body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+
+<div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
+
+  <!-- ───── Phone frame ───── -->
+  <div class="bg-white rounded-3xl shadow overflow-hidden flex flex-col w-[420px]" style="min-height:844px">
+
+    <!-- 헤더 -->
+    <div class="px-6 pt-6 pb-3 flex items-center justify-between">
+      <button class="relative">
+        <span class="ic">≡</span>
+        <span class="tag inline-tag" style="position:absolute;top:-10px;left:-12px">1</span>
+      </button>
+      <div class="font-bold text-lg tracking-tight">라이언</div>
+      <button class="relative">
+        <span class="ic">종</span>
+        <span class="tag inline-tag" style="position:absolute;top:-10px;right:-12px">2</span>
+      </button>
+    </div>
+
+    <!-- 인사 영역 (중앙 정렬) -->
+    <div class="flex-1 px-6 flex flex-col items-center justify-center text-center relative">
+      <span class="tag" style="position:absolute;top:24px;right:24px">3</span>
+
+      <!-- (선택) 라이언 마스코트 자리 -->
+      <div class="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 mb-6 flex items-center justify-center text-[10px] text-gray-400 text-center leading-tight relative">
+        라이언<br>마스코트
+        <span class="tag" style="position:absolute;top:-10px;right:-10px">4</span>
+      </div>
+
+      <p class="text-xs text-gray-500 uppercase tracking-wider mb-2">점심 · 12:08</p>
+      <h1 class="text-2xl font-bold leading-snug mb-3">다환님, 안녕하세요</h1>
+      <p class="text-sm text-gray-600 leading-relaxed max-w-[280px]">
+        뭐 도와드릴까요?<br>
+        식사·일정·날씨 뭐든 편하게 말씀해보세요.
+      </p>
+
+      <!-- 가벼운 페르소나 칩 (선택, 약하게) -->
+      <div class="mt-6 flex gap-2 flex-wrap justify-center relative">
+        <span class="tag" style="position:absolute;top:-14px;right:-30px">5</span>
+        <span class="chip">콜레스테롤 관리</span>
+        <span class="chip">단백질 부족</span>
+      </div>
+    </div>
+
+    <!-- 하단 채팅 입력바 (ChatGPT 메인 스타일) -->
+    <div class="border-t border-gray-200 px-4 py-3 relative">
+      <span class="tag" style="position:absolute;top:-10px;left:14px">6</span>
+      <div class="flex items-center gap-2 bg-gray-50 border border-gray-300 rounded-full pl-2 pr-2 py-2">
+        <button class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-base text-gray-600 font-light">+</button>
+        <input type="text" placeholder="라이언에게 말 걸기" class="flex-1 bg-transparent text-sm outline-none placeholder-gray-400" />
+        <button class="w-8 h-8 rounded-full border border-gray-400 flex items-center justify-center text-[9px] text-gray-500">마이크</button>
+        <button class="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">↑</button>
+      </div>
+
+      <!-- 빠른 액션 칩 (선택, idle 한정) -->
+      <div class="mt-3 flex gap-2 overflow-x-auto relative">
+        <span class="tag" style="position:absolute;top:-10px;right:0">7</span>
+        <button class="chip whitespace-nowrap">오늘 점심 추천</button>
+        <button class="chip whitespace-nowrap">내일 일정</button>
+        <button class="chip whitespace-nowrap">오늘 날씨</button>
+        <button class="chip whitespace-nowrap">예약 내역</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── Caption column ───── -->
+  <div class="cap w-[320px]">
+    <h2>주요 인터랙션 매핑</h2>
+
+    <div class="tag-row">
+      <span class="tag">1</span>
+      <div class="body"><strong>햄버거 → 사이드 패널</strong><br>동일 컴포넌트 — active와 같음. 메뉴 항목 v0.1 범위 외. <a href="01-home-lunch-active.html" class="underline">active</a> 참조.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">2</span>
+      <div class="body"><strong>종 (배지 없음)</strong><br>idle 상태 = 미확인 알림 count = 0이라 점 숨김. 새 알림 도착 시 → 점 활성 + 본 화면이 <strong>active 화면(01)</strong>으로 전환. transition 시퀀스는 v0.2.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">3</span>
+      <div class="body"><strong>idle 본문 = 미니멀</strong><br>Hero Decision Card 없음. 시점 인사 + 마스코트 + 페르소나 칩만. <strong>라이언이 능동 push하지 않는 평소 상태</strong> — 사용자가 채팅·음성으로 먼저 말 걸어야 추천 시작. 결과는 본 화면 Hero 영역으로 갱신 (이후 active와 동일 구조 카드).</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">4</span>
+      <div class="body"><strong>라이언 마스코트 (선택)</strong><br>RyanMascot 컴포넌트 (개발/web/src/components/RyanMascot.tsx). idle 시 breathe + blink. 사용자가 채팅·음성 입력 시 tilt 발동. <strong>v0.1 wireframe은 placeholder만</strong> — 마스코트 실제 노출 여부는 디자인 단계.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">5</span>
+      <div class="body"><strong>페르소나 칩 (선택)</strong><br>회원가입 7단계 입력값 기반 1~2개 노출. "내가 누구인지 라이언이 알고 있다" 신호. v0.1은 표시만, 탭 인터랙션 없음. v0.2에서 탭 시 마이페이지로 보낼지 결정.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">6</span>
+      <div class="body"><strong>채팅 입력바 (메인 진입점)</strong><br>idle 메인의 <strong>주 인터랙션</strong>. 좌측부터: <strong>+ 첨부</strong> · 텍스트 · 마이크 · ↑ 전송.<br>· <strong>+ 첨부</strong> = 시트 [사진·파일·카메라]. 음식·영수증 사진 라이언 분석 진입. 시트 자체는 v0.2.<br>· <strong>텍스트</strong> = 라이언 응답 카드가 Hero 영역에 생성 (이후 active와 같은 구조)<br>· <strong>마이크</strong> = 음성 풀스크린 <code>/user/voice</code> (U-13)<br>active와 동일 컴포넌트.</div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag">7</span>
+      <div class="body"><strong>빠른 액션 칩 (idle 한정)</strong><br>"뭐 도와드릴까요?" 옆 비어 있는 상태를 채우는 발판. 자주 묻는 4~6개 (점심 추천·일정·날씨·예약 내역 등) 가로 스크롤. 탭 시 채팅 입력바에 자동 입력 + 라이언 응답. <strong>active 화면에는 없음</strong> — 이미 추천 카드가 채워져 있으므로.</div>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-gray-200">
+      <p class="text-[11px] text-gray-500 leading-relaxed">
+        ※ 색·폰트·픽셀·radius·motion·WCAG 등 시각 사양은 디자인 가이드 참조. 본 wireframe은 인터랙션·동작 매핑 목적.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ 본 화면은 <strong>idle</strong> (알림 없는 평소 메인). 알림 인터럽트 도착 시 = <a href="01-home-lunch-active.html" class="underline">01-home-lunch-active.html</a>. 두 화면은 같은 URL <code>/user/home</code>의 두 상태.
+      </p>
+      <p class="text-[11px] text-gray-500 leading-relaxed mt-2">
+        ※ idle ↔ active 전환 트리거 = 신규 알림 도착 push. 사용자가 메인에 있는 상태에서 알림 받으면 어떻게 표시할지(Hero 영역 자동 갱신 / 토스트 / 모달) 미정 — v0.2.
+      </p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
