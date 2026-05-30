@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 메인 (U-03) · v0.2 wireframe · 5 상태 통합 인덱스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif}
+.card{background:#fff;border:1px solid #d4d4d4;border-radius:14px;padding:18px;transition:transform .12s ease;display:block}
+.card:hover{transform:translateY(-2px);border-color:#222}
+.k{display:inline-block;background:#eee;border-radius:4px;padding:1px 6px;font-size:11px;color:#444;margin-right:6px}
+.badge-new{display:inline-block;background:#1f1f1f;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px;letter-spacing:.04em}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen p-6 sm:p-10">
+
+<div class="max-w-[920px] mx-auto">
+
+  <header class="mb-8">
+    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">기획 / 02 메인</p>
+    <h1 class="text-3xl font-bold mb-2">U-03 메인 화면 — v0.3 wireframe (시연용 + 코호트 카드)</h1>
+    <p class="text-sm text-gray-600 leading-relaxed">
+      v0.2의 5 상태 통합 위에 <strong>시연용 demo-bar + 시간대별 코호트 트렌드 카드</strong> 추가.
+      <br>회원가입 정보(성별·연령대·체형 목표·직업)의 명분을 시각화하는 카드들.
+    </p>
+
+    <details class="mt-3 text-sm text-gray-700 bg-yellow-50 border border-yellow-200 rounded-lg p-3" open>
+      <summary class="font-semibold cursor-pointer">v0.2 대비 변경 사항</summary>
+      <ul class="mt-2 space-y-1.5 leading-relaxed list-disc pl-5 text-xs">
+        <li><strong>5 화면 모두 시연용 demo-bar 추가</strong>: 헤더 다음 한 단 아래에 5 상태 진입 버튼(active/idle/아침/점심/저녁). 점선 dashed 회색 테두리 + "DEMO · 실제 UI 아님" 라벨로 실제 UI와 시각 분리. 03~05의 기존 chip-time 영역은 demo-bar로 통합.</li>
+        <li><strong>05-evening "또래 퇴근 루틴" 카드 신규 추가</strong>: 30대 여성 코호트 운동 분포 (필라테스 55% / 헬스 25% / 요가 12% / 러닝 8%) + GPS 인근 필라테스 가맹점 + CTA "퇴근 루틴에 필라테스를 넣어볼까요?". 저녁 추천 다음 위치.</li>
+        <li><strong>04-noon 메인 카드 — 건강+코호트 트렌드로 정정</strong>: "오늘은 비 오니까 ○○칼국수 어때요?" → "오늘 닭가슴살 샐러드 어떠세요?". 트렌드 안내 박스 추가 ("30대 유지어터 여성 점심 1위 · 닭가슴살 샐러드 30%"). 회원가입 체형 목표(U-02-4=유지어터) + 식이(U-02-5) 정보 활용.</li>
+        <li><strong>알고리즘 정책 §1-4~6 신규</strong>: docs/추천-알고리즘.md에 시간대별 코호트 차원 (아침=관심사 / 점심=체형목표·식이 / 저녁=직업·라이프스타일) + 점심 vs 저녁 차원 분리 근거 표 추가.</li>
+      </ul>
+    </details>
+
+    <details class="mt-3 text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-lg p-3">
+      <summary class="font-semibold cursor-pointer">v0.2에서 유지된 항목</summary>
+      <ul class="mt-2 space-y-1.5 leading-relaxed list-disc pl-5 text-xs">
+        <li>5 상태 통합 (active/idle/morning/noon/evening) — v0.2에서 도입</li>
+        <li>풀스크린 4 화면(캘린더·일자·뉴스리스트·뉴스상세) 큐레이션/ 서브 폴더 위치 — v0.2와 동일</li>
+        <li>회원가입 v0.5 사이즈 토큰 일관 적용 — v0.2와 동일</li>
+      </ul>
+    </details>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      <span class="k">grayscale</span>
+      <span class="k">Lucide line icons</span>
+      <span class="k">Phone 420 + Caption 320</span>
+      <span class="k">v0.2 → v0.3</span>
+      <span class="k">demo-bar + 코호트 카드</span>
+    </div>
+  </header>
+
+  <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">기존 상태 (v0.1 유지)</h2>
+  <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+
+    <a href="01-active.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-03 · active</div>
+      <h3 class="text-base font-bold mb-2">알림 인터럽트 상태</h3>
+      <p class="text-xs text-gray-600">라이언 카드 슬라이드인. 결제 CTA 흐름 진입.</p>
+    </a>
+
+    <a href="02-idle.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-03 · idle</div>
+      <h3 class="text-base font-bold mb-2">기본 상태 (시간대 칩 진입점)</h3>
+      <p class="text-xs text-gray-600">알림 없음. 인사 + 시간대 칩 3개로 큐레이션 진입.</p>
+    </a>
+
+  </section>
+
+  <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">신규 시간대 상태 (v0.2)</h2>
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+
+    <a href="03-morning.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-03 · morning<span class="badge-new">NEW</span></div>
+      <h3 class="text-base font-bold mb-2">아침 카드 스택</h3>
+      <p class="text-xs text-gray-600">굿모닝 · 일정 · 출근길 가맹점 · 관심사 뉴스 · 생일 쿠폰(조건)</p>
+    </a>
+
+    <a href="04-noon.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-03 · noon<span class="badge-new">NEW</span></div>
+      <h3 class="text-base font-bold mb-2">점심 카드 스택</h3>
+      <p class="text-xs text-gray-600">속보 · 점심 추천 · 동선 식당 · 예산·페이</p>
+    </a>
+
+    <a href="05-evening.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-03 · evening<span class="badge-new">NEW</span></div>
+      <h3 class="text-base font-bold mb-2">저녁 카드 스택</h3>
+      <p class="text-xs text-gray-600">오늘 회고 · 저녁 추천 · 내일 일정 · 모레 한 줄 · 주요 뉴스 · 콘텐츠 추천</p>
+    </a>
+
+  </section>
+
+  <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">메인에서 진입하는 풀스크린 (별도 도메인)</h2>
+  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+
+    <a href="큐레이션/05-calendar.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-5</div>
+      <h3 class="text-sm font-bold mb-1">캘린더 뷰</h3>
+      <p class="text-[11px] text-gray-600">월/주 그리드 · 일자 dot · 결제 배지</p>
+    </a>
+
+    <a href="큐레이션/06-day-detail.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-6</div>
+      <h3 class="text-sm font-bold mb-1">일자 상세 일정</h3>
+      <p class="text-[11px] text-gray-600">오전/오후 타임라인 + 결제 통합</p>
+    </a>
+
+    <a href="큐레이션/07-news-list.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-7</div>
+      <h3 class="text-sm font-bold mb-1">뉴스 리스트</h3>
+      <p class="text-[11px] text-gray-600">카테고리 칩 + 추천 우선</p>
+    </a>
+
+    <a href="큐레이션/08-news-detail.html" class="card">
+      <div class="text-xs text-gray-500 mb-1">U-15-8</div>
+      <h3 class="text-sm font-bold mb-1">뉴스 상세</h3>
+      <p class="text-[11px] text-gray-600">라이언 한 줄 요약 + 관련 추천</p>
+    </a>
+
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-300 text-xs text-gray-500 leading-relaxed">
+    <p><strong>코드 라우트 (예정)</strong>:</p>
+    <ul class="list-disc pl-5 mt-1 space-y-0.5">
+      <li><code>/user/home</code> — 5 상태 통합 분기 (active/idle/morning/noon/evening)</li>
+      <li><code>/user/home/calendar</code> — U-15-5 캘린더 풀스크린</li>
+      <li><code>/user/home/day/[date]</code> — U-15-6 일자 상세</li>
+      <li><code>/user/home/news</code> · <code>/user/home/news/[id]</code> — U-15-7·8 뉴스</li>
+    </ul>
+    <p class="mt-3"><strong>컴포넌트 (예정)</strong>: <code>web/src/components/home/CurationChips.tsx</code> · <code>MorningCards.tsx</code> · <code>NoonCards.tsx</code> · <code>EveningCards.tsx</code></p>
+    <p class="mt-1"><strong>회의 근거</strong>: 회의록/텍스트파일/260528_LOO 회의_정리.txt + 2026-05-29 부분 통합 결정</p>
+    <p class="mt-1"><strong>이력 보존</strong>: <code>기획/02 메인/v0.1/</code> (active+idle 2장) · <code>기획/08 큐레이션/v0.4/</code> (시간대 카드 + 풀스크린 원본 8장)</p>
+    <p class="mt-1"><strong>활성 위치</strong>: 시간대 5 상태 = <code>기획/02 메인/v0.2/</code> · 풀스크린 4장 = <code>기획/02 메인/v0.2/큐레이션/</code></p>
+  </footer>
+
+</div>
+</body>
+</html>

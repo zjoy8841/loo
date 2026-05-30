@@ -59,8 +59,8 @@
 
 - Figma 페이지 `메인_v1`: `39:9079`
 - 같은 노션 description 페이지에 active/idle 두 섹션 (단일 페이지 구조) — 시간대 3 상태는 큐레이션 description 페이지 공유.
-- git wireframe (활성): `기획/02 메인/v0.2/` — 5 상태 통합 인덱스 + 5 화면 (01-active, 02-idle, 03-morning, 04-noon, 05-evening). 풀스크린 4장은 08 큐레이션 폴더에서 링크.
-- git wireframe (이력): `기획/02 메인/v0.1/` (active + idle 2장)
+- git wireframe (활성): `기획/02 메인/v0.3/` — v0.2 기반 + 시연용 demo-bar (5 화면 공통) + 05-evening 또래 퇴근 루틴 카드 + 04-noon 건강+코호트 트렌드 (닭가슴살 샐러드). 풀스크린 4장은 `v0.3/큐레이션/` 서브 폴더.
+- git wireframe (이력): `기획/02 메인/v0.1/` (active + idle 2장) · `v0.2/` (5 상태 통합 + 풀스크린 서브 폴더 — demo-bar·코호트 카드 추가 전 상태)
 - **시간대 카드 원본 (이력)**: `기획/08 큐레이션/v0.4/02-morning.html` · `03-noon.html` · `04-evening.html` (v0.2로 카피되어 통합됨)
 - 코드: `web/src/app/user/home/page.tsx` + `web/src/components/home/*` (active/idle mode state + 시간대 카드 슬라이드인 분기, 5 상태)
 

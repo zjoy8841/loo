@@ -23,10 +23,18 @@ body{font-family:Pretendard,system-ui,sans-serif}
 .card-sub{border:1px solid #d4d4d4;border-radius:18px;padding:18px;background:#fff;position:relative}
 .card-breaking{border:1.5px solid #1f1f1f;border-radius:14px;padding:14px;background:#1f1f1f;color:#fff;position:relative}
 .thumb{width:48px;height:48px;border-radius:8px;border:1px dashed #d4d4d4;display:flex;align-items:center;justify-content:center;font-size:10px;color:#999;flex-shrink:0}
+
+/* v0.2 — 시연용 상태 전환 디버그 박스 (실제 UI 아님) */
+.demo-bar{background:#f9fafb;border:1.5px dashed #888;border-radius:10px;padding:10px 12px;margin:8px 24px;position:relative}
+.demo-label{position:absolute;top:-7px;left:14px;background:#fff;padding:0 6px;font-size:9px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase}
+.demo-buttons{display:flex;gap:5px;flex-wrap:wrap}
+.demo-btn{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid #888;color:#555;background:#fff;font-weight:500;text-align:center;text-decoration:none}
+.demo-btn.active{background:#1f1f1f;color:#fff;border-color:#1f1f1f;font-weight:600}
+.demo-btn:hover{border-color:#1f1f1f;color:#1f1f1f}
 </style>
 </head>
 <body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
-<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
 
 <div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
 
@@ -46,10 +54,16 @@ body{font-family:Pretendard,system-ui,sans-serif}
       </a>
     </div>
 
-    <div class="px-6 py-3 flex gap-2">
-      <button class="chip-time"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
-      <button class="chip-time active"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
-      <button class="chip-time"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    <!-- v0.2 시연용 상태 전환 (실제 UI 아님) -->
+    <div class="demo-bar">
+      <span class="demo-label">DEMO · 실제 UI 아님</span>
+      <div class="demo-buttons">
+        <a href="01-active.html" class="demo-btn">active</a>
+        <a href="02-idle.html" class="demo-btn">idle</a>
+        <a href="03-morning.html" class="demo-btn">아침</a>
+        <a href="04-noon.html" class="demo-btn active">점심</a>
+        <a href="05-evening.html" class="demo-btn">저녁</a>
+      </div>
     </div>
 
     <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-5">
@@ -70,19 +84,28 @@ body{font-family:Pretendard,system-ui,sans-serif}
         </div>
       </div>
 
-      <!-- 메인 카드 -->
+      <!-- 메인 카드 — v0.2 수정: 직장인 트렌드 기반 메뉴 추천 -->
       <div class="card-main">
         <span class="tag" style="position:absolute;top:-10px;left:-10px">2</span>
         <div class="flex items-center justify-between mb-3">
           <p class="text-xs text-gray-500 uppercase tracking-wider">점심 · 12:15</p>
           <i data-lucide="cloud-rain" class="w-6 h-6 text-gray-700"></i>
         </div>
+
+        <!-- 코호트 트렌드 안내 (v0.2 — 건강 코호트 × 점심 메뉴 결합) -->
+        <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-gray-100 rounded-lg">
+          <i data-lucide="trending-up" class="w-4 h-4 text-gray-600 flex-shrink-0"></i>
+          <span class="text-xs text-gray-700 leading-tight">
+            30대 유지어터 여성 점심 1위 · <strong>닭가슴살 샐러드 30%</strong>
+          </span>
+        </div>
+
         <h2 class="text-xl font-bold leading-snug mb-2">
-          오늘은 비 오니까<br><strong>○○칼국수</strong> 어때요?
+          오늘 <strong>닭가슴살 샐러드</strong> 어떠세요?
         </h2>
         <p class="text-sm text-gray-700 leading-relaxed">
-          도보 4분 · 12:15 현재 한산<br>
-          시그니처: 사골 칼국수 9,000원
+          ○○샐러드 광화문점 · 도보 4분 · 12:15 현재 한산<br>
+          시그니처: 닭가슴살 케일 샐러드 12,500원
         </p>
         <div class="flex gap-2 mt-4">
           <button class="flex-1 py-2.5 border border-gray-800 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5">
@@ -153,7 +176,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
 
     <div class="tag-row"><span class="tag">1</span><div class="body"><strong>속보 (zap) — v0.3 신규</strong> — 검정 배경으로 강조. 트리거 조건: ① 사용자 위치 인근(영향 있음) ② 사용자 활동 패턴 영향(출근 경로·자주 가는 가맹점). 탭 → 뉴스 상세(U-15-8).<br>데이터: 뉴스 API push 채널 / Mock fallback.</div></div>
 
-    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>메인 카드 — 점심 한 큐 (utensils)</strong> — GPS + 가맹점 + 날씨 + 혼잡도. [길찾기 navigation] → 외부 지도. <strong>[예약] → 04 결제 단건 도메인 U-05-1 메뉴 상세</strong> (해당 식당 컨텍스트). v0.4 변경: 가맹점 예약 진입을 결제 도메인과 연결.</div></div>
+    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>메인 카드 — 건강+코호트 트렌드 + 점심 한 큐 (v0.2 수정)</strong> — 헤더 아래 트렌드 안내 박스(<code>trending-up</code> 아이콘 + "30대 유지어터 여성 점심 1위 · 닭가슴살 샐러드 30%"). <strong>회원가입 정보 결합</strong>: 성별·생년월일(U-02-2) × 체형 목표(U-02-4=유지어터) × 식이 제한(U-02-5). 그 코호트가 점심에 자주 먹는 메뉴 1위 → GPS·날씨로 매칭된 가맹점 추천. [길찾기] → 외부 지도. <strong>[예약] → 04 결제 단건 U-05-1</strong> (해당 식당 컨텍스트).<br>데이터: <code>activity_log</code> 동일 코호트(성별·연령대·체형 목표) 1주간 점심 카테고리 분포 + 가맹점 DB.<br>알고리즘: <code>docs/추천-알고리즘.md</code> §1 코호트 가중치 (성별·연령대·체형 목표) × §5 사회 증명(트렌드 신호).</div></div>
 
     <div class="tag-row"><span class="tag">★</span><div class="body"><strong>상단 캘린더 아이콘 (v0.4 신규)</strong> — 헤더 한 단 아래 별도 row. 탭 시 <code>U-15-5 캘린더</code> 진입. 02·03·04 시간대 화면 공통.</div></div>
 

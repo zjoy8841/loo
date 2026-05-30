@@ -24,10 +24,18 @@ body{font-family:Pretendard,system-ui,sans-serif}
 .card-coupon{border:1.5px dashed #1f1f1f;border-radius:14px;padding:14px;background:#fafafa;position:relative}
 .thumb{width:48px;height:48px;border-radius:8px;border:1px dashed #d4d4d4;display:flex;align-items:center;justify-content:center;font-size:10px;color:#999;flex-shrink:0}
 .news-tag{display:inline-block;font-size:10px;color:#555;border:1px solid #ccc;border-radius:4px;padding:1px 6px}
+
+/* v0.2 — 시연용 상태 전환 디버그 박스 (실제 UI 아님) */
+.demo-bar{background:#f9fafb;border:1.5px dashed #888;border-radius:10px;padding:10px 12px;margin:8px 24px;position:relative}
+.demo-label{position:absolute;top:-7px;left:14px;background:#fff;padding:0 6px;font-size:9px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase}
+.demo-buttons{display:flex;gap:5px;flex-wrap:wrap}
+.demo-btn{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid #888;color:#555;background:#fff;font-weight:500;text-align:center;text-decoration:none}
+.demo-btn.active{background:#1f1f1f;color:#fff;border-color:#1f1f1f;font-weight:600}
+.demo-btn:hover{border-color:#1f1f1f;color:#1f1f1f}
 </style>
 </head>
 <body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
-<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
 
 <div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
 
@@ -47,11 +55,17 @@ body{font-family:Pretendard,system-ui,sans-serif}
       </a>
     </div>
 
-    <div class="px-6 py-3 flex gap-2 relative">
-      <span class="tag" style="position:absolute;top:-2px;left:18px">1</span>
-      <button class="chip-time active"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
-      <button class="chip-time"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
-      <button class="chip-time"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    <!-- v0.2 시연용 상태 전환 (실제 UI 아님) -->
+    <div class="demo-bar">
+      <span class="tag" style="position:absolute;top:-12px;left:14px;z-index:1">1</span>
+      <span class="demo-label">DEMO · 실제 UI 아님</span>
+      <div class="demo-buttons">
+        <a href="01-active.html" class="demo-btn">active</a>
+        <a href="02-idle.html" class="demo-btn">idle</a>
+        <a href="03-morning.html" class="demo-btn active">아침</a>
+        <a href="04-noon.html" class="demo-btn">점심</a>
+        <a href="05-evening.html" class="demo-btn">저녁</a>
+      </div>
     </div>
 
     <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-5">

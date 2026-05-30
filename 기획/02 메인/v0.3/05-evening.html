@@ -25,10 +25,18 @@ body{font-family:Pretendard,system-ui,sans-serif}
 .metric .num{font-size:18px;font-weight:700}
 .metric .lbl{font-size:10px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
 .news-tag{display:inline-block;font-size:10px;color:#555;border:1px solid #ccc;border-radius:4px;padding:1px 6px}
+
+/* v0.2 — 시연용 상태 전환 디버그 박스 (실제 UI 아님) */
+.demo-bar{background:#f9fafb;border:1.5px dashed #888;border-radius:10px;padding:10px 12px;margin:8px 24px;position:relative}
+.demo-label{position:absolute;top:-7px;left:14px;background:#fff;padding:0 6px;font-size:9px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase}
+.demo-buttons{display:flex;gap:5px;flex-wrap:wrap}
+.demo-btn{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid #888;color:#555;background:#fff;font-weight:500;text-align:center;text-decoration:none}
+.demo-btn.active{background:#1f1f1f;color:#fff;border-color:#1f1f1f;font-weight:600}
+.demo-btn:hover{border-color:#1f1f1f;color:#1f1f1f}
 </style>
 </head>
 <body class="bg-gray-200 text-gray-900 min-h-screen p-4 sm:p-8">
-<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.2 인덱스</a>
+<a href="index.html" class="block max-w-[780px] mx-auto mb-3 text-sm text-gray-500">← v0.3 인덱스</a>
 
 <div class="max-w-[780px] mx-auto flex flex-wrap gap-5 justify-center items-start">
 
@@ -48,10 +56,16 @@ body{font-family:Pretendard,system-ui,sans-serif}
       </a>
     </div>
 
-    <div class="px-6 py-3 flex gap-2">
-      <button class="chip-time"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
-      <button class="chip-time"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
-      <button class="chip-time active"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    <!-- v0.2 시연용 상태 전환 (실제 UI 아님) -->
+    <div class="demo-bar">
+      <span class="demo-label">DEMO · 실제 UI 아님</span>
+      <div class="demo-buttons">
+        <a href="01-active.html" class="demo-btn">active</a>
+        <a href="02-idle.html" class="demo-btn">idle</a>
+        <a href="03-morning.html" class="demo-btn">아침</a>
+        <a href="04-noon.html" class="demo-btn">점심</a>
+        <a href="05-evening.html" class="demo-btn active">저녁</a>
+      </div>
     </div>
 
     <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-5">
@@ -87,6 +101,61 @@ body{font-family:Pretendard,system-ui,sans-serif}
             <div class="text-xs text-gray-500">비 와서 한산 · 도보 6분 · 떡볶이 5,500원</div>
           </div>
           <button class="text-xs px-3 py-1.5 border border-gray-800 rounded-full font-semibold">주문</button>
+        </div>
+      </div>
+
+      <!-- 보조: 또래 퇴근 루틴 + 가맹점 추천 (v0.2 신규) -->
+      <div class="card-sub">
+        <span class="tag" style="position:absolute;top:-10px;left:-10px">★</span>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i> 또래는 이렇게</h3>
+          <span class="text-[10px] text-gray-500 border border-gray-300 rounded-full px-2 py-0.5">30대 여성 · 퇴근 후</span>
+        </div>
+
+        <!-- 코호트 통계 막대 -->
+        <div class="space-y-2 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-semibold w-16">필라테스</span>
+            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gray-900 rounded-full" style="width:55%"></div>
+            </div>
+            <span class="text-xs font-bold w-9 text-right">55%</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs w-16 text-gray-500">헬스</span>
+            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gray-500 rounded-full" style="width:25%"></div>
+            </div>
+            <span class="text-xs w-9 text-right text-gray-500">25%</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs w-16 text-gray-500">요가</span>
+            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gray-400 rounded-full" style="width:12%"></div>
+            </div>
+            <span class="text-xs w-9 text-right text-gray-500">12%</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs w-16 text-gray-500">러닝</span>
+            <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gray-400 rounded-full" style="width:8%"></div>
+            </div>
+            <span class="text-xs w-9 text-right text-gray-500">8%</span>
+          </div>
+        </div>
+
+        <!-- 가까운 필라테스 가맹점 + CTA -->
+        <div class="pt-3 border-t border-gray-200">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-12 h-12 rounded-lg border border-dashed border-gray-300 flex items-center justify-center"><i data-lucide="image" class="w-4 h-4 text-gray-400"></i></div>
+            <div class="flex-1">
+              <div class="text-sm font-bold">○○필라테스 광화문점</div>
+              <div class="text-xs text-gray-500">도보 5분 · 첫 회 체험 19,000원 · 19시 빈자리 3</div>
+            </div>
+          </div>
+          <button class="w-full py-2.5 bg-gray-900 text-white rounded-full text-sm font-semibold flex items-center justify-center gap-1">
+            퇴근 루틴에 필라테스를 넣어볼까요? <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
         </div>
       </div>
 
@@ -202,6 +271,8 @@ body{font-family:Pretendard,system-ui,sans-serif}
     <div class="tag-row"><span class="tag">1</span><div class="body"><strong>오늘 하루 회고 (One Big Thing)</strong> — Apple Screen Time Daily Report. 4 메트릭 + 가장 많이 머문 장소(<code>map-pin</code>).<br>데이터: <code>activity_log</code> 일일 집계.</div></div>
 
     <div class="tag-row"><span class="tag">2</span><div class="body"><strong>저녁 추천 (store)</strong> — 퇴근 동선 기반. 점심 메인과 동일 구조 시간대만 다름. [주문] → 2단계.</div></div>
+
+    <div class="tag-row"><span class="tag">★</span><div class="body"><strong>또래는 이렇게 — 퇴근 루틴 + 가맹점 (v0.2 신규)</strong> — 동일 코호트(성별·생년월일·직업) 퇴근 후 활동 분포 (필라테스/헬스/요가/러닝). 1위 카테고리(필라테스)의 GPS 인근 가맹점 1곳 + CTA "퇴근 루틴에 넣어볼까요?". 코호트 추천 + 가맹점 트랙 결합.<br>데이터: activity_log 코호트 집계 + 가맹점 DB.<br>알고리즘 정책: <code>docs/추천-알고리즘.md</code> §5 사회 증명 + §1 코호트 가중치.</div></div>
 
     <div class="tag-row"><span class="tag">3</span><div class="body"><strong>내일 일정 (calendar-days) — v0.4 변경</strong> — 02 아침의 "오늘 일정" 카드와 <strong>동일 형식</strong>(헤더에 [전체 보기] 링크, 본문에 시간별 일정 리스트, 메타 영역에 날씨). 외근 자동 우산(<code>umbrella</code>) 표기 유지.<br><strong>[전체 보기] → U-15-6 일자 상세(내일)</strong>. <strong>v0.3의 카드 푸터 [캘린더에서 전체 보기] 버튼은 제거</strong> — 캘린더 진입은 상단 아이콘으로 통일.<br>데이터: Google Calendar (D+1) + 날씨 API.</div></div>
 
