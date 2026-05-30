@@ -92,20 +92,20 @@ body{font-family:Pretendard,system-ui,sans-serif}
           <i data-lucide="cloud-rain" class="w-6 h-6 text-gray-700"></i>
         </div>
 
-        <!-- 직장인 트렌드 안내 (v0.2 신규 — 메뉴 카피 위) -->
+        <!-- 코호트 트렌드 안내 (v0.2 — 건강 코호트 × 점심 메뉴 결합) -->
         <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-gray-100 rounded-lg">
           <i data-lucide="trending-up" class="w-4 h-4 text-gray-600 flex-shrink-0"></i>
           <span class="text-xs text-gray-700 leading-tight">
-            이번 주 직장인 점심 1위 · <strong>분식 23%</strong>
+            30대 유지어터 여성 점심 1위 · <strong>닭가슴살 샐러드 30%</strong>
           </span>
         </div>
 
         <h2 class="text-xl font-bold leading-snug mb-2">
-          오늘 <strong>분식</strong> 어떠세요?
+          오늘 <strong>닭가슴살 샐러드</strong> 어떠세요?
         </h2>
         <p class="text-sm text-gray-700 leading-relaxed">
-          ○○분식 광화문점 · 도보 4분 · 12:15 현재 한산<br>
-          시그니처: 떡볶이 + 김밥 세트 8,000원
+          ○○샐러드 광화문점 · 도보 4분 · 12:15 현재 한산<br>
+          시그니처: 닭가슴살 케일 샐러드 12,500원
         </p>
         <div class="flex gap-2 mt-4">
           <button class="flex-1 py-2.5 border border-gray-800 rounded-full text-sm font-semibold flex items-center justify-center gap-1.5">
@@ -176,7 +176,7 @@ body{font-family:Pretendard,system-ui,sans-serif}
 
     <div class="tag-row"><span class="tag">1</span><div class="body"><strong>속보 (zap) — v0.3 신규</strong> — 검정 배경으로 강조. 트리거 조건: ① 사용자 위치 인근(영향 있음) ② 사용자 활동 패턴 영향(출근 경로·자주 가는 가맹점). 탭 → 뉴스 상세(U-15-8).<br>데이터: 뉴스 API push 채널 / Mock fallback.</div></div>
 
-    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>메인 카드 — 직장인 트렌드 + 점심 한 큐 (v0.2 수정)</strong> — 헤더 아래 트렌드 안내 박스(<code>trending-up</code> 아이콘 + "이번 주 직장인 점심 1위 · 분식 23%"). 추천 메뉴는 이 트렌드 1위 카테고리에서 GPS·날씨·혼잡도로 매칭. [길찾기] → 외부 지도. <strong>[예약] → 04 결제 단건 U-05-1</strong> (해당 식당 컨텍스트).<br>데이터: <code>activity_log</code> 코호트(직업=직장인) 집계 1주간 점심 카테고리 분포 + 가맹점 DB.</div></div>
+    <div class="tag-row"><span class="tag">2</span><div class="body"><strong>메인 카드 — 건강+코호트 트렌드 + 점심 한 큐 (v0.2 수정)</strong> — 헤더 아래 트렌드 안내 박스(<code>trending-up</code> 아이콘 + "30대 유지어터 여성 점심 1위 · 닭가슴살 샐러드 30%"). <strong>회원가입 정보 결합</strong>: 성별·생년월일(U-02-2) × 체형 목표(U-02-4=유지어터) × 식이 제한(U-02-5). 그 코호트가 점심에 자주 먹는 메뉴 1위 → GPS·날씨로 매칭된 가맹점 추천. [길찾기] → 외부 지도. <strong>[예약] → 04 결제 단건 U-05-1</strong> (해당 식당 컨텍스트).<br>데이터: <code>activity_log</code> 동일 코호트(성별·연령대·체형 목표) 1주간 점심 카테고리 분포 + 가맹점 DB.<br>알고리즘: <code>docs/추천-알고리즘.md</code> §1 코호트 가중치 (성별·연령대·체형 목표) × §5 사회 증명(트렌드 신호).</div></div>
 
     <div class="tag-row"><span class="tag">★</span><div class="body"><strong>상단 캘린더 아이콘 (v0.4 신규)</strong> — 헤더 한 단 아래 별도 row. 탭 시 <code>U-15-5 캘린더</code> 진입. 02·03·04 시간대 화면 공통.</div></div>
 
