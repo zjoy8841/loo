@@ -54,10 +54,16 @@ body{font-family:Pretendard,system-ui,sans-serif}
       </a>
     </div>
 
-    <div class="px-6 py-3 flex gap-2">
-      <button class="chip-time"><i data-lucide="sunrise" class="w-3.5 h-3.5"></i> 아침</button>
-      <button class="chip-time active"><i data-lucide="utensils" class="w-3.5 h-3.5"></i> 점심</button>
-      <button class="chip-time"><i data-lucide="moon" class="w-3.5 h-3.5"></i> 저녁</button>
+    <!-- v0.2 시연용 상태 전환 (실제 UI 아님) -->
+    <div class="demo-bar">
+      <span class="demo-label">DEMO · 실제 UI 아님</span>
+      <div class="demo-buttons">
+        <a href="01-active.html" class="demo-btn">active</a>
+        <a href="02-idle.html" class="demo-btn">idle</a>
+        <a href="03-morning.html" class="demo-btn">아침</a>
+        <a href="04-noon.html" class="demo-btn active">점심</a>
+        <a href="05-evening.html" class="demo-btn">저녁</a>
+      </div>
     </div>
 
     <div class="flex-1 px-5 pb-5 overflow-y-auto space-y-5">
